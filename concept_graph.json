@@ -1,0 +1,674 @@
+[
+  {
+    "concept": "Machine Learning",
+      "prerequisites": ["Statistics", "Linear Algebra", "Calculus", "Programming"]
+    },
+    {
+      "concept": "Statistics",
+      "prerequisites": ["Basic Mathematics", "Probability Theory"]
+    },
+    {
+      "concept": "Linear Algebra",
+      "prerequisites": ["Basic Mathematics", "Matrix Operations", "Vector Spaces"]
+    },
+    {
+      "concept": "Calculus",
+      "prerequisites": ["Basic Mathematics", "Derivatives", "Integrals"]
+    },
+    {
+      "concept": "Probability Theory",
+      "prerequisites": ["Basic Mathematics", "Set Theory"]
+    },
+    {
+      "concept": "Supervised Learning",
+      "prerequisites": ["Machine Learning", "Loss Functions", "Optimization"]
+    },
+    {
+      "concept": "Unsupervised Learning",
+      "prerequisites": ["Machine Learning", "Distance Metrics", "Statistics"]
+    },
+    {
+      "concept": "Reinforcement Learning",
+      "prerequisites": ["Machine Learning", "Markov Decision Processes", "Dynamic Programming"]
+    },
+    {
+      "concept": "Loss Functions",
+      "prerequisites": ["Calculus", "Statistics"]
+    },
+    {
+      "concept": "Optimization",
+      "prerequisites": ["Calculus", "Linear Algebra", "Gradient Descent"]
+    },
+    {
+      "concept": "Gradient Descent",
+      "prerequisites": ["Calculus", "Derivatives", "Partial Derivatives"]
+    },
+    {
+      "concept": "Linear Regression",
+      "prerequisites": ["Supervised Learning", "Linear Algebra", "Least Squares", "Statistics"]
+    },
+    {
+      "concept": "Logistic Regression",
+      "prerequisites": ["Linear Regression", "Probability Theory", "Sigmoid Function", "Maximum Likelihood"]
+    },
+    {
+      "concept": "Sigmoid Function",
+      "prerequisites": ["Calculus", "Function Theory"]
+    },
+    {
+      "concept": "Maximum Likelihood",
+      "prerequisites": ["Probability Theory", "Statistics", "Optimization"]
+    },
+    {
+      "concept": "Regularization",
+      "prerequisites": ["Overfitting", "Loss Functions", "Optimization"]
+    },
+    {
+      "concept": "Ridge Regression",
+      "prerequisites": ["Linear Regression", "Regularization", "L2 Norm"]
+    },
+    {
+      "concept": "Lasso Regression",
+      "prerequisites": ["Linear Regression", "Regularization", "L1 Norm"]
+    },
+    {
+      "concept": "Elastic Net",
+      "prerequisites": ["Ridge Regression", "Lasso Regression", "Regularization"]
+    },
+    {
+      "concept": "Overfitting",
+      "prerequisites": ["Supervised Learning", "Training and Testing", "Bias-Variance Tradeoff"]
+    },
+    {
+      "concept": "Underfitting",
+      "prerequisites": ["Supervised Learning", "Training and Testing", "Bias-Variance Tradeoff"]
+    },
+    {
+      "concept": "Bias-Variance Tradeoff",
+      "prerequisites": ["Statistics", "Model Complexity", "Generalization"]
+    },
+    {
+      "concept": "Cross-Validation",
+      "prerequisites": ["Training and Testing", "Model Evaluation"]
+    },
+    {
+      "concept": "K-Fold Cross-Validation",
+      "prerequisites": ["Cross-Validation", "Data Splitting"]
+    },
+    {
+      "concept": "Decision Trees",
+      "prerequisites": ["Supervised Learning", "Entropy", "Information Gain", "Gini Impurity"]
+    },
+    {
+      "concept": "Entropy",
+      "prerequisites": ["Information Theory", "Probability Theory", "Logarithms"]
+    },
+    {
+      "concept": "Information Gain",
+      "prerequisites": ["Entropy", "Decision Trees"]
+    },
+    {
+      "concept": "Gini Impurity",
+      "prerequisites": ["Probability Theory", "Decision Trees"]
+    },
+    {
+      "concept": "Random Forest",
+      "prerequisites": ["Decision Trees", "Ensemble Learning", "Bagging", "Bootstrap Sampling"]
+    },
+    {
+      "concept": "Ensemble Learning",
+      "prerequisites": ["Supervised Learning", "Model Aggregation"]
+    },
+    {
+      "concept": "Bagging",
+      "prerequisites": ["Ensemble Learning", "Bootstrap Sampling", "Variance Reduction"]
+    },
+    {
+      "concept": "Bootstrap Sampling",
+      "prerequisites": ["Statistics", "Sampling Methods"]
+    },
+    {
+      "concept": "Boosting",
+      "prerequisites": ["Ensemble Learning", "Sequential Learning", "Weak Learners"]
+    },
+    {
+      "concept": "AdaBoost",
+      "prerequisites": ["Boosting", "Weighted Samples", "Exponential Loss"]
+    },
+    {
+      "concept": "Gradient Boosting",
+      "prerequisites": ["Boosting", "Gradient Descent", "Residual Fitting"]
+    },
+    {
+      "concept": "XGBoost",
+      "prerequisites": ["Gradient Boosting", "Regularization", "Tree Pruning"]
+    },
+    {
+      "concept": "LightGBM",
+      "prerequisites": ["Gradient Boosting", "Histogram-based Learning", "Leaf-wise Growth"]
+    },
+    {
+      "concept": "CatBoost",
+      "prerequisites": ["Gradient Boosting", "Categorical Features", "Ordered Boosting"]
+    },
+    {
+      "concept": "Support Vector Machines",
+      "prerequisites": ["Supervised Learning", "Linear Algebra", "Optimization", "Hyperplanes", "Margins"]
+    },
+    {
+      "concept": "Hyperplanes",
+      "prerequisites": ["Linear Algebra", "Geometry"]
+    },
+    {
+      "concept": "Kernel Trick",
+      "prerequisites": ["Support Vector Machines", "Feature Mapping", "Inner Products"]
+    },
+    {
+      "concept": "RBF Kernel",
+      "prerequisites": ["Kernel Trick", "Distance Metrics", "Gaussian Functions"]
+    },
+    {
+      "concept": "K-Nearest Neighbors",
+      "prerequisites": ["Supervised Learning", "Distance Metrics", "Instance-based Learning"]
+    },
+    {
+      "concept": "Distance Metrics",
+      "prerequisites": ["Linear Algebra", "Geometry"]
+    },
+    {
+      "concept": "Euclidean Distance",
+      "prerequisites": ["Distance Metrics", "Vector Norms"]
+    },
+    {
+      "concept": "Manhattan Distance",
+      "prerequisites": ["Distance Metrics", "Vector Norms"]
+    },
+    {
+      "concept": "Cosine Similarity",
+      "prerequisites": ["Distance Metrics", "Dot Product", "Vector Norms"]
+    },
+    {
+      "concept": "Naive Bayes",
+      "prerequisites": ["Supervised Learning", "Bayes Theorem", "Probability Theory", "Conditional Independence"]
+    },
+    {
+      "concept": "Bayes Theorem",
+      "prerequisites": ["Probability Theory", "Conditional Probability"]
+    },
+    {
+      "concept": "Neural Networks",
+      "prerequisites": ["Machine Learning", "Linear Algebra", "Calculus", "Activation Functions", "Backpropagation"]
+    },
+    {
+      "concept": "Perceptron",
+      "prerequisites": ["Linear Algebra", "Binary Classification", "Linear Separability"]
+    },
+    {
+      "concept": "Multilayer Perceptron",
+      "prerequisites": ["Perceptron", "Neural Networks", "Hidden Layers"]
+    },
+    {
+      "concept": "Activation Functions",
+      "prerequisites": ["Calculus", "Non-linearity"]
+    },
+    {
+      "concept": "Sigmoid Activation",
+      "prerequisites": ["Activation Functions", "Sigmoid Function"]
+    },
+    {
+      "concept": "ReLU",
+      "prerequisites": ["Activation Functions", "Piecewise Functions"]
+    },
+    {
+      "concept": "Tanh Activation",
+      "prerequisites": ["Activation Functions", "Hyperbolic Functions"]
+    },
+    {
+      "concept": "Softmax",
+      "prerequisites": ["Activation Functions", "Probability Distribution", "Multi-class Classification"]
+    },
+    {
+      "concept": "Backpropagation",
+      "prerequisites": ["Neural Networks", "Chain Rule", "Gradient Descent", "Calculus"]
+    },
+    {
+      "concept": "Chain Rule",
+      "prerequisites": ["Calculus", "Derivatives"]
+    },
+    {
+      "concept": "Forward Propagation",
+      "prerequisites": ["Neural Networks", "Matrix Multiplication"]
+    },
+    {
+      "concept": "Deep Learning",
+      "prerequisites": ["Neural Networks", "Optimization", "Large Datasets"]
+    },
+    {
+      "concept": "Convolutional Neural Networks",
+      "prerequisites": ["Deep Learning", "Image Processing", "Convolution Operation", "Pooling"]
+    },
+    {
+      "concept": "Convolution Operation",
+      "prerequisites": ["Linear Algebra", "Signal Processing", "Filters"]
+    },
+    {
+      "concept": "Pooling",
+      "prerequisites": ["Convolutional Neural Networks", "Downsampling"]
+    },
+    {
+      "concept": "Max Pooling",
+      "prerequisites": ["Pooling", "Feature Extraction"]
+    },
+    {
+      "concept": "Recurrent Neural Networks",
+      "prerequisites": ["Deep Learning", "Sequential Data", "Temporal Dependencies"]
+    },
+    {
+      "concept": "LSTM",
+      "prerequisites": ["Recurrent Neural Networks", "Vanishing Gradient Problem", "Gating Mechanisms"]
+    },
+    {
+      "concept": "GRU",
+      "prerequisites": ["Recurrent Neural Networks", "LSTM", "Gating Mechanisms"]
+    },
+    {
+      "concept": "Vanishing Gradient Problem",
+      "prerequisites": ["Backpropagation", "Deep Networks", "Gradient Flow"]
+    },
+    {
+      "concept": "Exploding Gradient Problem",
+      "prerequisites": ["Backpropagation", "Deep Networks", "Gradient Flow"]
+    },
+    {
+      "concept": "Batch Normalization",
+      "prerequisites": ["Deep Learning", "Normalization", "Training Stability"]
+    },
+    {
+      "concept": "Dropout",
+      "prerequisites": ["Neural Networks", "Regularization", "Overfitting Prevention"]
+    },
+    {
+      "concept": "Attention Mechanism",
+      "prerequisites": ["Deep Learning", "Sequential Models", "Weighted Aggregation"]
+    },
+    {
+      "concept": "Transformers",
+      "prerequisites": ["Attention Mechanism", "Self-Attention", "Multi-Head Attention", "Positional Encoding"]
+    },
+    {
+      "concept": "Self-Attention",
+      "prerequisites": ["Attention Mechanism", "Query-Key-Value"]
+    },
+    {
+      "concept": "BERT",
+      "prerequisites": ["Transformers", "Masked Language Modeling", "Bidirectional Context"]
+    },
+    {
+      "concept": "GPT",
+      "prerequisites": ["Transformers", "Autoregressive Models", "Causal Attention"]
+    },
+    {
+      "concept": "Transfer Learning",
+      "prerequisites": ["Deep Learning", "Pre-training", "Fine-tuning"]
+    },
+    {
+      "concept": "Fine-tuning",
+      "prerequisites": ["Transfer Learning", "Pre-trained Models", "Task Adaptation"]
+    },
+    {
+      "concept": "K-Means Clustering",
+      "prerequisites": ["Unsupervised Learning", "Distance Metrics", "Centroids", "Iterative Optimization"]
+    },
+    {
+      "concept": "Hierarchical Clustering",
+      "prerequisites": ["Unsupervised Learning", "Distance Metrics", "Dendrograms"]
+    },
+    {
+      "concept": "DBSCAN",
+      "prerequisites": ["Unsupervised Learning", "Density-based Clustering", "Distance Metrics"]
+    },
+    {
+      "concept": "Gaussian Mixture Models",
+      "prerequisites": ["Unsupervised Learning", "Probability Distributions", "Expectation-Maximization"]
+    },
+    {
+      "concept": "Expectation-Maximization",
+      "prerequisites": ["Statistics", "Maximum Likelihood", "Latent Variables"]
+    },
+    {
+      "concept": "Principal Component Analysis",
+      "prerequisites": ["Unsupervised Learning", "Linear Algebra", "Eigenvalues", "Eigenvectors", "Covariance Matrix"]
+    },
+    {
+      "concept": "Eigenvalues",
+      "prerequisites": ["Linear Algebra", "Matrix Decomposition"]
+    },
+    {
+      "concept": "Eigenvectors",
+      "prerequisites": ["Linear Algebra", "Matrix Decomposition"]
+    },
+    {
+      "concept": "Covariance Matrix",
+      "prerequisites": ["Statistics", "Linear Algebra", "Correlation"]
+    },
+    {
+      "concept": "t-SNE",
+      "prerequisites": ["Dimensionality Reduction", "Probability Distributions", "Manifold Learning"]
+    },
+    {
+      "concept": "UMAP",
+      "prerequisites": ["Dimensionality Reduction", "Manifold Learning", "Topological Data Analysis"]
+    },
+    {
+      "concept": "Autoencoders",
+      "prerequisites": ["Neural Networks", "Unsupervised Learning", "Encoder-Decoder Architecture"]
+    },
+    {
+      "concept": "Variational Autoencoders",
+      "prerequisites": ["Autoencoders", "Probability Theory", "Latent Space", "KL Divergence"]
+    },
+    {
+      "concept": "Generative Adversarial Networks",
+      "prerequisites": ["Deep Learning", "Generator", "Discriminator", "Adversarial Training"]
+    },
+    {
+      "concept": "Generator",
+      "prerequisites": ["Neural Networks", "Generative Models"]
+    },
+    {
+      "concept": "Discriminator",
+      "prerequisites": ["Neural Networks", "Binary Classification"]
+    },
+    {
+      "concept": "Markov Decision Processes",
+      "prerequisites": ["Reinforcement Learning", "States", "Actions", "Rewards", "Transitions"]
+    },
+    {
+      "concept": "Q-Learning",
+      "prerequisites": ["Reinforcement Learning", "Markov Decision Processes", "Value Functions", "Bellman Equation"]
+    },
+    {
+      "concept": "Deep Q-Networks",
+      "prerequisites": ["Q-Learning", "Deep Learning", "Experience Replay"]
+    },
+    {
+      "concept": "Policy Gradient",
+      "prerequisites": ["Reinforcement Learning", "Policy Optimization", "Gradient Ascent"]
+    },
+    {
+      "concept": "Actor-Critic",
+      "prerequisites": ["Policy Gradient", "Value Functions", "Policy Functions"]
+    },
+    {
+      "concept": "Feature Engineering",
+      "prerequisites": ["Machine Learning", "Domain Knowledge", "Data Preprocessing"]
+    },
+    {
+      "concept": "Feature Scaling",
+      "prerequisites": ["Feature Engineering", "Normalization", "Standardization"]
+    },
+    {
+      "concept": "Normalization",
+      "prerequisites": ["Feature Scaling", "Min-Max Scaling"]
+    },
+    {
+      "concept": "Standardization",
+      "prerequisites": ["Feature Scaling", "Z-score", "Mean and Standard Deviation"]
+    },
+    {
+      "concept": "One-Hot Encoding",
+      "prerequisites": ["Feature Engineering", "Categorical Variables"]
+    },
+    {
+      "concept": "Feature Selection",
+      "prerequisites": ["Feature Engineering", "Dimensionality Reduction", "Model Performance"]
+    },
+    {
+      "concept": "Recursive Feature Elimination",
+      "prerequisites": ["Feature Selection", "Model Training"]
+    },
+    {
+      "concept": "Data Augmentation",
+      "prerequisites": ["Machine Learning", "Training Data", "Generalization"]
+    },
+    {
+      "concept": "Confusion Matrix",
+      "prerequisites": ["Classification", "Model Evaluation", "True Positives", "False Positives"]
+    },
+    {
+      "concept": "Precision",
+      "prerequisites": ["Confusion Matrix", "Classification Metrics"]
+    },
+    {
+      "concept": "Recall",
+      "prerequisites": ["Confusion Matrix", "Classification Metrics"]
+    },
+    {
+      "concept": "F1 Score",
+      "prerequisites": ["Precision", "Recall", "Harmonic Mean"]
+    },
+    {
+      "concept": "ROC Curve",
+      "prerequisites": ["Binary Classification", "True Positive Rate", "False Positive Rate"]
+    },
+    {
+      "concept": "AUC",
+      "prerequisites": ["ROC Curve", "Model Performance"]
+    },
+    {
+      "concept": "Mean Squared Error",
+      "prerequisites": ["Regression", "Loss Functions", "Error Metrics"]
+    },
+    {
+      "concept": "Mean Absolute Error",
+      "prerequisites": ["Regression", "Loss Functions", "Error Metrics"]
+    },
+    {
+      "concept": "R-Squared",
+      "prerequisites": ["Regression", "Model Evaluation", "Variance Explained"]
+    },
+    {
+      "concept": "Hyperparameter Tuning",
+      "prerequisites": ["Machine Learning", "Model Selection", "Optimization"]
+    },
+    {
+      "concept": "Grid Search",
+      "prerequisites": ["Hyperparameter Tuning", "Exhaustive Search"]
+    },
+    {
+      "concept": "Random Search",
+      "prerequisites": ["Hyperparameter Tuning", "Random Sampling"]
+    },
+    {
+      "concept": "Bayesian Optimization",
+      "prerequisites": ["Hyperparameter Tuning", "Bayesian Statistics", "Surrogate Models"]
+    },
+    {
+      "concept": "Learning Rate",
+      "prerequisites": ["Optimization", "Gradient Descent", "Convergence"]
+    },
+    {
+      "concept": "Learning Rate Scheduling",
+      "prerequisites": ["Learning Rate", "Training Dynamics", "Adaptive Methods"]
+    },
+    {
+      "concept": "Momentum",
+      "prerequisites": ["Gradient Descent", "Optimization", "Velocity"]
+    },
+    {
+      "concept": "Adam Optimizer",
+      "prerequisites": ["Gradient Descent", "Momentum", "Adaptive Learning Rates"]
+    },
+    {
+      "concept": "Stochastic Gradient Descent",
+      "prerequisites": ["Gradient Descent", "Mini-batch Training", "Randomness"]
+    },
+    {
+      "concept": "Batch Gradient Descent",
+      "prerequisites": ["Gradient Descent", "Full Dataset Training"]
+    },
+    {
+      "concept": "Mini-batch Gradient Descent",
+      "prerequisites": ["Gradient Descent", "Stochastic Gradient Descent", "Batch Processing"]
+    },
+    {
+      "concept": "Semi-Supervised Learning",
+      "prerequisites": ["Machine Learning", "Labeled Data", "Unlabeled Data"]
+    },
+    {
+      "concept": "Self-Supervised Learning",
+      "prerequisites": ["Machine Learning", "Pretext Tasks", "Representation Learning"]
+    },
+    {
+      "concept": "Contrastive Learning",
+      "prerequisites": ["Self-Supervised Learning", "Similarity Learning", "Negative Sampling"]
+    },
+    {
+      "concept": "Meta-Learning",
+      "prerequisites": ["Machine Learning", "Learning to Learn", "Few-Shot Learning"]
+    },
+    {
+      "concept": "Few-Shot Learning",
+      "prerequisites": ["Meta-Learning", "Limited Data", "Transfer Learning"]
+    },
+    {
+      "concept": "Zero-Shot Learning",
+      "prerequisites": ["Transfer Learning", "Semantic Information", "Unseen Classes"]
+    },
+    {
+      "concept": "Multi-Task Learning",
+      "prerequisites": ["Machine Learning", "Shared Representations", "Multiple Objectives"]
+    },
+    {
+      "concept": "Online Learning",
+      "prerequisites": ["Machine Learning", "Sequential Data", "Incremental Updates"]
+    },
+    {
+      "concept": "Active Learning",
+      "prerequisites": ["Machine Learning", "Query Strategies", "Human-in-the-Loop"]
+    },
+    {
+      "concept": "Imbalanced Learning",
+      "prerequisites": ["Classification", "Class Distribution", "Resampling"]
+    },
+    {
+      "concept": "SMOTE",
+      "prerequisites": ["Imbalanced Learning", "Oversampling", "Synthetic Data"]
+    },
+    {
+      "concept": "Anomaly Detection",
+      "prerequisites": ["Unsupervised Learning", "Outliers", "Normal Behavior"]
+    },
+    {
+      "concept": "Isolation Forest",
+      "prerequisites": ["Anomaly Detection", "Decision Trees", "Random Partitioning"]
+    },
+    {
+      "concept": "Time Series Analysis",
+      "prerequisites": ["Machine Learning", "Temporal Data", "Sequential Patterns"]
+    },
+    {
+      "concept": "ARIMA",
+      "prerequisites": ["Time Series Analysis", "Autoregression", "Moving Average"]
+    },
+    {
+      "concept": "Natural Language Processing",
+      "prerequisites": ["Machine Learning", "Text Data", "Linguistics"]
+    },
+    {
+      "concept": "Tokenization",
+      "prerequisites": ["Natural Language Processing", "Text Preprocessing"]
+    },
+    {
+      "concept": "Word Embeddings",
+      "prerequisites": ["Natural Language Processing", "Vector Representations", "Semantic Similarity"]
+    },
+    {
+      "concept": "Word2Vec",
+      "prerequisites": ["Word Embeddings", "Skip-gram", "CBOW"]
+    },
+    {
+      "concept": "GloVe",
+      "prerequisites": ["Word Embeddings", "Co-occurrence Matrix", "Matrix Factorization"]
+    },
+    {
+      "concept": "Computer Vision",
+      "prerequisites": ["Machine Learning", "Image Data", "Visual Perception"]
+    },
+    {
+      "concept": "Object Detection",
+      "prerequisites": ["Computer Vision", "Bounding Boxes", "Region Proposals"]
+    },
+    {
+      "concept": "YOLO",
+      "prerequisites": ["Object Detection", "Convolutional Neural Networks", "Real-time Detection"]
+    },
+    {
+      "concept": "R-CNN",
+      "prerequisites": ["Object Detection", "Region-based CNN", "Selective Search"]
+    },
+    {
+      "concept": "Semantic Segmentation",
+      "prerequisites": ["Computer Vision", "Pixel-wise Classification", "Convolutional Neural Networks"]
+    },
+    {
+      "concept": "U-Net",
+      "prerequisites": ["Semantic Segmentation", "Encoder-Decoder", "Skip Connections"]
+    },
+    {
+      "concept": "ResNet",
+      "prerequisites": ["Convolutional Neural Networks", "Residual Connections", "Deep Networks"]
+    },
+    {
+      "concept": "Residual Connections",
+      "prerequisites": ["Deep Learning", "Skip Connections", "Gradient Flow"]
+    },
+    {
+      "concept": "Batch Size",
+      "prerequisites": ["Training", "Memory Management", "Convergence"]
+    },
+    {
+      "concept": "Epochs",
+      "prerequisites": ["Training", "Full Dataset Pass", "Convergence"]
+    },
+    {
+      "concept": "Early Stopping",
+      "prerequisites": ["Training", "Validation Performance", "Overfitting Prevention"]
+    },
+    {
+      "concept": "Model Compression",
+      "prerequisites": ["Deep Learning", "Efficiency", "Deployment"]
+    },
+    {
+      "concept": "Pruning",
+      "prerequisites": ["Model Compression", "Weight Removal", "Sparsity"]
+    },
+    {
+      "concept": "Quantization",
+      "prerequisites": ["Model Compression", "Reduced Precision", "Inference Speed"]
+    },
+    {
+      "concept": "Knowledge Distillation",
+      "prerequisites": ["Model Compression", "Teacher-Student", "Transfer Learning"]
+    },
+    {
+      "concept": "Federated Learning",
+      "prerequisites": ["Machine Learning", "Distributed Training", "Privacy Preservation"]
+    },
+    {
+      "concept": "Explainable AI",
+      "prerequisites": ["Machine Learning", "Model Interpretability", "Transparency"]
+    },
+    {
+      "concept": "SHAP",
+      "prerequisites": ["Explainable AI", "Shapley Values", "Feature Importance"]
+    },
+    {
+      "concept": "LIME",
+      "prerequisites": ["Explainable AI", "Local Interpretability", "Perturbation-based"]
+    },
+    {
+      "concept": "Gradient-based Attribution",
+      "prerequisites": ["Explainable AI", "Neural Networks", "Backpropagation"]
+    }
+]
