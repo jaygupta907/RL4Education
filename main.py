@@ -8,9 +8,22 @@ def main(args):
 
     agent_llm = AgentLLM(args)
 
-    question = "Explain the concept of overfitting in machine learning."
+    # Initial question(s)
+    questions = ["How does Bias-Variance Tradeoff affect error during training."]
 
-    agent_llm.ppo_step(question)
+    # Loop to iteratively refine responses using PPO
+    for _ in range(args.num_iterations):  # Number of iterations specified in config
+        all_decoded_responses = []  # To store responses from all questions in this iteration
+
+        for question in questions:
+            # Run PPO step for each question
+            decoded_responses, rewards, stats = agent_llm.ppo_step(question)
+            all_decoded_responses.extend(decoded_responses)  # Collect all responses
+
+
+        # Use all responses as questions for the next iteration
+        questions = all_decoded_responses
+        
 
 if __name__ == "__main__":
     args = yaml.load(open('config.yaml'),Loader=yaml.FullLoader)

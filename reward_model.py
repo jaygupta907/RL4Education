@@ -36,7 +36,7 @@ class RewardModel(nn.Module):
         self.concept_graph_class = ConceptGraph(self.concept_graph_path)
         self.concept_graph = self.concept_graph_class.get_concept_graph()
     
-    def extract_concepts(self, question,threshold=0.90):
+    def extract_concepts(self, question,threshold=0.95):
         """
         Extract relevant concepts from the question using zero-shot classification.
 
