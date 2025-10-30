@@ -1,0 +1,133 @@
+Loading checkpoint shards: 100%|████████████████████████████████████████████████████████████████████████| 2/2 [00:01<00:00,  1.71it/s]
+WARNING:root:A <class 'transformers.models.qwen2.modeling_qwen2.Qwen2ForCausalLM'> model is loaded from 'Qwen/Qwen2.5-3B-Instruct', and no v_head weight is found. This IS expected if you are not resuming PPO training.
+/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/trl/trainer/ppo_trainer.py:266: UserWarning: No dataset is provided. Make sure to set config.batch_size to the correct value before training.
+  warnings.warn(
+/home/ae21b026/RL4Education/load_context.py:104: LangChainDeprecationWarning: The class `HuggingFaceEmbeddings` was deprecated in LangChain 0.2.2 and will be removed in 1.0. An updated version of the class exists in the `langchain-huggingface package and should be used instead. To use it run `pip install -U `langchain-huggingface` and import as `from `langchain_huggingface import HuggingFaceEmbeddings``.
+  embedding_model = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+Device set to use cuda:0
+--------------------------------------------------------------------------------------------------------------------------------------
+Extracted concepts for the question: ['Bias-Variance Tradeoff']
+--------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------
+New concepts for the question: ['Underfitting', 'Overfitting']
+--------------------------------------------------------------------------------------------------------------------------------------
+You're using a Qwen2TokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
+/home/ae21b026/RL4Education/reward_model.py:111: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  novelty = torch.cosine_similarity(torch.tensor(question_embedding), self.mean_question_embedding.unsqueeze(0))
+======================================================================================================================================
+Response: 'Question: In the realm of machine learning models, how does the Bias Variance Trade-off impact underfit and overparameterized situations differently? Illustrate this difference using examples of an underfitted model that struggles to generalize, and contrast it with an overfittled model which neither captures the underlying pattern nor avoids noise.
+
+Answer:
+In scenarios where a machine-learning model fails to capture the essential features of the training dataset—resulting in high bias and poor performance on both training as well as unseen test data—the model suffers from under-fitting. This can be illustrated through an example of a linear regression model being applied to a highly non-linear problem space, where the model's simplicity prevents it from learning important non-linearity present in the true function that generates the data, leading to high error rates on the validation set as it cannot effectively model the variance or variability observed in diverse parts of data samples.
+
+Conversely, in an overly complex situation characterized by overparametrization—wherein a'
+Reward: 2.150
+======================================================================================================================================
+======================================================================================================================================
+Response: 'Harder question:
+How does the Bias-variance tradeoff differ in models prone to overfitted versus underfited errors? Additionally, explain why underfit models are typically associated with high training errors and low testing errors, contrasting this with scenarios of over-fitting where you observe a reversed trend.
+
+Answer:
+In models that are prone towards over fitting, there is a higher variance. This means that the model can fit the training dataset very closely due to capturing noise. As a result, it may perform well during the initial training phase but struggles during testing as it has memorized the noise instead of learning generalizable patterns. Hence, the performance drops drastically. Underfit cases, on the other hand, have higher bias but less variance, causing them to perform poorly even on their training set as the models do not account for minor variances in the data which should be learned. In contrast, over-fit models show an inverted trend where they have lower training loss but suffer with a much higher validation'
+Reward: 2.699
+======================================================================================================================================
+======================================================================================================================================
+Response: 'New question:
+In the process of machine learning, how does the bias-variance tradeoff contribute to both overfitted and underfited models? Discuss the role of regularization and early stopping in mitigating these issues.
+
+Answer:
+The bias-variance trade-off involves a delicate balance where a high-bias model leads to underfitment (the model not capturing the underlying pattern in the data), while a low-biased model with high variance fits the noise in addition to the signal, leading to over-fitting (performing well only on training set but not the unseen test set).
+
+Regularization and Early Stopping play key roles in combating overfits. Regularizers add a penalty term to fit in fewer parameters, thereby reducing the complexity of the model and lowering variance. By applying regularization parameters judiciously, one can achieve a compromise between bias and variance, often reducing overconfidence in noisy or complex data sets.
+
+Early stopping is a form of model oversight technique which prevents the training algorithm from continuing'
+Reward: 2.173
+======================================================================================================================================
+======================================================================================================================================
+Response: '**New Question:**
+In the process of minimizing bias and variance, why do practitioners need to be wary of overfitted models and what steps can be taken to avoid it? Additionally, explain how high test accuracy without corresponding validation accuracy might indicate an overconcerned model with the training set rather distinct characteristics found in new, unseen examples.
+
+**Answer:**
+Widely concerned about overfolded models, practitioners must understand the trade-off between bias, variance and minimize overtraining through techniques like regularization, cross-validation and data augmentation. High test set accuracy devoid of matching validation set performance signifies potential over-fitting, where the model has learned the noise within the data rather accurately predicting outcomes of the known dataset rather distinguishing new information. To prevent this, methods such as early stopping are crucial, ensuring that the optimization process doesn't get stuck in local minima, thereby reducing over-fit tendencies. Additionally understanding the fundamental difference between fitting the variance (how much each point varies) and the bias (the'
+Reward: 3.385
+======================================================================================================================================
+You seem to be using the pipelines sequentially on GPU. In order to maximize efficiency please use a dataset
+======================================================================================================================================
+Response: 'New question:
+In machine learning, how does the Bias-variance tradeoff influence the decision to use a deeper or shallower model? Discuss how underfit models relate to this dilemma and elaborate on the strategies that might be applied to avoid both underfitted and overfittted models.
+
+Answer:
+The Bias-variance trade-off influences the choice between using a shallow or deeper model; a deep model reduces bias, improving accuracy on training datasets while risking high variance, which leads to poor performance on new, unseen datasets. Underfit occurs with very shallow models, those that are simple and have low complexity. These models may lead to both low bias and low variance but result in a high overall error because they do not capture the underlying trends in the data, leading to underperformance on both training (due to insufficient learning) and test/validation sets (again due to lack of capturing overall structure). To address under-fitting, strategies include increasing model capacity (like adding more layers to neural networks), acquiring more'
+Reward: 2.676
+======================================================================================================================================
+======================================================================================================================================
+Response: 'Question: Why does overfitted models typically show high training loss and low cross-validation loss?
+
+Answer:
+Overfished models tend to have high losses during both training due to the model learning noise in the training set, but they also exhibit a decrease in cross validation loss as the additional complexity allows the noise present in training to be incorporated into predictions. This indicates a point where the trained model has over-fitted to this specific training dataset, thus not effectively generalizing to a held out validation or test dataset. Answer:
+Why does an underfited model typically result in a higher error rate across all types of datasets including training, validation, and testing sets?
+
+Answer:
+
+Underfittted models fail to capture the underlying trend in any dataset (training, crossvalidation, or testing) as they lack the complexity to learn important features. Consequently, they result not only in high errors during testing but often also high error rates during other stages like training itself, leading to an overall poor fit across different'
+Reward: 2.000
+======================================================================================================================================
+======================================================================================================================================
+Response: 'New Question:
+What role does the Bias-variance tradeoff play in determining whether a machine learning model underfits or overfits? Explain the relationship between bias and variance in the contexts of underfit models and how these concepts apply to scenarios of both over and underfitted models.
+
+Answer:
+The Bias-variance trade-off helps determine the balance between a learner's capacity to accurately capture the underlying trend in data (low bias) versus its sensitivity to fluctuations in random data points (high variance). In the case of an under-fitted model (underfit), the model has high bias meaning it tends to miss important patterns in training examples, leading to poor performance on both the training set and any test or validation sets. Conversely, for a well-fitting model, there is a balanced level of bias where the algorithm captures enough of the useful information in a way that generalizes well. At the other extreme, an overfitter has low bias but high variance; it fits the noise in your training dataset'
+Reward: 2.667
+======================================================================================================================================
+======================================================================================================================================
+Response: 'Question: Why might optimizing for high training performance lead to overfitted models? How can the Bias-variance tradeoff help us avoid this pitfall?
+
+Answer:
+Optimizing for a high score in training sets may lead models to memorize the training dataset instead of learning generalizable patterns, causing them to underperform on future, unseen datasets due to a decrease in the model's capacity for variability. A bias-varaince trade-off helps because reducing variance (exploring too much noise) can help maintain bias (oversimplifying the problem), preventing overfits where the learned function closely follows training set errors rather capturing the true underlying pattern. Balancing these through regularization, dropout, early stopping and other strategies mitigates over-fitting and improves generalizability. Techniques such as cross-validation further aid in this process by providing a better estimate of how a machine learning model will generalize to an independent dataset. Overemphasis on training loss without sufficient validation could lead one to overlook an over-fit, highlighting the'
+Reward: 3.360
+======================================================================================================================================
+Traceback (most recent call last):
+  File "/home/ae21b026/RL4Education/main.py", line 31, in <module>
+    main(args)
+  File "/home/ae21b026/RL4Education/main.py", line 20, in main
+    decoded_responses, rewards, stats = agent_llm.ppo_step(question)
+  File "/home/ae21b026/RL4Education/ppo_trainer.py", line 275, in ppo_step
+    stats = self.ppo_trainer.step(query_tensors, response_tensors, rewards)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/trl/trainer/ppo_trainer.py", line 824, in step
+    train_stats = self.train_minibatch(
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/trl/trainer/ppo_trainer.py", line 1089, in train_minibatch
+    loss_p, loss_v, train_stats = self.loss(
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/trl/trainer/ppo_trainer.py", line 1244, in loss
+    entropy = masked_mean(entropy_from_logits(logits), mask)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/trl/core.py", line 199, in entropy_from_logits
+    pd = torch.nn.functional.softmax(logits, dim=-1)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/torch/nn/functional.py", line 2133, in softmax
+    ret = input.softmax(dim)
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 750.00 MiB. GPU 0 has a total capacity of 31.73 GiB of which 148.25 MiB is free. Including non-PyTorch memory, this process has 31.58 GiB memory in use. Of the allocated memory 30.77 GiB is allocated by PyTorch, and 449.92 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Traceback (most recent call last):
+  File "/home/ae21b026/RL4Education/main.py", line 31, in <module>
+    main(args)
+  File "/home/ae21b026/RL4Education/main.py", line 20, in main
+    decoded_responses, rewards, stats = agent_llm.ppo_step(question)
+  File "/home/ae21b026/RL4Education/ppo_trainer.py", line 275, in ppo_step
+    stats = self.ppo_trainer.step(query_tensors, response_tensors, rewards)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/trl/trainer/ppo_trainer.py", line 824, in step
+    train_stats = self.train_minibatch(
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/trl/trainer/ppo_trainer.py", line 1089, in train_minibatch
+    loss_p, loss_v, train_stats = self.loss(
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/trl/trainer/ppo_trainer.py", line 1244, in loss
+    entropy = masked_mean(entropy_from_logits(logits), mask)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/trl/core.py", line 199, in entropy_from_logits
+    pd = torch.nn.functional.softmax(logits, dim=-1)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/torch/nn/functional.py", line 2133, in softmax
+    ret = input.softmax(dim)
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 750.00 MiB. GPU 0 has a total capacity of 31.73 GiB of which 148.25 MiB is free. Including non-PyTorch memory, this process has 31.58 GiB memory in use. Of the allocated memory 30.77 GiB is allocated by PyTorch, and 449.92 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)

@@ -26,8 +26,8 @@ class RewardModel(nn.Module):
         # Sentence embedding model for computing question embeddings
         self.embedding_model = SentenceTransformer('thenlper/gte-base').to(self.device)
         
-        # Compute the mean embedding of the question bank
-        self.mean_question_embedding = self.compute_mean_question_embedding(self.question_bank_path)
+        # Compute the mean embedding of the answers in the question bank
+        self.mean_answer_embedding = self.compute_mean_answer_embedding(self.question_bank_path)
         
         # Zero-shot classification pipeline for concept extraction
         self.concept_extractor = pipeline("zero-shot-classification", model="MoritzLaurer/deberta-v3-large-zeroshot-v2.0")
@@ -62,33 +62,33 @@ class RewardModel(nn.Module):
 
         return relevant_concepts
     
-    def compute_mean_question_embedding(self, question_bank_path):
+    def compute_mean_answer_embedding(self, question_bank_path):
             """
-            Loads questions from a JSON file and computes their mean embedding.
+            Loads answers from a JSON file and computes their mean embedding.
 
             Args:
                 question_bank_path (str): The file path to the JSON question bank.
 
             Returns:
-                torch.Tensor: The mean embedding of all questions in the bank.
+                torch.Tensor: The mean embedding of all answers in the bank.
             """
-            # 1. Load the JSON and extract all question strings into a list
-            questions = []
+            # 1. Load the JSON and extract all answer strings into a list
+            answers = []
             with open(question_bank_path, 'r') as f:
                 data = json.load(f)
 
             for concept_block in data:
                 if 'questions' in concept_block and isinstance(concept_block['questions'], list):
                     for qa_pair in concept_block['questions']:
-                        if 'question' in qa_pair:
-                            questions.append(qa_pair['question'])
+                        if 'answer' in qa_pair:
+                            answers.append(qa_pair['answer'])
 
-            if not questions:
-                print("No questions found in the file.")
+            if not answers:
+                print("No answers found in the file.")
                 return None
 
-            # 2. Encode the list of questions
-            embeddings = self.embedding_model.encode(questions, convert_to_tensor=True)
+            # 2. Encode the list of answers
+            embeddings = self.embedding_model.encode(answers, convert_to_tensor=True)
 
             # 3. Compute the mean of the embeddings
             # The embeddings are already a tensor, so no need for torch.tensor()
@@ -96,19 +96,21 @@ class RewardModel(nn.Module):
 
             return mean_embedding
 
-    def novelity_reward(self, question):
+    def novelity_reward(self, answer_text):
         """
-        Compute the novelty reward for a question based on its embedding similarity
-        to the mean question embedding.
+        Compute the novelty reward for an answer based on its embedding similarity
+        to the mean answer embedding.
 
         Args:
-            question (str): The input question.
+            answer_text (str): The generated answer text.
 
         Returns:
             float: Novelty reward (1 - cosine similarity).
         """
-        question_embedding = self.embedding_model.encode([question],convert_to_tensor=True)
-        novelty = torch.cosine_similarity(torch.tensor(question_embedding), self.mean_question_embedding.unsqueeze(0))
+        if self.mean_answer_embedding is None:
+            return 0.0
+        answer_embedding = self.embedding_model.encode([answer_text], convert_to_tensor=True)
+        novelty = torch.cosine_similarity(torch.tensor(answer_embedding), self.mean_answer_embedding.unsqueeze(0))
         return 1.0 - novelty.item()
     
     def concept_depth_reward(self, question):
@@ -151,19 +153,45 @@ class RewardModel(nn.Module):
 
         return max(outer_max_list)
 
-    def distractor_reward(self, question):
+    def split_required_and_distractors(self, question, allowed_concepts=None, threshold: float = 0.95):
         """
-        Placeholder for distractor reward computation.
+        Split concepts mentioned in the question into required and distractors.
 
         Args:
             question (str): The input question.
+            allowed_concepts (set|list|None): Concepts considered required/allowed. If None,
+                all extracted concepts are considered required and distractors will be empty.
+            threshold (float): Threshold to pass to concept extractor.
 
         Returns:
-            float: Distractor reward (currently 0.0).
+            tuple[set, set]: (required_concepts_in_question, distractor_concepts_in_question)
         """
-        return 0.0
+        mentioned = set(self.extract_concepts(question, threshold=threshold))
+        if not allowed_concepts:
+            return mentioned, set()
+        allowed = set(allowed_concepts)
+        required = mentioned.intersection(allowed)
+        distractors = mentioned.difference(allowed)
+        return required, distractors
 
-    def get_reward(self, question):
+    def distractor_reward(self, question, allowed_concepts=None):
+        """
+        Reward based on the number of distractor concepts present in the question.
+
+        A distractor is any extracted concept not in the provided allowed set.
+
+        Args:
+            question (str): The input question.
+            allowed_concepts (set|list|None): Concepts considered required/allowed.
+
+        Returns:
+            float: Distractor reward proportional to count of distractors.
+        """
+        _, distractors = self.split_required_and_distractors(question, allowed_concepts)
+        # Simple linear reward: 1 point per distractor, capped to avoid explosion
+        return float(min(len(distractors), 5))
+
+    def get_reward(self, question, allowed_concepts=None, answer=None):
         """
         Compute the total reward for a question based on novelty, depth, and distractor rewards.
 
@@ -174,9 +202,9 @@ class RewardModel(nn.Module):
             float: Total reward for the question.
         """
 
-        novelty = self.novelity_reward(question)
+        novelty = self.novelity_reward(answer) if isinstance(answer, str) and len(answer.strip()) > 0 else 0.0
         depth = self.concept_depth_reward(question)
-        distractor = self.distractor_reward(question)
+        distractor = self.distractor_reward(question, allowed_concepts)
         
         # Weighted sum of individual rewards
         total_reward = self.args.novelty * novelty + self.args.depth * depth + self.args.distractor * distractor

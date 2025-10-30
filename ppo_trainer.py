@@ -83,6 +83,8 @@ class AgentLLM:
         # Load the concept graph and context loader
         self.concept_graph = ConceptGraph(self.concept_graph_path)
         self.context_loader = LoadContext(self.question_bank_path)
+        # Weight for verification bonus (can be configured in config.yaml as 'verification')
+        self.verification_weight = getattr(args, "verification", 0.0)
 
     def generate_query(self, question):
         extracted_concepts = self.reward_model.extract_concepts(question)
@@ -98,6 +100,7 @@ class AgentLLM:
             context_piece = self.context_loader.get_context(concept)
             context.append(context_piece)
         batch_prompts = []
+        batch_meta = []  # keep track of per-prompt metadata
         for new_concept, context_piece in zip(dependent_concepts, context):
             try:
                 messages = [
@@ -116,6 +119,8 @@ class AgentLLM:
                             f"Requirements:\n"
                             f"- Make it more challenging than the original\n"
                             f"- Integrate '{new_concept}' naturally\n"
+                            f"- Include some distractor concepts in the question not listed above\n"
+                            f"- Ensure it remains answerable strictly from the provided context\n"
                             f"- Output the question followed by its answer, separated by 'Answer:'\n\n"
                         )
                     }
@@ -147,21 +152,33 @@ class AgentLLM:
                 # )
                 pass
             batch_prompts.append(prompt)
+            allowed_concepts = set(extracted_concepts) | {new_concept}
+            batch_meta.append({
+                "new_concept": new_concept,
+                "context": context_piece,
+                "allowed_concepts": list(allowed_concepts),
+                "extracted_concepts": list(extracted_concepts),
+            })
 
         target_size = self.ppo_config.batch_size
 
         if len(batch_prompts) < target_size:
             import random
             while len(batch_prompts) < target_size:
-                batch_prompts.append(random.choice(batch_prompts))
+                idx = random.randrange(len(batch_prompts))
+                batch_prompts.append(batch_prompts[idx])
+                batch_meta.append(batch_meta[idx])
         elif len(batch_prompts) > target_size:
             import random
-            batch_prompts = random.sample(batch_prompts, target_size)
+            indices = list(range(len(batch_prompts)))
+            indices = random.sample(indices, target_size)
+            batch_prompts = [batch_prompts[i] for i in indices]
+            batch_meta = [batch_meta[i] for i in indices]
 
-        return batch_prompts
+        return batch_prompts, batch_meta
 
     def ppo_step(self, question):
-        batch_prompts = self.generate_query(question)
+        batch_prompts, batch_meta = self.generate_query(question)
 
         # Tokenize with proper padding
         tokenized = self.tokenizer(
@@ -176,7 +193,7 @@ class AgentLLM:
         query_tensors = [ids for ids in tokenized.input_ids]
 
         generation_kwargs = dict(
-            max_new_tokens=150,
+            max_new_tokens=50,
             min_new_tokens=10,
             do_sample=True,
             top_k=50,
@@ -205,7 +222,7 @@ class AgentLLM:
 
         # Calculate rewards
         rewards = []
-        for response in decoded_responses:
+        for idx, response in enumerate(decoded_responses):
             # Split the response into question and answer
             if "Answer:" in response:
                 question_part, answer_part = response.split("Answer:", 1)
@@ -218,12 +235,41 @@ class AgentLLM:
                 # Penalize empty questions
                 final_score = -1.0
             else:
-                base_score = self.reward_model.get_reward(question_part.strip())
+                # Use allowed concepts for distractor reward
+                allowed_concepts = batch_meta[idx].get("allowed_concepts", [])
+                base_score = self.reward_model.get_reward(
+                    question_part.strip(),
+                    allowed_concepts=allowed_concepts,
+                    answer=answer_part.strip()
+                )
                 word_count = len(question_part.split())
                 length_bonus = min(word_count / 20.0, 1.0) * 0.5
-                final_score = base_score + length_bonus
+                # Optional verification bonus based on context consistency
+                verification_weight = getattr(self.ppo_config, "verification_weight", getattr(self, "verification_weight", 0.0))
+                verification_score = 0.0
+                try:
+                    context_piece = batch_meta[idx].get("context", "")
+                    if len(answer_part.strip()) > 0 and len(context_piece) > 0:
+                        # Simple check: generate an answer from context and compare via embedding similarity
+                        expected_answer = self.context_loader.get_response(question_part.strip())
+                        emb = self.reward_model.embedding_model
+                        a_emb = emb.encode([answer_part.strip()], convert_to_tensor=True)
+                        e_emb = emb.encode([expected_answer.strip()], convert_to_tensor=True)
+                        sim = torch.cosine_similarity(a_emb, e_emb).item()
+                        # Map cosine similarity [-1,1] to [0,1]
+                        verification_score = max(0.0, min((sim + 1.0) / 2.0, 1.0))
+                except Exception:
+                    verification_score = 0.0
 
-            wandb.log({"response": response, "reward": final_score, "question": question_part, "answer": answer_part})
+                final_score = base_score + length_bonus + verification_weight * verification_score
+
+            wandb.log({
+                "response": response,
+                "reward": final_score,
+                "question": question_part,
+                "answer": answer_part,
+                "verification_score": verification_score if 'verification_score' in locals() else 0.0
+            })
             rewards.append(torch.tensor(final_score).to(self.device))
             print('=' * shutil.get_terminal_size().columns)
             print(f"Response: '{response}'\nReward: {final_score:.3f}")
