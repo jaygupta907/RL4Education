@@ -153,47 +153,9 @@ class RewardModel(nn.Module):
 
         return max(outer_max_list)
 
-    def split_required_and_distractors(self, question, allowed_concepts=None, threshold: float = 0.95):
-        """
-        Split concepts mentioned in the question into required and distractors.
-
-        Args:
-            question (str): The input question.
-            allowed_concepts (set|list|None): Concepts considered required/allowed. If None,
-                all extracted concepts are considered required and distractors will be empty.
-            threshold (float): Threshold to pass to concept extractor.
-
-        Returns:
-            tuple[set, set]: (required_concepts_in_question, distractor_concepts_in_question)
-        """
-        mentioned = set(self.extract_concepts(question, threshold=threshold))
-        if not allowed_concepts:
-            return mentioned, set()
-        allowed = set(allowed_concepts)
-        required = mentioned.intersection(allowed)
-        distractors = mentioned.difference(allowed)
-        return required, distractors
-
-    def distractor_reward(self, question, allowed_concepts=None):
-        """
-        Reward based on the number of distractor concepts present in the question.
-
-        A distractor is any extracted concept not in the provided allowed set.
-
-        Args:
-            question (str): The input question.
-            allowed_concepts (set|list|None): Concepts considered required/allowed.
-
-        Returns:
-            float: Distractor reward proportional to count of distractors.
-        """
-        _, distractors = self.split_required_and_distractors(question, allowed_concepts)
-        # Simple linear reward: 1 point per distractor, capped to avoid explosion
-        return float(min(len(distractors), 5))
-
     def get_reward(self, question, allowed_concepts=None, answer=None):
         """
-        Compute the total reward for a question based on novelty, depth, and distractor rewards.
+        Compute the total reward for a question based on novelty and depth rewards.
 
         Args:
             question (str): The input question.
@@ -204,8 +166,7 @@ class RewardModel(nn.Module):
 
         novelty = self.novelity_reward(answer) if isinstance(answer, str) and len(answer.strip()) > 0 else 0.0
         depth = self.concept_depth_reward(question)
-        distractor = self.distractor_reward(question, allowed_concepts)
         
         # Weighted sum of individual rewards
-        total_reward = self.args.novelty * novelty + self.args.depth * depth + self.args.distractor * distractor
+        total_reward = self.args.novelty * novelty + self.args.depth * depth
         return total_reward

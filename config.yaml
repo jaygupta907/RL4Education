@@ -2,13 +2,11 @@
 #Reward Model Parameters
 novelty: 1.0
 depth: 0.2
-distractor: 0.5
 
 
 #PPO Trainer Parameters
 model_name: "Qwen/Qwen2.5-3B-Instruct"
 num_iterations: 5
-verification: 0.5
 
 concept_graph_path: "concept_graph.json"
 question_bank_path: "question_bank.json"
