@@ -1,0 +1,48 @@
+Target Variable: impedance
+Answer: 4728.3951
+
+Generated Question:
+"In an electrical circuit, there is a charge of 12.1118 Coulombs flowing through it. The circuit has a length of 33.3443 meters and operates for 77.0201 seconds. The magnetic field is 61.2116 Tesla, and the angle between the magnetic field and the direction of the current is 16.2190 degrees. The speed of the current is 48.9041 meters per second. Additionally, the period of oscillation is 79.9308 seconds. If the resistivity of the material is 9.0645 ohm-meters and the width of the circuit is 66.4344 meters, what is the impedance?"
+
+============================================================
+Calculation Details:
+============================================================
+Calculation Summary:
+Target Variable: impedance
+Final Answer: 4728.3951
+
+Formulas Used:
+  impedance = math.sqrt(resistance**2 + reactance**2)
+  resistance = voltage / current
+  reactance = angular_frequency * inductance
+  voltage = electric_field * distance
+  current = charge / time
+  angular_frequency = 2 * math.pi * frequency
+  inductance = magnetic_flux / current
+  electric_field = force / charge
+  distance = speed * time
+  frequency = 1 / period
+  magnetic_flux = magnetic_field * area * math.cos(angle)
+  area = length * width
+
+Given Values:
+  angle = 16.2190
+  charge = 12.1118
+  force = 3.1806
+  length = 33.3443
+  magnetic_field = 61.2116
+  period = 79.9308
+  resistivity = 9.0645
+  speed = 48.9041
+  time = 77.0201
+  width = 66.4344
+
+Calculated Intermediate Values:
+  impedance = 4728.3951
+  reactance = 4716.2797
+  resistance = 338.2699
+  angular_frequency = 83.0296
+  area = 2215.2096
+  current = 0.1573
+  inductance = 56.8024
+  voltage = 53.1948

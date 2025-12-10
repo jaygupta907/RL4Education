@@ -1,0 +1,884 @@
+{
+    "variables": [
+        {
+            "variable": "velocity",
+            "formulas": [
+                "displacement / time",
+                "initial_velocity + acceleration * time",
+                "math.sqrt(2 * acceleration * displacement + initial_velocity**2)"
+            ],
+            "dependencies": [
+                "displacement",
+                "time",
+                "initial_velocity",
+                "acceleration"
+            ]
+        },
+        {
+            "variable": "acceleration",
+            "formulas": [
+                "(final_velocity - initial_velocity) / time",
+                "force / mass",
+                "(final_velocity**2 - initial_velocity**2) / (2 * displacement)"
+            ],
+            "dependencies": [
+                "final_velocity",
+                "initial_velocity",
+                "time",
+                "force",
+                "mass",
+                "displacement"
+            ]
+        },
+        {
+            "variable": "force",
+            "formulas": [
+                "mass * acceleration",
+                "mass * gravity",
+                "spring_constant * displacement"
+            ],
+            "dependencies": [
+                "mass",
+                "acceleration",
+                "gravity",
+                "spring_constant",
+                "displacement"
+            ]
+        },
+        {
+            "variable": "kinetic_energy",
+            "formulas": [
+                "0.5 * mass * velocity**2",
+                "work",
+                "total_energy - potential_energy"
+            ],
+            "dependencies": [
+                "mass",
+                "velocity",
+                "work",
+                "total_energy",
+                "potential_energy"
+            ]
+        },
+        {
+            "variable": "potential_energy",
+            "formulas": [
+                "mass * gravity * height",
+                "0.5 * spring_constant * displacement**2",
+                "total_energy - kinetic_energy"
+            ],
+            "dependencies": [
+                "mass",
+                "gravity",
+                "height",
+                "spring_constant",
+                "displacement",
+                "total_energy",
+                "kinetic_energy"
+            ]
+        },
+        {
+            "variable": "work",
+            "formulas": [
+                "force * displacement * math.cos(angle)",
+                "change_in_kinetic_energy",
+                "change_in_potential_energy"
+            ],
+            "dependencies": [
+                "force",
+                "displacement",
+                "angle",
+                "change_in_kinetic_energy",
+                "change_in_potential_energy"
+            ]
+        },
+        {
+            "variable": "power",
+            "formulas": [
+                "work / time",
+                "force * velocity",
+                "current * voltage"
+            ],
+            "dependencies": [
+                "work",
+                "time",
+                "force",
+                "velocity",
+                "current",
+                "voltage"
+            ]
+        },
+        {
+            "variable": "momentum",
+            "formulas": [
+                "mass * velocity",
+                "force * time",
+                "initial_momentum + impulse"
+            ],
+            "dependencies": [
+                "mass",
+                "velocity",
+                "force",
+                "time",
+                "initial_momentum",
+                "impulse"
+            ]
+        },
+        {
+            "variable": "displacement",
+            "formulas": [
+                "final_position - initial_position",
+                "velocity * time + 0.5 * acceleration * time**2",
+                "initial_velocity * time + 0.5 * acceleration * time**2"
+            ],
+            "dependencies": [
+                "final_position",
+                "initial_position",
+                "velocity",
+                "time",
+                "acceleration",
+                "initial_velocity"
+            ]
+        },
+        {
+            "variable": "speed",
+            "formulas": [
+                "abs(velocity)",
+                "distance / time",
+                "math.sqrt(velocity_x**2 + velocity_y**2)"
+            ],
+            "dependencies": [
+                "velocity",
+                "distance",
+                "time",
+                "velocity_x",
+                "velocity_y"
+            ]
+        },
+        {
+            "variable": "angular_velocity",
+            "formulas": [
+                "angular_displacement / time",
+                "2 * math.pi * frequency",
+                "velocity / radius",
+                "(final_angle - initial_angle) / time"
+            ],
+            "dependencies": [
+                "angular_displacement",
+                "time",
+                "frequency",
+                "velocity",
+                "radius",
+                "final_angle",
+                "initial_angle"
+            ]
+        },
+        {
+            "variable": "angular_acceleration",
+            "formulas": [
+                "(final_angular_velocity - initial_angular_velocity) / time",
+                "torque / moment_of_inertia",
+                "change_in_angular_velocity / time"
+            ],
+            "dependencies": [
+                "final_angular_velocity",
+                "initial_angular_velocity",
+                "time",
+                "torque",
+                "moment_of_inertia",
+                "change_in_angular_velocity"
+            ]
+        },
+        {
+            "variable": "torque",
+            "formulas": [
+                "force * radius * math.sin(angle)",
+                "moment_of_inertia * angular_acceleration",
+                "force_perpendicular * radius"
+            ],
+            "dependencies": [
+                "force",
+                "radius",
+                "angle",
+                "moment_of_inertia",
+                "angular_acceleration",
+                "force_perpendicular"
+            ]
+        },
+        {
+            "variable": "moment_of_inertia",
+            "formulas": [
+                "mass * radius**2",
+                "torque / angular_acceleration",
+                "angular_momentum / angular_velocity"
+            ],
+            "dependencies": [
+                "mass",
+                "radius",
+                "torque",
+                "angular_acceleration",
+                "angular_momentum",
+                "angular_velocity"
+            ]
+        },
+        {
+            "variable": "angular_momentum",
+            "formulas": [
+                "moment_of_inertia * angular_velocity",
+                "mass * velocity * radius",
+                "momentum * radius"
+            ],
+            "dependencies": [
+                "moment_of_inertia",
+                "angular_velocity",
+                "mass",
+                "velocity",
+                "radius",
+                "momentum"
+            ]
+        },
+        {
+            "variable": "centripetal_force",
+            "formulas": [
+                "mass * centripetal_acceleration",
+                "mass * velocity**2 / radius",
+                "mass * angular_velocity**2 * radius"
+            ],
+            "dependencies": [
+                "mass",
+                "centripetal_acceleration",
+                "velocity",
+                "radius",
+                "angular_velocity"
+            ]
+        },
+        {
+            "variable": "centripetal_acceleration",
+            "formulas": [
+                "velocity**2 / radius",
+                "angular_velocity**2 * radius",
+                "centripetal_force / mass"
+            ],
+            "dependencies": [
+                "velocity",
+                "radius",
+                "angular_velocity",
+                "centripetal_force",
+                "mass"
+            ]
+        },
+        {
+            "variable": "frequency",
+            "formulas": [
+                "1 / period",
+                "angular_velocity / (2 * math.pi)",
+                "wave_speed / wavelength",
+                "number_of_cycles / time"
+            ],
+            "dependencies": [
+                "period",
+                "angular_velocity",
+                "wave_speed",
+                "wavelength",
+                "number_of_cycles",
+                "time"
+            ]
+        },
+        {
+            "variable": "period",
+            "formulas": [
+                "1 / frequency",
+                "2 * math.pi * math.sqrt(mass / spring_constant)",
+                "2 * math.pi / angular_velocity",
+                "time / number_of_cycles"
+            ],
+            "dependencies": [
+                "frequency",
+                "mass",
+                "spring_constant",
+                "angular_velocity",
+                "time",
+                "number_of_cycles"
+            ]
+        },
+        {
+            "variable": "wavelength",
+            "formulas": [
+                "wave_speed / frequency",
+                "wave_speed * period",
+                "2 * math.pi / wave_number"
+            ],
+            "dependencies": [
+                "wave_speed",
+                "frequency",
+                "period",
+                "wave_number"
+            ]
+        },
+        {
+            "variable": "wave_speed",
+            "formulas": [
+                "frequency * wavelength",
+                "wavelength / period",
+                "math.sqrt(tension / linear_density)"
+            ],
+            "dependencies": [
+                "frequency",
+                "wavelength",
+                "period",
+                "tension",
+                "linear_density"
+            ]
+        },
+        {
+            "variable": "resistance",
+            "formulas": [
+                "voltage / current",
+                "resistivity * length / area",
+                "power / current**2",
+                "voltage**2 / power"
+            ],
+            "dependencies": [
+                "voltage",
+                "current",
+                "resistivity",
+                "length",
+                "area",
+                "power"
+            ]
+        },
+        {
+            "variable": "voltage",
+            "formulas": [
+                "current * resistance",
+                "power / current",
+                "electric_field * distance",
+                "work / charge"
+            ],
+            "dependencies": [
+                "current",
+                "resistance",
+                "power",
+                "electric_field",
+                "distance",
+                "work",
+                "charge"
+            ]
+        },
+        {
+            "variable": "current",
+            "formulas": [
+                "voltage / resistance",
+                "charge / time",
+                "power / voltage",
+                "math.sqrt(power / resistance)"
+            ],
+            "dependencies": [
+                "voltage",
+                "resistance",
+                "charge",
+                "time",
+                "power"
+            ]
+        },
+        {
+            "variable": "capacitance",
+            "formulas": [
+                "charge / voltage",
+                "permittivity * area / distance",
+                "energy / (0.5 * voltage**2)"
+            ],
+            "dependencies": [
+                "charge",
+                "voltage",
+                "permittivity",
+                "area",
+                "distance",
+                "energy"
+            ]
+        },
+        {
+            "variable": "electric_field",
+            "formulas": [
+                "force / charge",
+                "voltage / distance",
+                "coulomb_constant * charge / distance**2"
+            ],
+            "dependencies": [
+                "force",
+                "charge",
+                "voltage",
+                "distance",
+                "coulomb_constant"
+            ]
+        },
+        {
+            "variable": "magnetic_field",
+            "formulas": [
+                "force / (charge * velocity)",
+                "permeability * current / (2 * math.pi * radius)",
+                "magnetic_flux / area"
+            ],
+            "dependencies": [
+                "force",
+                "charge",
+                "velocity",
+                "permeability",
+                "current",
+                "radius",
+                "magnetic_flux",
+                "area"
+            ]
+        },
+        {
+            "variable": "density",
+            "formulas": [
+                "mass / volume",
+                "pressure / (gas_constant * temperature)"
+            ],
+            "dependencies": [
+                "mass",
+                "volume",
+                "pressure",
+                "gas_constant",
+                "temperature"
+            ]
+        },
+        {
+            "variable": "pressure",
+            "formulas": [
+                "force / area",
+                "density * gas_constant * temperature",
+                "density * gravity * height"
+            ],
+            "dependencies": [
+                "force",
+                "area",
+                "density",
+                "gas_constant",
+                "temperature",
+                "gravity",
+                "height"
+            ]
+        },
+        {
+            "variable": "volume",
+            "formulas": [
+                "mass / density",
+                "area * height",
+                "gas_constant * temperature * number_of_moles / pressure",
+                "(4/3) * math.pi * radius**3"
+            ],
+            "dependencies": [
+                "mass",
+                "density",
+                "area",
+                "height",
+                "gas_constant",
+                "temperature",
+                "number_of_moles",
+                "pressure",
+                "radius"
+            ]
+        },
+        {
+            "variable": "temperature",
+            "formulas": [
+                "pressure * volume / (gas_constant * number_of_moles)",
+                "pressure / (density * gas_constant)",
+                "average_kinetic_energy / (1.5 * boltzmann_constant)"
+            ],
+            "dependencies": [
+                "pressure",
+                "volume",
+                "gas_constant",
+                "number_of_moles",
+                "density",
+                "average_kinetic_energy",
+                "boltzmann_constant"
+            ]
+        },
+        {
+            "variable": "impulse",
+            "formulas": [
+                "force * time",
+                "change_in_momentum",
+                "final_momentum - initial_momentum"
+            ],
+            "dependencies": [
+                "force",
+                "time",
+                "change_in_momentum",
+                "final_momentum",
+                "initial_momentum"
+            ]
+        },
+        {
+            "variable": "total_energy",
+            "formulas": [
+                "kinetic_energy + potential_energy",
+                "work + initial_energy",
+                "mass * speed_of_light**2"
+            ],
+            "dependencies": [
+                "kinetic_energy",
+                "potential_energy",
+                "work",
+                "initial_energy",
+                "mass",
+                "speed_of_light"
+            ]
+        },
+        {
+            "variable": "friction_force",
+            "formulas": [
+                "coefficient_of_friction * normal_force",
+                "mu_static * normal_force",
+                "mu_kinetic * normal_force"
+            ],
+            "dependencies": [
+                "coefficient_of_friction",
+                "normal_force",
+                "mu_static",
+                "mu_kinetic"
+            ]
+        },
+        {
+            "variable": "normal_force",
+            "formulas": [
+                "mass * gravity * math.cos(angle)",
+                "mass * gravity",
+                "force_applied * math.sin(angle)"
+            ],
+            "dependencies": [
+                "mass",
+                "gravity",
+                "angle",
+                "force_applied"
+            ]
+        },
+        {
+            "variable": "tension",
+            "formulas": [
+                "mass * acceleration + mass * gravity",
+                "force_applied",
+                "centripetal_force + weight"
+            ],
+            "dependencies": [
+                "mass",
+                "acceleration",
+                "gravity",
+                "force_applied",
+                "centripetal_force",
+                "weight"
+            ]
+        },
+        {
+            "variable": "weight",
+            "formulas": [
+                "mass * gravity",
+                "force",
+                "density * volume * gravity"
+            ],
+            "dependencies": [
+                "mass",
+                "gravity",
+                "force",
+                "density",
+                "volume"
+            ]
+        },
+        {
+            "variable": "buoyant_force",
+            "formulas": [
+                "density_fluid * volume_displaced * gravity",
+                "weight_displaced",
+                "density_fluid * volume * gravity"
+            ],
+            "dependencies": [
+                "density_fluid",
+                "volume_displaced",
+                "gravity",
+                "weight_displaced",
+                "volume"
+            ]
+        },
+        {
+            "variable": "area",
+            "formulas": [
+                "length * width",
+                "math.pi * radius**2",
+                "0.5 * base * height",
+                "pressure * force"
+            ],
+            "dependencies": [
+                "length",
+                "width",
+                "radius",
+                "base",
+                "height",
+                "pressure",
+                "force"
+            ]
+        },
+        {
+            "variable": "distance",
+            "formulas": [
+                "speed * time",
+                "math.sqrt((x2 - x1)**2 + (y2 - y1)**2)",
+                "initial_velocity * time + 0.5 * acceleration * time**2"
+            ],
+            "dependencies": [
+                "speed",
+                "time",
+                "x2",
+                "x1",
+                "y2",
+                "y1",
+                "initial_velocity",
+                "acceleration"
+            ]
+        },
+        {
+            "variable": "height",
+            "formulas": [
+                "initial_velocity_y * time - 0.5 * gravity * time**2",
+                "potential_energy / (mass * gravity)",
+                "vertical_displacement"
+            ],
+            "dependencies": [
+                "initial_velocity_y",
+                "time",
+                "gravity",
+                "potential_energy",
+                "mass",
+                "vertical_displacement"
+            ]
+        },
+        {
+            "variable": "range",
+            "formulas": [
+                "initial_velocity**2 * math.sin(2 * angle) / gravity",
+                "horizontal_velocity * time_of_flight",
+                "horizontal_displacement"
+            ],
+            "dependencies": [
+                "initial_velocity",
+                "angle",
+                "gravity",
+                "horizontal_velocity",
+                "time_of_flight",
+                "horizontal_displacement"
+            ]
+        },
+        {
+            "variable": "time_of_flight",
+            "formulas": [
+                "2 * initial_velocity_y / gravity",
+                "2 * initial_velocity * math.sin(angle) / gravity",
+                "range / horizontal_velocity"
+            ],
+            "dependencies": [
+                "initial_velocity_y",
+                "gravity",
+                "initial_velocity",
+                "angle",
+                "range",
+                "horizontal_velocity"
+            ]
+        },
+        {
+            "variable": "maximum_height",
+            "formulas": [
+                "initial_velocity_y**2 / (2 * gravity)",
+                "initial_velocity**2 * math.sin(angle)**2 / (2 * gravity)",
+                "potential_energy_max / (mass * gravity)"
+            ],
+            "dependencies": [
+                "initial_velocity_y",
+                "gravity",
+                "initial_velocity",
+                "angle",
+                "potential_energy_max",
+                "mass"
+            ]
+        },
+        {
+            "variable": "electric_potential_energy",
+            "formulas": [
+                "charge * voltage",
+                "coulomb_constant * charge1 * charge2 / distance",
+                "0.5 * capacitance * voltage**2"
+            ],
+            "dependencies": [
+                "charge",
+                "voltage",
+                "coulomb_constant",
+                "charge1",
+                "charge2",
+                "distance",
+                "capacitance"
+            ]
+        },
+        {
+            "variable": "magnetic_flux",
+            "formulas": [
+                "magnetic_field * area * math.cos(angle)",
+                "magnetic_field * area",
+                "voltage_induced * time"
+            ],
+            "dependencies": [
+                "magnetic_field",
+                "area",
+                "angle",
+                "voltage_induced",
+                "time"
+            ]
+        },
+        {
+            "variable": "inductance",
+            "formulas": [
+                "magnetic_flux / current",
+                "voltage / (change_in_current / time)",
+                "self_inductance"
+            ],
+            "dependencies": [
+                "magnetic_flux",
+                "current",
+                "voltage",
+                "change_in_current",
+                "time",
+                "self_inductance"
+            ]
+        },
+        {
+            "variable": "impedance",
+            "formulas": [
+                "math.sqrt(resistance**2 + reactance**2)",
+                "voltage / current",
+                "math.sqrt(resistance**2 + (angular_frequency * inductance - 1/(angular_frequency * capacitance))**2)"
+            ],
+            "dependencies": [
+                "resistance",
+                "reactance",
+                "voltage",
+                "current",
+                "angular_frequency",
+                "inductance",
+                "capacitance"
+            ]
+        },
+        {
+            "variable": "reactance",
+            "formulas": [
+                "angular_frequency * inductance",
+                "1 / (angular_frequency * capacitance)",
+                "inductive_reactance - capacitive_reactance"
+            ],
+            "dependencies": [
+                "angular_frequency",
+                "inductance",
+                "capacitance",
+                "inductive_reactance",
+                "capacitive_reactance"
+            ]
+        },
+        {
+            "variable": "angular_frequency",
+            "formulas": [
+                "2 * math.pi * frequency",
+                "angular_velocity",
+                "math.sqrt(spring_constant / mass)",
+                "1 / math.sqrt(inductance * capacitance)"
+            ],
+            "dependencies": [
+                "frequency",
+                "angular_velocity",
+                "spring_constant",
+                "mass",
+                "inductance",
+                "capacitance"
+            ]
+        },
+        {
+            "variable": "efficiency",
+            "formulas": [
+                "useful_output / total_input",
+                "output_power / input_power",
+                "work_output / work_input"
+            ],
+            "dependencies": [
+                "useful_output",
+                "total_input",
+                "output_power",
+                "input_power",
+                "work_output",
+                "work_input"
+            ]
+        },
+        {
+            "variable": "mechanical_advantage",
+            "formulas": [
+                "output_force / input_force",
+                "input_distance / output_distance",
+                "load / effort"
+            ],
+            "dependencies": [
+                "output_force",
+                "input_force",
+                "input_distance",
+                "output_distance",
+                "load",
+                "effort"
+            ]
+        },
+        {
+            "variable": "stress",
+            "formulas": [
+                "force / area",
+                "young_modulus * strain",
+                "pressure"
+            ],
+            "dependencies": [
+                "force",
+                "area",
+                "young_modulus",
+                "strain",
+                "pressure"
+            ]
+        },
+        {
+            "variable": "strain",
+            "formulas": [
+                "change_in_length / original_length",
+                "stress / young_modulus",
+                "deformation / length"
+            ],
+            "dependencies": [
+                "change_in_length",
+                "original_length",
+                "stress",
+                "young_modulus",
+                "deformation",
+                "length"
+            ]
+        },
+        {
+            "variable": "young_modulus",
+            "formulas": [
+                "stress / strain",
+                "force * original_length / (area * change_in_length)",
+                "elastic_modulus"
+            ],
+            "dependencies": [
+                "stress",
+                "strain",
+                "force",
+                "original_length",
+                "area",
+                "change_in_length",
+                "elastic_modulus"
+            ]
+        }
+    ]
+}

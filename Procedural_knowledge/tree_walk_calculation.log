@@ -1,0 +1,2226 @@
+
+============================================================
+Starting tree walk from target node: magnetic_flux
+Maximum branch length: 4
+============================================================
+
+  Found base input leaf node: angle
+  Found base input leaf node: voltage_induced
+  Found base input leaf node: time
+  Found base input leaf node: charge
+  Found base input leaf node: permeability
+  Found base input leaf node: radius
+  Skipping magnetic_flux (already at level 0, would create cycle)
+  Skipping area (already at level 1, would create cycle)
+  Found base input leaf node: length
+  Found base input leaf node: width
+  Found base input leaf node: base
+  Skipping force (already at level 2, would create cycle)
+  Found base input leaf node: mass
+  Found base input leaf node: gravity
+  Found base input leaf node: spring_constant
+  Found base input leaf node: initial_velocity
+  Skipping displacement (already at level 3, would create cycle)
+  Skipping acceleration (already at level 3, would create cycle)
+  Found base input leaf node: initial_velocity_y
+  Found base input leaf node: vertical_displacement
+  Found base input leaf node: gas_constant
+  Skipping force (already at level 2, would create cycle)
+  Skipping area (already at level 1, would create cycle)
+  Skipping height (already at level 2, would create cycle)
+  Found base input leaf node: final_velocity
+  Skipping force (already at level 2, would create cycle)
+  Skipping displacement (already at level 3, would create cycle)
+  Found base input leaf node: final_position
+  Found base input leaf node: initial_position
+  Skipping velocity (already at level 2, would create cycle)
+  Skipping acceleration (already at level 3, would create cycle)
+  Skipping current (already at level 2, would create cycle)
+  Skipping resistance (already at level 3, would create cycle)
+  Skipping power (already at level 3, would create cycle)
+  Found base input leaf node: resistivity
+  Skipping voltage (already at level 3, would create cycle)
+  Skipping current (already at level 2, would create cycle)
+  Skipping area (already at level 1, would create cycle)
+  Skipping power (already at level 3, would create cycle)
+  Skipping work (already at level 4, would create cycle)
+  Skipping force (already at level 2, would create cycle)
+  Skipping velocity (already at level 2, would create cycle)
+  Skipping current (already at level 2, would create cycle)
+  Skipping voltage (already at level 3, would create cycle)
+  Skipping height (already at level 2, would create cycle)
+  Skipping displacement (already at level 3, would create cycle)
+  Skipping pressure (already at level 2, would create cycle)
+  Skipping temperature (already at level 3, would create cycle)
+  Found base input leaf node: number_of_moles
+  Found base input leaf node: average_kinetic_energy
+  Found base input leaf node: boltzmann_constant
+  Skipping pressure (already at level 2, would create cycle)
+  Skipping volume (already at level 4, would create cycle)
+  Skipping density (already at level 3, would create cycle)
+
+Tree walk complete:
+  Total nodes: 45
+  Total edges: 75
+  Leaf nodes: 29
+  Base inputs: 23
+  Levels: 5
+
+Nodes by level:
+  Level 0: ['magnetic_flux']
+  Level 1: ['magnetic_field', 'area']
+  Level 2: ['force', 'velocity', 'current', 'height', 'pressure']
+  Level 3: ['acceleration', 'displacement', 'voltage', 'resistance', 'power', 'potential_energy', 'density', 'temperature']
+  Level 4: ['electric_field', 'distance', 'work', 'total_energy', 'kinetic_energy', 'volume']
+
+Leaf nodes: ['angle', 'average_kinetic_energy', 'base', 'boltzmann_constant', 'charge', 'distance', 'electric_field', 'final_position', 'final_velocity', 'gas_constant', 'gravity', 'initial_position', 'initial_velocity', 'initial_velocity_y', 'kinetic_energy', 'length', 'mass', 'number_of_moles', 'permeability', 'radius', 'resistivity', 'spring_constant', 'time', 'total_energy', 'vertical_displacement', 'voltage_induced', 'volume', 'width', 'work']
+Base inputs: ['angle', 'average_kinetic_energy', 'base', 'boltzmann_constant', 'charge', 'final_position', 'final_velocity', 'gas_constant', 'gravity', 'initial_position', 'initial_velocity', 'initial_velocity_y', 'length', 'mass', 'number_of_moles', 'permeability', 'radius', 'resistivity', 'spring_constant', 'time', 'vertical_displacement', 'voltage_induced', 'width']
+
+============================================================
+Pruning tree to keep only necessary branches
+============================================================
+
+  Node magnetic_flux uses formula: magnetic_field * area * math.cos(angle)
+    Required dependencies: ['angle', 'area', 'magnetic_field']
+  Node magnetic_field uses formula: force / (charge * velocity)
+    Required dependencies: ['charge', 'force', 'velocity']
+  Node area uses formula: length * width
+    Required dependencies: ['length', 'width']
+  Node force uses formula: mass * acceleration
+    Required dependencies: ['acceleration', 'mass']
+  Node velocity uses formula: displacement / time
+    Required dependencies: ['displacement', 'time']
+  Node acceleration uses formula: (final_velocity - initial_velocity) / time
+    Required dependencies: ['final_velocity', 'initial_velocity', 'time']
+  Node displacement uses formula: final_position - initial_position
+    Required dependencies: ['final_position', 'initial_position']
+  Leaf nodes in pruned tree: ['angle', 'charge', 'final_position', 'final_velocity', 'gravity', 'initial_position', 'initial_velocity', 'length', 'mass', 'time', 'voltage_induced', 'width']
+
+Pruning complete:
+  Original nodes: 45
+  Pruned nodes: 19
+  Original edges: 75
+  Pruned edges: 19
+  Removed 26 nodes
+  Removed 56 edges
+
+Pruned nodes by level:
+  Level 0: ['magnetic_flux']
+  Level 1: ['time', 'magnetic_field', 'area', 'voltage_induced', 'angle']
+  Level 2: ['force', 'velocity', 'charge', 'width', 'length']
+  Level 3: ['mass', 'acceleration', 'gravity', 'initial_velocity', 'displacement']
+  Level 4: ['final_velocity', 'final_position', 'initial_position']
+
+============================================================
+Assigning random values to leaf nodes
+============================================================
+
+  angle = 94.9760
+  charge = 11.3523
+  final_position = 51.0043
+  final_velocity = 28.6435
+  gravity = 65.1310
+  initial_position = 34.6673
+  initial_velocity = 59.6417
+  length = 62.4522
+  mass = 30.6221
+  time = 32.3595
+  voltage_induced = 29.1624
+  width = 52.4022
+
+============================================================
+Calculating values backwards from leaf nodes to target
+============================================================
+
+Deepest level 4 contains leaf nodes (already have values), skipping calculation
+
+--- Processing Level 3 ---
+  Nodes to calculate at level 3: ['acceleration', 'displacement']
+
+  Calculating: acceleration
+    Formula: (final_velocity - initial_velocity) / time
+    Result: -0.9579
+
+  Calculating: displacement
+    Formula: final_position - initial_position
+    Result: 16.3370
+
+--- Processing Level 2 ---
+  Nodes to calculate at level 2: ['force', 'velocity']
+
+  Calculating: force
+    Formula: mass * acceleration
+    Result: -29.3339
+
+  Calculating: velocity
+    Formula: displacement / time
+    Result: 0.5049
+
+--- Processing Level 1 ---
+  Nodes to calculate at level 1: ['magnetic_field', 'area']
+
+  Calculating: magnetic_field
+    Formula: force / (charge * velocity)
+    Result: -5.1182
+
+  Calculating: area
+    Formula: length * width
+    Result: 3272.6320
+
+--- Processing Level 0 ---
+  Nodes to calculate at level 0: ['magnetic_flux']
+
+  Calculating: magnetic_flux
+    Formula: magnetic_field * area * math.cos(angle)
+    Result: -12501.4206
+
+============================================================
+Final target value: magnetic_flux = -12501.4206
+============================================================
+
+
+============================================================
+Summary of all calculated values
+============================================================
+
+Base Inputs (Leaf Nodes):
+  angle = 94.9760
+  charge = 11.3523
+  final_position = 51.0043
+  final_velocity = 28.6435
+  gravity = 65.1310
+  initial_position = 34.6673
+  initial_velocity = 59.6417
+  length = 62.4522
+  mass = 30.6221
+  time = 32.3595
+  voltage_induced = 29.1624
+  width = 52.4022
+
+Level 0:
+  magnetic_flux = -12501.4206
+Level 1:
+  angle = 94.9760
+  area = 3272.6320
+  magnetic_field = -5.1182
+  time = 32.3595
+  voltage_induced = 29.1624
+Level 2:
+  charge = 11.3523
+  force = -29.3339
+  length = 62.4522
+  velocity = 0.5049
+  width = 52.4022
+Level 3:
+  acceleration = -0.9579
+  displacement = 16.3370
+  gravity = 65.1310
+  initial_velocity = 59.6417
+  mass = 30.6221
+Level 4:
+  final_position = 51.0043
+  final_velocity = 28.6435
+  initial_position = 34.6673
+NumExpr defaulting to 8 threads.
+============================================================
+Running Tree Walk Calculation
+============================================================
+
+============================================================
+Starting tree walk from target node: magnetic_flux
+Maximum branch length: 4
+============================================================
+
+  Found base input leaf node: angle
+  Found base input leaf node: voltage_induced
+  Found base input leaf node: time
+  Found base input leaf node: charge
+  Found base input leaf node: permeability
+  Found base input leaf node: radius
+  Skipping magnetic_flux (already at level 0, would create cycle)
+  Skipping area (already at level 1, would create cycle)
+  Found base input leaf node: length
+  Found base input leaf node: width
+  Found base input leaf node: base
+  Skipping force (already at level 2, would create cycle)
+  Found base input leaf node: mass
+  Found base input leaf node: gravity
+  Found base input leaf node: spring_constant
+  Found base input leaf node: initial_velocity
+  Skipping displacement (already at level 3, would create cycle)
+  Skipping acceleration (already at level 3, would create cycle)
+  Found base input leaf node: initial_velocity_y
+  Found base input leaf node: vertical_displacement
+  Found base input leaf node: gas_constant
+  Skipping force (already at level 2, would create cycle)
+  Skipping area (already at level 1, would create cycle)
+  Skipping height (already at level 2, would create cycle)
+  Found base input leaf node: final_velocity
+  Skipping force (already at level 2, would create cycle)
+  Skipping displacement (already at level 3, would create cycle)
+  Found base input leaf node: final_position
+  Found base input leaf node: initial_position
+  Skipping velocity (already at level 2, would create cycle)
+  Skipping acceleration (already at level 3, would create cycle)
+  Skipping current (already at level 2, would create cycle)
+  Skipping resistance (already at level 3, would create cycle)
+  Skipping power (already at level 3, would create cycle)
+  Found base input leaf node: resistivity
+  Skipping voltage (already at level 3, would create cycle)
+  Skipping current (already at level 2, would create cycle)
+  Skipping area (already at level 1, would create cycle)
+  Skipping power (already at level 3, would create cycle)
+  Skipping work (already at level 4, would create cycle)
+  Skipping force (already at level 2, would create cycle)
+  Skipping velocity (already at level 2, would create cycle)
+  Skipping current (already at level 2, would create cycle)
+  Skipping voltage (already at level 3, would create cycle)
+  Skipping height (already at level 2, would create cycle)
+  Skipping displacement (already at level 3, would create cycle)
+  Skipping pressure (already at level 2, would create cycle)
+  Skipping temperature (already at level 3, would create cycle)
+  Found base input leaf node: number_of_moles
+  Found base input leaf node: average_kinetic_energy
+  Found base input leaf node: boltzmann_constant
+  Skipping pressure (already at level 2, would create cycle)
+  Skipping volume (already at level 4, would create cycle)
+  Skipping density (already at level 3, would create cycle)
+
+Tree walk complete:
+  Total nodes: 45
+  Total edges: 75
+  Leaf nodes: 29
+  Base inputs: 23
+  Levels: 5
+
+Nodes by level:
+  Level 0: ['magnetic_flux']
+  Level 1: ['magnetic_field', 'area']
+  Level 2: ['force', 'velocity', 'current', 'height', 'pressure']
+  Level 3: ['acceleration', 'displacement', 'voltage', 'resistance', 'power', 'potential_energy', 'density', 'temperature']
+  Level 4: ['electric_field', 'distance', 'work', 'total_energy', 'kinetic_energy', 'volume']
+
+Leaf nodes: ['angle', 'average_kinetic_energy', 'base', 'boltzmann_constant', 'charge', 'distance', 'electric_field', 'final_position', 'final_velocity', 'gas_constant', 'gravity', 'initial_position', 'initial_velocity', 'initial_velocity_y', 'kinetic_energy', 'length', 'mass', 'number_of_moles', 'permeability', 'radius', 'resistivity', 'spring_constant', 'time', 'total_energy', 'vertical_displacement', 'voltage_induced', 'volume', 'width', 'work']
+Base inputs: ['angle', 'average_kinetic_energy', 'base', 'boltzmann_constant', 'charge', 'final_position', 'final_velocity', 'gas_constant', 'gravity', 'initial_position', 'initial_velocity', 'initial_velocity_y', 'length', 'mass', 'number_of_moles', 'permeability', 'radius', 'resistivity', 'spring_constant', 'time', 'vertical_displacement', 'voltage_induced', 'width']
+
+============================================================
+Pruning tree to keep only necessary branches
+============================================================
+
+  Node magnetic_flux uses formula: magnetic_field * area * math.cos(angle)
+    Required dependencies: ['angle', 'area', 'magnetic_field']
+  Node magnetic_field uses formula: force / (charge * velocity)
+    Required dependencies: ['charge', 'force', 'velocity']
+  Node area uses formula: length * width
+    Required dependencies: ['length', 'width']
+  Node force uses formula: mass * acceleration
+    Required dependencies: ['acceleration', 'mass']
+  Node velocity uses formula: displacement / time
+    Required dependencies: ['displacement', 'time']
+  Node acceleration uses formula: (final_velocity - initial_velocity) / time
+    Required dependencies: ['final_velocity', 'initial_velocity', 'time']
+  Node displacement uses formula: final_position - initial_position
+    Required dependencies: ['final_position', 'initial_position']
+  Leaf nodes in pruned tree: ['angle', 'charge', 'final_position', 'final_velocity', 'gravity', 'initial_position', 'initial_velocity', 'length', 'mass', 'time', 'voltage_induced', 'width']
+
+Pruning complete:
+  Original nodes: 45
+  Pruned nodes: 19
+  Original edges: 75
+  Pruned edges: 19
+  Removed 26 nodes
+  Removed 56 edges
+
+Pruned nodes by level:
+  Level 0: ['magnetic_flux']
+  Level 1: ['voltage_induced', 'time', 'angle', 'area', 'magnetic_field']
+  Level 2: ['length', 'width', 'charge', 'velocity', 'force']
+  Level 3: ['initial_velocity', 'displacement', 'acceleration', 'gravity', 'mass']
+  Level 4: ['initial_position', 'final_position', 'final_velocity']
+
+============================================================
+Assigning random values to leaf nodes
+============================================================
+
+  angle = 48.7019
+  charge = 56.3679
+  final_position = 17.2503
+  final_velocity = 29.2863
+  gravity = 99.3682
+  initial_position = 39.6257
+  initial_velocity = 80.0188
+  length = 30.6864
+  mass = 15.6404
+  time = 53.6617
+  voltage_induced = 63.3760
+  width = 67.0166
+
+============================================================
+Calculating values backwards from leaf nodes to target
+============================================================
+
+Deepest level 4 contains leaf nodes (already have values), skipping calculation
+
+--- Processing Level 3 ---
+  Nodes to calculate at level 3: ['displacement', 'acceleration']
+
+  Calculating: displacement
+    Formula: final_position - initial_position
+    Result: -22.3754
+
+  Calculating: acceleration
+    Formula: (final_velocity - initial_velocity) / time
+    Result: -0.9454
+
+--- Processing Level 2 ---
+  Nodes to calculate at level 2: ['velocity', 'force']
+
+  Calculating: velocity
+    Formula: displacement / time
+    Result: -0.4170
+
+  Calculating: force
+    Formula: mass * acceleration
+    Result: -14.7867
+
+--- Processing Level 1 ---
+  Nodes to calculate at level 1: ['area', 'magnetic_field']
+
+  Calculating: area
+    Formula: length * width
+    Result: 2056.4950
+
+  Calculating: magnetic_field
+    Formula: force / (charge * velocity)
+    Result: 0.6291
+
+--- Processing Level 0 ---
+  Nodes to calculate at level 0: ['magnetic_flux']
+
+  Calculating: magnetic_flux
+    Formula: magnetic_field * area * math.cos(angle)
+    Result: 9.3813
+
+============================================================
+Final target value: magnetic_flux = 9.3813
+============================================================
+
+
+============================================================
+Summary of all calculated values
+============================================================
+
+Base Inputs (Leaf Nodes):
+  angle = 48.7019
+  charge = 56.3679
+  final_position = 17.2503
+  final_velocity = 29.2863
+  gravity = 99.3682
+  initial_position = 39.6257
+  initial_velocity = 80.0188
+  length = 30.6864
+  mass = 15.6404
+  time = 53.6617
+  voltage_induced = 63.3760
+  width = 67.0166
+
+Level 0:
+  magnetic_flux = 9.3813
+Level 1:
+  angle = 48.7019
+  area = 2056.4950
+  magnetic_field = 0.6291
+  time = 53.6617
+  voltage_induced = 63.3760
+Level 2:
+  charge = 56.3679
+  force = -14.7867
+  length = 30.6864
+  velocity = -0.4170
+  width = 67.0166
+Level 3:
+  acceleration = -0.9454
+  displacement = -22.3754
+  gravity = 99.3682
+  initial_velocity = 80.0188
+  mass = 15.6404
+Level 4:
+  final_position = 17.2503
+  final_velocity = 29.2863
+  initial_position = 39.6257
+
+============================================================
+Generating Question from Answer
+============================================================
+Loading Qwen LLM model for question generation (this may take a moment)...
+We will use 90% of the memory on device 0 for storing the model, and 10% for the buffer to avoid OOM. You can set `max_memory` in to a higher value to use more memory (at your own risk).
+Qwen LLM model loaded successfully.
+
+============================================================
+Generated Question:
+============================================================
+A scientist is experimenting with a coil placed at an angle in a magnetic field. Given the magnetic flux through the coil is 9.3813 webers, the coil's area is 2056.495 square meters, the magnetic field strength is 0.6291 teslas, the coil's length is 30.6864 meters, its width is 67.0166 meters, the force acting on the coil is -14.7867 newtons, the initial velocity of an object is 80.0188 meters per second, the final velocity is 29.2863 meters per second, the gravitational acceleration is 99.3682 meters per second squared, the initial position is 39.6257 meters, the final position is 17.2503 meters, the displacement of the object is -2
+
+
+Question saved to generated_question.txt
+NumExpr defaulting to 8 threads.
+============================================================
+Running Tree Walk Calculation
+============================================================
+
+============================================================
+Starting tree walk from target node: magnetic_flux
+Maximum branch length: 4
+============================================================
+
+  Found base input leaf node: angle
+  Found base input leaf node: voltage_induced
+  Found base input leaf node: time
+  Found base input leaf node: charge
+  Found base input leaf node: permeability
+  Found base input leaf node: radius
+  Skipping magnetic_flux (already at level 0, would create cycle)
+  Skipping area (already at level 1, would create cycle)
+  Found base input leaf node: length
+  Found base input leaf node: width
+  Found base input leaf node: base
+  Skipping force (already at level 2, would create cycle)
+  Found base input leaf node: mass
+  Found base input leaf node: gravity
+  Found base input leaf node: spring_constant
+  Found base input leaf node: initial_velocity
+  Skipping displacement (already at level 3, would create cycle)
+  Skipping acceleration (already at level 3, would create cycle)
+  Found base input leaf node: initial_velocity_y
+  Found base input leaf node: vertical_displacement
+  Found base input leaf node: gas_constant
+  Skipping force (already at level 2, would create cycle)
+  Skipping area (already at level 1, would create cycle)
+  Skipping height (already at level 2, would create cycle)
+  Found base input leaf node: final_velocity
+  Skipping force (already at level 2, would create cycle)
+  Skipping displacement (already at level 3, would create cycle)
+  Found base input leaf node: final_position
+  Found base input leaf node: initial_position
+  Skipping velocity (already at level 2, would create cycle)
+  Skipping acceleration (already at level 3, would create cycle)
+  Skipping current (already at level 2, would create cycle)
+  Skipping resistance (already at level 3, would create cycle)
+  Skipping power (already at level 3, would create cycle)
+  Found base input leaf node: resistivity
+  Skipping voltage (already at level 3, would create cycle)
+  Skipping current (already at level 2, would create cycle)
+  Skipping area (already at level 1, would create cycle)
+  Skipping power (already at level 3, would create cycle)
+  Skipping work (already at level 4, would create cycle)
+  Skipping force (already at level 2, would create cycle)
+  Skipping velocity (already at level 2, would create cycle)
+  Skipping current (already at level 2, would create cycle)
+  Skipping voltage (already at level 3, would create cycle)
+  Skipping height (already at level 2, would create cycle)
+  Skipping displacement (already at level 3, would create cycle)
+  Skipping pressure (already at level 2, would create cycle)
+  Skipping temperature (already at level 3, would create cycle)
+  Found base input leaf node: number_of_moles
+  Found base input leaf node: average_kinetic_energy
+  Found base input leaf node: boltzmann_constant
+  Skipping pressure (already at level 2, would create cycle)
+  Skipping volume (already at level 4, would create cycle)
+  Skipping density (already at level 3, would create cycle)
+
+Tree walk complete:
+  Total nodes: 45
+  Total edges: 75
+  Leaf nodes: 29
+  Base inputs: 23
+  Levels: 5
+
+Nodes by level:
+  Level 0: ['magnetic_flux']
+  Level 1: ['magnetic_field', 'area']
+  Level 2: ['force', 'velocity', 'current', 'height', 'pressure']
+  Level 3: ['acceleration', 'displacement', 'voltage', 'resistance', 'power', 'potential_energy', 'density', 'temperature']
+  Level 4: ['electric_field', 'distance', 'work', 'total_energy', 'kinetic_energy', 'volume']
+
+Leaf nodes: ['angle', 'average_kinetic_energy', 'base', 'boltzmann_constant', 'charge', 'distance', 'electric_field', 'final_position', 'final_velocity', 'gas_constant', 'gravity', 'initial_position', 'initial_velocity', 'initial_velocity_y', 'kinetic_energy', 'length', 'mass', 'number_of_moles', 'permeability', 'radius', 'resistivity', 'spring_constant', 'time', 'total_energy', 'vertical_displacement', 'voltage_induced', 'volume', 'width', 'work']
+Base inputs: ['angle', 'average_kinetic_energy', 'base', 'boltzmann_constant', 'charge', 'final_position', 'final_velocity', 'gas_constant', 'gravity', 'initial_position', 'initial_velocity', 'initial_velocity_y', 'length', 'mass', 'number_of_moles', 'permeability', 'radius', 'resistivity', 'spring_constant', 'time', 'vertical_displacement', 'voltage_induced', 'width']
+
+============================================================
+Pruning tree to keep only necessary branches
+============================================================
+
+  Node magnetic_flux uses formula: magnetic_field * area * math.cos(angle)
+    Required dependencies: ['angle', 'area', 'magnetic_field']
+  Node magnetic_field uses formula: force / (charge * velocity)
+    Required dependencies: ['charge', 'force', 'velocity']
+  Node area uses formula: length * width
+    Required dependencies: ['length', 'width']
+  Node force uses formula: mass * acceleration
+    Required dependencies: ['acceleration', 'mass']
+  Node velocity uses formula: displacement / time
+    Required dependencies: ['displacement', 'time']
+  Node acceleration uses formula: (final_velocity - initial_velocity) / time
+    Required dependencies: ['final_velocity', 'initial_velocity', 'time']
+  Node displacement uses formula: final_position - initial_position
+    Required dependencies: ['final_position', 'initial_position']
+  Leaf nodes in pruned tree: ['angle', 'charge', 'final_position', 'final_velocity', 'gravity', 'initial_position', 'initial_velocity', 'length', 'mass', 'time', 'voltage_induced', 'width']
+
+Pruning complete:
+  Original nodes: 45
+  Pruned nodes: 19
+  Original edges: 75
+  Pruned edges: 19
+  Removed 26 nodes
+  Removed 56 edges
+
+Pruned nodes by level:
+  Level 0: ['magnetic_flux']
+  Level 1: ['voltage_induced', 'time', 'area', 'magnetic_field', 'angle']
+  Level 2: ['width', 'length', 'velocity', 'force', 'charge']
+  Level 3: ['acceleration', 'initial_velocity', 'displacement', 'gravity', 'mass']
+  Level 4: ['final_velocity', 'final_position', 'initial_position']
+
+============================================================
+Assigning random values to leaf nodes
+============================================================
+
+  angle = 43.7029
+  charge = 75.3759
+  final_position = 59.2854
+  final_velocity = 6.1118
+  gravity = 12.6869
+  initial_position = 88.3853
+  initial_velocity = 24.0280
+  length = 58.5336
+  mass = 82.8259
+  time = 83.0680
+  voltage_induced = 80.6731
+  width = 84.9373
+
+============================================================
+Calculating values backwards from leaf nodes to target
+============================================================
+
+Deepest level 4 contains leaf nodes (already have values), skipping calculation
+
+--- Processing Level 3 ---
+  Nodes to calculate at level 3: ['acceleration', 'displacement']
+
+  Calculating: acceleration
+    Formula: (final_velocity - initial_velocity) / time
+    Result: -0.2157
+
+  Calculating: displacement
+    Formula: final_position - initial_position
+    Result: -29.0999
+
+--- Processing Level 2 ---
+  Nodes to calculate at level 2: ['velocity', 'force']
+
+  Calculating: velocity
+    Formula: displacement / time
+    Result: -0.3503
+
+  Calculating: force
+    Formula: mass * acceleration
+    Result: -17.8640
+
+--- Processing Level 1 ---
+  Nodes to calculate at level 1: ['area', 'magnetic_field']
+
+  Calculating: area
+    Formula: length * width
+    Result: 4971.6844
+
+  Calculating: magnetic_field
+    Formula: force / (charge * velocity)
+    Result: 0.6765
+
+--- Processing Level 0 ---
+  Nodes to calculate at level 0: ['magnetic_flux']
+
+  Calculating: magnetic_flux
+    Formula: magnetic_field * area * math.cos(angle)
+    Result: 3233.0424
+
+============================================================
+Final target value: magnetic_flux = 3233.0424
+============================================================
+
+
+============================================================
+Summary of all calculated values
+============================================================
+
+Base Inputs (Leaf Nodes):
+  angle = 43.7029
+  charge = 75.3759
+  final_position = 59.2854
+  final_velocity = 6.1118
+  gravity = 12.6869
+  initial_position = 88.3853
+  initial_velocity = 24.0280
+  length = 58.5336
+  mass = 82.8259
+  time = 83.0680
+  voltage_induced = 80.6731
+  width = 84.9373
+
+Level 0:
+  magnetic_flux = 3233.0424
+Level 1:
+  angle = 43.7029
+  area = 4971.6844
+  magnetic_field = 0.6765
+  time = 83.0680
+  voltage_induced = 80.6731
+Level 2:
+  charge = 75.3759
+  force = -17.8640
+  length = 58.5336
+  velocity = -0.3503
+  width = 84.9373
+Level 3:
+  acceleration = -0.2157
+  displacement = -29.0999
+  gravity = 12.6869
+  initial_velocity = 24.0280
+  mass = 82.8259
+Level 4:
+  final_position = 59.2854
+  final_velocity = 6.1118
+  initial_position = 88.3853
+
+============================================================
+Generating Question from Answer
+============================================================
+Loading Qwen LLM model for question generation (this may take a moment)...
+We will use 90% of the memory on device 0 for storing the model, and 10% for the buffer to avoid OOM. You can set `max_memory` in to a higher value to use more memory (at your own risk).
+Qwen LLM model loaded successfully.
+
+============================================================
+Generated Question:
+============================================================
+A coil with a given magnetic field moves through a region of space, inducing a voltage of 80.6731 volts. If the angle between the magnetic field lines and the normal to the coil's plane is 43.7029 degrees, and the coil has a length of 58.5336 meters and a width of 84.9373 meters, find the magnetic flux through the coil if the magnetic field strength is such that it causes a force of 75.3759 newtons on a charge of 59.2854 coulombs moving at a velocity of 6.1118 meters per second. What is the magnetic flux?
+
+
+Question saved to generated_question.txt
+NumExpr defaulting to 8 threads.
+============================================================
+Running Tree Walk Calculation
+============================================================
+
+============================================================
+Starting tree walk from target node: impedance
+Maximum branch length: 4
+============================================================
+
+  Found base input leaf node: resistivity
+  Found base input leaf node: length
+  Skipping voltage (already at level 1, would create cycle)
+  Skipping current (already at level 1, would create cycle)
+  Found base input leaf node: inductive_reactance
+  Found base input leaf node: capacitive_reactance
+  Skipping angular_frequency (already at level 1, would create cycle)
+  Skipping inductance (already at level 1, would create cycle)
+  Skipping capacitance (already at level 1, would create cycle)
+  Found base input leaf node: charge
+  Skipping current (already at level 1, would create cycle)
+  Skipping resistance (already at level 1, would create cycle)
+  Skipping power (already at level 2, would create cycle)
+  Found base input leaf node: time
+  Skipping voltage (already at level 1, would create cycle)
+  Skipping resistance (already at level 1, would create cycle)
+  Skipping power (already at level 2, would create cycle)
+  Found base input leaf node: spring_constant
+  Found base input leaf node: mass
+  Skipping inductance (already at level 1, would create cycle)
+  Skipping capacitance (already at level 1, would create cycle)
+  Found base input leaf node: change_in_current
+  Found base input leaf node: self_inductance
+  Skipping current (already at level 1, would create cycle)
+  Skipping voltage (already at level 1, would create cycle)
+  Found base input leaf node: permittivity
+  Found base input leaf node: energy
+  Skipping voltage (already at level 1, would create cycle)
+  Skipping area (already at level 2, would create cycle)
+  Skipping distance (already at level 2, would create cycle)
+  Found base input leaf node: width
+  Found base input leaf node: radius
+  Found base input leaf node: base
+  Skipping work (already at level 2, would create cycle)
+  Skipping force (already at level 3, would create cycle)
+  Skipping current (already at level 1, would create cycle)
+  Skipping voltage (already at level 1, would create cycle)
+  Found base input leaf node: coulomb_constant
+  Skipping force (already at level 3, would create cycle)
+  Skipping voltage (already at level 1, would create cycle)
+  Skipping distance (already at level 2, would create cycle)
+  Found base input leaf node: x2
+  Found base input leaf node: x1
+  Found base input leaf node: y2
+  Found base input leaf node: y1
+  Found base input leaf node: initial_velocity
+  Found base input leaf node: angle
+  Found base input leaf node: change_in_kinetic_energy
+  Found base input leaf node: change_in_potential_energy
+  Skipping force (already at level 3, would create cycle)
+  Found base input leaf node: number_of_cycles
+  Skipping angular_velocity (already at level 2, would create cycle)
+  Found base input leaf node: angular_displacement
+  Found base input leaf node: final_angle
+  Found base input leaf node: initial_angle
+  Skipping frequency (already at level 2, would create cycle)
+  Skipping velocity (already at level 3, would create cycle)
+  Found base input leaf node: voltage_induced
+  Skipping area (already at level 2, would create cycle)
+  Found base input leaf node: initial_velocity_y
+  Found base input leaf node: gravity
+  Found base input leaf node: vertical_displacement
+  Found base input leaf node: gas_constant
+  Skipping force (already at level 3, would create cycle)
+  Skipping area (already at level 2, would create cycle)
+  Skipping height (already at level 3, would create cycle)
+  Skipping acceleration (already at level 3, would create cycle)
+  Skipping displacement (already at level 3, would create cycle)
+  Skipping displacement (already at level 3, would create cycle)
+  Skipping acceleration (already at level 3, would create cycle)
+  Found base input leaf node: velocity_x
+  Found base input leaf node: velocity_y
+  Skipping velocity (already at level 3, would create cycle)
+  Skipping distance (already at level 2, would create cycle)
+  Found base input leaf node: final_velocity
+  Skipping force (already at level 3, would create cycle)
+  Skipping displacement (already at level 3, would create cycle)
+  Found base input leaf node: final_position
+  Found base input leaf node: initial_position
+  Skipping velocity (already at level 3, would create cycle)
+  Skipping acceleration (already at level 3, would create cycle)
+  Skipping frequency (already at level 2, would create cycle)
+  Skipping angular_velocity (already at level 2, would create cycle)
+  Found base input leaf node: linear_density
+  Skipping frequency (already at level 2, would create cycle)
+  Skipping wavelength (already at level 3, would create cycle)
+  Skipping period (already at level 3, would create cycle)
+  Found base input leaf node: wave_number
+  Skipping wave_speed (already at level 3, would create cycle)
+  Skipping frequency (already at level 2, would create cycle)
+  Skipping period (already at level 3, would create cycle)
+  Found base input leaf node: permeability
+  Skipping force (already at level 3, would create cycle)
+  Skipping velocity (already at level 3, would create cycle)
+  Skipping current (already at level 1, would create cycle)
+  Skipping magnetic_flux (already at level 2, would create cycle)
+  Skipping area (already at level 2, would create cycle)
+
+Tree walk complete:
+  Total nodes: 72
+  Total edges: 127
+  Leaf nodes: 45
+  Base inputs: 41
+  Levels: 5
+
+Nodes by level:
+  Level 0: ['impedance']
+  Level 1: ['resistance', 'reactance', 'voltage', 'current', 'angular_frequency', 'inductance', 'capacitance']
+  Level 2: ['area', 'power', 'electric_field', 'distance', 'work', 'frequency', 'angular_velocity', 'magnetic_flux']
+  Level 3: ['height', 'pressure', 'force', 'velocity', 'speed', 'acceleration', 'displacement', 'period', 'wave_speed', 'wavelength', 'magnetic_field']
+  Level 4: ['potential_energy', 'density', 'temperature', 'tension']
+
+Leaf nodes: ['angle', 'angular_displacement', 'base', 'capacitive_reactance', 'change_in_current', 'change_in_kinetic_energy', 'change_in_potential_energy', 'charge', 'coulomb_constant', 'density', 'energy', 'final_angle', 'final_position', 'final_velocity', 'gas_constant', 'gravity', 'inductive_reactance', 'initial_angle', 'initial_position', 'initial_velocity', 'initial_velocity_y', 'length', 'linear_density', 'mass', 'number_of_cycles', 'permeability', 'permittivity', 'potential_energy', 'radius', 'resistivity', 'self_inductance', 'spring_constant', 'temperature', 'tension', 'time', 'velocity_x', 'velocity_y', 'vertical_displacement', 'voltage_induced', 'wave_number', 'width', 'x1', 'x2', 'y1', 'y2']
+Base inputs: ['angle', 'angular_displacement', 'base', 'capacitive_reactance', 'change_in_current', 'change_in_kinetic_energy', 'change_in_potential_energy', 'charge', 'coulomb_constant', 'energy', 'final_angle', 'final_position', 'final_velocity', 'gas_constant', 'gravity', 'inductive_reactance', 'initial_angle', 'initial_position', 'initial_velocity', 'initial_velocity_y', 'length', 'linear_density', 'mass', 'number_of_cycles', 'permeability', 'permittivity', 'radius', 'resistivity', 'self_inductance', 'spring_constant', 'time', 'velocity_x', 'velocity_y', 'vertical_displacement', 'voltage_induced', 'wave_number', 'width', 'x1', 'x2', 'y1', 'y2']
+
+============================================================
+Pruning tree to keep only necessary branches
+============================================================
+
+  Node impedance uses formula: math.sqrt(resistance**2 + reactance**2)
+    Required dependencies: ['reactance', 'resistance']
+  Node resistance uses formula: voltage / current
+    Required dependencies: ['current', 'voltage']
+  Node reactance uses formula: angular_frequency * inductance
+    Required dependencies: ['angular_frequency', 'inductance']
+  Node voltage uses formula: electric_field * distance
+    Required dependencies: ['distance', 'electric_field']
+  Node current uses formula: charge / time
+    Required dependencies: ['charge', 'time']
+  Node angular_frequency uses formula: 2 * math.pi * frequency
+    Required dependencies: ['frequency']
+  Node inductance uses formula: magnetic_flux / current
+    Required dependencies: ['current', 'magnetic_flux']
+  Node electric_field uses formula: force / charge
+    Required dependencies: ['charge', 'force']
+  Node distance uses formula: speed * time
+    Required dependencies: ['speed', 'time']
+  Node frequency uses formula: 1 / period
+    Required dependencies: ['period']
+  Node magnetic_flux uses formula: magnetic_field * area * math.cos(angle)
+    Required dependencies: ['angle', 'area', 'magnetic_field']
+  Node force uses formula: mass * acceleration
+    Required dependencies: ['acceleration', 'mass']
+  Node speed uses formula: abs(velocity)
+    Required dependencies: ['velocity']
+  Node acceleration uses formula: (final_velocity - initial_velocity) / time
+    Required dependencies: ['final_velocity', 'initial_velocity', 'time']
+  Node period uses formula: 2 * math.pi * math.sqrt(mass / spring_constant)
+    Required dependencies: ['mass', 'spring_constant']
+  Node magnetic_field uses formula: force / (charge * velocity)
+    Required dependencies: ['charge', 'force', 'velocity']
+  Node area uses formula: length * width
+    Required dependencies: ['length', 'width']
+  Node work uses formula: force * displacement * math.cos(angle)
+    Required dependencies: ['angle', 'displacement', 'force']
+  Node angular_velocity uses formula: angular_displacement / time
+    Required dependencies: ['angular_displacement', 'time']
+  Node velocity uses formula: initial_velocity + acceleration * time
+    Required dependencies: ['acceleration', 'initial_velocity', 'time']
+  Node displacement uses formula: final_position - initial_position
+    Required dependencies: ['final_position', 'initial_position']
+  Node wave_speed uses formula: math.sqrt(tension / linear_density)
+    Required dependencies: ['linear_density', 'tension']
+  Node wavelength uses formula: 2 * math.pi / wave_number
+    Required dependencies: ['wave_number']
+  Node tension uses formula: mass * acceleration + mass * gravity
+    Required dependencies: ['acceleration', 'gravity', 'mass']
+  Leaf nodes in pruned tree: ['angle', 'angular_displacement', 'charge', 'final_position', 'final_velocity', 'gravity', 'initial_position', 'initial_velocity', 'length', 'linear_density', 'mass', 'number_of_cycles', 'resistivity', 'spring_constant', 'time', 'voltage_induced', 'wave_number', 'width', 'x1', 'x2', 'y1', 'y2']
+
+Pruning complete:
+  Original nodes: 72
+  Pruned nodes: 46
+  Original edges: 127
+  Pruned edges: 47
+  Removed 26 nodes
+  Removed 80 edges
+
+Pruned nodes by level:
+  Level 0: ['impedance']
+  Level 1: ['resistance', 'reactance']
+  Level 2: ['area', 'current', 'resistivity', 'length', 'voltage', 'angular_frequency', 'inductance']
+  Level 3: ['width', 'time', 'charge', 'work', 'electric_field', 'distance', 'frequency', 'magnetic_flux']
+  Level 4: ['angle', 'force', 'displacement', 'x2', 'y1', 'y2', 'x1', 'speed', 'number_of_cycles', 'wavelength', 'angular_velocity', 'period', 'wave_speed', 'voltage_induced', 'magnetic_field']
+  Level 5: ['acceleration', 'final_position', 'initial_position', 'velocity', 'wave_number', 'angular_displacement', 'tension', 'linear_density']
+  Level 6: ['final_velocity']
+
+============================================================
+Assigning random values to leaf nodes
+============================================================
+
+  angle = 71.1859
+  angular_displacement = 20.3723
+  charge = 10.7055
+  final_position = 84.1756
+  final_velocity = 65.4991
+  gravity = 18.9518
+  initial_position = 55.7940
+  initial_velocity = 42.6771
+  length = 53.6511
+  linear_density = 22.8831
+  mass = 28.7379
+  number_of_cycles = 59.3978
+  resistivity = 65.2259
+  spring_constant = 6.6911
+  time = 55.6756
+  voltage_induced = 61.2616
+  wave_number = 44.4984
+  width = 44.1078
+  x1 = 20.7006
+  x2 = 5.1693
+  y1 = 88.0209
+  y2 = 17.9254
+
+============================================================
+Calculating values backwards from leaf nodes to target
+============================================================
+
+Deepest level 6 contains leaf nodes (already have values), skipping calculation
+
+--- Processing Level 5 ---
+  Nodes to calculate at level 5: ['acceleration', 'velocity', 'tension']
+  velocity depends on same-level nodes: {'acceleration'}
+  tension depends on same-level nodes: {'acceleration'}
+
+  Calculating: acceleration
+    Formula: (final_velocity - initial_velocity) / time
+    Result: 0.4099
+
+  Calculating: velocity
+    Formula: initial_velocity + acceleration * time
+    Result: 65.4991
+
+  Calculating: tension
+    Formula: mass * acceleration + mass * gravity
+    Result: 556.4147
+
+--- Processing Level 4 ---
+  Nodes to calculate at level 4: ['force', 'displacement', 'speed', 'wavelength', 'angular_velocity', 'period', 'wave_speed', 'magnetic_field']
+  magnetic_field depends on same-level nodes: {'force'}
+
+  Calculating: force
+    Formula: mass * acceleration
+    Result: 11.7800
+
+  Calculating: displacement
+    Formula: final_position - initial_position
+    Result: 28.3817
+
+  Calculating: speed
+    Formula: abs(velocity)
+    Result: 65.4991
+
+  Calculating: wavelength
+    Formula: 2 * math.pi / wave_number
+    Result: 0.1412
+
+  Calculating: angular_velocity
+    Formula: angular_displacement / time
+    Result: 0.3659
+
+  Calculating: period
+    Formula: 2 * math.pi * math.sqrt(mass / spring_constant)
+    Result: 13.0214
+
+  Calculating: wave_speed
+    Formula: wavelength / period
+    Result: 0.0108
+
+  Calculating: magnetic_field
+    Formula: force / (charge * velocity)
+    Result: 0.0168
+
+--- Processing Level 3 ---
+  Nodes to calculate at level 3: ['work', 'electric_field', 'distance', 'frequency', 'magnetic_flux']
+
+  Calculating: work
+    Formula: force * displacement * math.cos(angle)
+    Result: -160.2950
+
+  Calculating: electric_field
+    Formula: force / charge
+    Result: 1.1004
+
+  Calculating: distance
+    Formula: speed * time
+    Result: 3646.6985
+
+  Calculating: frequency
+    Formula: 1 / period
+    Result: 0.0768
+
+  Calculating: magnetic_flux
+    Formula: voltage_induced * time
+    Result: 3410.7782
+
+--- Processing Level 2 ---
+  Nodes to calculate at level 2: ['area', 'current', 'voltage', 'angular_frequency', 'inductance']
+  inductance depends on same-level nodes: {'current'}
+
+  Calculating: area
+    Formula: length * width
+    Result: 2366.4307
+
+  Calculating: current
+    Formula: charge / time
+    Result: 0.1923
+
+  Calculating: voltage
+    Formula: electric_field * distance
+    Result: 4012.7041
+
+  Calculating: angular_frequency
+    Formula: 2 * math.pi * frequency
+    Result: 0.4825
+
+  Calculating: inductance
+    Formula: magnetic_flux / current
+    Result: 17738.3016
+
+--- Processing Level 1 ---
+  Nodes to calculate at level 1: ['resistance', 'reactance']
+
+  Calculating: resistance
+    Formula: voltage / current
+    Result: 20868.7142
+
+  Calculating: reactance
+    Formula: angular_frequency * inductance
+    Result: 8559.2130
+
+--- Processing Level 0 ---
+  Nodes to calculate at level 0: ['impedance']
+
+  Calculating: impedance
+    Formula: math.sqrt(resistance**2 + reactance**2)
+    Result: 22555.7833
+
+============================================================
+Final target value: impedance = 22555.7833
+============================================================
+
+
+============================================================
+Summary of all calculated values
+============================================================
+
+Base Inputs (Leaf Nodes):
+  angle = 71.1859
+  angular_displacement = 20.3723
+  charge = 10.7055
+  final_position = 84.1756
+  final_velocity = 65.4991
+  gravity = 18.9518
+  initial_position = 55.7940
+  initial_velocity = 42.6771
+  length = 53.6511
+  linear_density = 22.8831
+  mass = 28.7379
+  number_of_cycles = 59.3978
+  resistivity = 65.2259
+  spring_constant = 6.6911
+  time = 55.6756
+  voltage_induced = 61.2616
+  wave_number = 44.4984
+  width = 44.1078
+  x1 = 20.7006
+  x2 = 5.1693
+  y1 = 88.0209
+  y2 = 17.9254
+
+Level 0:
+  impedance = 22555.7833
+Level 1:
+  reactance = 8559.2130
+  resistance = 20868.7142
+Level 2:
+  angular_frequency = 0.4825
+  area = 2366.4307
+  current = 0.1923
+  inductance = 17738.3016
+  length = 53.6511
+  resistivity = 65.2259
+  voltage = 4012.7041
+Level 3:
+  charge = 10.7055
+  distance = 3646.6985
+  electric_field = 1.1004
+  frequency = 0.0768
+  magnetic_flux = 3410.7782
+  time = 55.6756
+  width = 44.1078
+  work = -160.2950
+Level 4:
+  angle = 71.1859
+  angular_velocity = 0.3659
+  displacement = 28.3817
+  force = 11.7800
+  magnetic_field = 0.0168
+  number_of_cycles = 59.3978
+  period = 13.0214
+  speed = 65.4991
+  voltage_induced = 61.2616
+  wave_speed = 0.0108
+  wavelength = 0.1412
+  x1 = 20.7006
+  x2 = 5.1693
+  y1 = 88.0209
+  y2 = 17.9254
+Level 5:
+  acceleration = 0.4099
+  angular_displacement = 20.3723
+  final_position = 84.1756
+  initial_position = 55.7940
+  linear_density = 22.8831
+  tension = 556.4147
+  velocity = 65.4991
+  wave_number = 44.4984
+Level 6:
+  final_velocity = 65.4991
+
+============================================================
+Generating Question from Answer
+============================================================
+Loading Qwen LLM model for question generation (this may take a moment)...
+We will use 90% of the memory on device 0 for storing the model, and 10% for the buffer to avoid OOM. You can set `max_memory` in to a higher value to use more memory (at your own risk).
+Qwen LLM model loaded successfully.
+
+============================================================
+Generated Question:
+============================================================
+A circuit consists of various components with the following properties: a resistor with a resistance of 34.25 units, an inductor with an inductance of 29.57 units, and a capacitor with a capacitance of 23.14 units. Calculate the impedance of the circuit.
+
+
+Question saved to generated_question.txt
+NumExpr defaulting to 8 threads.
+============================================================
+Running Tree Walk Calculation
+============================================================
+
+============================================================
+Starting tree walk from target node: impedance
+Maximum branch length: 2
+============================================================
+
+  Found base input leaf node: resistivity
+  Found base input leaf node: length
+  Skipping voltage (already at level 1, would create cycle)
+  Skipping current (already at level 1, would create cycle)
+  Found base input leaf node: inductive_reactance
+  Found base input leaf node: capacitive_reactance
+  Skipping angular_frequency (already at level 1, would create cycle)
+  Skipping inductance (already at level 1, would create cycle)
+  Skipping capacitance (already at level 1, would create cycle)
+  Found base input leaf node: charge
+  Skipping current (already at level 1, would create cycle)
+  Skipping resistance (already at level 1, would create cycle)
+  Skipping power (already at level 2, would create cycle)
+  Found base input leaf node: time
+  Skipping voltage (already at level 1, would create cycle)
+  Skipping resistance (already at level 1, would create cycle)
+  Skipping power (already at level 2, would create cycle)
+  Found base input leaf node: spring_constant
+  Found base input leaf node: mass
+  Skipping inductance (already at level 1, would create cycle)
+  Skipping capacitance (already at level 1, would create cycle)
+  Found base input leaf node: change_in_current
+  Found base input leaf node: self_inductance
+  Skipping current (already at level 1, would create cycle)
+  Skipping voltage (already at level 1, would create cycle)
+  Found base input leaf node: permittivity
+  Found base input leaf node: energy
+  Skipping voltage (already at level 1, would create cycle)
+  Skipping area (already at level 2, would create cycle)
+  Skipping distance (already at level 2, would create cycle)
+
+Tree walk complete:
+  Total nodes: 28
+  Total edges: 45
+  Leaf nodes: 20
+  Base inputs: 12
+  Levels: 3
+
+Nodes by level:
+  Level 0: ['impedance']
+  Level 1: ['resistance', 'reactance', 'voltage', 'current', 'angular_frequency', 'inductance', 'capacitance']
+  Level 2: ['area', 'power', 'electric_field', 'distance', 'work', 'frequency', 'angular_velocity', 'magnetic_flux']
+
+Leaf nodes: ['angular_velocity', 'area', 'capacitive_reactance', 'change_in_current', 'charge', 'distance', 'electric_field', 'energy', 'frequency', 'inductive_reactance', 'length', 'magnetic_flux', 'mass', 'permittivity', 'power', 'resistivity', 'self_inductance', 'spring_constant', 'time', 'work']
+Base inputs: ['capacitive_reactance', 'change_in_current', 'charge', 'energy', 'inductive_reactance', 'length', 'mass', 'permittivity', 'resistivity', 'self_inductance', 'spring_constant', 'time']
+
+============================================================
+Pruning tree to keep only necessary branches
+============================================================
+
+  Node impedance uses formula: math.sqrt(resistance**2 + reactance**2)
+    Required dependencies: ['reactance', 'resistance']
+  Node resistance uses formula: voltage / current
+    Required dependencies: ['current', 'voltage']
+  Node reactance uses formula: angular_frequency * inductance
+    Required dependencies: ['angular_frequency', 'inductance']
+  Node voltage uses formula: electric_field * distance
+    Required dependencies: ['distance', 'electric_field']
+  Node current uses formula: charge / time
+    Required dependencies: ['charge', 'time']
+  Node angular_frequency uses formula: 2 * math.pi * frequency
+    Required dependencies: ['frequency']
+  Node inductance uses formula: magnetic_flux / current
+    Required dependencies: ['current', 'magnetic_flux']
+  Node electric_field uses formula: force / charge
+    Required dependencies: ['charge', 'force']
+  Node distance uses formula: speed * time
+    Required dependencies: ['speed', 'time']
+  Node frequency uses formula: 1 / period
+    Required dependencies: ['period']
+  Node magnetic_flux uses formula: magnetic_field * area * math.cos(angle)
+    Required dependencies: ['angle', 'area', 'magnetic_field']
+  Node area uses formula: length * width
+    Required dependencies: ['length', 'width']
+  Leaf nodes in pruned tree: ['angle', 'charge', 'force', 'length', 'magnetic_field', 'period', 'resistivity', 'speed', 'time', 'width']
+
+Pruning complete:
+  Original nodes: 28
+  Pruned nodes: 22
+  Original edges: 45
+  Pruned edges: 15
+  Removed 6 nodes
+  Removed 30 edges
+
+Pruned nodes by level:
+  Level 0: ['impedance']
+  Level 1: ['resistance', 'reactance']
+  Level 2: ['voltage', 'current', 'length', 'area', 'resistivity', 'angular_frequency', 'inductance']
+  Level 3: ['distance', 'electric_field', 'time', 'frequency', 'magnetic_flux']
+
+============================================================
+Assigning random values to leaf nodes
+============================================================
+
+  angle = 65.9745
+  charge = 7.1454
+  force = 47.7517
+  length = 44.8581
+  magnetic_field = 74.3474
+  period = 86.7331
+  resistivity = 62.3045
+  speed = 51.0491
+  time = 13.7825
+  width = 39.2035
+
+============================================================
+Calculating values backwards from leaf nodes to target
+============================================================
+
+Deepest level 3 contains leaf nodes (already have values), skipping calculation
+
+--- Processing Level 2 ---
+  Nodes to calculate at level 2: ['voltage', 'current', 'area', 'angular_frequency', 'inductance']
+  inductance depends on same-level nodes: {'current'}
+
+  Calculating: voltage
+    Could not calculate voltage - missing dependencies or invalid formula
+    Missing dependencies: ['current', 'resistance', 'power', 'electric_field', 'distance', 'work']
+    Assigned default random value: 44.0086
+
+  Calculating: current
+    Formula: charge / time
+    Result: 0.5184
+
+  Calculating: area
+    Formula: length * width
+    Result: 1758.5934
+
+  Calculating: angular_frequency
+    Could not calculate angular_frequency - missing dependencies or invalid formula
+    Missing dependencies: ['frequency', 'angular_velocity', 'spring_constant', 'mass', 'inductance', 'capacitance']
+    Assigned default random value: 1.7244
+
+  Calculating: inductance
+    Could not calculate inductance - missing dependencies or invalid formula
+    Missing dependencies: ['magnetic_flux', 'change_in_current', 'self_inductance']
+    Assigned default random value: 62.5344
+
+--- Processing Level 1 ---
+  Nodes to calculate at level 1: ['resistance', 'reactance']
+
+  Calculating: resistance
+    Formula: voltage / current
+    Result: 84.8869
+
+  Calculating: reactance
+    Formula: angular_frequency * inductance
+    Result: 107.8336
+
+--- Processing Level 0 ---
+  Nodes to calculate at level 0: ['impedance']
+
+  Calculating: impedance
+    Formula: math.sqrt(resistance**2 + reactance**2)
+    Result: 137.2366
+
+============================================================
+Final target value: impedance = 137.2366
+============================================================
+
+
+============================================================
+Summary of all calculated values
+============================================================
+
+Base Inputs (Leaf Nodes):
+  charge = 7.1454
+  length = 44.8581
+  resistivity = 62.3045
+  time = 13.7825
+
+Level 0:
+  impedance = 137.2366
+Level 1:
+  reactance = 107.8336
+  resistance = 84.8869
+Level 2:
+  angular_frequency = 1.7244
+  area = 1758.5934
+  current = 0.5184
+  inductance = 62.5344
+  length = 44.8581
+  resistivity = 62.3045
+  voltage = 44.0086
+Level 3:
+  time = 13.7825
+
+============================================================
+Generating Question from Answer
+============================================================
+Loading Qwen LLM model for question generation (this may take a moment)...
+We will use 90% of the memory on device 0 for storing the model, and 10% for the buffer to avoid OOM. You can set `max_memory` in to a higher value to use more memory (at your own risk).
+Qwen LLM model loaded successfully.
+
+============================================================
+Generated Question:
+============================================================
+A scientist is studying a complex electrical circuit. They measure the magnetic field strength as 74.3474 Tesla, the angle between the magnetic field lines and the plane of the circuit as 65.9745 degrees, the charge moving through the circuit as 7.1454 Coulombs, the time it takes for the circuit to complete one cycle as 86.7331 seconds, the width of the circuit as 39.2035 meters, and the length of the circuit as 44.8581 meters. Using these measurements along with the formula for magnetic flux, what is the impedance of the circuit?
+
+
+Question saved to generated_question.txt
+NumExpr defaulting to 8 threads.
+============================================================
+Running Tree Walk Calculation
+============================================================
+
+============================================================
+Starting tree walk from target node: impedance
+Maximum branch length: 2
+============================================================
+
+  Found base input leaf node: resistivity
+  Found base input leaf node: length
+  Skipping voltage (already at level 1, would create cycle)
+  Skipping current (already at level 1, would create cycle)
+  Found base input leaf node: inductive_reactance
+  Found base input leaf node: capacitive_reactance
+  Skipping angular_frequency (already at level 1, would create cycle)
+  Skipping inductance (already at level 1, would create cycle)
+  Skipping capacitance (already at level 1, would create cycle)
+  Found base input leaf node: charge
+  Skipping current (already at level 1, would create cycle)
+  Skipping resistance (already at level 1, would create cycle)
+  Skipping power (already at level 2, would create cycle)
+  Found base input leaf node: time
+  Skipping voltage (already at level 1, would create cycle)
+  Skipping resistance (already at level 1, would create cycle)
+  Skipping power (already at level 2, would create cycle)
+  Found base input leaf node: spring_constant
+  Found base input leaf node: mass
+  Skipping inductance (already at level 1, would create cycle)
+  Skipping capacitance (already at level 1, would create cycle)
+  Found base input leaf node: change_in_current
+  Found base input leaf node: self_inductance
+  Skipping current (already at level 1, would create cycle)
+  Skipping voltage (already at level 1, would create cycle)
+  Found base input leaf node: permittivity
+  Found base input leaf node: energy
+  Skipping voltage (already at level 1, would create cycle)
+  Skipping area (already at level 2, would create cycle)
+  Skipping distance (already at level 2, would create cycle)
+
+Tree walk complete:
+  Total nodes: 28
+  Total edges: 45
+  Leaf nodes: 20
+  Base inputs: 12
+  Levels: 3
+
+Nodes by level:
+  Level 0: ['impedance']
+  Level 1: ['resistance', 'reactance', 'voltage', 'current', 'angular_frequency', 'inductance', 'capacitance']
+  Level 2: ['area', 'power', 'electric_field', 'distance', 'work', 'frequency', 'angular_velocity', 'magnetic_flux']
+
+Leaf nodes: ['angular_velocity', 'area', 'capacitive_reactance', 'change_in_current', 'charge', 'distance', 'electric_field', 'energy', 'frequency', 'inductive_reactance', 'length', 'magnetic_flux', 'mass', 'permittivity', 'power', 'resistivity', 'self_inductance', 'spring_constant', 'time', 'work']
+Base inputs: ['capacitive_reactance', 'change_in_current', 'charge', 'energy', 'inductive_reactance', 'length', 'mass', 'permittivity', 'resistivity', 'self_inductance', 'spring_constant', 'time']
+
+============================================================
+Pruning tree to keep only necessary branches
+============================================================
+
+  Node impedance uses formula: math.sqrt(resistance**2 + reactance**2)
+    Required dependencies: ['reactance', 'resistance']
+  Node resistance uses formula: voltage / current
+    Required dependencies: ['current', 'voltage']
+  Node reactance uses formula: angular_frequency * inductance
+    Required dependencies: ['angular_frequency', 'inductance']
+  Node voltage uses formula: electric_field * distance
+    Required dependencies: ['distance', 'electric_field']
+  Node current uses formula: charge / time
+    Required dependencies: ['charge', 'time']
+  Node angular_frequency uses formula: 2 * math.pi * frequency
+    Required dependencies: ['frequency']
+  Node inductance uses formula: magnetic_flux / current
+    Required dependencies: ['current', 'magnetic_flux']
+  Node electric_field uses formula: force / charge
+    Required dependencies: ['charge', 'force']
+  Node distance uses formula: speed * time
+    Required dependencies: ['speed', 'time']
+  Node frequency uses formula: 1 / period
+    Required dependencies: ['period']
+  Node magnetic_flux uses formula: magnetic_field * area * math.cos(angle)
+    Required dependencies: ['angle', 'area', 'magnetic_field']
+  Node area uses formula: length * width
+    Required dependencies: ['length', 'width']
+  Leaf nodes in pruned tree: ['angle', 'charge', 'force', 'length', 'magnetic_field', 'period', 'resistivity', 'speed', 'time', 'width']
+
+Pruning complete:
+  Original nodes: 28
+  Pruned nodes: 22
+  Original edges: 45
+  Pruned edges: 15
+  Removed 6 nodes
+  Removed 30 edges
+
+Pruned nodes by level:
+  Level 0: ['impedance']
+  Level 1: ['reactance', 'resistance']
+  Level 2: ['inductance', 'angular_frequency', 'current', 'length', 'area', 'resistivity', 'voltage']
+  Level 3: ['magnetic_flux', 'frequency', 'time', 'electric_field', 'distance']
+
+============================================================
+Assigning random values to leaf nodes
+============================================================
+
+  angle = 24.3995
+  charge = 46.9086
+  force = 13.6032
+  length = 92.0114
+  magnetic_field = 64.6197
+  period = 41.9764
+  resistivity = 74.5973
+  speed = 95.4397
+  time = 18.9925
+  width = 92.7234
+
+============================================================
+Calculating values backwards from leaf nodes to target
+============================================================
+
+Deepest level 3 contains leaf nodes (already have values), skipping calculation
+
+--- Processing Level 2 ---
+  Nodes to calculate at level 2: ['inductance', 'angular_frequency', 'current', 'area', 'voltage']
+  inductance depends on same-level nodes: {'current'}
+
+  Calculating: angular_frequency
+    Could not calculate angular_frequency - missing dependencies or invalid formula
+    Missing dependencies: ['frequency', 'angular_velocity', 'spring_constant', 'mass', 'inductance', 'capacitance']
+    Assigned default random value: 88.6286
+
+  Calculating: current
+    Formula: charge / time
+    Result: 2.4698
+
+  Calculating: area
+    Formula: length * width
+    Result: 8531.6048
+
+  Calculating: voltage
+    Could not calculate voltage - missing dependencies or invalid formula
+    Missing dependencies: ['resistance', 'power', 'electric_field', 'distance', 'work']
+    Assigned default random value: 32.0127
+
+  Calculating: inductance
+    Could not calculate inductance - missing dependencies or invalid formula
+    Missing dependencies: ['magnetic_flux', 'change_in_current', 'self_inductance']
+    Assigned default random value: 74.3318
+
+--- Processing Level 1 ---
+  Nodes to calculate at level 1: ['reactance', 'resistance']
+
+  Calculating: reactance
+    Formula: angular_frequency * inductance
+    Result: 6587.9219
+
+  Calculating: resistance
+    Formula: voltage / current
+    Result: 12.9614
+
+--- Processing Level 0 ---
+  Nodes to calculate at level 0: ['impedance']
+
+  Calculating: impedance
+    Formula: math.sqrt(resistance**2 + reactance**2)
+    Result: 6587.9346
+
+============================================================
+Final target value: impedance = 6587.9346
+============================================================
+
+
+============================================================
+Summary of all calculated values
+============================================================
+
+Base Inputs (Leaf Nodes):
+  charge = 46.9086
+  length = 92.0114
+  resistivity = 74.5973
+  time = 18.9925
+
+Level 0:
+  impedance = 6587.9346
+Level 1:
+  reactance = 6587.9219
+  resistance = 12.9614
+Level 2:
+  angular_frequency = 88.6286
+  area = 8531.6048
+  current = 2.4698
+  inductance = 74.3318
+  length = 92.0114
+  resistivity = 74.5973
+  voltage = 32.0127
+Level 3:
+  time = 18.9925
+
+============================================================
+Generating Question from Answer
+============================================================
+Loading Qwen LLM model for question generation (this may take a moment)...
+We will use 90% of the memory on device 0 for storing the model, and 10% for the buffer to avoid OOM. You can set `max_memory` in to a higher value to use more memory (at your own risk).
+Qwen LLM model loaded successfully.
+Question validation warnings:
+  - Question mentions 'current' which is not in allowed variables
+  - Question mentions 'field' which is not in allowed variables
+  - Question mentions 'flux' which is not in allowed variables
+The question may contain variables or values not in the tree walk.
+
+============================================================
+Generated Question:
+============================================================
+A coil with a certain inductance is placed in a magnetic field of 64.6197 Tesla, forming an angle of 24.3995 degrees with a magnetic flux density. If the current passing through the coil is 46.9086 Coulombs over a time period of 18.9925 seconds, and the length and width of the coil determine its area, what is the impedance of the coil?
+
+
+Question saved to generated_question.txt
+NumExpr defaulting to 8 threads.
+============================================================
+Running Tree Walk Calculation
+============================================================
+
+============================================================
+Starting tree walk from target node: impedance
+Maximum branch length: 2
+============================================================
+
+  Found base input leaf node: resistivity
+  Found base input leaf node: length
+  Skipping voltage (already at level 1, would create cycle)
+  Skipping current (already at level 1, would create cycle)
+  Found base input leaf node: inductive_reactance
+  Found base input leaf node: capacitive_reactance
+  Skipping angular_frequency (already at level 1, would create cycle)
+  Skipping inductance (already at level 1, would create cycle)
+  Skipping capacitance (already at level 1, would create cycle)
+  Found base input leaf node: charge
+  Skipping current (already at level 1, would create cycle)
+  Skipping resistance (already at level 1, would create cycle)
+  Skipping power (already at level 2, would create cycle)
+  Found base input leaf node: time
+  Skipping voltage (already at level 1, would create cycle)
+  Skipping resistance (already at level 1, would create cycle)
+  Skipping power (already at level 2, would create cycle)
+  Found base input leaf node: spring_constant
+  Found base input leaf node: mass
+  Skipping inductance (already at level 1, would create cycle)
+  Skipping capacitance (already at level 1, would create cycle)
+  Found base input leaf node: change_in_current
+  Found base input leaf node: self_inductance
+  Skipping current (already at level 1, would create cycle)
+  Skipping voltage (already at level 1, would create cycle)
+  Found base input leaf node: permittivity
+  Found base input leaf node: energy
+  Skipping voltage (already at level 1, would create cycle)
+  Skipping area (already at level 2, would create cycle)
+  Skipping distance (already at level 2, would create cycle)
+
+Tree walk complete:
+  Total nodes: 28
+  Total edges: 45
+  Leaf nodes: 20
+  Base inputs: 12
+  Levels: 3
+
+Nodes by level:
+  Level 0: ['impedance']
+  Level 1: ['resistance', 'reactance', 'voltage', 'current', 'angular_frequency', 'inductance', 'capacitance']
+  Level 2: ['area', 'power', 'electric_field', 'distance', 'work', 'frequency', 'angular_velocity', 'magnetic_flux']
+
+Leaf nodes: ['angular_velocity', 'area', 'capacitive_reactance', 'change_in_current', 'charge', 'distance', 'electric_field', 'energy', 'frequency', 'inductive_reactance', 'length', 'magnetic_flux', 'mass', 'permittivity', 'power', 'resistivity', 'self_inductance', 'spring_constant', 'time', 'work']
+Base inputs: ['capacitive_reactance', 'change_in_current', 'charge', 'energy', 'inductive_reactance', 'length', 'mass', 'permittivity', 'resistivity', 'self_inductance', 'spring_constant', 'time']
+
+============================================================
+Pruning tree to keep only necessary branches
+============================================================
+
+  Node impedance uses formula: math.sqrt(resistance**2 + reactance**2)
+    Required dependencies: ['reactance', 'resistance']
+  Node resistance uses formula: voltage / current
+    Required dependencies: ['current', 'voltage']
+  Node reactance uses formula: angular_frequency * inductance
+    Required dependencies: ['angular_frequency', 'inductance']
+  Node voltage uses formula: electric_field * distance
+    Required dependencies: ['distance', 'electric_field']
+  Node current uses formula: charge / time
+    Required dependencies: ['charge', 'time']
+  Node angular_frequency uses formula: 2 * math.pi * frequency
+    Required dependencies: ['frequency']
+  Node inductance uses formula: magnetic_flux / current
+    Required dependencies: ['current', 'magnetic_flux']
+  Node electric_field uses formula: force / charge
+    Required dependencies: ['charge', 'force']
+  Node distance uses formula: speed * time
+    Required dependencies: ['speed', 'time']
+  Node frequency uses formula: 1 / period
+    Required dependencies: ['period']
+  Node magnetic_flux uses formula: magnetic_field * area * math.cos(angle)
+    Required dependencies: ['angle', 'area', 'magnetic_field']
+  Node area uses formula: length * width
+    Required dependencies: ['length', 'width']
+  Leaf nodes in pruned tree: ['angle', 'charge', 'force', 'length', 'magnetic_field', 'period', 'resistivity', 'speed', 'time', 'width']
+
+Pruning complete:
+  Original nodes: 28
+  Pruned nodes: 22
+  Original edges: 45
+  Pruned edges: 15
+  Removed 6 nodes
+  Removed 30 edges
+
+Pruned nodes by level:
+  Level 0: ['impedance']
+  Level 1: ['reactance', 'resistance']
+  Level 2: ['inductance', 'angular_frequency', 'resistivity', 'area', 'voltage', 'current', 'length']
+  Level 3: ['magnetic_flux', 'frequency', 'electric_field', 'distance', 'time']
+
+============================================================
+Assigning random values to leaf nodes
+============================================================
+
+  angle = 63.5287
+  charge = 80.8621
+  force = 45.2610
+  length = 45.6048
+  magnetic_field = 81.9763
+  period = 71.5807
+  resistivity = 92.3538
+  speed = 56.1279
+  time = 85.4505
+  width = 16.3707
+
+============================================================
+Calculating values backwards from leaf nodes to target
+============================================================
+
+Deepest level 3 contains leaf nodes (already have values), skipping calculation
+
+--- Processing Level 2 ---
+  Nodes to calculate at level 2: ['inductance', 'angular_frequency', 'area', 'voltage', 'current']
+  inductance depends on same-level nodes: {'current'}
+
+  Calculating: angular_frequency
+    Could not calculate angular_frequency - missing dependencies or invalid formula
+    Missing dependencies: ['frequency', 'angular_velocity', 'spring_constant', 'mass', 'inductance', 'capacitance']
+    Assigned default random value: 82.8223
+
+  Calculating: area
+    Formula: length * width
+    Result: 746.5847
+
+  Calculating: voltage
+    Could not calculate voltage - missing dependencies or invalid formula
+    Missing dependencies: ['current', 'resistance', 'power', 'electric_field', 'distance', 'work']
+    Assigned default random value: 25.2333
+
+  Calculating: current
+    Formula: charge / time
+    Result: 0.9463
+
+  Calculating: inductance
+    Could not calculate inductance - missing dependencies or invalid formula
+    Missing dependencies: ['magnetic_flux', 'change_in_current', 'self_inductance']
+    Assigned default random value: 15.5188
+
+--- Processing Level 1 ---
+  Nodes to calculate at level 1: ['reactance', 'resistance']
+
+  Calculating: reactance
+    Formula: angular_frequency * inductance
+    Result: 1285.3033
+
+  Calculating: resistance
+    Formula: voltage / current
+    Result: 26.6651
+
+--- Processing Level 0 ---
+  Nodes to calculate at level 0: ['impedance']
+
+  Calculating: impedance
+    Formula: math.sqrt(resistance**2 + reactance**2)
+    Result: 1285.5799
+
+============================================================
+Final target value: impedance = 1285.5799
+============================================================
+
+
+============================================================
+Summary of all calculated values
+============================================================
+
+Base Inputs (Leaf Nodes):
+  charge = 80.8621
+  length = 45.6048
+  resistivity = 92.3538
+  time = 85.4505
+
+Level 0:
+  impedance = 1285.5799
+Level 1:
+  reactance = 1285.3033
+  resistance = 26.6651
+Level 2:
+  angular_frequency = 82.8223
+  area = 746.5847
+  current = 0.9463
+  inductance = 15.5188
+  length = 45.6048
+  resistivity = 92.3538
+  voltage = 25.2333
+Level 3:
+  time = 85.4505
+
+============================================================
+Generating Question from Answer
+============================================================
+Loading Qwen 7B LLM model for question generation (this may take a moment)...
+We will use 90% of the memory on device 0 for storing the model, and 10% for the buffer to avoid OOM. You can set `max_memory` in to a higher value to use more memory (at your own risk).
+Qwen 7B LLM model loaded successfully.
+Question validation warnings:
+  - Question mentions 'field' which is not in allowed variables
+  - Question mentions 'flux' which is not in allowed variables
+The question may contain variables or values not in the tree walk.
+
+============================================================
+Generated Question:
+============================================================
+A charged particle moves through a magnetic field at a certain speed and angle. Given the magnetic field strength, the length and width of the path, the charge and time of the particle, calculate the impedance if the magnetic flux and the resistivity are also known. What is the impedance?
+
+
+Question saved to generated_question.txt
+NumExpr defaulting to 8 threads.
+============================================================
+Running Tree Walk Calculation
+============================================================
+
+============================================================
+Starting tree walk from target node: impedance
+Maximum branch length: 2
+============================================================
+
+  Found base input leaf node: resistivity
+  Found base input leaf node: length
+  Skipping voltage (already at level 1, would create cycle)
+  Skipping current (already at level 1, would create cycle)
+  Found base input leaf node: inductive_reactance
+  Found base input leaf node: capacitive_reactance
+  Skipping angular_frequency (already at level 1, would create cycle)
+  Skipping inductance (already at level 1, would create cycle)
+  Skipping capacitance (already at level 1, would create cycle)
+  Found base input leaf node: charge
+  Skipping current (already at level 1, would create cycle)
+  Skipping resistance (already at level 1, would create cycle)
+  Skipping power (already at level 2, would create cycle)
+  Found base input leaf node: time
+  Skipping voltage (already at level 1, would create cycle)
+  Skipping resistance (already at level 1, would create cycle)
+  Skipping power (already at level 2, would create cycle)
+  Found base input leaf node: spring_constant
+  Found base input leaf node: mass
+  Skipping inductance (already at level 1, would create cycle)
+  Skipping capacitance (already at level 1, would create cycle)
+  Found base input leaf node: change_in_current
+  Found base input leaf node: self_inductance
+  Skipping current (already at level 1, would create cycle)
+  Skipping voltage (already at level 1, would create cycle)
+  Found base input leaf node: permittivity
+  Found base input leaf node: energy
+  Skipping voltage (already at level 1, would create cycle)
+  Skipping area (already at level 2, would create cycle)
+  Skipping distance (already at level 2, would create cycle)
+
+Tree walk complete:
+  Total nodes: 28
+  Total edges: 45
+  Leaf nodes: 20
+  Base inputs: 12
+  Levels: 3
+
+Nodes by level:
+  Level 0: ['impedance']
+  Level 1: ['resistance', 'reactance', 'voltage', 'current', 'angular_frequency', 'inductance', 'capacitance']
+  Level 2: ['area', 'power', 'electric_field', 'distance', 'work', 'frequency', 'angular_velocity', 'magnetic_flux']
+
+Leaf nodes: ['angular_velocity', 'area', 'capacitive_reactance', 'change_in_current', 'charge', 'distance', 'electric_field', 'energy', 'frequency', 'inductive_reactance', 'length', 'magnetic_flux', 'mass', 'permittivity', 'power', 'resistivity', 'self_inductance', 'spring_constant', 'time', 'work']
+Base inputs: ['capacitive_reactance', 'change_in_current', 'charge', 'energy', 'inductive_reactance', 'length', 'mass', 'permittivity', 'resistivity', 'self_inductance', 'spring_constant', 'time']
+
+============================================================
+Pruning tree to keep only necessary branches
+============================================================
+
+  Node impedance uses formula: math.sqrt(resistance**2 + reactance**2)
+    Required dependencies: ['reactance', 'resistance']
+  Node resistance uses formula: voltage / current
+    Required dependencies: ['current', 'voltage']
+  Node reactance uses formula: angular_frequency * inductance
+    Required dependencies: ['angular_frequency', 'inductance']
+  Node voltage uses formula: electric_field * distance
+    Required dependencies: ['distance', 'electric_field']
+  Node current uses formula: charge / time
+    Required dependencies: ['charge', 'time']
+  Node angular_frequency uses formula: 2 * math.pi * frequency
+    Required dependencies: ['frequency']
+  Node inductance uses formula: magnetic_flux / current
+    Required dependencies: ['current', 'magnetic_flux']
+  Node electric_field uses formula: force / charge
+    Required dependencies: ['charge', 'force']
+  Node distance uses formula: speed * time
+    Required dependencies: ['speed', 'time']
+  Node frequency uses formula: 1 / period
+    Required dependencies: ['period']
+  Node magnetic_flux uses formula: magnetic_field * area * math.cos(angle)
+    Required dependencies: ['angle', 'area', 'magnetic_field']
+  Node area uses formula: length * width
+    Required dependencies: ['length', 'width']
+  Leaf nodes in pruned tree: ['angle', 'charge', 'force', 'length', 'magnetic_field', 'period', 'resistivity', 'speed', 'time', 'width']
+
+Pruning complete:
+  Original nodes: 28
+  Pruned nodes: 22
+  Original edges: 45
+  Pruned edges: 15
+  Removed 6 nodes
+  Removed 30 edges
+
+Pruned nodes by level:
+  Level 0: ['impedance']
+  Level 1: ['reactance', 'resistance']
+  Level 2: ['angular_frequency', 'inductance', 'voltage', 'area', 'current', 'length', 'resistivity']
+  Level 3: ['frequency', 'magnetic_flux', 'electric_field', 'distance', 'time']
+
+============================================================
+Assigning random values to leaf nodes
+============================================================
+
+  angle = 40.8958
+  charge = 72.7637
+  force = 69.4709
+  length = 42.6775
+  magnetic_field = 16.5588
+  period = 31.0649
+  resistivity = 93.0584
+  speed = 72.4073
+  time = 14.7909
+  width = 62.7943
+
+============================================================
+Calculating values backwards from leaf nodes to target
+============================================================
+
+Deepest level 3 contains leaf nodes (already have values), skipping calculation
+
+--- Processing Level 2 ---
+  Nodes to calculate at level 2: ['angular_frequency', 'inductance', 'voltage', 'area', 'current']
+  inductance depends on same-level nodes: {'current'}
+
+  Calculating: angular_frequency
+    Could not calculate angular_frequency - missing dependencies or invalid formula
+    Missing dependencies: ['frequency', 'angular_velocity', 'spring_constant', 'mass', 'inductance', 'capacitance']
+    Assigned default random value: 25.9428
+
+  Calculating: voltage
+    Could not calculate voltage - missing dependencies or invalid formula
+    Missing dependencies: ['current', 'resistance', 'power', 'electric_field', 'distance', 'work']
+    Assigned default random value: 83.9292
+
+  Calculating: area
+    Formula: length * width
+    Result: 2679.9017
+
+  Calculating: current
+    Formula: charge / time
+    Result: 4.9195
+
+  Calculating: inductance
+    Could not calculate inductance - missing dependencies or invalid formula
+    Missing dependencies: ['magnetic_flux', 'change_in_current', 'self_inductance']
+    Assigned default random value: 14.8957
+
+--- Processing Level 1 ---
+  Nodes to calculate at level 1: ['reactance', 'resistance']
+
+  Calculating: reactance
+    Formula: angular_frequency * inductance
+    Result: 386.4352
+
+  Calculating: resistance
+    Formula: voltage / current
+    Result: 17.0605
+
+--- Processing Level 0 ---
+  Nodes to calculate at level 0: ['impedance']
+
+  Calculating: impedance
+    Formula: math.sqrt(resistance**2 + reactance**2)
+    Result: 386.8116
+
+============================================================
+Final target value: impedance = 386.8116
+============================================================
+
+
+============================================================
+Summary of all calculated values
+============================================================
+
+Base Inputs (Leaf Nodes):
+  charge = 72.7637
+  length = 42.6775
+  resistivity = 93.0584
+  time = 14.7909
+
+Level 0:
+  impedance = 386.8116
+Level 1:
+  reactance = 386.4352
+  resistance = 17.0605
+Level 2:
+  angular_frequency = 25.9428
+  area = 2679.9017
+  current = 4.9195
+  inductance = 14.8957
+  length = 42.6775
+  resistivity = 93.0584
+  voltage = 83.9292
+Level 3:
+  time = 14.7909
+
+============================================================
+Generating Question from Answer
+============================================================
+Loading Qwen LLM model for question generation (this may take a moment)...
+We will use 90% of the memory on device 0 for storing the model, and 10% for the buffer to avoid OOM. You can set `max_memory` in to a higher value to use more memory (at your own risk).
+Qwen LLM model loaded successfully.
+Question validation warnings:
+  - Question mentions 'current' which is not in allowed variables
+  - Question mentions 'resistance' which is not in allowed variables
+  - Question mentions 'field' which is not in allowed variables
+The question may contain variables or values not in the tree walk.
+
+============================================================
+Generated Question:
+============================================================
+A device consists of a coil with a certain inductance and a capacitor. When connected in an AC circuit, it experiences a magnetic field generated by a current-carrying wire placed perpendicular to the coil at a distance determined by the length and width of a rectangular region. Given the angle between the magnetic field lines and the plane of the coil, the force exerted on the wire, the period of oscillation, the speed of the wire, and other electrical properties like charge, current, resistance, and reactance, what is the impedance of the circuit?
+
+
+Question saved to generated_question.txt
+NumExpr defaulting to 8 threads.
+============================================================
+Running Tree Walk Calculation
+============================================================
+
+============================================================
+Starting tree walk from target node: impedance
+Maximum branch length: 2
+============================================================
+
+  Found base input leaf node: resistivity
+  Found base input leaf node: length
+  Skipping voltage (already at level 1, would create cycle)
+  Skipping current (already at level 1, would create cycle)
+  Found base input leaf node: inductive_reactance
+  Found base input leaf node: capacitive_reactance
+  Skipping angular_frequency (already at level 1, would create cycle)
+  Skipping inductance (already at level 1, would create cycle)
+  Skipping capacitance (already at level 1, would create cycle)
+  Found base input leaf node: charge
+  Skipping current (already at level 1, would create cycle)
+  Skipping resistance (already at level 1, would create cycle)
+  Skipping power (already at level 2, would create cycle)
+  Found base input leaf node: time
+  Skipping voltage (already at level 1, would create cycle)
+  Skipping resistance (already at level 1, would create cycle)
+  Skipping power (already at level 2, would create cycle)
+  Found base input leaf node: spring_constant
+  Found base input leaf node: mass
+  Skipping inductance (already at level 1, would create cycle)
+  Skipping capacitance (already at level 1, would create cycle)
+  Found base input leaf node: change_in_current
+  Found base input leaf node: self_inductance
+  Skipping current (already at level 1, would create cycle)
+  Skipping voltage (already at level 1, would create cycle)
+  Found base input leaf node: permittivity
+  Found base input leaf node: energy
+  Skipping voltage (already at level 1, would create cycle)
+  Skipping area (already at level 2, would create cycle)
+  Skipping distance (already at level 2, would create cycle)
+
+Tree walk complete:
+  Total nodes: 28
+  Total edges: 45
+  Leaf nodes: 20
+  Base inputs: 12
+  Levels: 3
+
+Nodes by level:
+  Level 0: ['impedance']
+  Level 1: ['resistance', 'reactance', 'voltage', 'current', 'angular_frequency', 'inductance', 'capacitance']
+  Level 2: ['area', 'power', 'electric_field', 'distance', 'work', 'frequency', 'angular_velocity', 'magnetic_flux']
+
+Leaf nodes: ['angular_velocity', 'area', 'capacitive_reactance', 'change_in_current', 'charge', 'distance', 'electric_field', 'energy', 'frequency', 'inductive_reactance', 'length', 'magnetic_flux', 'mass', 'permittivity', 'power', 'resistivity', 'self_inductance', 'spring_constant', 'time', 'work']
+Base inputs: ['capacitive_reactance', 'change_in_current', 'charge', 'energy', 'inductive_reactance', 'length', 'mass', 'permittivity', 'resistivity', 'self_inductance', 'spring_constant', 'time']
+
+============================================================
+Pruning tree to keep only necessary branches
+============================================================
+
+  Node impedance uses formula: math.sqrt(resistance**2 + reactance**2)
+    Required dependencies: ['reactance', 'resistance']
+  Node resistance uses formula: voltage / current
+    Required dependencies: ['current', 'voltage']
+  Node reactance uses formula: angular_frequency * inductance
+    Required dependencies: ['angular_frequency', 'inductance']
+  Node voltage uses formula: electric_field * distance
+    Required dependencies: ['distance', 'electric_field']
+  Node current uses formula: charge / time
+    Required dependencies: ['charge', 'time']
+  Node angular_frequency uses formula: 2 * math.pi * frequency
+    Required dependencies: ['frequency']
+  Node inductance uses formula: magnetic_flux / current
+    Required dependencies: ['current', 'magnetic_flux']
+  Node electric_field uses formula: force / charge
+    Required dependencies: ['charge', 'force']
+  Node distance uses formula: speed * time
+    Required dependencies: ['speed', 'time']
+  Node frequency uses formula: 1 / period
+    Required dependencies: ['period']
+  Node magnetic_flux uses formula: magnetic_field * area * math.cos(angle)
+    Required dependencies: ['angle', 'area', 'magnetic_field']
+  Node area uses formula: length * width
+    Required dependencies: ['length', 'width']
+  Leaf nodes in pruned tree: ['angle', 'charge', 'force', 'length', 'magnetic_field', 'period', 'resistivity', 'speed', 'time', 'width']
+
+Pruning complete:
+  Original nodes: 28
+  Pruned nodes: 22
+  Original edges: 45
+  Pruned edges: 15
+  Removed 6 nodes
+  Removed 30 edges
+
+Pruned nodes by level:
+  Level 0: ['impedance']
+  Level 1: ['resistance', 'reactance']
+  Level 2: ['length', 'voltage', 'resistivity', 'current', 'area', 'inductance', 'angular_frequency']
+  Level 3: ['electric_field', 'distance', 'time', 'magnetic_flux', 'frequency']
+
+============================================================
+Assigning random values to leaf nodes
+============================================================
+
+  angle = 16.2190
+  charge = 12.1118
+  force = 3.1806
+  length = 33.3443
+  magnetic_field = 61.2116
+  period = 79.9308
+  resistivity = 9.0645
+  speed = 48.9041
+  time = 77.0201
+  width = 66.4344
+
+============================================================
+Calculating values backwards from leaf nodes to target
+============================================================
+
+Deepest level 3 contains leaf nodes (already have values), skipping calculation
+
+--- Processing Level 2 ---
+  Nodes to calculate at level 2: ['voltage', 'current', 'area', 'inductance', 'angular_frequency']
+  inductance depends on same-level nodes: {'current'}
+
+  Calculating: voltage
+    Could not calculate voltage - missing dependencies or invalid formula
+    Missing dependencies: ['current', 'resistance', 'power', 'electric_field', 'distance', 'work']
+    Assigned default random value: 53.1948
+
+  Calculating: current
+    Formula: charge / time
+    Result: 0.1573
+
+  Calculating: area
+    Formula: length * width
+    Result: 2215.2096
+
+  Calculating: inductance
+    Could not calculate inductance - missing dependencies or invalid formula
+    Missing dependencies: ['magnetic_flux', 'change_in_current', 'self_inductance']
+    Assigned default random value: 56.8024
+
+  Calculating: angular_frequency
+    Could not calculate angular_frequency - missing dependencies or invalid formula
+    Missing dependencies: ['frequency', 'angular_velocity', 'spring_constant', 'mass', 'capacitance']
+    Assigned default random value: 83.0296
+
+--- Processing Level 1 ---
+  Nodes to calculate at level 1: ['resistance', 'reactance']
+
+  Calculating: resistance
+    Formula: voltage / current
+    Result: 338.2699
+
+  Calculating: reactance
+    Formula: angular_frequency * inductance
+    Result: 4716.2797
+
+--- Processing Level 0 ---
+  Nodes to calculate at level 0: ['impedance']
+
+  Calculating: impedance
+    Formula: math.sqrt(resistance**2 + reactance**2)
+    Result: 4728.3951
+
+============================================================
+Final target value: impedance = 4728.3951
+============================================================
+
+
+============================================================
+Summary of all calculated values
+============================================================
+
+Base Inputs (Leaf Nodes):
+  charge = 12.1118
+  length = 33.3443
+  resistivity = 9.0645
+  time = 77.0201
+
+Level 0:
+  impedance = 4728.3951
+Level 1:
+  reactance = 4716.2797
+  resistance = 338.2699
+Level 2:
+  angular_frequency = 83.0296
+  area = 2215.2096
+  current = 0.1573
+  inductance = 56.8024
+  length = 33.3443
+  resistivity = 9.0645
+  voltage = 53.1948
+Level 3:
+  time = 77.0201
+
+============================================================
+Generating Question from Answer
+============================================================
+Loading Qwen LLM model for question generation (this may take a moment)...
+We will use 90% of the memory on device 0 for storing the model, and 10% for the buffer to avoid OOM. You can set `max_memory` in to a higher value to use more memory (at your own risk).
+Qwen LLM model loaded successfully.
+Question validation warnings:
+  - Question mentions 'current' which is not in allowed variables
+  - Question mentions 'field' which is not in allowed variables
+The question may contain variables or values not in the tree walk.
+Question is missing these required values: ['force = 3.1806']
+The question may not include all required numeric values.
+
+============================================================
+Generated Question:
+============================================================
+"In an electrical circuit, there is a charge of 12.1118 Coulombs flowing through it. The circuit has a length of 33.3443 meters and operates for 77.0201 seconds. The magnetic field is 61.2116 Tesla, and the angle between the magnetic field and the direction of the current is 16.2190 degrees. The speed of the current is 48.9041 meters per second. Additionally, the period of oscillation is 79.9308 seconds. If the resistivity of the material is 9.0645 ohm-meters and the width of the circuit is 66.4344 meters, what is the impedance?"
+
+
+Question saved to generated_question.txt
