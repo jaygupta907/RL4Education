@@ -1,48 +1,44 @@
-Target Variable: impedance
-Answer: 4728.3951
+Target Variable: magnetic_flux
+Answer: -48.0652
 
 Generated Question:
-"In an electrical circuit, there is a charge of 12.1118 Coulombs flowing through it. The circuit has a length of 33.3443 meters and operates for 77.0201 seconds. The magnetic field is 61.2116 Tesla, and the angle between the magnetic field and the direction of the current is 16.2190 degrees. The speed of the current is 48.9041 meters per second. Additionally, the period of oscillation is 79.9308 seconds. If the resistivity of the material is 9.0645 ohm-meters and the width of the circuit is 66.4344 meters, what is the impedance?"
+A rectangular coil with a length of 2.2115 meters and a width of 24.3650 meters is placed such that the angle between the plane of the coil and a uniform magnetic field is 46.1238 degrees. The coil has a charge of 51.3600 Coulombs and an initial position of 64.3765 meters. After 40.1055 seconds, the coil's position changes to 14.1130 meters. Additionally, the coil has an initial velocity of 60.2547 meters per second and a final velocity of 16.4250 meters per second. The mass of the coil is 97.2561 kilograms. 
+
+What is the magnetic_flux?
 
 ============================================================
 Calculation Details:
 ============================================================
 Calculation Summary:
-Target Variable: impedance
-Final Answer: 4728.3951
+Target Variable: magnetic_flux
+Final Answer: -48.0652
 
 Formulas Used:
-  impedance = math.sqrt(resistance**2 + reactance**2)
-  resistance = voltage / current
-  reactance = angular_frequency * inductance
-  voltage = electric_field * distance
-  current = charge / time
-  angular_frequency = 2 * math.pi * frequency
-  inductance = magnetic_flux / current
-  electric_field = force / charge
-  distance = speed * time
-  frequency = 1 / period
   magnetic_flux = magnetic_field * area * math.cos(angle)
+  magnetic_field = force / (charge * velocity)
   area = length * width
+  force = mass * acceleration
+  velocity = displacement / time
+  acceleration = (final_velocity - initial_velocity) / time
+  displacement = final_position - initial_position
 
 Given Values:
-  angle = 16.2190
-  charge = 12.1118
-  force = 3.1806
-  length = 33.3443
-  magnetic_field = 61.2116
-  period = 79.9308
-  resistivity = 9.0645
-  speed = 48.9041
-  time = 77.0201
-  width = 66.4344
+  angle = 46.1238
+  charge = 51.3600
+  final_position = 14.1130
+  final_velocity = 16.4250
+  initial_position = 64.3765
+  initial_velocity = 60.2547
+  length = 2.2115
+  mass = 97.2561
+  time = 40.1055
+  width = 24.3650
 
 Calculated Intermediate Values:
-  impedance = 4728.3951
-  reactance = 4716.2797
-  resistance = 338.2699
-  angular_frequency = 83.0296
-  area = 2215.2096
-  current = 0.1573
-  inductance = 56.8024
-  voltage = 53.1948
+  magnetic_flux = -48.0652
+  area = 53.8835
+  magnetic_field = 1.6512
+  force = -106.2875
+  velocity = -1.2533
+  acceleration = -1.0929
+  displacement = -50.2635

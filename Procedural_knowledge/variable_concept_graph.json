@@ -12,6 +12,11 @@
                 "time",
                 "initial_velocity",
                 "acceleration"
+            ],
+            "questions": [
+                "A car travels 120 meters in 8 seconds. What is its velocity?",
+                "An object starts with an initial velocity of 5 m/s and accelerates at 3 m/s² for 4 seconds. What is its final velocity?",
+                "A ball is thrown upward with an initial velocity of 20 m/s. If it accelerates downward at 9.8 m/s² and travels 15 meters, what is its velocity?"
             ]
         },
         {
@@ -28,6 +33,11 @@
                 "force",
                 "mass",
                 "displacement"
+            ],
+            "questions": [
+                "A car accelerates from 10 m/s to 30 m/s in 5 seconds. What is its acceleration?",
+                "A force of 50 Newtons is applied to a 10 kg object. What is the acceleration?",
+                "An object changes velocity from 5 m/s to 15 m/s while traveling 40 meters. What is its acceleration?"
             ]
         },
         {
@@ -43,6 +53,11 @@
                 "gravity",
                 "spring_constant",
                 "displacement"
+            ],
+            "questions": [
+                "A 5 kg object accelerates at 4 m/s². What is the force acting on it?",
+                "What is the weight of a 10 kg object on Earth where gravity is 9.8 m/s²?",
+                "A spring with a spring constant of 200 N/m is stretched 0.3 meters. What is the force?"
             ]
         },
         {
@@ -58,6 +73,11 @@
                 "work",
                 "total_energy",
                 "potential_energy"
+            ],
+            "questions": [
+                "A 2 kg object moves at 6 m/s. What is its kinetic energy?",
+                "If 100 Joules of work is done on an object, what is its kinetic energy?",
+                "A system has total energy of 150 J and potential energy of 50 J. What is the kinetic energy?"
             ]
         },
         {
@@ -75,6 +95,11 @@
                 "displacement",
                 "total_energy",
                 "kinetic_energy"
+            ],
+            "questions": [
+                "A 3 kg object is lifted to a height of 5 meters. What is its gravitational potential energy? (Use g = 9.8 m/s²)",
+                "A spring with spring constant 100 N/m is compressed 0.2 meters. What is its potential energy?",
+                "A system has total energy of 200 J and kinetic energy of 80 J. What is the potential energy?"
             ]
         },
         {
@@ -90,6 +115,11 @@
                 "angle",
                 "change_in_kinetic_energy",
                 "change_in_potential_energy"
+            ],
+            "questions": [
+                "A force of 20 N is applied at an angle of 0 degrees to move an object 5 meters. How much work is done?",
+                "An object's kinetic energy increases from 50 J to 150 J. How much work was done?",
+                "An object's potential energy decreases by 80 J. How much work was done?"
             ]
         },
         {
@@ -106,6 +136,11 @@
                 "velocity",
                 "current",
                 "voltage"
+            ],
+            "questions": [
+                "1000 Joules of work is done in 5 seconds. What is the power?",
+                "A force of 50 N moves an object at 4 m/s. What is the power?",
+                "A circuit has a current of 2 Amperes and voltage of 120 Volts. What is the power?"
             ]
         },
         {
@@ -122,6 +157,11 @@
                 "time",
                 "initial_momentum",
                 "impulse"
+            ],
+            "questions": [
+                "A 4 kg object moves at 7 m/s. What is its momentum?",
+                "A force of 15 N acts on an object for 3 seconds. What is the change in momentum?",
+                "An object has initial momentum of 20 kg·m/s and receives an impulse of 10 kg·m/s. What is its final momentum?"
             ]
         },
         {
@@ -138,6 +178,11 @@
                 "time",
                 "acceleration",
                 "initial_velocity"
+            ],
+            "questions": [
+                "An object moves from position 3 m to position 12 m. What is its displacement?",
+                "An object moves at 8 m/s for 5 seconds with an acceleration of 2 m/s². What is its displacement?",
+                "An object starts at 5 m/s and accelerates at 3 m/s² for 4 seconds. What is its displacement?"
             ]
         },
         {
@@ -153,6 +198,11 @@
                 "time",
                 "velocity_x",
                 "velocity_y"
+            ],
+            "questions": [
+                "An object has a velocity of -15 m/s. What is its speed?",
+                "A car travels 240 kilometers in 3 hours. What is its average speed?",
+                "An object has velocity components of 6 m/s in the x-direction and 8 m/s in the y-direction. What is its speed?"
             ]
         },
         {
@@ -171,6 +221,11 @@
                 "radius",
                 "final_angle",
                 "initial_angle"
+            ],
+            "questions": [
+                "A wheel rotates through 2π radians in 4 seconds. What is its angular velocity?",
+                "An object rotates at 3 Hz. What is its angular velocity?",
+                "A point on a wheel with radius 0.5 m has a linear velocity of 10 m/s. What is the angular velocity?"
             ]
         },
         {
@@ -187,6 +242,11 @@
                 "torque",
                 "moment_of_inertia",
                 "change_in_angular_velocity"
+            ],
+            "questions": [
+                "A wheel accelerates from 2 rad/s to 8 rad/s in 3 seconds. What is its angular acceleration?",
+                "A torque of 20 N·m is applied to an object with moment of inertia 5 kg·m². What is the angular acceleration?",
+                "An object's angular velocity changes by 12 rad/s in 4 seconds. What is its angular acceleration?"
             ]
         },
         {
@@ -203,6 +263,11 @@
                 "moment_of_inertia",
                 "angular_acceleration",
                 "force_perpendicular"
+            ],
+            "questions": [
+                "A force of 30 N is applied at a distance of 0.5 m at an angle of 90 degrees. What is the torque?",
+                "An object with moment of inertia 8 kg·m² has an angular acceleration of 2 rad/s². What is the torque?",
+                "A perpendicular force of 25 N is applied at a radius of 0.4 m. What is the torque?"
             ]
         },
         {
@@ -219,6 +284,11 @@
                 "angular_acceleration",
                 "angular_momentum",
                 "angular_velocity"
+            ],
+            "questions": [
+                "A point mass of 5 kg is located 2 m from the axis of rotation. What is its moment of inertia?",
+                "A torque of 15 N·m produces an angular acceleration of 3 rad/s². What is the moment of inertia?",
+                "An object has angular momentum of 40 kg·m²/s and angular velocity of 5 rad/s. What is its moment of inertia?"
             ]
         },
         {
@@ -235,6 +305,11 @@
                 "velocity",
                 "radius",
                 "momentum"
+            ],
+            "questions": [
+                "An object with moment of inertia 6 kg·m² rotates at 4 rad/s. What is its angular momentum?",
+                "A 3 kg object moves at 8 m/s in a circle of radius 1.5 m. What is its angular momentum?",
+                "An object has linear momentum of 20 kg·m/s and moves in a circle of radius 2 m. What is its angular momentum?"
             ]
         },
         {
@@ -250,6 +325,11 @@
                 "velocity",
                 "radius",
                 "angular_velocity"
+            ],
+            "questions": [
+                "A 2 kg object experiences centripetal acceleration of 5 m/s². What is the centripetal force?",
+                "A 4 kg object moves at 6 m/s in a circle of radius 3 m. What is the centripetal force?",
+                "A 3 kg object rotates with angular velocity 2 rad/s at radius 2 m. What is the centripetal force?"
             ]
         },
         {
@@ -265,6 +345,11 @@
                 "angular_velocity",
                 "centripetal_force",
                 "mass"
+            ],
+            "questions": [
+                "An object moves at 10 m/s in a circle of radius 5 m. What is its centripetal acceleration?",
+                "An object rotates with angular velocity 3 rad/s at radius 2 m. What is its centripetal acceleration?",
+                "A centripetal force of 50 N acts on a 5 kg object. What is the centripetal acceleration?"
             ]
         },
         {
@@ -282,6 +367,12 @@
                 "wavelength",
                 "number_of_cycles",
                 "time"
+            ],
+            "questions": [
+                "A wave has a period of 0.5 seconds. What is its frequency?",
+                "An object rotates with angular velocity 4π rad/s. What is its frequency?",
+                "A wave travels at 340 m/s with wavelength 2 m. What is its frequency?",
+                "A system completes 60 cycles in 12 seconds. What is its frequency?"
             ]
         },
         {
@@ -299,6 +390,12 @@
                 "angular_velocity",
                 "time",
                 "number_of_cycles"
+            ],
+            "questions": [
+                "A wave has frequency 2 Hz. What is its period?",
+                "A spring-mass system has mass 4 kg and spring constant 100 N/m. What is its period?",
+                "An object rotates with angular velocity π rad/s. What is its period?",
+                "A system completes 20 cycles in 10 seconds. What is its period?"
             ]
         },
         {
@@ -313,6 +410,11 @@
                 "frequency",
                 "period",
                 "wave_number"
+            ],
+            "questions": [
+                "A wave travels at 300 m/s with frequency 150 Hz. What is its wavelength?",
+                "A wave travels at 340 m/s with period 0.01 seconds. What is its wavelength?",
+                "A wave has wave number 2π m⁻¹. What is its wavelength?"
             ]
         },
         {
@@ -328,6 +430,11 @@
                 "period",
                 "tension",
                 "linear_density"
+            ],
+            "questions": [
+                "A wave has frequency 50 Hz and wavelength 4 m. What is its speed?",
+                "A wave has wavelength 6 m and period 0.02 seconds. What is its speed?",
+                "A string has tension 100 N and linear density 0.01 kg/m. What is the wave speed?"
             ]
         },
         {
@@ -345,6 +452,12 @@
                 "length",
                 "area",
                 "power"
+            ],
+            "questions": [
+                "A circuit has voltage 12 V and current 3 A. What is the resistance?",
+                "A wire has resistivity 1.7×10⁻⁸ Ω·m, length 10 m, and cross-sectional area 2×10⁻⁶ m². What is its resistance?",
+                "A resistor dissipates 100 W with current 5 A. What is its resistance?",
+                "A resistor has voltage 20 V and power 40 W. What is its resistance?"
             ]
         },
         {
@@ -363,6 +476,12 @@
                 "distance",
                 "work",
                 "charge"
+            ],
+            "questions": [
+                "A circuit has current 2 A and resistance 6 Ω. What is the voltage?",
+                "A device uses 60 W of power with current 5 A. What is the voltage?",
+                "An electric field of 1000 N/C exists over a distance of 0.05 m. What is the voltage?",
+                "100 Joules of work is done moving 5 Coulombs of charge. What is the voltage?"
             ]
         },
         {
@@ -379,6 +498,12 @@
                 "charge",
                 "time",
                 "power"
+            ],
+            "questions": [
+                "A circuit has voltage 24 V and resistance 8 Ω. What is the current?",
+                "10 Coulombs of charge flows in 2 seconds. What is the current?",
+                "A device uses 120 W with voltage 12 V. What is the current?",
+                "A resistor dissipates 50 W with resistance 2 Ω. What is the current?"
             ]
         },
         {
@@ -395,6 +520,11 @@
                 "area",
                 "distance",
                 "energy"
+            ],
+            "questions": [
+                "A capacitor stores 0.001 C of charge at 10 V. What is its capacitance?",
+                "A parallel plate capacitor has permittivity 8.85×10⁻¹² F/m, area 0.01 m², and plate separation 0.001 m. What is its capacitance?",
+                "A capacitor stores 0.05 J of energy at 20 V. What is its capacitance?"
             ]
         },
         {
@@ -410,6 +540,11 @@
                 "voltage",
                 "distance",
                 "coulomb_constant"
+            ],
+            "questions": [
+                "A force of 0.02 N acts on a charge of 0.001 C. What is the electric field?",
+                "A voltage of 100 V exists across a distance of 0.05 m. What is the electric field?",
+                "A point charge of 2×10⁻⁶ C is located 0.1 m away. What is the electric field? (Use k = 9×10⁹ N·m²/C²)"
             ]
         },
         {
@@ -428,6 +563,11 @@
                 "radius",
                 "magnetic_flux",
                 "area"
+            ],
+            "questions": [
+                "A charge of 0.001 C moving at 100 m/s experiences a force of 0.05 N. What is the magnetic field?",
+                "A wire carries current 5 A. At distance 0.02 m, what is the magnetic field? (Use μ₀ = 4π×10⁻⁷ T·m/A)",
+                "A magnetic flux of 0.02 Wb passes through an area of 0.01 m². What is the magnetic field?"
             ]
         },
         {
@@ -442,6 +582,10 @@
                 "pressure",
                 "gas_constant",
                 "temperature"
+            ],
+            "questions": [
+                "A substance has mass 5 kg and volume 0.002 m³. What is its density?",
+                "A gas has pressure 101325 Pa at temperature 300 K. What is its density? (Use R = 287 J/(kg·K))"
             ]
         },
         {
@@ -459,6 +603,11 @@
                 "temperature",
                 "gravity",
                 "height"
+            ],
+            "questions": [
+                "A force of 500 N is applied over an area of 0.01 m². What is the pressure?",
+                "A gas has density 1.2 kg/m³ at temperature 300 K. What is its pressure? (Use R = 287 J/(kg·K))",
+                "A fluid with density 1000 kg/m³ is at height 5 m. What is the pressure? (Use g = 9.8 m/s²)"
             ]
         },
         {
@@ -479,6 +628,12 @@
                 "number_of_moles",
                 "pressure",
                 "radius"
+            ],
+            "questions": [
+                "A substance has mass 10 kg and density 2000 kg/m³. What is its volume?",
+                "A cylinder has base area 0.05 m² and height 2 m. What is its volume?",
+                "A gas at 300 K and 101325 Pa has 2 moles. What is its volume? (Use R = 8.314 J/(mol·K))",
+                "A sphere has radius 0.5 m. What is its volume?"
             ]
         },
         {
@@ -496,6 +651,11 @@
                 "density",
                 "average_kinetic_energy",
                 "boltzmann_constant"
+            ],
+            "questions": [
+                "A gas has pressure 202650 Pa, volume 0.05 m³, and 1 mole. What is its temperature? (Use R = 8.314 J/(mol·K))",
+                "A gas has pressure 101325 Pa and density 1.2 kg/m³. What is its temperature? (Use R = 287 J/(kg·K))",
+                "A gas has average kinetic energy 6.21×10⁻²¹ J per particle. What is its temperature? (Use k = 1.38×10⁻²³ J/K)"
             ]
         },
         {
@@ -511,6 +671,11 @@
                 "change_in_momentum",
                 "final_momentum",
                 "initial_momentum"
+            ],
+            "questions": [
+                "A force of 20 N acts for 0.5 seconds. What is the impulse?",
+                "An object's momentum changes by 15 kg·m/s. What is the impulse?",
+                "An object has initial momentum 10 kg·m/s and final momentum 25 kg·m/s. What is the impulse?"
             ]
         },
         {
@@ -527,6 +692,11 @@
                 "initial_energy",
                 "mass",
                 "speed_of_light"
+            ],
+            "questions": [
+                "A system has kinetic energy 50 J and potential energy 30 J. What is the total energy?",
+                "100 J of work is done on a system with initial energy 200 J. What is the total energy?",
+                "What is the rest energy of a 1 kg object? (Use c = 3×10⁸ m/s)"
             ]
         },
         {
@@ -541,6 +711,11 @@
                 "normal_force",
                 "mu_static",
                 "mu_kinetic"
+            ],
+            "questions": [
+                "A surface has coefficient of friction 0.5 and normal force 100 N. What is the friction force?",
+                "A surface has static coefficient 0.6 and normal force 50 N. What is the static friction force?",
+                "A surface has kinetic coefficient 0.4 and normal force 80 N. What is the kinetic friction force?"
             ]
         },
         {
@@ -555,6 +730,11 @@
                 "gravity",
                 "angle",
                 "force_applied"
+            ],
+            "questions": [
+                "A 10 kg object sits on an inclined plane at 30 degrees. What is the normal force? (Use g = 9.8 m/s²)",
+                "A 5 kg object sits on a horizontal surface. What is the normal force? (Use g = 9.8 m/s²)",
+                "A force of 100 N is applied at 60 degrees to a surface. What is the normal component?"
             ]
         },
         {
@@ -571,6 +751,11 @@
                 "force_applied",
                 "centripetal_force",
                 "weight"
+            ],
+            "questions": [
+                "A 2 kg object accelerates upward at 3 m/s². What is the tension? (Use g = 9.8 m/s²)",
+                "A rope applies a force of 50 N. What is the tension?",
+                "An object has centripetal force 20 N and weight 10 N. What is the tension?"
             ]
         },
         {
@@ -586,6 +771,11 @@
                 "force",
                 "density",
                 "volume"
+            ],
+            "questions": [
+                "What is the weight of a 10 kg object on Earth? (Use g = 9.8 m/s²)",
+                "An object experiences a gravitational force of 49 N. What is its weight?",
+                "A material with density 2000 kg/m³ has volume 0.01 m³. What is its weight? (Use g = 9.8 m/s²)"
             ]
         },
         {
@@ -601,6 +791,11 @@
                 "gravity",
                 "weight_displaced",
                 "volume"
+            ],
+            "questions": [
+                "An object displaces 0.002 m³ of water (density 1000 kg/m³). What is the buoyant force? (Use g = 9.8 m/s²)",
+                "An object displaces fluid with weight 19.6 N. What is the buoyant force?",
+                "An object with volume 0.001 m³ is submerged in water (density 1000 kg/m³). What is the buoyant force? (Use g = 9.8 m/s²)"
             ]
         },
         {
@@ -619,6 +814,12 @@
                 "height",
                 "pressure",
                 "force"
+            ],
+            "questions": [
+                "A rectangle has length 5 m and width 3 m. What is its area?",
+                "A circle has radius 2 m. What is its area?",
+                "A triangle has base 6 m and height 4 m. What is its area?",
+                "A force of 1000 N creates pressure 50000 Pa. What is the area?"
             ]
         },
         {
@@ -637,6 +838,11 @@
                 "y1",
                 "initial_velocity",
                 "acceleration"
+            ],
+            "questions": [
+                "An object travels at 15 m/s for 4 seconds. What distance does it cover?",
+                "What is the distance between points (0, 0) and (3, 4)?",
+                "An object starts at 2 m/s and accelerates at 3 m/s² for 5 seconds. What distance does it travel?"
             ]
         },
         {
@@ -653,6 +859,11 @@
                 "potential_energy",
                 "mass",
                 "vertical_displacement"
+            ],
+            "questions": [
+                "A ball is thrown upward with initial vertical velocity 20 m/s. After 2 seconds, what is its height? (Use g = 9.8 m/s²)",
+                "An object has potential energy 196 J, mass 2 kg. What is its height? (Use g = 9.8 m/s²)",
+                "An object moves vertically by 15 m. What is its height change?"
             ]
         },
         {
@@ -669,6 +880,11 @@
                 "horizontal_velocity",
                 "time_of_flight",
                 "horizontal_displacement"
+            ],
+            "questions": [
+                "A projectile is launched at 20 m/s at 45 degrees. What is its range? (Use g = 9.8 m/s²)",
+                "A projectile has horizontal velocity 15 m/s and time of flight 3 seconds. What is its range?",
+                "A projectile has horizontal displacement 30 m. What is its range?"
             ]
         },
         {
@@ -685,6 +901,11 @@
                 "angle",
                 "range",
                 "horizontal_velocity"
+            ],
+            "questions": [
+                "A projectile is launched with initial vertical velocity 19.6 m/s. What is its time of flight? (Use g = 9.8 m/s²)",
+                "A projectile is launched at 30 m/s at 30 degrees. What is its time of flight? (Use g = 9.8 m/s²)",
+                "A projectile has range 60 m and horizontal velocity 20 m/s. What is its time of flight?"
             ]
         },
         {
@@ -701,6 +922,11 @@
                 "angle",
                 "potential_energy_max",
                 "mass"
+            ],
+            "questions": [
+                "A ball is thrown upward with initial vertical velocity 14 m/s. What is its maximum height? (Use g = 9.8 m/s²)",
+                "A projectile is launched at 20 m/s at 60 degrees. What is its maximum height? (Use g = 9.8 m/s²)",
+                "A projectile reaches maximum potential energy 98 J with mass 1 kg. What is its maximum height? (Use g = 9.8 m/s²)"
             ]
         },
         {
@@ -718,6 +944,11 @@
                 "charge2",
                 "distance",
                 "capacitance"
+            ],
+            "questions": [
+                "A charge of 0.002 C is at voltage 100 V. What is its electric potential energy?",
+                "Two charges of 1×10⁻⁶ C each are 0.1 m apart. What is their electric potential energy? (Use k = 9×10⁹ N·m²/C²)",
+                "A capacitor of 0.001 F is charged to 50 V. What is its stored energy?"
             ]
         },
         {
@@ -733,6 +964,11 @@
                 "angle",
                 "voltage_induced",
                 "time"
+            ],
+            "questions": [
+                "A magnetic field of 0.5 T passes through an area of 0.02 m² at 0 degrees. What is the magnetic flux?",
+                "A magnetic field of 1 T passes through an area of 0.01 m². What is the magnetic flux?",
+                "A voltage of 2 V is induced for 0.5 seconds. What is the change in magnetic flux?"
             ]
         },
         {
@@ -749,6 +985,11 @@
                 "change_in_current",
                 "time",
                 "self_inductance"
+            ],
+            "questions": [
+                "A coil produces magnetic flux 0.01 Wb with current 2 A. What is its inductance?",
+                "A voltage of 10 V is induced when current changes by 5 A in 0.1 seconds. What is the inductance?",
+                "A coil has self-inductance 0.05 H. What is its inductance?"
             ]
         },
         {
@@ -766,6 +1007,11 @@
                 "angular_frequency",
                 "inductance",
                 "capacitance"
+            ],
+            "questions": [
+                "A circuit has resistance 3 Ω and reactance 4 Ω. What is its impedance?",
+                "A circuit has voltage 120 V and current 5 A. What is its impedance?",
+                "A circuit has resistance 5 Ω, angular frequency 100 rad/s, inductance 0.1 H, and capacitance 0.001 F. What is its impedance?"
             ]
         },
         {
@@ -781,6 +1027,11 @@
                 "capacitance",
                 "inductive_reactance",
                 "capacitive_reactance"
+            ],
+            "questions": [
+                "A circuit has angular frequency 50 rad/s and inductance 0.2 H. What is the inductive reactance?",
+                "A circuit has angular frequency 100 rad/s and capacitance 0.0001 F. What is the capacitive reactance?",
+                "A circuit has inductive reactance 10 Ω and capacitive reactance 6 Ω. What is the net reactance?"
             ]
         },
         {
@@ -798,6 +1049,12 @@
                 "mass",
                 "inductance",
                 "capacitance"
+            ],
+            "questions": [
+                "A system oscillates at frequency 2 Hz. What is its angular frequency?",
+                "An object rotates with angular velocity 5 rad/s. What is its angular frequency?",
+                "A spring-mass system has spring constant 100 N/m and mass 4 kg. What is its angular frequency?",
+                "An LC circuit has inductance 0.01 H and capacitance 0.0001 F. What is its angular frequency?"
             ]
         },
         {
@@ -814,6 +1071,11 @@
                 "input_power",
                 "work_output",
                 "work_input"
+            ],
+            "questions": [
+                "A machine produces 80 J of useful output from 100 J of total input. What is its efficiency?",
+                "A device has output power 50 W and input power 100 W. What is its efficiency?",
+                "A machine does 60 J of useful work with 80 J of input work. What is its efficiency?"
             ]
         },
         {
@@ -830,6 +1092,11 @@
                 "output_distance",
                 "load",
                 "effort"
+            ],
+            "questions": [
+                "A machine produces output force 200 N with input force 50 N. What is its mechanical advantage?",
+                "A lever requires input distance 2 m to move output distance 0.5 m. What is its mechanical advantage?",
+                "A machine lifts a load of 300 N with effort 100 N. What is its mechanical advantage?"
             ]
         },
         {
@@ -845,6 +1112,11 @@
                 "young_modulus",
                 "strain",
                 "pressure"
+            ],
+            "questions": [
+                "A force of 1000 N is applied to an area of 0.001 m². What is the stress?",
+                "A material has Young's modulus 2×10¹¹ Pa and strain 0.001. What is the stress?",
+                "A material experiences pressure 50000 Pa. What is the stress?"
             ]
         },
         {
@@ -861,6 +1133,11 @@
                 "young_modulus",
                 "deformation",
                 "length"
+            ],
+            "questions": [
+                "A rod of original length 2 m stretches by 0.002 m. What is the strain?",
+                "A material has stress 2×10⁸ Pa and Young's modulus 2×10¹¹ Pa. What is the strain?",
+                "A material deforms by 0.001 m from original length 1 m. What is the strain?"
             ]
         },
         {
@@ -878,6 +1155,11 @@
                 "area",
                 "change_in_length",
                 "elastic_modulus"
+            ],
+            "questions": [
+                "A material has stress 1×10⁸ Pa and strain 0.0005. What is its Young's modulus?",
+                "A force of 5000 N is applied to a rod of original length 1 m and area 0.0001 m², causing it to stretch 0.0005 m. What is the Young's modulus?",
+                "A material has elastic modulus 2×10¹¹ Pa. What is its Young's modulus?"
             ]
         }
     ]

@@ -360,6 +360,43 @@ class TreeWalkCalculator:
                                     if (dep, node) not in necessary_edges and (dep, node) in self.tree_structure['edges']:
                                         necessary_edges.append((dep, node))
         
+        # Cleanup: Remove nodes that aren't actually used by selected formulas
+        # Build set of all nodes that are required dependencies of selected formulas
+        required_nodes = {target}
+        changed = True
+        while changed:
+            changed = False
+            # For each node that's already required, add its required dependencies
+            for node in list(required_nodes):
+                if node in node_formulas:
+                    formula, required_deps = node_formulas[node]
+                    if formula:  # Only if a formula was selected
+                        for dep in required_deps:
+                            if dep not in required_nodes:
+                                required_nodes.add(dep)
+                                changed = True
+                    else:
+                        # Fallback case: no formula selected, but dependencies were kept
+                        # Use the dependencies that were stored (node_deps)
+                        for dep in required_deps:
+                            if dep not in required_nodes and dep in necessary_nodes:
+                                required_nodes.add(dep)
+                                changed = True
+        
+        # Only keep nodes that are actually required by selected formulas
+        # Base inputs are only kept if they're actually required (in required_nodes)
+        nodes_before_cleanup = necessary_nodes.copy()
+        necessary_nodes = necessary_nodes.intersection(required_nodes)
+        
+        # Also filter edges to only include those between kept nodes
+        necessary_edges = [(dep, target_node) for dep, target_node in necessary_edges 
+                          if dep in necessary_nodes and target_node in necessary_nodes]
+        
+        # Log removed nodes for debugging
+        removed_nodes = nodes_before_cleanup - necessary_nodes
+        if removed_nodes:
+            logger.info(f"  Cleanup removed unnecessary nodes: {sorted(removed_nodes)}")
+        
         # Prune the tree structure
         pruned_tree = {
             'target': target,
@@ -501,14 +538,9 @@ class TreeWalkCalculator:
         # This ensures dependencies are calculated before nodes that depend on them
         all_levels = sorted(self.tree_structure['levels'].keys(), reverse=True)
         
-        # Skip the deepest level (last level) since those are leaf nodes with assigned values
-        # Start calculating from the second-to-last level
-        if len(all_levels) > 0:
-            deepest_level = all_levels[0]  # Highest level number
-            logger.info(f"Deepest level {deepest_level} contains leaf nodes (already have values), skipping calculation")
-            levels_to_process = [level for level in all_levels if level < deepest_level]
-        else:
-            levels_to_process = all_levels
+        # Process all levels, but skip leaf nodes (they already have assigned values)
+        # The deepest level may contain both leaf nodes (with values) and non-leaf nodes (to calculate)
+        levels_to_process = all_levels
         
         for level in levels_to_process:
             logger.info(f"\n--- Processing Level {level} ---")
@@ -669,19 +701,22 @@ class TreeWalkCalculator:
         logger.info("Summary of all calculated values")
         logger.info(f"{'='*60}\n")
         
-        # Print base inputs first
-        if self.tree_structure['base_inputs']:
-            logger.info("Base Inputs (Leaf Nodes):")
-            for node in sorted(self.tree_structure['base_inputs']):
+        # Print leaf nodes (these are the inputs used for question generation)
+        leaf_nodes = self.tree_structure.get('leaf_nodes', set())
+        if leaf_nodes:
+            logger.info("Leaf Nodes (Input Values):")
+            for node in sorted(leaf_nodes):
                 if node in self.values:
                     logger.info(f"  {node} = {self.values[node]:.4f}")
             logger.info("")
         
-        # Print by level
+        # Print by level (excluding leaf nodes as they're already printed above)
         for level in sorted(self.tree_structure['levels'].keys()):
-            logger.info(f"Level {level}:")
-            for node in sorted(self.tree_structure['levels'][level]):
-                if node in self.values:
+            level_nodes = [node for node in sorted(self.tree_structure['levels'][level]) 
+                          if node not in leaf_nodes and node in self.values]
+            if level_nodes:
+                logger.info(f"Level {level}:")
+                for node in level_nodes:
                     logger.info(f"  {node} = {self.values[node]:.4f}")
 
 

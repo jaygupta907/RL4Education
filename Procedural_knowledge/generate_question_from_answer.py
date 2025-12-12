@@ -1,28 +1,3 @@
-"""
-Question Generation from Answer using Qwen LLM
-
-This script takes the calculated answer from tree_walk_calculation.py and generates
-a natural word problem question based on that answer using Qwen LLM.
-
-Usage:
-    # Option 1: Run standalone (runs calculation and generates question)
-    python generate_question_from_answer.py
-    
-    # Option 2: Use as a module
-    from generate_question_from_answer import QuestionGenerator
-    from tree_walk_calculation import TreeWalkCalculator
-    
-    calculator = TreeWalkCalculator("variable_concept_graph.json", max_length=4)
-    result = calculator.run("magnetic_flux", min_val=1.0, max_val=100.0)
-    
-    generator = QuestionGenerator()
-    question = generator.generate_question(calculator)
-
-Requirements:
-    - transformers library: pip install transformers torch
-    - Qwen model will be downloaded automatically on first use
-"""
-
 import logging
 from typing import Optional, Dict, List
 from tree_walk_calculation import TreeWalkCalculator
@@ -71,7 +46,7 @@ class QuestionGenerator:
             logger.info("Loading Qwen LLM model for question generation (this may take a moment)...")
             self.llm_pipeline = pipeline(
                 "text-generation",
-                model="Qwen/Qwen2.5-3B-Instruct",
+                model="Qwen/Qwen2.5-7B-Instruct",
                 device_map="auto",
                 model_kwargs={"torch_dtype": "auto"}
             )
@@ -119,6 +94,64 @@ class QuestionGenerator:
         
         return "\n".join(summary_lines)
     
+    def _get_questions_for_nodes(self, calculator: TreeWalkCalculator) -> Dict[str, List[str]]:
+        """
+        Extract questions for all nodes in the pruned tree walk (excluding target node).
+        
+        Args:
+            calculator: TreeWalkCalculator instance with completed calculation
+            
+        Returns:
+            Dictionary mapping variable names to their questions
+        """
+        questions_dict = {}
+        
+        # Get target node to exclude it from context
+        target = calculator.tree_structure.get('target')
+        
+        # Get all nodes in the pruned tree walk
+        all_nodes = calculator.tree_structure.get('nodes', set())
+        
+        # Extract questions for each node from the graph data (excluding target)
+        for node in all_nodes:
+            if node != target and node in calculator.variable_info:
+                var_info = calculator.variable_info[node]
+                if 'questions' in var_info and var_info['questions']:
+                    questions_dict[node] = var_info['questions']
+        
+        return questions_dict
+    
+    def _format_questions_context(self, questions_dict: Dict[str, List[str]], calculator: TreeWalkCalculator) -> str:
+        """
+        Format questions from all nodes in the pruned tree walk (excluding target) as context for the LLM prompt.
+        
+        Args:
+            questions_dict: Dictionary mapping variable names to their questions (target excluded)
+            calculator: TreeWalkCalculator instance
+            
+        Returns:
+            Formatted string with example questions
+        """
+        if not questions_dict:
+            return ""
+        
+        context_lines = []
+        context_lines.append("EXAMPLE QUESTIONS from all nodes in pruned tree walk (phrasing style only):")
+        
+        # Organize by level to show the calculation path
+        all_levels = sorted(calculator.tree_structure.get('levels', {}).keys(), reverse=True)
+        
+        for level in all_levels:
+            level_nodes = calculator.tree_structure['levels'].get(level, [])
+            for node in sorted(level_nodes):
+                if node in questions_dict:
+                    node_questions = questions_dict[node]
+                    context_lines.append(f"\n{node} (Level {level}):")
+                    for i, q in enumerate(node_questions[:2], 1):  # Show max 2 questions per node
+                        context_lines.append(f"  {i}. {q}")
+        
+        return "\n".join(context_lines)
+    
     def generate_question(self, calculator: TreeWalkCalculator) -> Optional[str]:
         """
         Generate a question based on the calculated answer using Qwen LLM.
@@ -143,31 +176,50 @@ class QuestionGenerator:
             logger.warning("No target value calculated. Cannot generate question.")
             return None
         
+        # Get questions for all nodes in the pruned tree walk
+        questions_dict = self._get_questions_for_nodes(calculator)
+        
+        # Identify leaf vs intermediate nodes
+        leaf_nodes_set = calculator.tree_structure.get('leaf_nodes', set())
+        all_nodes_set = calculator.tree_structure.get('nodes', set())
+        intermediate_nodes = sorted([n for n in all_nodes_set if n not in leaf_nodes_set and n != target])
+        
+        # Log which nodes have questions
+        if questions_dict:
+            logger.info(f"\n{'='*60}")
+            logger.info("Question generation context:")
+            logger.info(f"{'='*60}")
+            logger.info(f"LEAF NODES (will be used IN the question): {sorted(leaf_nodes_set)}")
+            logger.info(f"INTERMEDIATE NODES (context only, NOT in question): {intermediate_nodes}")
+            logger.info(f"\nFound example questions for nodes in pruned tree walk:")
+            leaf_with_questions = [n for n in sorted(questions_dict.keys()) if n in leaf_nodes_set]
+            intermediate_with_questions = [n for n in sorted(questions_dict.keys()) if n not in leaf_nodes_set]
+            if leaf_with_questions:
+                logger.info(f"  Leaf nodes with examples: {leaf_with_questions}")
+            if intermediate_with_questions:
+                logger.info(f"  Intermediate nodes with examples: {intermediate_with_questions}")
+            logger.info(f"{'='*60}\n")
+        else:
+            logger.info("No example questions found in the pruned tree walk nodes.")
+        
+        questions_context = self._format_questions_context(questions_dict, calculator)
+        
+        # Print the formatted questions context for debugging/inspection
+        if questions_context:
+            logger.info(f"\n{'='*60}")
+            logger.info("Questions Context (formatted for LLM):")
+            logger.info(f"{'='*60}")
+            logger.info(questions_context)
+            logger.info(f"{'='*60}\n")
+        
         # Create prompt for question generation
-        # DO NOT include the final answer - only given values and formulas
-        system_prompt = """You are an expert physics/mathematics educator. Your task is to generate a natural, realistic word problem question.
+        system_prompt = """You are an expert physics/mathematics educator. Generate clear, natural word problem questions.
 
-CRITICAL RULES - YOU MUST FOLLOW THESE EXACTLY:
-1. The question must be written in natural, conversational language
-2. You MUST use ONLY the variables and values provided in the "Given Values" list below
-3. You MUST include the EXACT numeric values for ALL given variables in your question
-4. You MUST NOT use vague descriptions like "certain", "a distance", "some value" - use the actual numbers
-5. You MUST include ALL given values with their exact numbers in the problem statement
-6. You MUST NOT mention any variables that are NOT in the given values list
-7. Ask for the target variable (what needs to be calculated)
-8. Be appropriate for a physics or mathematics context
-9. DO NOT include the final answer or any calculated values in the question
-10. DO NOT mention the target variable's value or any intermediate calculated values
-11. DO NOT invent or add any variables not in the given list
-12. Be clear and well-structured
-13. End with asking what the target variable is (e.g., "What is the impedance?")
-
-EXAMPLE FORMAT:
-If given values are: charge = 7.1454, length = 44.8581, time = 13.7825
-Good question: "A circuit has a charge of 7.1454 Coulombs flowing through it. The circuit has a length of 44.8581 meters and operates for 13.7825 seconds. What is the impedance?"
-Bad question: "A circuit has certain properties and some charge flowing through it. What is the impedance?" (missing exact values)
-
-Generate ONLY the question text, without any explanation, answer, or numerical result. The question must include ALL given values with their exact numbers."""
+Key principles:
+• Use ONLY the variables and values explicitly provided
+• Include ALL given values with their EXACT numeric values
+• Write naturally with appropriate physical units
+• Example questions demonstrate phrasing style - do NOT copy their variable names"""
         
         # Extract only given values (leaf nodes) for the prompt, NOT calculated values
         given_values_list = []
@@ -195,39 +247,54 @@ Generate ONLY the question text, without any explanation, answer, or numerical r
                 if formula:
                     formulas_text += f"  {node} = {formula}\n"
         
-        # Format given values more explicitly for the LLM
+        # Format given values more explicitly for the LLM with clear numbering
         values_examples = []
-        for var in sorted(given_values_list):
+        for idx, var in enumerate(sorted(given_values_list), 1):
             value = given_values_dict[var]
-            values_examples.append(f"{var} = {value:.4f}")
-        values_list_text = "\n".join([f"  - {ex}" for ex in values_examples])
+            values_examples.append(f"{idx}. {var} = {value:.4f}")
+        values_list_text = "\n".join(values_examples)
         
-        user_prompt = f"""Generate a word problem question using ONLY the following information:
+        # Create a clear list of allowed variables
+        allowed_vars_list = ", ".join(sorted(given_values_list))
+        
+        # Identify leaf vs intermediate nodes for clarity in prompt
+        leaf_nodes_set = calculator.tree_structure.get('leaf_nodes', set())
+        all_nodes_set = calculator.tree_structure.get('nodes', set())
+        intermediate_nodes = sorted([n for n in all_nodes_set if n not in leaf_nodes_set and n != target])
+        
+        # Format the user prompt - improved structure
+        user_prompt = f"""Generate a physics/mathematics word problem question.
 
-TARGET VARIABLE TO FIND: {target}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TASK: Find the {target}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-YOU MUST USE THESE EXACT VALUES (include ALL of them with their exact numbers):
+YOU MUST USE THESE {len(given_values_list)} VALUES (include ALL with exact numbers):
 {values_list_text}
 
-ALLOWED VARIABLE NAMES (use ONLY these, no others): {', '.join(sorted(given_values_list))}
+ALLOWED VARIABLES ONLY: {allowed_vars_list}
+Do NOT use: {', '.join(intermediate_nodes[:5]) if intermediate_nodes else 'any calculated/intermediate variables'}
 
-{formulas_text}
+{formulas_text if formulas_text else ""}
 
-STRICT REQUIREMENTS - READ CAREFULLY:
-1. You MUST include ALL {len(given_values_list)} given values in your question
-2. You MUST write the EXACT numeric value for each variable (e.g., "charge of 7.1454 Coulombs", "length of 44.8581 meters")
-3. You MUST NOT use vague language like "certain", "some", "a distance", "various" - use the actual numbers
-4. You MUST NOT mention any variables NOT in the allowed list: {', '.join(sorted(given_values_list))}
-5. You MUST NOT invent or add any new variables or values
-6. Ask what the {target} is (DO NOT provide the answer)
-7. Do NOT reveal any calculated values, intermediate results, or the final answer
-8. Do NOT mention intermediate calculated variables (like current, resistance, voltage, etc.) unless they are in the allowed list above
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EXAMPLE QUESTIONS (for phrasing style only):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+{questions_context if questions_context else "No examples available."}
 
-EXAMPLE OF WHAT TO DO:
-Given: charge = 7.1454, length = 44.8581, time = 13.7825
-Question: "An electrical circuit has a charge of 7.1454 Coulombs flowing through it. The circuit has a length of 44.8581 meters and operates for 13.7825 seconds. What is the impedance?"
+⚠️ Note: Examples show phrasing style. Use ONLY variables from the allowed list above.
 
-Generate a natural word problem question that includes ALL given values with their exact numbers."""
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REQUIREMENTS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Include ALL {len(given_values_list)} values above with their EXACT numbers
+2. Use ONLY these variables: {allowed_vars_list}
+3. Write in natural language with appropriate units
+4. End with: "What is the {target}?"
+5. Do NOT use vague terms like "certain", "some", "a distance" - use actual numbers
+6. Do NOT mention intermediate/calculated variables
+
+Generate the question now:"""
         
         try:
             # Format prompt for Qwen2.5-Instruct
@@ -236,9 +303,9 @@ Generate a natural word problem question that includes ALL given values with the
             # Generate question
             result = self.llm_pipeline(
                 full_prompt,
-                max_new_tokens=200,
+                max_new_tokens=400,
                 num_return_sequences=1,
-                temperature=0.7,
+                temperature=0.5,
                 do_sample=True,
                 pad_token_id=self.llm_pipeline.tokenizer.eos_token_id,
             )
@@ -252,8 +319,6 @@ Generate a natural word problem question that includes ALL given values with the
             question = question.split("<|im_end|>")[0].strip()
             
             if question:
-                # Validate that question only uses allowed variables and includes all values
-                question = self._validate_question(question, given_values_dict, target)
                 
                 # Check if all values are included
                 missing_values = self._check_missing_values(question, given_values_dict)
@@ -273,74 +338,6 @@ Generate a natural word problem question that includes ALL given values with the
             logger.error(f"Error generating question with Qwen LLM: {e}")
             return None
     
-    def _validate_question(self, question: str, allowed_variables: Dict[str, float], target: str) -> str:
-        """
-        Validate and clean the generated question to ensure it only uses allowed variables.
-        
-        Args:
-            question: Generated question text
-            allowed_variables: Dictionary of allowed variable names and their values
-            target: Target variable name
-            
-        Returns:
-            Validated question (may be modified to remove invalid variables)
-        """
-        import re
-        
-        # Get all variable names from the question (simple pattern matching)
-        # Look for patterns like "variable_name = value" or "variable_name as value"
-        question_lower = question.lower()
-        allowed_var_names = set(allowed_variables.keys())
-        allowed_var_names.add(target.lower())
-        
-        # Check for numeric values that don't match allowed values
-        # Extract all numbers from the question
-        numbers_in_question = re.findall(r'\d+\.?\d*', question)
-        
-        # Check if any numbers don't match allowed values (with some tolerance)
-        allowed_values = set()
-        for var, val in allowed_variables.items():
-            # Round to 4 decimal places for comparison
-            allowed_values.add(round(val, 4))
-        
-        # Warn if question contains variables or values not in allowed list
-        warnings = []
-        
-        # Check for common variable names that might be hallucinated
-        common_physics_vars = ['magnetic_field', 'angle', 'width', 'height', 'mass', 'velocity', 
-                              'acceleration', 'displacement', 'force', 'voltage', 'current',
-                              'resistance', 'power', 'energy', 'field', 'flux']
-        
-        for var in common_physics_vars:
-            if var not in allowed_var_names:
-                # Check if this variable name appears in question (case insensitive)
-                pattern = rf'\b{var}\b'
-                if re.search(pattern, question_lower, re.IGNORECASE):
-                    warnings.append(f"Question mentions '{var}' which is not in allowed variables")
-        
-        # Check for values that don't match allowed values
-        for num_str in numbers_in_question:
-            try:
-                num_val = float(num_str)
-                rounded_val = round(num_val, 4)
-                # Check if this value is close to any allowed value (within 0.0001)
-                found_match = False
-                for allowed_val in allowed_values:
-                    if abs(rounded_val - allowed_val) < 0.0001:
-                        found_match = True
-                        break
-                if not found_match and rounded_val > 0.1:  # Ignore very small numbers
-                    warnings.append(f"Question contains value '{num_val}' which doesn't match any allowed value")
-            except ValueError:
-                pass
-        
-        if warnings:
-            logger.warning("Question validation warnings:")
-            for warning in warnings:
-                logger.warning(f"  - {warning}")
-            logger.warning("The question may contain variables or values not in the tree walk.")
-        
-        return question
     
     def _check_missing_values(self, question: str, required_values: Dict[str, float]) -> List[str]:
         """
@@ -380,8 +377,8 @@ def main():
     """Main function to run calculation and generate question."""
     # Configuration
     graph_file = "variable_concept_graph.json"
-    target_node = "impedance"
-    max_length = 2
+    target_node = "magnetic_flux"
+    max_length = 3
     min_val = 1.0
     max_val = 100.0
     
