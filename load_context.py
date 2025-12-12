@@ -42,12 +42,12 @@ class LoadContext:
         self.prompt = PromptTemplate.from_template(self.template)
         self.device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
         
-        # Initialize the HuggingFace pipeline for text generation
+        # Initialize the HuggingFace pipeline for text generation - use CPU to save GPU memory
         self.llm = HuggingFacePipeline.from_model_id(
             model_id="google/flan-t5-small",
             task="text2text-generation",
             pipeline_kwargs={"max_new_tokens": 150},
-            device=0
+            device=-1  # Use CPU instead of GPU
         )
         
         # Define the RAG (Retrieval-Augmented Generation) chain

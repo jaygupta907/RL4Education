@@ -1,0 +1,1006 @@
+[
+    {
+        "concept": "Basic Mathematics",
+        "prerequisites": []
+    },
+    {
+        "concept": "Algebra",
+        "prerequisites": [
+            "Basic Mathematics"
+        ]
+    },
+    {
+        "concept": "Geometry",
+        "prerequisites": [
+            "Basic Mathematics"
+        ]
+    },
+    {
+        "concept": "Trigonometry",
+        "prerequisites": [
+            "Geometry",
+            "Algebra"
+        ]
+    },
+    {
+        "concept": "Calculus",
+        "prerequisites": [
+            "Algebra",
+            "Geometry",
+            "Trigonometry"
+        ]
+    },
+    {
+        "concept": "Derivatives",
+        "prerequisites": [
+            "Calculus"
+        ]
+    },
+    {
+        "concept": "Integrals",
+        "prerequisites": [
+            "Calculus"
+        ]
+    },
+    {
+        "concept": "Vectors",
+        "prerequisites": [
+            "Algebra",
+            "Geometry"
+        ]
+    },
+    {
+        "concept": "Vector Addition",
+        "prerequisites": [
+            "Vectors"
+        ]
+    },
+    {
+        "concept": "Vector Multiplication",
+        "prerequisites": [
+            "Vectors"
+        ]
+    },
+    {
+        "concept": "Dot Product",
+        "prerequisites": [
+            "Vector Multiplication",
+            "Trigonometry"
+        ]
+    },
+    {
+        "concept": "Cross Product",
+        "prerequisites": [
+            "Vector Multiplication",
+            "Trigonometry"
+        ]
+    },
+    {
+        "concept": "Classical Mechanics",
+        "prerequisites": [
+            "Calculus",
+            "Vectors",
+            "Basic Mathematics"
+        ]
+    },
+    {
+        "concept": "Kinematics",
+        "prerequisites": [
+            "Classical Mechanics",
+            "Derivatives",
+            "Integrals"
+        ]
+    },
+    {
+        "concept": "Position",
+        "prerequisites": [
+            "Kinematics",
+            "Vectors"
+        ]
+    },
+    {
+        "concept": "Displacement",
+        "prerequisites": [
+            "Position",
+            "Vector Addition"
+        ]
+    },
+    {
+        "concept": "Velocity",
+        "prerequisites": [
+            "Displacement",
+            "Derivatives"
+        ]
+    },
+    {
+        "concept": "Speed",
+        "prerequisites": [
+            "Velocity",
+            "Vectors"
+        ]
+    },
+    {
+        "concept": "Acceleration",
+        "prerequisites": [
+            "Velocity",
+            "Derivatives"
+        ]
+    },
+    {
+        "concept": "Uniform Motion",
+        "prerequisites": [
+            "Velocity",
+            "Kinematics"
+        ]
+    },
+    {
+        "concept": "Uniformly Accelerated Motion",
+        "prerequisites": [
+            "Acceleration",
+            "Kinematics",
+            "Integrals"
+        ]
+    },
+    {
+        "concept": "Projectile Motion",
+        "prerequisites": [
+            "Uniformly Accelerated Motion",
+            "Vectors",
+            "Trigonometry"
+        ]
+    },
+    {
+        "concept": "Circular Motion",
+        "prerequisites": [
+            "Acceleration",
+            "Vectors",
+            "Trigonometry"
+        ]
+    },
+    {
+        "concept": "Angular Velocity",
+        "prerequisites": [
+            "Circular Motion",
+            "Derivatives"
+        ]
+    },
+    {
+        "concept": "Angular Acceleration",
+        "prerequisites": [
+            "Angular Velocity",
+            "Derivatives"
+        ]
+    },
+    {
+        "concept": "Centripetal Acceleration",
+        "prerequisites": [
+            "Circular Motion",
+            "Acceleration",
+            "Vectors"
+        ]
+    },
+    {
+        "concept": "Dynamics",
+        "prerequisites": [
+            "Kinematics",
+            "Classical Mechanics"
+        ]
+    },
+    {
+        "concept": "Force",
+        "prerequisites": [
+            "Dynamics",
+            "Vectors"
+        ]
+    },
+    {
+        "concept": "Newton's First Law",
+        "prerequisites": [
+            "Force",
+            "Dynamics"
+        ]
+    },
+    {
+        "concept": "Newton's Second Law",
+        "prerequisites": [
+            "Force",
+            "Acceleration",
+            "Mass"
+        ]
+    },
+    {
+        "concept": "Newton's Third Law",
+        "prerequisites": [
+            "Force",
+            "Dynamics"
+        ]
+    },
+    {
+        "concept": "Mass",
+        "prerequisites": [
+            "Dynamics"
+        ]
+    },
+    {
+        "concept": "Inertia",
+        "prerequisites": [
+            "Mass",
+            "Newton's First Law"
+        ]
+    },
+    {
+        "concept": "Weight",
+        "prerequisites": [
+            "Mass",
+            "Gravitational Force"
+        ]
+    },
+    {
+        "concept": "Friction",
+        "prerequisites": [
+            "Force",
+            "Newton's Laws"
+        ]
+    },
+    {
+        "concept": "Static Friction",
+        "prerequisites": [
+            "Friction",
+            "Newton's First Law"
+        ]
+    },
+    {
+        "concept": "Kinetic Friction",
+        "prerequisites": [
+            "Friction",
+            "Newton's Second Law"
+        ]
+    },
+    {
+        "concept": "Normal Force",
+        "prerequisites": [
+            "Force",
+            "Newton's Third Law"
+        ]
+    },
+    {
+        "concept": "Tension",
+        "prerequisites": [
+            "Force",
+            "Newton's Laws"
+        ]
+    },
+    {
+        "concept": "Gravitational Force",
+        "prerequisites": [
+            "Force",
+            "Newton's Laws"
+        ]
+    },
+    {
+        "concept": "Universal Gravitation",
+        "prerequisites": [
+            "Gravitational Force",
+            "Newton's Laws"
+        ]
+    },
+    {
+        "concept": "Gravitational Field",
+        "prerequisites": [
+            "Universal Gravitation",
+            "Force"
+        ]
+    },
+    {
+        "concept": "Work",
+        "prerequisites": [
+            "Force",
+            "Displacement",
+            "Dot Product"
+        ]
+    },
+    {
+        "concept": "Energy",
+        "prerequisites": [
+            "Work",
+            "Dynamics"
+        ]
+    },
+    {
+        "concept": "Kinetic Energy",
+        "prerequisites": [
+            "Energy",
+            "Velocity",
+            "Mass"
+        ]
+    },
+    {
+        "concept": "Potential Energy",
+        "prerequisites": [
+            "Energy",
+            "Force"
+        ]
+    },
+    {
+        "concept": "Gravitational Potential Energy",
+        "prerequisites": [
+            "Potential Energy",
+            "Gravitational Force",
+            "Integrals"
+        ]
+    },
+    {
+        "concept": "Elastic Potential Energy",
+        "prerequisites": [
+            "Potential Energy",
+            "Hooke's Law"
+        ]
+    },
+    {
+        "concept": "Conservation of Energy",
+        "prerequisites": [
+            "Kinetic Energy",
+            "Potential Energy",
+            "Work"
+        ]
+    },
+    {
+        "concept": "Power",
+        "prerequisites": [
+            "Work",
+            "Derivatives"
+        ]
+    },
+    {
+        "concept": "Momentum",
+        "prerequisites": [
+            "Mass",
+            "Velocity",
+            "Vectors"
+        ]
+    },
+    {
+        "concept": "Impulse",
+        "prerequisites": [
+            "Momentum",
+            "Force",
+            "Integrals"
+        ]
+    },
+    {
+        "concept": "Conservation of Momentum",
+        "prerequisites": [
+            "Momentum",
+            "Newton's Third Law"
+        ]
+    },
+    {
+        "concept": "Collisions",
+        "prerequisites": [
+            "Conservation of Momentum",
+            "Conservation of Energy"
+        ]
+    },
+    {
+        "concept": "Elastic Collisions",
+        "prerequisites": [
+            "Collisions",
+            "Conservation of Energy"
+        ]
+    },
+    {
+        "concept": "Inelastic Collisions",
+        "prerequisites": [
+            "Collisions",
+            "Conservation of Momentum"
+        ]
+    },
+    {
+        "concept": "Rotational Motion",
+        "prerequisites": [
+            "Circular Motion",
+            "Dynamics"
+        ]
+    },
+    {
+        "concept": "Torque",
+        "prerequisites": [
+            "Force",
+            "Rotational Motion",
+            "Cross Product"
+        ]
+    },
+    {
+        "concept": "Moment of Inertia",
+        "prerequisites": [
+            "Rotational Motion",
+            "Mass"
+        ]
+    },
+    {
+        "concept": "Angular Momentum",
+        "prerequisites": [
+            "Momentum",
+            "Rotational Motion",
+            "Cross Product"
+        ]
+    },
+    {
+        "concept": "Conservation of Angular Momentum",
+        "prerequisites": [
+            "Angular Momentum",
+            "Torque"
+        ]
+    },
+    {
+        "concept": "Rotational Kinetic Energy",
+        "prerequisites": [
+            "Kinetic Energy",
+            "Rotational Motion",
+            "Moment of Inertia"
+        ]
+    },
+    {
+        "concept": "Simple Harmonic Motion",
+        "prerequisites": [
+            "Circular Motion",
+            "Trigonometry",
+            "Derivatives"
+        ]
+    },
+    {
+        "concept": "Hooke's Law",
+        "prerequisites": [
+            "Force",
+            "Elastic Potential Energy"
+        ]
+    },
+    {
+        "concept": "Spring Force",
+        "prerequisites": [
+            "Hooke's Law",
+            "Simple Harmonic Motion"
+        ]
+    },
+    {
+        "concept": "Pendulum",
+        "prerequisites": [
+            "Simple Harmonic Motion",
+            "Gravitational Force",
+            "Trigonometry"
+        ]
+    },
+    {
+        "concept": "Waves",
+        "prerequisites": [
+            "Simple Harmonic Motion",
+            "Trigonometry"
+        ]
+    },
+    {
+        "concept": "Wave Properties",
+        "prerequisites": [
+            "Waves"
+        ]
+    },
+    {
+        "concept": "Wavelength",
+        "prerequisites": [
+            "Wave Properties"
+        ]
+    },
+    {
+        "concept": "Frequency",
+        "prerequisites": [
+            "Wave Properties",
+            "Derivatives"
+        ]
+    },
+    {
+        "concept": "Amplitude",
+        "prerequisites": [
+            "Wave Properties"
+        ]
+    },
+    {
+        "concept": "Wave Speed",
+        "prerequisites": [
+            "Wavelength",
+            "Frequency"
+        ]
+    },
+    {
+        "concept": "Wave Equation",
+        "prerequisites": [
+            "Wave Properties",
+            "Derivatives",
+            "Trigonometry"
+        ]
+    },
+    {
+        "concept": "Standing Waves",
+        "prerequisites": [
+            "Waves",
+            "Wave Equation"
+        ]
+    },
+    {
+        "concept": "Interference",
+        "prerequisites": [
+            "Waves",
+            "Wave Properties"
+        ]
+    },
+    {
+        "concept": "Constructive Interference",
+        "prerequisites": [
+            "Interference"
+        ]
+    },
+    {
+        "concept": "Destructive Interference",
+        "prerequisites": [
+            "Interference"
+        ]
+    },
+    {
+        "concept": "Diffraction",
+        "prerequisites": [
+            "Waves",
+            "Interference"
+        ]
+    },
+    {
+        "concept": "Sound Waves",
+        "prerequisites": [
+            "Waves",
+            "Mechanical Waves"
+        ]
+    },
+    {
+        "concept": "Mechanical Waves",
+        "prerequisites": [
+            "Waves"
+        ]
+    },
+    {
+        "concept": "Doppler Effect",
+        "prerequisites": [
+            "Sound Waves",
+            "Frequency",
+            "Velocity"
+        ]
+    },
+    {
+        "concept": "Thermodynamics",
+        "prerequisites": [
+            "Classical Mechanics",
+            "Energy"
+        ]
+    },
+    {
+        "concept": "Temperature",
+        "prerequisites": [
+            "Thermodynamics"
+        ]
+    },
+    {
+        "concept": "Heat",
+        "prerequisites": [
+            "Temperature",
+            "Energy"
+        ]
+    },
+    {
+        "concept": "Thermal Equilibrium",
+        "prerequisites": [
+            "Temperature",
+            "Heat"
+        ]
+    },
+    {
+        "concept": "Zeroth Law of Thermodynamics",
+        "prerequisites": [
+            "Thermal Equilibrium",
+            "Temperature"
+        ]
+    },
+    {
+        "concept": "First Law of Thermodynamics",
+        "prerequisites": [
+            "Conservation of Energy",
+            "Heat",
+            "Work"
+        ]
+    },
+    {
+        "concept": "Internal Energy",
+        "prerequisites": [
+            "First Law of Thermodynamics",
+            "Energy"
+        ]
+    },
+    {
+        "concept": "Second Law of Thermodynamics",
+        "prerequisites": [
+            "First Law of Thermodynamics",
+            "Heat"
+        ]
+    },
+    {
+        "concept": "Entropy",
+        "prerequisites": [
+            "Second Law of Thermodynamics",
+            "Heat",
+            "Temperature"
+        ]
+    },
+    {
+        "concept": "Heat Transfer",
+        "prerequisites": [
+            "Heat",
+            "Temperature"
+        ]
+    },
+    {
+        "concept": "Conduction",
+        "prerequisites": [
+            "Heat Transfer"
+        ]
+    },
+    {
+        "concept": "Convection",
+        "prerequisites": [
+            "Heat Transfer"
+        ]
+    },
+    {
+        "concept": "Radiation",
+        "prerequisites": [
+            "Heat Transfer"
+        ]
+    },
+    {
+        "concept": "Ideal Gas Law",
+        "prerequisites": [
+            "Temperature",
+            "Pressure",
+            "Volume"
+        ]
+    },
+    {
+        "concept": "Pressure",
+        "prerequisites": [
+            "Force",
+            "Area"
+        ]
+    },
+    {
+        "concept": "Volume",
+        "prerequisites": [
+            "Geometry"
+        ]
+    },
+    {
+        "concept": "Area",
+        "prerequisites": [
+            "Geometry"
+        ]
+    },
+    {
+        "concept": "Electromagnetism",
+        "prerequisites": [
+            "Classical Mechanics",
+            "Vectors"
+        ]
+    },
+    {
+        "concept": "Electric Charge",
+        "prerequisites": [
+            "Electromagnetism"
+        ]
+    },
+    {
+        "concept": "Coulomb's Law",
+        "prerequisites": [
+            "Electric Charge",
+            "Force",
+            "Vectors"
+        ]
+    },
+    {
+        "concept": "Electric Field",
+        "prerequisites": [
+            "Coulomb's Law",
+            "Force",
+            "Electric Charge"
+        ]
+    },
+    {
+        "concept": "Electric Potential",
+        "prerequisites": [
+            "Electric Field",
+            "Potential Energy",
+            "Integrals"
+        ]
+    },
+    {
+        "concept": "Electric Potential Energy",
+        "prerequisites": [
+            "Electric Potential",
+            "Electric Charge"
+        ]
+    },
+    {
+        "concept": "Capacitance",
+        "prerequisites": [
+            "Electric Charge",
+            "Electric Potential"
+        ]
+    },
+    {
+        "concept": "Capacitor",
+        "prerequisites": [
+            "Capacitance",
+            "Electric Field"
+        ]
+    },
+    {
+        "concept": "Current",
+        "prerequisites": [
+            "Electric Charge",
+            "Derivatives"
+        ]
+    },
+    {
+        "concept": "Resistance",
+        "prerequisites": [
+            "Current",
+            "Electric Potential"
+        ]
+    },
+    {
+        "concept": "Ohm's Law",
+        "prerequisites": [
+            "Current",
+            "Resistance",
+            "Electric Potential"
+        ]
+    },
+    {
+        "concept": "Electric Power",
+        "prerequisites": [
+            "Current",
+            "Electric Potential",
+            "Power"
+        ]
+    },
+    {
+        "concept": "Magnetic Field",
+        "prerequisites": [
+            "Electromagnetism",
+            "Vectors"
+        ]
+    },
+    {
+        "concept": "Magnetic Force",
+        "prerequisites": [
+            "Magnetic Field",
+            "Electric Charge",
+            "Velocity",
+            "Cross Product"
+        ]
+    },
+    {
+        "concept": "Lorentz Force",
+        "prerequisites": [
+            "Electric Force",
+            "Magnetic Force",
+            "Vectors"
+        ]
+    },
+    {
+        "concept": "Electric Force",
+        "prerequisites": [
+            "Electric Field",
+            "Electric Charge"
+        ]
+    },
+    {
+        "concept": "Electromagnetic Induction",
+        "prerequisites": [
+            "Magnetic Field",
+            "Electric Field",
+            "Integrals"
+        ]
+    },
+    {
+        "concept": "Faraday's Law",
+        "prerequisites": [
+            "Electromagnetic Induction",
+            "Magnetic Field",
+            "Derivatives"
+        ]
+    },
+    {
+        "concept": "Lenz's Law",
+        "prerequisites": [
+            "Faraday's Law",
+            "Electromagnetic Induction"
+        ]
+    },
+    {
+        "concept": "Optics",
+        "prerequisites": [
+            "Waves",
+            "Electromagnetism"
+        ]
+    },
+    {
+        "concept": "Light",
+        "prerequisites": [
+            "Optics",
+            "Electromagnetic Waves"
+        ]
+    },
+    {
+        "concept": "Electromagnetic Waves",
+        "prerequisites": [
+            "Electromagnetism",
+            "Waves"
+        ]
+    },
+    {
+        "concept": "Reflection",
+        "prerequisites": [
+            "Light",
+            "Waves"
+        ]
+    },
+    {
+        "concept": "Refraction",
+        "prerequisites": [
+            "Light",
+            "Waves",
+            "Snell's Law"
+        ]
+    },
+    {
+        "concept": "Snell's Law",
+        "prerequisites": [
+            "Refraction",
+            "Trigonometry"
+        ]
+    },
+    {
+        "concept": "Index of Refraction",
+        "prerequisites": [
+            "Refraction",
+            "Wave Speed"
+        ]
+    },
+    {
+        "concept": "Lenses",
+        "prerequisites": [
+            "Refraction",
+            "Geometric Optics"
+        ]
+    },
+    {
+        "concept": "Geometric Optics",
+        "prerequisites": [
+            "Optics",
+            "Geometry"
+        ]
+    },
+    {
+        "concept": "Mirrors",
+        "prerequisites": [
+            "Reflection",
+            "Geometric Optics"
+        ]
+    },
+    {
+        "concept": "Thin Lens Equation",
+        "prerequisites": [
+            "Lenses",
+            "Geometric Optics"
+        ]
+    },
+    {
+        "concept": "Mirror Equation",
+        "prerequisites": [
+            "Mirrors",
+            "Geometric Optics"
+        ]
+    },
+    {
+        "concept": "Dispersion",
+        "prerequisites": [
+            "Refraction",
+            "Index of Refraction"
+        ]
+    },
+    {
+        "concept": "Fluid Mechanics",
+        "prerequisites": [
+            "Classical Mechanics",
+            "Pressure"
+        ]
+    },
+    {
+        "concept": "Density",
+        "prerequisites": [
+            "Mass",
+            "Volume"
+        ]
+    },
+    {
+        "concept": "Buoyancy",
+        "prerequisites": [
+            "Pressure",
+            "Force",
+            "Archimedes' Principle"
+        ]
+    },
+    {
+        "concept": "Archimedes' Principle",
+        "prerequisites": [
+            "Buoyancy",
+            "Pressure",
+            "Force"
+        ]
+    },
+    {
+        "concept": "Bernoulli's Principle",
+        "prerequisites": [
+            "Fluid Mechanics",
+            "Conservation of Energy",
+            "Pressure"
+        ]
+    },
+    {
+        "concept": "Continuity Equation",
+        "prerequisites": [
+            "Fluid Mechanics",
+            "Conservation of Mass"
+        ]
+    },
+    {
+        "concept": "Conservation of Mass",
+        "prerequisites": [
+            "Mass"
+        ]
+    },
+    {
+        "concept": "Statics",
+        "prerequisites": [
+            "Dynamics",
+            "Force",
+            "Newton's First Law"
+        ]
+    },
+    {
+        "concept": "Equilibrium",
+        "prerequisites": [
+            "Statics",
+            "Newton's First Law",
+            "Force"
+        ]
+    },
+    {
+        "concept": "Free Body Diagrams",
+        "prerequisites": [
+            "Statics",
+            "Force"
+        ]
+    },
+    {
+        "concept": "Center of Mass",
+        "prerequisites": [
+            "Mass",
+            "Vectors",
+            "Statics"
+        ]
+    }
+]

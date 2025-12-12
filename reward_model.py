@@ -29,8 +29,8 @@ class RewardModel(nn.Module):
         # Compute the mean embedding of the answers in the question bank
         self.mean_answer_embedding = self.compute_mean_answer_embedding(self.question_bank_path)
         
-        # Zero-shot classification pipeline for concept extraction
-        self.concept_extractor = pipeline("zero-shot-classification", model="MoritzLaurer/deberta-v3-large-zeroshot-v2.0")
+        # Zero-shot classification pipeline for concept extraction - use CPU to save GPU memory
+        self.concept_extractor = pipeline("zero-shot-classification", model="MoritzLaurer/deberta-v3-large-zeroshot-v2.0", device=-1)
         
         # Load the concept graph from the provided path
         self.concept_graph_class = ConceptGraph(self.concept_graph_path)

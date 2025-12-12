@@ -5,8 +5,11 @@ depth: 0.2
 
 
 #PPO Trainer Parameters
-model_name: "Qwen/Qwen2.5-3B-Instruct"
+model_name: "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"
 num_iterations: 5
+walk_length: 5
+verification: 1.0
 
-concept_graph_path: "concept_graph.json"
-question_bank_path: "question_bank.json"
+
+concept_graph_path: "concept_graph_physics.json"
+question_bank_path: "question_bank_physics.json"
