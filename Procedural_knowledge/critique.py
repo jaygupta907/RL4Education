@@ -9,8 +9,7 @@ generator = QuestionGenerator()
 question = generator.generate_question(calculator)
 
 judge = QuestionJudge()
-score = judge.evaluate(calculator, question)  # Returns 0.0-10.0
-detailed = judge.evaluate_detailed(calculator, question)  # Returns dict with score + feedback
-
-print(f"Score: {score}")
-print(f"Detailed: {detailed}")
+result = judge.evaluate(calculator, question)  # Returns dict with score + explanation
+if result:
+    print(f"Score: {result['score']}/10.0")
+    print(f"Explanation: {result['explanation']}")

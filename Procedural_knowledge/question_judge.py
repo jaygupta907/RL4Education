@@ -21,7 +21,7 @@ Usage:
 
 Requirements:
     - transformers library: pip install transformers torch
-    - Qwen model will be downloaded automatically on first use
+    - Qwen 2.5 3B model will be downloaded automatically on first use
 """
 
 import logging
@@ -30,7 +30,7 @@ from tree_walk_calculation import TreeWalkCalculator
 
 # Try to import transformers for Qwen LLM
 try:
-    from transformers import pipeline
+    from transformers import pipeline, AutoTokenizer
     TRANSFORMERS_AVAILABLE = True
 except ImportError:
     TRANSFORMERS_AVAILABLE = False
@@ -61,6 +61,7 @@ class QuestionJudge:
         """
         self.model_name = model_name
         self.judge_pipeline = None
+        self.tokenizer = None
         self._judge_initialized = False
     
     def _initialize_judge(self):
@@ -76,9 +77,13 @@ class QuestionJudge:
         
         try:
             logger.info(f"Loading judge LLM model ({self.model_name})...")
+            # Load tokenizer separately to use chat template
+            self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
+            
             self.judge_pipeline = pipeline(
                 "text-generation",
                 model=self.model_name,
+                tokenizer=self.tokenizer,
                 device_map="auto",
                 model_kwargs={"torch_dtype": "auto"}
             )
@@ -87,6 +92,7 @@ class QuestionJudge:
             logger.warning(f"Could not load judge LLM model: {e}")
             logger.warning("Question judging will be disabled.")
             self.judge_pipeline = None
+            self.tokenizer = None
     
     def _format_solution_trace(self, calculator: TreeWalkCalculator) -> str:
         """
@@ -204,18 +210,18 @@ class QuestionJudge:
             'found_count': len(present)
         }
     
-    def evaluate(self, calculator: TreeWalkCalculator, question: str) -> Optional[float]:
+    def evaluate(self, calculator: TreeWalkCalculator, question: str) -> Optional[Dict]:
         """
         Evaluate if the generated question correctly asks for the solution trace.
         Uses LLM judge score only (no programmatic scoring).
-        Generates detailed feedback for the score.
+        Returns score and explanation.
         
         Args:
             calculator: TreeWalkCalculator instance with completed calculation
             question: Generated question string
             
         Returns:
-            Score from 0.0 to 10.0, or None if judge LLM is not available
+            Dictionary with 'score' (0.0-10.0) and 'explanation' (str), or None if judge LLM is not available
         """
         self._initialize_judge()
         
@@ -225,14 +231,14 @@ class QuestionJudge:
         
         if not question:
             logger.warning("No question provided for evaluation.")
-            return 0.0
+            return {"score": 0.0, "explanation": "No question provided"}
         
         target = calculator.tree_structure['target']
         target_value = calculator.values.get(target, None)
         
         if target_value is None:
             logger.warning("No target value calculated. Cannot evaluate question.")
-            return 0.0
+            return {"score": 0.0, "explanation": "No target value available"}
         
         # Format solution trace
         solution_trace = self._format_solution_trace(calculator)
@@ -269,7 +275,7 @@ SCORING (0.0 to 10.0):
 
 Respond in this format:
 SCORE: X.X
-FEEDBACK: [detailed feedback listing which variables are present/missing and if values are correct]"""
+EXPLANATION: [detailed explanation listing which variables are present/missing and if values are correct]"""
         
         # Format required values list clearly
         required_values_text = "\n".join([f"{idx}. {var} = {val:.4f}" 
@@ -301,11 +307,23 @@ INSTRUCTIONS:
 3. List which values are present and which are missing
 4. Score based on completeness: missing values = lower score
 
-Provide score and detailed feedback:"""
+Provide score and explanation:"""
         
         try:
-            # Format prompt for Qwen2.5-Instruct
-            full_prompt = f"<|im_start|>system\n{system_prompt}<|im_end|>\n<|im_start|>user\n{user_prompt}<|im_end|>\n<|im_start|>assistant\n"
+            # Format prompt using Qwen 2.5 chat template
+            if self.tokenizer and hasattr(self.tokenizer, 'apply_chat_template'):
+                messages = [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_prompt}
+                ]
+                full_prompt = self.tokenizer.apply_chat_template(
+                    messages,
+                    tokenize=False,
+                    add_generation_prompt=True
+                )
+            else:
+                # Fallback format if chat template not available (Qwen uses ChatML format)
+                full_prompt = f"<|im_start|>system\n{system_prompt}<|im_end|>\n<|im_start|>user\n{user_prompt}<|im_end|>\n<|im_start|>assistant\n"
             
             # Generate evaluation with more tokens for detailed feedback
             result = self.judge_pipeline(
@@ -314,7 +332,7 @@ Provide score and detailed feedback:"""
                 num_return_sequences=1,
                 temperature=0.2,
                 do_sample=True,
-                pad_token_id=self.judge_pipeline.tokenizer.eos_token_id,
+                pad_token_id=self.tokenizer.eos_token_id if self.tokenizer else None,
             )
             
             generated_text = result[0]["generated_text"]
@@ -322,20 +340,21 @@ Provide score and detailed feedback:"""
             # Extract the generated part (after the prompt)
             response = generated_text[len(full_prompt):].strip()
             
-            # Clean up the response
+            # Clean up the response (remove any remaining special tokens)
             response = response.split("<|im_end|>")[0].strip()
+            response = response.split("<|end_of_text|>")[0].strip()
             
-            # Parse score and feedback
+            # Parse score and explanation
             import re
             score_match = re.search(r'SCORE:\s*(\d+\.?\d*)', response, re.IGNORECASE)
-            feedback_match = re.search(r'FEEDBACK:\s*(.+?)(?=SCORE:|$)', response, re.IGNORECASE | re.DOTALL)
+            explanation_match = re.search(r'EXPLANATION:\s*(.+?)(?=SCORE:|$)', response, re.IGNORECASE | re.DOTALL)
             
             score = None
             if score_match:
                 score = float(score_match.group(1))
                 score = max(0.0, min(10.0, score))
             
-            feedback = feedback_match.group(1).strip() if feedback_match else "No feedback provided"
+            explanation = explanation_match.group(1).strip() if explanation_match else "No explanation provided"
             
             if score is not None:
                 logger.info(f"\n{'='*60}")
@@ -344,153 +363,7 @@ Provide score and detailed feedback:"""
                 logger.info(f"LLM Judge Score: {score}/10.0")
                 logger.info(f"{'='*60}\n")
                 
-                return score
-            else:
-                logger.warning(f"Could not extract score from judge response: {response}")
-                return None
-                
-        except Exception as e:
-            logger.error(f"Error evaluating question with judge LLM: {e}")
-            return None
-    
-    def evaluate_detailed(self, calculator: TreeWalkCalculator, question: str) -> Optional[Dict]:
-        """
-        Evaluate question with detailed feedback.
-        
-        Args:
-            calculator: TreeWalkCalculator instance with completed calculation
-            question: Generated question string
-            
-        Returns:
-            Dictionary with score and feedback, or None if judge LLM is not available
-        """
-        self._initialize_judge()
-        
-        if not self.judge_pipeline:
-            logger.warning("Judge LLM not available. Cannot evaluate question.")
-            return None
-        
-        if not question:
-            logger.warning("No question provided for evaluation.")
-            return {"score": 0.0, "feedback": "No question provided"}
-        
-        target = calculator.tree_structure['target']
-        target_value = calculator.values.get(target, None)
-        
-        if target_value is None:
-            logger.warning("No target value calculated. Cannot evaluate question.")
-            return {"score": 0.0, "feedback": "No target value available"}
-        
-        # Format solution trace
-        solution_trace = self._format_solution_trace(calculator)
-        
-        # Get leaf nodes and their values
-        leaf_nodes = sorted(calculator.tree_structure['leaf_nodes'])
-        leaf_values = {}
-        for leaf in leaf_nodes:
-            if leaf in calculator.values:
-                leaf_values[leaf] = calculator.values[leaf]
-        
-        # Do programmatic check first
-        check_result = self._check_required_values_present(calculator, question)
-        
-        # Create evaluation prompt with detailed feedback focused on solution trace
-        system_prompt = """You are an expert evaluator for physics/mathematics word problems. 
-Evaluate if a generated question provides ALL the correct variables needed to calculate the target variable as shown in the solution trace.
-
-CRITICAL: You must check EACH required value individually. Look for the EXACT number in the question text.
-Do NOT assume values are present - verify by finding the actual number in the question.
-
-EVALUATION FOCUS:
-- Does the question include ALL required leaf node values from the solution trace? (Check each one)
-- Are the values EXACTLY correct (match the solution trace)? (Verify numbers match)
-- Would solving with these values produce the same solution trace?
-
-Provide:
-1. A score from 0.0 to 10.0 (based on whether question provides all correct variables for solution trace)
-2. Detailed feedback listing which variables are present/missing and if values are correct
-
-Respond in this format:
-SCORE: X.X
-FEEDBACK: [detailed feedback about variables and values - list each required value and whether it's present]"""
-        
-        # Format required values list clearly
-        required_values_text = "\n".join([f"{idx}. {var} = {val:.4f}" 
-                                         for idx, (var, val) in enumerate(sorted(leaf_values.items()), 1)])
-        
-        # Include programmatic check results in prompt
-        programmatic_info = ""
-        if check_result['missing']:
-            programmatic_info = f"\n⚠️ PROGRAMMATIC CHECK FOUND MISSING VALUES: {', '.join(check_result['missing'])}\n"
-            programmatic_info += f"Found {check_result['found_count']} out of {check_result['total_required']} required values.\n"
-        
-        user_prompt = f"""Evaluate if this question provides ALL correct variables to calculate the target:
-
-QUESTION:
-{question}
-
-SOLUTION TRACE (what the question should lead to):
-{solution_trace}
-
-REQUIRED VALUES (ALL {len(leaf_values)} must be in question with EXACT numbers):
-{required_values_text}
-{programmatic_info}
-TARGET VARIABLE: {target}
-EXPECTED ANSWER: {target_value:.4f}
-
-INSTRUCTIONS:
-Check EACH required value above:
-1. Search for the number in the question text
-2. Verify it matches exactly (within 0.0001 tolerance)
-3. List which values are present and which are missing
-4. Score based on completeness
-
-Provide score and detailed feedback:"""
-        
-        try:
-            # Format prompt for Qwen2.5-Instruct
-            full_prompt = f"<|im_start|>system\n{system_prompt}<|im_end|>\n<|im_start|>user\n{user_prompt}<|im_end|>\n<|im_start|>assistant\n"
-            
-            # Generate evaluation
-            result = self.judge_pipeline(
-                full_prompt,
-                max_new_tokens=200,
-                num_return_sequences=1,
-                temperature=0.3,
-                do_sample=True,
-                pad_token_id=self.judge_pipeline.tokenizer.eos_token_id,
-            )
-            
-            generated_text = result[0]["generated_text"]
-            
-            # Extract the generated part (after the prompt)
-            response = generated_text[len(full_prompt):].strip()
-            
-            # Clean up the response
-            response = response.split("<|im_end|>")[0].strip()
-            
-            # Parse score and feedback
-            import re
-            score_match = re.search(r'SCORE:\s*(\d+\.?\d*)', response, re.IGNORECASE)
-            feedback_match = re.search(r'FEEDBACK:\s*(.+?)(?=SCORE:|$)', response, re.IGNORECASE | re.DOTALL)
-            
-            score = None
-            if score_match:
-                score = float(score_match.group(1))
-                score = max(0.0, min(10.0, score))
-            
-            feedback = feedback_match.group(1).strip() if feedback_match else "No feedback provided"
-            
-            if score is not None:
-                logger.info(f"\n{'='*60}")
-                logger.info("Question Evaluation (Detailed):")
-                logger.info(f"{'='*60}")
-                logger.info(f"Question: {question}")
-                logger.info(f"Score: {score}/10.0")
-                logger.info(f"Feedback: {feedback}")
-                logger.info(f"{'='*60}\n")
-                
-                return {"score": score, "feedback": feedback}
+                return {"score": score, "explanation": explanation}
             else:
                 logger.warning(f"Could not extract score from judge response: {response}")
                 return None
@@ -539,17 +412,11 @@ def main():
     logger.info("="*60)
     judge = QuestionJudge()
     
-    # Simple score evaluation
-    score = judge.evaluate(calculator, question)
-    if score is not None:
-        logger.info(f"\nFinal Score: {score}/10.0")
-    
-    # Detailed evaluation
-    detailed = judge.evaluate_detailed(calculator, question)
-    if detailed:
-        logger.info(f"\nDetailed Evaluation:")
-        logger.info(f"Score: {detailed['score']}/10.0")
-        logger.info(f"Feedback: {detailed['feedback']}")
+    # Evaluate question
+    result = judge.evaluate(calculator, question)
+    if result:
+        logger.info(f"\nFinal Score: {result['score']}/10.0")
+        logger.info(f"Explanation: {result['explanation']}")
 
 
 if __name__ == "__main__":
