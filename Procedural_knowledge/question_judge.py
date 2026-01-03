@@ -213,8 +213,9 @@ class QuestionJudge:
     def evaluate(self, calculator: TreeWalkCalculator, question: str) -> Optional[Dict]:
         """
         Evaluate if the generated question correctly asks for the solution trace.
-        Uses LLM judge score only (no programmatic scoring).
-        Returns score and explanation.
+        Uses LLM judge with semantic matching (not exact variable name matching).
+        The judge recognizes semantically equivalent variable descriptions.
+        For example: "change_in_length" matches "length changed from x to y".
         
         Args:
             calculator: TreeWalkCalculator instance with completed calculation
@@ -253,41 +254,64 @@ class QuestionJudge:
         # Do programmatic check first
         check_result = self._check_required_values_present(calculator, question)
         
-        # Create evaluation prompt focused on solution trace correctness with detailed feedback
+        # Create evaluation prompt focused on solution trace correctness with semantic matching
         system_prompt = """You are an expert evaluator for physics/mathematics word problems. 
 Your task is to evaluate if a generated question provides ALL the correct variables needed to calculate the target variable as shown in the solution trace.
 
-CRITICAL: You must check EACH required value individually. Look for the EXACT number in the question text.
-Do NOT assume values are present - verify by finding the actual number in the question.
+CRITICAL: You must use SEMANTIC MATCHING, not exact variable name matching. Variables can be described in different ways but refer to the same physical/mathematical concept.
+
+SEMANTIC MATCHING EXAMPLES:
+- "change_in_length" matches: "length changed from x to y", "change in length", "delta length", "length difference", "initial length and final length"
+- "initial_velocity" matches: "starts at velocity", "initial speed", "velocity at t=0", "begins moving at"
+- "final_velocity" matches: "final speed", "velocity after", "ends at velocity", "reaches velocity"
+- "displacement" matches: "distance traveled", "change in position", "moves from x to y"
+- "acceleration" matches: "accelerates at", "acceleration of", "rate of change of velocity"
+- Any variable described in natural language that represents the same concept should be considered a match
 
 CRITICAL EVALUATION CRITERIA:
-1. Does the question include ALL required leaf node values from the solution trace? (Check each one)
-2. Are the values EXACTLY correct (match the solution trace values)? (Verify numbers match)
-3. Does the question ask for the correct target variable?
-4. Would solving the question with the provided values lead to the EXACT same solution trace?
+1. Does the question include ALL required values from the solution trace? (Check semantically, not by exact name)
+2. Are the values correct (match the solution trace values)? (Verify numbers match, allow minor rounding)
+3. Does the question ask for the correct target variable? (Semantic match acceptable)
+4. Would solving the question with the provided values lead to the same solution trace?
+
+IMPORTANT RULES:
+- Focus on whether the CONCEPT is present, not the exact variable name
+- If a question says "length changed from 5m to 8m", this provides "change_in_length = 3m" semantically
+- If a question says "starts at 10 m/s", this provides "initial_velocity = 10 m/s" semantically
+- Multiple ways of expressing the same variable are all valid matches
+- Only penalize if the CONCEPTUAL information is missing, not if the wording differs
 
 SCORING (0.0 to 10.0):
-- 10.0: ALL required variables with EXACT correct values, correct target, would produce same solution trace
-- 8.0-9.9: All required variables included, values mostly correct (minor rounding differences OK)
-- 6.0-7.9: Most variables included, some values correct
-- 4.0-5.9: Some variables missing or incorrect values
-- 0.0-3.9: Missing critical variables or wrong values, cannot produce solution trace
+- 10.0: ALL required concepts present with correct values, correct target, would produce same solution trace
+- 8.0-9.9: All required concepts included, values mostly correct (minor rounding differences OK)
+- 6.0-7.9: Most concepts included, some values correct
+- 4.0-5.9: Some concepts missing or incorrect values
+- 0.0-3.9: Missing critical concepts or wrong values, cannot produce solution trace
 
 Respond in this format:
 SCORE: X.X
-EXPLANATION: [detailed explanation listing which variables are present/missing and if values are correct]"""
+EXPLANATION: [detailed explanation listing which concepts are present/missing (using semantic matching) and if values are correct]"""
         
         # Format required values list clearly
-        required_values_text = "\n".join([f"{idx}. {var} = {val:.4f}" 
-                                         for idx, (var, val) in enumerate(sorted(leaf_values.items()), 1)])
+        # Note: The LLM will use semantic matching, so exact variable names are just for reference
+        required_values_text = "\n".join([
+            f"{idx}. {var} = {val:.4f}"
+            for idx, (var, val) in enumerate(sorted(leaf_values.items()), 1)
+        ])
+        required_values_text += "\n\nIMPORTANT: Match these semantically, not by exact name. For example:"
+        required_values_text += "\n- 'change_in_length' matches 'length changed from X to Y' or 'change in length'"
+        required_values_text += "\n- 'initial_velocity' matches 'starts at X m/s' or 'initial speed is X'"
+        required_values_text += "\n- Any natural language description of the same concept is valid"
         
-        # Include programmatic check results in prompt for context
+        # Include programmatic check results in prompt for context (note: this is preliminary, LLM does semantic matching)
         programmatic_info = ""
         if check_result['missing']:
-            programmatic_info = f"\n⚠️ PROGRAMMATIC CHECK FOUND MISSING VALUES: {', '.join(check_result['missing'])}\n"
-            programmatic_info += f"Found {check_result['found_count']} out of {check_result['total_required']} required values.\n"
+            programmatic_info = f"\n⚠️ PRELIMINARY CHECK (exact name matching only - you should use semantic matching):\n"
+            programmatic_info += f"   Found {check_result['found_count']} out of {check_result['total_required']} required values by exact name.\n"
+            programmatic_info += f"   Missing by exact name: {', '.join(check_result['missing'])}\n"
+            programmatic_info += f"   NOTE: Use SEMANTIC MATCHING - these may still be present with different wording!\n"
         
-        user_prompt = f"""Evaluate if this question provides ALL correct variables to calculate the target:
+        user_prompt = f"""Evaluate if this question provides ALL correct variables to calculate the target using SEMANTIC MATCHING:
 
 QUESTION:
 {question}
@@ -295,17 +319,31 @@ QUESTION:
 SOLUTION TRACE (what the question should lead to):
 {solution_trace}
 
-REQUIRED VALUES (ALL {len(leaf_values)} must be in question with EXACT numbers):
+REQUIRED VALUES (ALL {len(leaf_values)} concepts must be present in question with correct numbers):
 {required_values_text}
 {programmatic_info}
 TARGET VARIABLE: {target}
 EXPECTED ANSWER: {target_value:.4f}
 
-INSTRUCTIONS:
-1. Check EACH required value above - is its number present in the question?
-2. Verify the numbers match exactly (within 0.0001 tolerance)
-3. List which values are present and which are missing
-4. Score based on completeness: missing values = lower score
+INSTRUCTIONS FOR SEMANTIC EVALUATION:
+1. For EACH required value above, check if the CONCEPT is present in the question (not exact variable name)
+   - Example: If solution needs "change_in_length = 3", check if question mentions length changing by 3, 
+     or gives initial/final lengths that allow calculating the change
+   - Example: If solution needs "initial_velocity = 10", check if question says "starts at 10 m/s" or similar
+   
+2. Verify the NUMBERS match (within 0.0001 tolerance for rounding)
+   - If question says "length changed from 5m to 8m", this provides change_in_length = 3m semantically
+   - If question says "starts at 10 m/s", this provides initial_velocity = 10 m/s semantically
+   
+3. List which CONCEPTS are present (with semantic matches) and which are missing
+   - Use semantic understanding: "change in X" = "X changed from A to B" = "delta X" = "X difference"
+   - Multiple phrasings of the same concept are all valid
+   
+4. Score based on completeness: missing CONCEPTS = lower score (not missing exact variable names)
+
+REMEMBER: Focus on whether the question provides the necessary INFORMATION to calculate the target, 
+not whether variable names match exactly. Natural language descriptions of the same physical/mathematical 
+concept should be considered equivalent.
 
 Provide score and explanation:"""
         
@@ -347,20 +385,35 @@ Provide score and explanation:"""
             # Parse score and explanation
             import re
             score_match = re.search(r'SCORE:\s*(\d+\.?\d*)', response, re.IGNORECASE)
-            explanation_match = re.search(r'EXPLANATION:\s*(.+?)(?=SCORE:|$)', response, re.IGNORECASE | re.DOTALL)
+            # Try multiple patterns for explanation extraction
+            explanation_match = (
+                re.search(r'EXPLANATION:\s*(.+?)(?=SCORE:|$)', response, re.IGNORECASE | re.DOTALL) or
+                re.search(r'EXPLANATION:\s*(.+)', response, re.IGNORECASE | re.DOTALL) or
+                re.search(r'explanation:\s*(.+)', response, re.IGNORECASE | re.DOTALL)
+            )
             
             score = None
             if score_match:
                 score = float(score_match.group(1))
                 score = max(0.0, min(10.0, score))
             
-            explanation = explanation_match.group(1).strip() if explanation_match else "No explanation provided"
+            if explanation_match:
+                explanation = explanation_match.group(1).strip()
+                # Clean up explanation (remove trailing special tokens)
+                explanation = explanation.split("<|im_end|>")[0].strip()
+                explanation = explanation.split("<|end_of_text|>")[0].strip()
+            else:
+                # If no explanation found, use the full response (minus score line)
+                explanation = re.sub(r'SCORE:\s*\d+\.?\d*\s*', '', response, flags=re.IGNORECASE).strip()
+                if not explanation or len(explanation) < 10:
+                    explanation = "No explanation provided"
             
             if score is not None:
                 logger.info(f"\n{'='*60}")
                 logger.info("Question Evaluation:")
                 logger.info(f"{'='*60}")
                 logger.info(f"LLM Judge Score: {score}/10.0")
+                logger.info(f"Explanation: {explanation}")
                 logger.info(f"{'='*60}\n")
                 
                 return {"score": score, "explanation": explanation}

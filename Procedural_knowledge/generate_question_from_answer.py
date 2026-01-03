@@ -212,14 +212,15 @@ class QuestionGenerator:
             logger.info(questions_context)
             logger.info(f"{'='*60}\n")
         
-        # Create prompt for question generation
-        system_prompt = """You are an expert physics/mathematics educator. Generate clear, natural word problem questions.
+        # System prompt - concise and direct
+        system_prompt = """Generate physics/mathematics word problems in English only.
 
-Key principles:
-• Use ONLY the variables and values explicitly provided
-• Include ALL given values with their EXACT numeric values
-• Write naturally with appropriate physical units
-• Example questions demonstrate phrasing style - do NOT copy their variable names"""
+Rules:
+• Use EXACT numeric values from the trace - no rounding or approximations
+• Write in plain English (ASCII only) - no LaTeX, markdown, or Unicode symbols
+• Include all given values with their exact numbers
+• End with "What is the [target]?"
+• English only - no other languages"""
         
         # Extract only given values (leaf nodes) for the prompt, NOT calculated values
         given_values_list = []
@@ -230,10 +231,10 @@ Key principles:
                 given_values_list.append(leaf)
                 given_values_dict[leaf] = value
         
-        # Format given values clearly
-        given_values_text = "Given Values (YOU MUST USE ONLY THESE VARIABLES AND VALUES):\n"
+        # Format given values clearly with full precision
+        given_values_text = "Given Values (YOU MUST USE ONLY THESE VARIABLES AND EXACT VALUES):\n"
         for leaf in sorted(given_values_list):
-            given_values_text += f"  {leaf} = {calculator.values[leaf]:.4f}\n"
+            given_values_text += f"  {leaf} = {calculator.values[leaf]:.10f}\n"
         
         # Create a strict list of allowed variable names
         allowed_variables_text = f"\nALLOWED VARIABLE NAMES (use only these): {', '.join(sorted(given_values_list))}\n"
@@ -247,11 +248,11 @@ Key principles:
                 if formula:
                     formulas_text += f"  {node} = {formula}\n"
         
-        # Format given values more explicitly for the LLM with clear numbering
+        # Format given values more explicitly for the LLM with clear numbering and full precision
         values_examples = []
         for idx, var in enumerate(sorted(given_values_list), 1):
             value = given_values_dict[var]
-            values_examples.append(f"{idx}. {var} = {value:.4f}")
+            values_examples.append(f"{idx}. {var} = {value:.10f}")
         values_list_text = "\n".join(values_examples)
         
         # Create a clear list of allowed variables
@@ -262,36 +263,51 @@ Key principles:
         all_nodes_set = calculator.tree_structure.get('nodes', set())
         intermediate_nodes = sorted([n for n in all_nodes_set if n not in leaf_nodes_set and n != target])
         
-        # Format the user prompt - improved structure
+        # User prompt
         user_prompt = f"""Generate a physics/mathematics word problem question.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 TASK: Find the {target}
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 YOU MUST USE THESE {len(given_values_list)} VALUES (include ALL with exact numbers):
+
 {values_list_text}
 
 ALLOWED VARIABLES ONLY: {allowed_vars_list}
+
 Do NOT use: {', '.join(intermediate_nodes[:5]) if intermediate_nodes else 'any calculated/intermediate variables'}
 
 {formulas_text if formulas_text else ""}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 EXAMPLE QUESTIONS (for phrasing style only):
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 {questions_context if questions_context else "No examples available."}
 
 ⚠️ Note: Examples show phrasing style. Use ONLY variables from the allowed list above.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 REQUIREMENTS:
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 1. Include ALL {len(given_values_list)} values above with their EXACT numbers
+
 2. Use ONLY these variables: {allowed_vars_list}
+
 3. Write in natural language with appropriate units
+
 4. End with: "What is the {target}?"
+
 5. Do NOT use vague terms like "certain", "some", "a distance" - use actual numbers
+
 6. Do NOT mention intermediate/calculated variables
 
 Generate the question now:"""
