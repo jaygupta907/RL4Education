@@ -1,0 +1,5 @@
+2026-01-14 16:26:52,056 INFO    MainThread:17298 [wandb_init.py:setup_run_log_directory():705] Logging user logs to /home/ae21b026/RL4Education/Procedural_knowledge/wandb/run-20260114_162652-cxz7t4dz/logs/debug.log
+2026-01-14 16:26:52,056 INFO    MainThread:17298 [wandb_init.py:setup_run_log_directory():706] Logging internal logs to /home/ae21b026/RL4Education/Procedural_knowledge/wandb/run-20260114_162652-cxz7t4dz/logs/debug-internal.log
+2026-01-14 16:26:52,056 INFO    MainThread:17298 [wandb_init.py:init():832] calling init triggers
+2026-01-14 16:26:52,056 INFO    MainThread:17298 [wandb_init.py:init():837] wandb.init called with sweep_config: {}
+config: {'policy_model': 'Qwen/Qwen2.5-3B-Instruct', 'judge_model': 'Qwen/Qwen2.5-3B-Instruct', 'max_length': 8, 'batch_size': 1, 'learning_rate': 1.41e-05, 'ppo_epochs': 4, 'max_new_tokens': 500, 'temperature': 0.5, '_wandb': {}}

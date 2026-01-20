@@ -11,13 +11,12 @@ except ImportError:
     print("Warning: transformers not available. Question generation will be disabled.")
     print("Install with: pip install transformers torch")
 
-# Configure logging
+# Configure logging (console only, no file logging)
 logging.basicConfig(
     level=logging.INFO,
     format='%(message)s',
     handlers=[
-        logging.FileHandler('question_generation.log'),
-        logging.StreamHandler()
+        logging.StreamHandler()  # Only console, no file logging
     ]
 )
 logger = logging.getLogger(__name__)
@@ -82,7 +81,11 @@ class QuestionGenerator:
         summary_lines.append("Given Values:")
         for leaf in sorted(calculator.tree_structure['leaf_nodes']):
             if leaf in calculator.values:
-                summary_lines.append(f"  {leaf} = {calculator.values[leaf]:.4f}")
+                si_unit = calculator._get_si_unit(leaf)
+                if si_unit:
+                    summary_lines.append(f"  {leaf} = {calculator.values[leaf]:.4f} {si_unit}")
+                else:
+                    summary_lines.append(f"  {leaf} = {calculator.values[leaf]:.4f}")
         summary_lines.append("")
         
         # Add calculated intermediate values
@@ -136,7 +139,6 @@ class QuestionGenerator:
             return ""
         
         context_lines = []
-        context_lines.append("EXAMPLE QUESTIONS from all nodes in pruned tree walk (phrasing style only):")
         
         # Organize by level to show the calculation path
         all_levels = sorted(calculator.tree_structure.get('levels', {}).keys(), reverse=True)
@@ -234,7 +236,11 @@ Rules:
         # Format given values clearly with full precision
         given_values_text = "Given Values (YOU MUST USE ONLY THESE VARIABLES AND EXACT VALUES):\n"
         for leaf in sorted(given_values_list):
-            given_values_text += f"  {leaf} = {calculator.values[leaf]:.10f}\n"
+            si_unit = calculator._get_si_unit(leaf)
+            if si_unit:
+                given_values_text += f"  {leaf} = {calculator.values[leaf]:.10f} {si_unit}\n"
+            else:
+                given_values_text += f"  {leaf} = {calculator.values[leaf]:.10f}\n"
         
         # Create a strict list of allowed variable names
         allowed_variables_text = f"\nALLOWED VARIABLE NAMES (use only these): {', '.join(sorted(given_values_list))}\n"
@@ -252,7 +258,11 @@ Rules:
         values_examples = []
         for idx, var in enumerate(sorted(given_values_list), 1):
             value = given_values_dict[var]
-            values_examples.append(f"{idx}. {var} = {value:.10f}")
+            si_unit = calculator._get_si_unit(var)
+            if si_unit:
+                values_examples.append(f"{idx}. {var} = {value:.10f} {si_unit}")
+            else:
+                values_examples.append(f"{idx}. {var} = {value:.10f}")
         values_list_text = "\n".join(values_examples)
         
         # Create a clear list of allowed variables

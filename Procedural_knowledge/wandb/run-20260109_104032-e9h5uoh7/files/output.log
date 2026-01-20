@@ -1,0 +1,246 @@
+/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/trl/trainer/ppo_trainer.py:266: UserWarning: No dataset is provided. Make sure to set config.batch_size to the correct value before training.
+  warnings.warn(
+PPO trainer initialized successfully.
+Run-specific logs directory created: ./checkpoints/logs/run_20260109_104033
+[34m[1mwandb[0m: wandb.init() called while a run is active and reinit is set to 'default', so returning the previous run.
+Wandb initialized for logging.
+Starting PPO training...
+Configuration: TrainingConfig(policy_model_name='Qwen/Qwen2.5-3B-Instruct', judge_model_name='Qwen/Qwen2.5-3B-Instruct', graph_file='variable_concept_graph.json', max_length=8, num_episodes=100, batch_size=1, mini_batch_size=1, gradient_accumulation_steps=1, learning_rate=1.41e-05, ppo_epochs=4, cliprange=0.2, cliprange_value=0.2, gamma=1.0, lam=0.95, lora_r=4, lora_alpha=16, lora_dropout=0.1, max_new_tokens=500, temperature=0.5, top_p=0.9, top_k=50, repetition_penalty=1.2, no_repeat_ngram_size=2, output_dir='./checkpoints/question_generator_ppo', save_steps=10, logging_steps=1, use_reward_model=True, concept_graph_path='../concept_graph_physics.json', question_bank_path='../question_bank_physics.json', reward_model_novelty_weight=0.3, reward_model_depth_weight=0.7, judge_reward_weight=0.7, reward_model_weight=0.3, use_quantization=True, use_8bit=False, max_memory=None)
+
+============================================================
+Episode 1/100
+============================================================
+GPU Memory Episode 1 start: Allocated=10.58GB, Reserved=12.85GB, Max=11.83GB
+Collecting batch...
+Found 48 variables with depth >= 3 (out of 55 total)
+
+============================================================
+Starting tree walk from target node: magnetic_field
+Maximum branch length: 8
+============================================================
+
+  Found base input leaf node: permeability
+  Found base input leaf node: charge
+  Found base input leaf node: radius
+  Node magnetic_field at level 0 uses formula: permeability * current / (2 * math.pi * radius)
+    Required dependencies: ['current', 'permeability', 'radius']
+    Visiting dependency: current (level 1)
+  Found base input leaf node: time
+  Node current at level 1 uses formula: charge / time
+    Required dependencies: ['charge', 'time']
+
+Tree walk complete:
+  Total nodes: 6
+  Total edges: 6
+  Leaf nodes: 4
+  Base inputs: 4
+  Levels: 3
+  Nodes with selected formulas: 2
+
+Nodes by level:
+  Level 0: ['magnetic_field']
+  Level 1: ['current']
+  Level 2: []
+
+Leaf nodes: ['charge', 'permeability', 'radius', 'time']
+Base inputs: ['charge', 'permeability', 'radius', 'time']
+
+Selected formulas:
+  current: charge / time
+    Dependencies: ['charge', 'time']
+  magnetic_field: permeability * current / (2 * math.pi * radius)
+    Dependencies: ['current', 'permeability', 'radius']
+
+============================================================
+Pruning tree to keep only necessary branches
+============================================================
+
+  Leaf nodes in pruned tree: ['charge', 'permeability', 'radius', 'time']
+
+Pruning complete:
+  Original nodes: 6
+  Pruned nodes: 6
+  Original edges: 6
+  Pruned edges: 5
+  Removed 0 nodes
+  Removed 1 edges
+
+Pruned nodes by level:
+  Level 0: ['magnetic_field']
+  Level 1: ['permeability', 'radius', 'current']
+  Level 2: ['time', 'charge']
+
+============================================================
+Assigning random values to leaf nodes
+============================================================
+
+  charge = 5.0080
+  permeability = 96.5810
+  radius = 49.1068
+  time = 91.9052
+
+============================================================
+Calculating values backwards from leaf nodes to target
+============================================================
+
+
+--- Processing Level 2 ---
+
+--- Processing Level 1 ---
+  Nodes to calculate at level 1: ['current']
+
+  Calculating: current
+    Using selected formula: charge / time
+    Result: 0.0545
+
+--- Processing Level 0 ---
+  Nodes to calculate at level 0: ['magnetic_field']
+
+  Calculating: magnetic_field
+    Using selected formula: permeability * current / (2 * math.pi * radius)
+    Result: 0.0171
+
+--- Processing Level 2 ---
+
+--- Processing Level 1 ---
+  Nodes to calculate at level 1: ['current']
+
+--- Processing Level 0 ---
+  Nodes to calculate at level 0: ['magnetic_field']
+
+============================================================
+Final target value: magnetic_field = 0.0171
+============================================================
+
+Generating questions...
+You're using a Qwen2TokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
+
+============================================================
+Generated Questions:
+============================================================
+
+Question 1:
+A circular loop of wire has a radius of ⁴⁹.₁₀₆₈ meters. In one second, ²⁵.₀₂₄₇ coulombs pass through this loop carrying a charge per unit time equal to the product of its circumference times the number of turns divided by the square of the loop's radius. If the material inside the wire contains free electrons whose density allows them to move at an average speed such that they complete one full circle around the center of rotation every ¹⁰³.₉₀⁶ seconds, what is their drift velocity?
+
+============================================================
+
+Computing rewards...
+============================================================
+Question Evaluation:
+============================================================
+Traceback (most recent call last):
+  File "/home/ae21b026/RL4Education/Procedural_knowledge/finetune_question_generator.py", line 1165, in <module>
+    main()
+  File "/home/ae21b026/RL4Education/Procedural_knowledge/finetune_question_generator.py", line 1161, in main
+    trainer.train()
+  File "/home/ae21b026/RL4Education/Procedural_knowledge/finetune_question_generator.py", line 950, in train
+    result = self.judge.evaluate(ex["calculator"], response)
+  File "/home/ae21b026/RL4Education/Procedural_knowledge/question_judge.py", line 366, in evaluate
+    result = self.judge_pipeline(
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/pipelines/text_generation.py", line 287, in __call__
+    return super().__call__(text_inputs, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/pipelines/base.py", line 1379, in __call__
+    return self.run_single(inputs, preprocess_params, forward_params, postprocess_params)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/pipelines/base.py", line 1386, in run_single
+    model_outputs = self.forward(model_inputs, **forward_params)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/pipelines/base.py", line 1286, in forward
+    model_outputs = self._forward(model_inputs, **forward_params)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/pipelines/text_generation.py", line 385, in _forward
+    output = self.model.generate(input_ids=input_ids, attention_mask=attention_mask, **generate_kwargs)
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/generation/utils.py", line 2465, in generate
+    result = self._sample(
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/generation/utils.py", line 3434, in _sample
+    outputs = model_forward(**model_inputs, return_dict=True)
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/utils/generic.py", line 965, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/utils/deprecation.py", line 172, in wrapped_func
+    return func(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/models/qwen2/modeling_qwen2.py", line 823, in forward
+    outputs: BaseModelOutputWithPast = self.model(
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/utils/generic.py", line 965, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/models/qwen2/modeling_qwen2.py", line 549, in forward
+    layer_outputs = decoder_layer(
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/models/qwen2/modeling_qwen2.py", line 262, in forward
+    hidden_states, self_attn_weights = self.self_attn(
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/models/qwen2/modeling_qwen2.py", line 194, in forward
+    attn_output, attn_weights = attention_interface(
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/integrations/sdpa_attention.py", line 54, in sdpa_attention_forward
+    attn_output = torch.nn.functional.scaled_dot_product_attention(
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/ae21b026/RL4Education/Procedural_knowledge/finetune_question_generator.py", line 1165, in <module>
+    main()
+  File "/home/ae21b026/RL4Education/Procedural_knowledge/finetune_question_generator.py", line 1161, in main
+    trainer.train()
+  File "/home/ae21b026/RL4Education/Procedural_knowledge/finetune_question_generator.py", line 950, in train
+    result = self.judge.evaluate(ex["calculator"], response)
+  File "/home/ae21b026/RL4Education/Procedural_knowledge/question_judge.py", line 366, in evaluate
+    result = self.judge_pipeline(
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/pipelines/text_generation.py", line 287, in __call__
+    return super().__call__(text_inputs, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/pipelines/base.py", line 1379, in __call__
+    return self.run_single(inputs, preprocess_params, forward_params, postprocess_params)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/pipelines/base.py", line 1386, in run_single
+    model_outputs = self.forward(model_inputs, **forward_params)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/pipelines/base.py", line 1286, in forward
+    model_outputs = self._forward(model_inputs, **forward_params)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/pipelines/text_generation.py", line 385, in _forward
+    output = self.model.generate(input_ids=input_ids, attention_mask=attention_mask, **generate_kwargs)
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/generation/utils.py", line 2465, in generate
+    result = self._sample(
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/generation/utils.py", line 3434, in _sample
+    outputs = model_forward(**model_inputs, return_dict=True)
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/utils/generic.py", line 965, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/utils/deprecation.py", line 172, in wrapped_func
+    return func(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/models/qwen2/modeling_qwen2.py", line 823, in forward
+    outputs: BaseModelOutputWithPast = self.model(
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/utils/generic.py", line 965, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/models/qwen2/modeling_qwen2.py", line 549, in forward
+    layer_outputs = decoder_layer(
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/models/qwen2/modeling_qwen2.py", line 262, in forward
+    hidden_states, self_attn_weights = self.self_attn(
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/models/qwen2/modeling_qwen2.py", line 194, in forward
+    attn_output, attn_weights = attention_interface(
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/integrations/sdpa_attention.py", line 54, in sdpa_attention_forward
+    attn_output = torch.nn.functional.scaled_dot_product_attention(
+KeyboardInterrupt

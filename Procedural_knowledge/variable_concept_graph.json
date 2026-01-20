@@ -2,6 +2,7 @@
     "variables": [
         {
             "variable": "velocity",
+            "si_unit": "m/s",
             "formulas": [
                 "displacement / time",
                 "initial_velocity + acceleration * time",
@@ -21,6 +22,7 @@
         },
         {
             "variable": "acceleration",
+            "si_unit": "m/s²",
             "formulas": [
                 "(final_velocity - initial_velocity) / time",
                 "force / mass",
@@ -42,6 +44,7 @@
         },
         {
             "variable": "force",
+            "si_unit": "N",
             "formulas": [
                 "mass * acceleration",
                 "mass * gravity",
@@ -62,6 +65,7 @@
         },
         {
             "variable": "kinetic_energy",
+            "si_unit": "J",
             "formulas": [
                 "0.5 * mass * velocity**2",
                 "work",
@@ -82,6 +86,7 @@
         },
         {
             "variable": "potential_energy",
+            "si_unit": "J",
             "formulas": [
                 "mass * gravity * height",
                 "0.5 * spring_constant * displacement**2",
@@ -104,6 +109,7 @@
         },
         {
             "variable": "work",
+            "si_unit": "J",
             "formulas": [
                 "force * displacement * math.cos(angle)",
                 "change_in_kinetic_energy",
@@ -124,6 +130,7 @@
         },
         {
             "variable": "power",
+            "si_unit": "W",
             "formulas": [
                 "work / time",
                 "force * velocity",
@@ -145,6 +152,7 @@
         },
         {
             "variable": "momentum",
+            "si_unit": "kg·m/s",
             "formulas": [
                 "mass * velocity",
                 "force * time",
@@ -166,6 +174,7 @@
         },
         {
             "variable": "displacement",
+            "si_unit": "m",
             "formulas": [
                 "final_position - initial_position",
                 "velocity * time + 0.5 * acceleration * time**2",
@@ -187,6 +196,7 @@
         },
         {
             "variable": "speed",
+            "si_unit": "m/s",
             "formulas": [
                 "abs(velocity)",
                 "distance / time",
@@ -207,6 +217,7 @@
         },
         {
             "variable": "angular_velocity",
+            "si_unit": "rad/s",
             "formulas": [
                 "angular_displacement / time",
                 "2 * math.pi * frequency",
@@ -230,6 +241,7 @@
         },
         {
             "variable": "angular_acceleration",
+            "si_unit": "rad/s²",
             "formulas": [
                 "(final_angular_velocity - initial_angular_velocity) / time",
                 "torque / moment_of_inertia",
@@ -251,6 +263,7 @@
         },
         {
             "variable": "torque",
+            "si_unit": "N·m",
             "formulas": [
                 "force * radius * math.sin(angle)",
                 "moment_of_inertia * angular_acceleration",
@@ -272,6 +285,7 @@
         },
         {
             "variable": "moment_of_inertia",
+            "si_unit": "kg·m²",
             "formulas": [
                 "mass * radius**2",
                 "torque / angular_acceleration",
@@ -293,6 +307,7 @@
         },
         {
             "variable": "angular_momentum",
+            "si_unit": "kg·m²/s",
             "formulas": [
                 "moment_of_inertia * angular_velocity",
                 "mass * velocity * radius",
@@ -314,6 +329,7 @@
         },
         {
             "variable": "centripetal_force",
+            "si_unit": "N",
             "formulas": [
                 "mass * centripetal_acceleration",
                 "mass * velocity**2 / radius",
@@ -334,6 +350,7 @@
         },
         {
             "variable": "centripetal_acceleration",
+            "si_unit": "m/s²",
             "formulas": [
                 "velocity**2 / radius",
                 "angular_velocity**2 * radius",
@@ -354,6 +371,7 @@
         },
         {
             "variable": "frequency",
+            "si_unit": "Hz",
             "formulas": [
                 "1 / period",
                 "angular_velocity / (2 * math.pi)",
@@ -377,6 +395,7 @@
         },
         {
             "variable": "period",
+            "si_unit": "s",
             "formulas": [
                 "1 / frequency",
                 "2 * math.pi * math.sqrt(mass / spring_constant)",
@@ -400,6 +419,7 @@
         },
         {
             "variable": "wavelength",
+            "si_unit": "m",
             "formulas": [
                 "wave_speed / frequency",
                 "wave_speed * period",
@@ -419,6 +439,7 @@
         },
         {
             "variable": "wave_speed",
+            "si_unit": "m/s",
             "formulas": [
                 "frequency * wavelength",
                 "wavelength / period",
@@ -439,6 +460,7 @@
         },
         {
             "variable": "resistance",
+            "si_unit": "Ω",
             "formulas": [
                 "voltage / current",
                 "resistivity * length / area",
@@ -455,13 +477,14 @@
             ],
             "questions": [
                 "A circuit has voltage 12 V and current 3 A. What is the resistance?",
-                "A wire has resistivity 1.7×10⁻⁸ Ω·m, length 10 m, and cross-sectional area 2×10⁻⁶ m². What is its resistance?",
+                "A wire has resistivity 1.7e-8 Ω·m, length 10 m, and cross-sectional area 2e-6 m². What is its resistance?",
                 "A resistor dissipates 100 W with current 5 A. What is its resistance?",
                 "A resistor has voltage 20 V and power 40 W. What is its resistance?"
             ]
         },
         {
             "variable": "voltage",
+            "si_unit": "V",
             "formulas": [
                 "current * resistance",
                 "power / current",
@@ -486,6 +509,7 @@
         },
         {
             "variable": "current",
+            "si_unit": "A",
             "formulas": [
                 "voltage / resistance",
                 "charge / time",
@@ -508,6 +532,7 @@
         },
         {
             "variable": "capacitance",
+            "si_unit": "F",
             "formulas": [
                 "charge / voltage",
                 "permittivity * area / distance",
@@ -523,12 +548,13 @@
             ],
             "questions": [
                 "A capacitor stores 0.001 C of charge at 10 V. What is its capacitance?",
-                "A parallel plate capacitor has permittivity 8.85×10⁻¹² F/m, area 0.01 m², and plate separation 0.001 m. What is its capacitance?",
+                "A parallel plate capacitor has permittivity 8.85e-12 F/m, area 0.01 m², and plate separation 0.001 m. What is its capacitance?",
                 "A capacitor stores 0.05 J of energy at 20 V. What is its capacitance?"
             ]
         },
         {
             "variable": "electric_field",
+            "si_unit": "N/C",
             "formulas": [
                 "force / charge",
                 "voltage / distance",
@@ -544,11 +570,12 @@
             "questions": [
                 "A force of 0.02 N acts on a charge of 0.001 C. What is the electric field?",
                 "A voltage of 100 V exists across a distance of 0.05 m. What is the electric field?",
-                "A point charge of 2×10⁻⁶ C is located 0.1 m away. What is the electric field? (Use k = 9×10⁹ N·m²/C²)"
+                "A point charge of 2e-6 C is located 0.1 m away. What is the electric field? (Use k = 9e9 N·m²/C²)"
             ]
         },
         {
             "variable": "magnetic_field",
+            "si_unit": "T",
             "formulas": [
                 "force / (charge * velocity)",
                 "permeability * current / (2 * math.pi * radius)",
@@ -566,12 +593,13 @@
             ],
             "questions": [
                 "A charge of 0.001 C moving at 100 m/s experiences a force of 0.05 N. What is the magnetic field?",
-                "A wire carries current 5 A. At distance 0.02 m, what is the magnetic field? (Use μ₀ = 4π×10⁻⁷ T·m/A)",
+                "A wire carries current 5 A. At distance 0.02 m, what is the magnetic field? (Use μ₀ = 4*math.pi*1e-7 T·m/A)",
                 "A magnetic flux of 0.02 Wb passes through an area of 0.01 m². What is the magnetic field?"
             ]
         },
         {
             "variable": "density",
+            "si_unit": "kg/m³",
             "formulas": [
                 "mass / volume",
                 "pressure / (gas_constant * temperature)"
@@ -590,6 +618,7 @@
         },
         {
             "variable": "pressure",
+            "si_unit": "Pa",
             "formulas": [
                 "force / area",
                 "density * gas_constant * temperature",
@@ -612,6 +641,7 @@
         },
         {
             "variable": "volume",
+            "si_unit": "m³",
             "formulas": [
                 "mass / density",
                 "area * height",
@@ -638,6 +668,7 @@
         },
         {
             "variable": "temperature",
+            "si_unit": "K",
             "formulas": [
                 "pressure * volume / (gas_constant * number_of_moles)",
                 "pressure / (density * gas_constant)",
@@ -655,11 +686,12 @@
             "questions": [
                 "A gas has pressure 202650 Pa, volume 0.05 m³, and 1 mole. What is its temperature? (Use R = 8.314 J/(mol·K))",
                 "A gas has pressure 101325 Pa and density 1.2 kg/m³. What is its temperature? (Use R = 287 J/(kg·K))",
-                "A gas has average kinetic energy 6.21×10⁻²¹ J per particle. What is its temperature? (Use k = 1.38×10⁻²³ J/K)"
+                "A gas has average kinetic energy 6.21e-21 J per particle. What is its temperature? (Use k = 1.38e-23 J/K)"
             ]
         },
         {
             "variable": "impulse",
+            "si_unit": "N·s",
             "formulas": [
                 "force * time",
                 "change_in_momentum",
@@ -680,6 +712,7 @@
         },
         {
             "variable": "total_energy",
+            "si_unit": "J",
             "formulas": [
                 "kinetic_energy + potential_energy",
                 "work + initial_energy",
@@ -696,11 +729,12 @@
             "questions": [
                 "A system has kinetic energy 50 J and potential energy 30 J. What is the total energy?",
                 "100 J of work is done on a system with initial energy 200 J. What is the total energy?",
-                "What is the rest energy of a 1 kg object? (Use c = 3×10⁸ m/s)"
+                "What is the rest energy of a 1 kg object? (Use c = 3e8 m/s)"
             ]
         },
         {
             "variable": "friction_force",
+            "si_unit": "N",
             "formulas": [
                 "coefficient_of_friction * normal_force",
                 "mu_static * normal_force",
@@ -720,6 +754,7 @@
         },
         {
             "variable": "normal_force",
+            "si_unit": "N",
             "formulas": [
                 "mass * gravity * math.cos(angle)",
                 "mass * gravity",
@@ -739,6 +774,7 @@
         },
         {
             "variable": "tension",
+            "si_unit": "N",
             "formulas": [
                 "mass * acceleration + mass * gravity",
                 "force_applied",
@@ -760,6 +796,7 @@
         },
         {
             "variable": "weight",
+            "si_unit": "N",
             "formulas": [
                 "mass * gravity",
                 "force",
@@ -780,6 +817,7 @@
         },
         {
             "variable": "buoyant_force",
+            "si_unit": "N",
             "formulas": [
                 "density_fluid * volume_displaced * gravity",
                 "weight_displaced",
@@ -800,6 +838,7 @@
         },
         {
             "variable": "area",
+            "si_unit": "m²",
             "formulas": [
                 "length * width",
                 "math.pi * radius**2",
@@ -824,6 +863,7 @@
         },
         {
             "variable": "distance",
+            "si_unit": "m",
             "formulas": [
                 "speed * time",
                 "math.sqrt((x2 - x1)**2 + (y2 - y1)**2)",
@@ -847,6 +887,7 @@
         },
         {
             "variable": "height",
+            "si_unit": "m",
             "formulas": [
                 "initial_velocity_y * time - 0.5 * gravity * time**2",
                 "potential_energy / (mass * gravity)",
@@ -868,6 +909,7 @@
         },
         {
             "variable": "range",
+            "si_unit": "m",
             "formulas": [
                 "initial_velocity**2 * math.sin(2 * angle) / gravity",
                 "horizontal_velocity * time_of_flight",
@@ -889,6 +931,7 @@
         },
         {
             "variable": "time_of_flight",
+            "si_unit": "s",
             "formulas": [
                 "2 * initial_velocity_y / gravity",
                 "2 * initial_velocity * math.sin(angle) / gravity",
@@ -910,6 +953,7 @@
         },
         {
             "variable": "maximum_height",
+            "si_unit": "m",
             "formulas": [
                 "initial_velocity_y**2 / (2 * gravity)",
                 "initial_velocity**2 * math.sin(angle)**2 / (2 * gravity)",
@@ -931,6 +975,7 @@
         },
         {
             "variable": "electric_potential_energy",
+            "si_unit": "J",
             "formulas": [
                 "charge * voltage",
                 "coulomb_constant * charge1 * charge2 / distance",
@@ -947,12 +992,13 @@
             ],
             "questions": [
                 "A charge of 0.002 C is at voltage 100 V. What is its electric potential energy?",
-                "Two charges of 1×10⁻⁶ C each are 0.1 m apart. What is their electric potential energy? (Use k = 9×10⁹ N·m²/C²)",
+                "Two charges of 1e-6 C each are 0.1 m apart. What is their electric potential energy? (Use k = 9e9 N·m²/C²)",
                 "A capacitor of 0.001 F is charged to 50 V. What is its stored energy?"
             ]
         },
         {
             "variable": "magnetic_flux",
+            "si_unit": "Wb",
             "formulas": [
                 "magnetic_field * area * math.cos(angle)",
                 "magnetic_field * area",
@@ -973,6 +1019,7 @@
         },
         {
             "variable": "inductance",
+            "si_unit": "H",
             "formulas": [
                 "magnetic_flux / current",
                 "voltage / (change_in_current / time)",
@@ -994,6 +1041,7 @@
         },
         {
             "variable": "impedance",
+            "si_unit": "Ω",
             "formulas": [
                 "math.sqrt(resistance**2 + reactance**2)",
                 "voltage / current",
@@ -1016,6 +1064,7 @@
         },
         {
             "variable": "reactance",
+            "si_unit": "Ω",
             "formulas": [
                 "angular_frequency * inductance",
                 "1 / (angular_frequency * capacitance)",
@@ -1036,6 +1085,7 @@
         },
         {
             "variable": "angular_frequency",
+            "si_unit": "rad/s",
             "formulas": [
                 "2 * math.pi * frequency",
                 "angular_velocity",
@@ -1059,6 +1109,7 @@
         },
         {
             "variable": "efficiency",
+            "si_unit": "dimensionless",
             "formulas": [
                 "useful_output / total_input",
                 "output_power / input_power",
@@ -1080,6 +1131,7 @@
         },
         {
             "variable": "mechanical_advantage",
+            "si_unit": "dimensionless",
             "formulas": [
                 "output_force / input_force",
                 "input_distance / output_distance",
@@ -1101,6 +1153,7 @@
         },
         {
             "variable": "stress",
+            "si_unit": "Pa",
             "formulas": [
                 "force / area",
                 "young_modulus * strain",
@@ -1115,12 +1168,13 @@
             ],
             "questions": [
                 "A force of 1000 N is applied to an area of 0.001 m². What is the stress?",
-                "A material has Young's modulus 2×10¹¹ Pa and strain 0.001. What is the stress?",
+                "A material has Young's modulus 2e11 Pa and strain 0.001. What is the stress?",
                 "A material experiences pressure 50000 Pa. What is the stress?"
             ]
         },
         {
             "variable": "strain",
+            "si_unit": "dimensionless",
             "formulas": [
                 "change_in_length / original_length",
                 "stress / young_modulus",
@@ -1136,12 +1190,13 @@
             ],
             "questions": [
                 "A rod of original length 2 m stretches by 0.002 m. What is the strain?",
-                "A material has stress 2×10⁸ Pa and Young's modulus 2×10¹¹ Pa. What is the strain?",
+                "A material has stress 2e8 Pa and Young's modulus 2e11 Pa. What is the strain?",
                 "A material deforms by 0.001 m from original length 1 m. What is the strain?"
             ]
         },
         {
             "variable": "young_modulus",
+            "si_unit": "Pa",
             "formulas": [
                 "stress / strain",
                 "force * original_length / (area * change_in_length)",
@@ -1157,10 +1212,185 @@
                 "elastic_modulus"
             ],
             "questions": [
-                "A material has stress 1×10⁸ Pa and strain 0.0005. What is its Young's modulus?",
+                "A material has stress 1e8 Pa and strain 0.0005. What is its Young's modulus?",
                 "A force of 5000 N is applied to a rod of original length 1 m and area 0.0001 m², causing it to stretch 0.0005 m. What is the Young's modulus?",
-                "A material has elastic modulus 2×10¹¹ Pa. What is its Young's modulus?"
+                "A material has elastic modulus 2e11 Pa. What is its Young's modulus?"
             ]
+        },
+        {
+            "variable": "time",
+            "si_unit": "s",
+            "formulas": [],
+            "dependencies": [],
+            "questions": []
+        },
+        {
+            "variable": "radius",
+            "si_unit": "m",
+            "formulas": [],
+            "dependencies": [],
+            "questions": []
+        },
+        {
+            "variable": "final_velocity",
+            "si_unit": "m/s",
+            "formulas": [],
+            "dependencies": [],
+            "questions": []
+        },
+        {
+            "variable": "initial_velocity",
+            "si_unit": "m/s",
+            "formulas": [],
+            "dependencies": [],
+            "questions": []
+        },
+        {
+            "variable": "mass",
+            "si_unit": "kg",
+            "formulas": [],
+            "dependencies": [],
+            "questions": []
+        },
+        {
+            "variable": "gravity",
+            "si_unit": "m/s²",
+            "formulas": [],
+            "dependencies": [],
+            "questions": []
+        },
+        {
+            "variable": "gas_constant",
+            "si_unit": "J/(mol·K)",
+            "formulas": [],
+            "dependencies": [],
+            "questions": []
+        },
+        {
+            "variable": "boltzmann_constant",
+            "si_unit": "J/K",
+            "formulas": [],
+            "dependencies": [],
+            "questions": []
+        },
+        {
+            "variable": "number_of_moles",
+            "si_unit": "mol",
+            "formulas": [],
+            "dependencies": [],
+            "questions": []
+        },
+        {
+            "variable": "length",
+            "si_unit": "m",
+            "formulas": [],
+            "dependencies": [],
+            "questions": []
+        },
+        {
+            "variable": "width",
+            "si_unit": "m",
+            "formulas": [],
+            "dependencies": [],
+            "questions": []
+        },
+        {
+            "variable": "base",
+            "si_unit": "m",
+            "formulas": [],
+            "dependencies": [],
+            "questions": []
+        },
+        {
+            "variable": "change_in_length",
+            "si_unit": "m",
+            "formulas": [],
+            "dependencies": [],
+            "questions": []
+        },
+        {
+            "variable": "original_length",
+            "si_unit": "m",
+            "formulas": [],
+            "dependencies": [],
+            "questions": []
+        },
+        {
+            "variable": "elastic_modulus",
+            "si_unit": "Pa",
+            "formulas": [],
+            "dependencies": [],
+            "questions": []
+        },
+        {
+            "variable": "spring_constant",
+            "si_unit": "N/m",
+            "formulas": [],
+            "dependencies": [],
+            "questions": []
+        },
+        {
+            "variable": "average_kinetic_energy",
+            "si_unit": "J",
+            "formulas": [],
+            "dependencies": [],
+            "questions": []
+        },
+        {
+            "variable": "resistivity",
+            "si_unit": "Ω·m",
+            "formulas": [],
+            "dependencies": [],
+            "questions": []
+        },
+        {
+            "variable": "capacitive_reactance",
+            "si_unit": "Ω",
+            "formulas": [],
+            "dependencies": [],
+            "questions": []
+        },
+        {
+            "variable": "inductive_reactance",
+            "si_unit": "Ω",
+            "formulas": [],
+            "dependencies": [],
+            "questions": []
+        },
+        {
+            "variable": "change_in_current",
+            "si_unit": "A",
+            "formulas": [],
+            "dependencies": [],
+            "questions": []
+        },
+        {
+            "variable": "charge",
+            "si_unit": "C",
+            "formulas": [],
+            "dependencies": [],
+            "questions": []
+        },
+        {
+            "variable": "energy",
+            "si_unit": "J",
+            "formulas": [],
+            "dependencies": [],
+            "questions": []
+        },
+        {
+            "variable": "permittivity",
+            "si_unit": "F/m",
+            "formulas": [],
+            "dependencies": [],
+            "questions": []
+        },
+        {
+            "variable": "self_inductance",
+            "si_unit": "H",
+            "formulas": [],
+            "dependencies": [],
+            "questions": []
         }
     ]
 }

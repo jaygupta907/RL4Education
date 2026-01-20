@@ -106,30 +106,45 @@
         ]
     },
     {
-        "concept": "Velocity",
+        "concept": "Initial Velocity",
         "prerequisites": [
             "Displacement",
-            "Derivatives"
+            "Kinematics"
         ]
     },
     {
-        "concept": "Speed",
+        "concept": "Average Velocity",
         "prerequisites": [
-            "Velocity",
-            "Vectors"
+            "Displacement",
+            "Kinematics"
         ]
     },
     {
         "concept": "Acceleration",
         "prerequisites": [
-            "Velocity",
+            "Initial Velocity",
+            "Average Velocity",
             "Derivatives"
+        ]
+    },
+    {
+        "concept": "Final Velocity",
+        "prerequisites": [
+            "Initial Velocity",
+            "Acceleration"
+        ]
+    },
+    {
+        "concept": "Speed",
+        "prerequisites": [
+            "Average Velocity",
+            "Vectors"
         ]
     },
     {
         "concept": "Uniform Motion",
         "prerequisites": [
-            "Velocity",
+            "Average Velocity",
             "Kinematics"
         ]
     },
@@ -310,7 +325,7 @@
         "concept": "Kinetic Energy",
         "prerequisites": [
             "Energy",
-            "Velocity",
+            "Final Velocity",
             "Mass"
         ]
     },
@@ -355,7 +370,7 @@
         "concept": "Momentum",
         "prerequisites": [
             "Mass",
-            "Velocity",
+            "Final Velocity",
             "Vectors"
         ]
     },
@@ -568,7 +583,7 @@
         "prerequisites": [
             "Sound Waves",
             "Frequency",
-            "Velocity"
+            "Final Velocity"
         ]
     },
     {
@@ -787,7 +802,7 @@
         "prerequisites": [
             "Magnetic Field",
             "Electric Charge",
-            "Velocity",
+            "Final Velocity",
             "Cross Product"
         ]
     },

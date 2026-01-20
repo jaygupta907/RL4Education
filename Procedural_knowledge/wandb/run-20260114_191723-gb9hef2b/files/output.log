@@ -1,0 +1,318 @@
+/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/trl/trainer/ppo_trainer.py:266: UserWarning: No dataset is provided. Make sure to set config.batch_size to the correct value before training.
+  warnings.warn(
+PPO trainer initialized successfully.
+Run-specific logs directory created: ./checkpoints/logs/run_20260114_191725
+[34m[1mwandb[0m: wandb.init() called while a run is active and reinit is set to 'default', so returning the previous run.
+Wandb initialized for logging.
+Starting PPO training...
+Configuration: TrainingConfig(policy_model_name='Qwen/Qwen2.5-3B-Instruct', judge_model_name='Qwen/Qwen2.5-3B-Instruct', graph_file='variable_concept_graph.json', max_length=8, num_episodes=1000, batch_size=1, mini_batch_size=1, gradient_accumulation_steps=1, learning_rate=1.41e-05, ppo_epochs=4, cliprange=0.2, cliprange_value=0.2, gamma=1.0, lam=0.95, lora_r=4, lora_alpha=16, lora_dropout=0.1, max_new_tokens=500, temperature=0.5, top_p=0.9, top_k=50, repetition_penalty=1.2, no_repeat_ngram_size=2, output_dir='./checkpoints/question_generator_ppo', save_steps=10, logging_steps=1, use_quantization=True, use_8bit=False, max_memory=None)
+
+============================================================
+Episode 1/1000
+============================================================
+GPU Memory Episode 1 start: Allocated=10.17GB, Reserved=12.85GB, Max=11.41GB
+Collecting batch...
+Found 51 variables with depth >= 3 (out of 72 total)
+
+============================================================
+Starting tree walk from target node: stress
+Maximum branch length: 8
+============================================================
+
+  Node stress at level 0 uses formula: pressure
+    Required dependencies: ['pressure']
+    Visiting dependency: pressure (level 1)
+  Node pressure at level 1 uses formula: force / area
+    Required dependencies: ['area', 'force']
+    Visiting dependency: force (level 2)
+    Visiting dependency: area (level 2)
+  Node force at level 2 uses formula: mass * acceleration
+    Required dependencies: ['acceleration', 'mass']
+    Visiting dependency: mass (level 3)
+    Visiting dependency: acceleration (level 3)
+  Node area at level 2 uses formula: pressure * force
+    Required dependencies: ['force', 'pressure']
+  Skipping pressure (already at level 1, would create cycle)
+  Skipping force (already at level 2, would create cycle)
+  Found leaf node at level 3: mass (no dependencies)
+  Node acceleration at level 3 uses formula: force / mass
+    Required dependencies: ['force', 'mass']
+  Skipping mass (already at level 3, would create cycle)
+  Skipping force (already at level 2, would create cycle)
+
+Tree walk complete:
+  Total nodes: 6
+  Total edges: 9
+  Leaf nodes: 1
+  Base inputs: 0
+  Levels: 5
+  Nodes with selected formulas: 5
+
+Nodes by level:
+  Level 0: ['stress']
+  Level 1: ['pressure']
+  Level 2: ['force', 'area']
+  Level 3: ['mass', 'acceleration']
+  Level 4: []
+
+Leaf nodes: ['mass']
+Base inputs: []
+
+Selected formulas:
+  acceleration: force / mass
+    Dependencies: ['force', 'mass']
+  area: pressure * force
+    Dependencies: ['force', 'pressure']
+  force: mass * acceleration
+    Dependencies: ['acceleration', 'mass']
+  pressure: force / area
+    Dependencies: ['area', 'force']
+  stress: pressure
+    Dependencies: ['pressure']
+
+============================================================
+Pruning tree to keep only necessary branches
+============================================================
+
+  Leaf nodes in pruned tree: []
+
+Pruning complete:
+  Original nodes: 6
+  Pruned nodes: 6
+  Original edges: 9
+  Pruned edges: 5
+  Removed 0 nodes
+  Removed 4 edges
+
+Pruned nodes by level:
+  Level 0: ['stress']
+  Level 1: ['pressure']
+  Level 2: ['force', 'area']
+  Level 3: ['mass', 'acceleration']
+
+============================================================
+Assigning random values to leaf nodes
+============================================================
+
+
+============================================================
+Calculating values backwards from leaf nodes to target
+============================================================
+
+
+Detected 2 cycle(s). Breaking cycles by assigning random values...
+  Cycle detected: force -> acceleration -> force
+  Breaking cycle: assigned random value to force = 89.1341 (treating as leaf node)
+  Cycle detected: pressure -> area -> pressure
+  Breaking cycle: assigned random value to pressure = 5.0080 (treating as leaf node)
+  Total nodes converted to leaf nodes to break cycles: 2
+
+
+--- Processing Level 3 ---
+  Nodes to calculate at level 3: ['mass', 'acceleration']
+
+  Calculating: mass
+    Could not calculate mass - invalid formula
+    Assigned default random value: 96.5810
+
+  Calculating: acceleration
+    Using selected formula: force / mass
+    Result: 0.9229
+
+--- Processing Level 2 ---
+  Nodes to calculate at level 2: ['area']
+
+  Calculating: area
+    Using selected formula: pressure * force
+    Result: 446.3797
+
+--- Processing Level 1 ---
+
+--- Processing Level 0 ---
+  Nodes to calculate at level 0: ['stress']
+
+  Calculating: stress
+    Using selected formula: pressure
+    Result: 5.0080
+
+--- Processing Level 3 ---
+  Nodes to calculate at level 3: ['mass', 'acceleration']
+
+--- Processing Level 2 ---
+  Nodes to calculate at level 2: ['area']
+
+--- Processing Level 1 ---
+
+--- Processing Level 0 ---
+  Nodes to calculate at level 0: ['stress']
+
+============================================================
+Final target value: stress = 5.0080
+============================================================
+Generate a physics/mathematics word problem question.
+
+
+TASK: Find the stress
+
+YOU MUST USE THESE 2 VALUES (include ALL with exact numbers AND their SI units):
+1. force = 89.1341481629 N
+2. pressure = 5.0079534399 Pa
+
+IMPORTANT: Each value above shows the variable name, exact numeric value, and its SI unit (e.g., "velocity = 15.5000 m/s" means velocity is 15.5 meters per second).
+You MUST include these SI units when writing the question. Use the units as shown (e.g., "m/s" can be written as "meters per second" or "m/s", "kg" as "kilograms" or "kg", "N" as "Newtons" or "N").
+
+
+EXAMPLE QUESTIONS (for phrasing style only):
+
+acceleration (Level 3):
+  1. A car accelerates from 10 m/s to 30 m/s in 5 seconds. What is its acceleration?
+  2. A force of 50 Newtons is applied to a 10 kg object. What is the acceleration?
+
+area (Level 2):
+  1. A rectangle has length 5 m and width 3 m. What is its area?
+  2. A circle has radius 2 m. What is its area?
+
+force (Level 2):
+  1. A 5 kg object accelerates at 4 m/s². What is the force acting on it?
+  2. What is the weight of a 10 kg object on Earth where gravity is 9.8 m/s²?
+
+pressure (Level 1):
+  1. A force of 500 N is applied over an area of 0.01 m². What is the pressure?
+  2. A gas has density 1.2 kg/m³ at temperature 300 K. What is its pressure? (Use R = 287 J/(kg·K))
+
+REQUIREMENTS:
+1. Include ALL 2 values above with their EXACT numbers AND their SI units (as shown in the values list)
+2. Use ONLY these variables: force, pressure
+3. Write in natural language and include the SI units from the values list (e.g., if value shows "m/s", use "meters per second" or "m/s" in the question)
+4. End with: "What is the stress?"
+5. Do NOT use vague terms - use actual numbers with their units
+6. Do NOT mention intermediate/calculated variables
+
+Generate the question now:
+
+Generating questions...
+You're using a Qwen2TokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
+
+============================================================
+Generated Questions:
+============================================================
+
+Question 1:
+A rectangular surface has a normal force (i.e., perpendicular force) of force = X Newtons ( N ) applied uniformly across an Area of Y square meters ( m^2). If this same force causes a Pressure of Z Pascals ( Pa), what is called Stress on that surface?
+
+============================================================
+
+Computing rewards...
+============================================================
+Question Evaluation:
+============================================================
+
+============================================================
+Question Evaluation:
+============================================================
+LLM Judge Score: 4.0/10.0
+Explanation: - **force**: The question mentions "normal force of force = X Newtons (N) applied uniformly across an Area of Y square meters (m^2)". This provides the concept of force applied, which is semantically equivalent to "force = 89.1341 N". However, the specific numerical value of 89.1341 is missing.
+- **pressure**: The question states "If this same force causes a Pressure of Z Pascals (Pa)", which directly provides the concept of pressure. The value of 5.0080 Pa is also missing.
+- **stress**: The question asks for "Stress on that surface", which is the target variable. The expected answer of 5.0080 is provided in the solution trace, so the target variable is correctly identified.
+
+The question does not provide the missing numerical values for force and pressure, which are required
+============================================================
+
+
+Question 1:
+  Score: 4.00/10.0
+  Judge Reward: -0.2000
+  Tree Walk Length: 4 (max: 8)
+  Tree Walk Length Reward: 0.0000
+  Combined Reward: -0.2000
+  Explanation: - **force**: The question mentions "normal force of force = X Newtons (N) applied uniformly across an Area of Y square meters (m^2)". This provides the concept of force applied, which is semantically equivalent to "force = 89.1341 N". However, the specific numerical value of 89.1341 is missing.
+- **pressure**: The question states "If this same force causes a Pressure of Z Pascals (Pa)", which directly provides the concept of pressure. The value of 5.0080 Pa is also missing.
+- **stress**: The question asks for "Stress on that surface", which is the target variable. The expected answer of 5.0080 is provided in the solution trace, so the target variable is correctly identified.
+
+The question does not provide the missing numerical values for force and pressure, which are required
+
+============================================================
+Episode results logged to: ./checkpoints/logs/run_20260114_191725/episode_0001_20260114_191750.json
+Average judge score: 4.00/10.0
+Average reward: -0.2000
+Training with PPO...
+Traceback (most recent call last):
+  File "/home/ae21b026/RL4Education/Procedural_knowledge/finetune_question_generator.py", line 1070, in <module>
+    main()
+  File "/home/ae21b026/RL4Education/Procedural_knowledge/finetune_question_generator.py", line 1066, in main
+    trainer.train()
+  File "/home/ae21b026/RL4Education/Procedural_knowledge/finetune_question_generator.py", line 971, in train
+    stats = self.ppo_trainer.step(
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/trl/trainer/ppo_trainer.py", line 749, in step
+    ref_logprobs, ref_logits_or_none, _, _ = self.batched_forward_pass(
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/trl/trainer/ppo_trainer.py", line 1013, in batched_forward_pass
+    logits, _, values = model(**input_kwargs)
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1881, in _call_impl
+    return inner()
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1829, in inner
+    result = forward_call(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/trl/models/modeling_value_head.py", line 173, in forward
+    base_model_output = self.pretrained_model(
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/utils/generic.py", line 965, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/utils/deprecation.py", line 172, in wrapped_func
+    return func(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/models/qwen2/modeling_qwen2.py", line 839, in forward
+    logits = self.lm_head(hidden_states[:, slice_indices, :])
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/nn/modules/linear.py", line 134, in forward
+    return F.linear(input, self.weight, self.bias)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/ae21b026/RL4Education/Procedural_knowledge/finetune_question_generator.py", line 1070, in <module>
+    main()
+  File "/home/ae21b026/RL4Education/Procedural_knowledge/finetune_question_generator.py", line 1066, in main
+    trainer.train()
+  File "/home/ae21b026/RL4Education/Procedural_knowledge/finetune_question_generator.py", line 971, in train
+    stats = self.ppo_trainer.step(
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/trl/trainer/ppo_trainer.py", line 749, in step
+    ref_logprobs, ref_logits_or_none, _, _ = self.batched_forward_pass(
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/trl/trainer/ppo_trainer.py", line 1013, in batched_forward_pass
+    logits, _, values = model(**input_kwargs)
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1881, in _call_impl
+    return inner()
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1829, in inner
+    result = forward_call(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/trl/models/modeling_value_head.py", line 173, in forward
+    base_model_output = self.pretrained_model(
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/utils/generic.py", line 965, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/utils/deprecation.py", line 172, in wrapped_func
+    return func(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/models/qwen2/modeling_qwen2.py", line 839, in forward
+    logits = self.lm_head(hidden_states[:, slice_indices, :])
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ae21b026/.local/lib/python3.10/site-packages/torch/nn/modules/linear.py", line 134, in forward
+    return F.linear(input, self.weight, self.bias)
+KeyboardInterrupt

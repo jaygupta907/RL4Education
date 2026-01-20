@@ -25,6 +25,7 @@ import os
 import random
 import re
 import torch
+from datetime import datetime
 from typing import Dict, List, Optional, Set, Tuple, Union
 from dataclasses import dataclass
 from tree_walk_calculation import TreeWalkCalculator
@@ -42,13 +43,20 @@ except ImportError as e:
     print(f"Warning: Required libraries not available: {e}")
     print("Install with: pip install transformers torch trl peft bitsandbytes accelerate")
 
-# Configure logging
+# Try to import wandb
+try:
+    import wandb
+    WANDB_AVAILABLE = True
+except ImportError:
+    WANDB_AVAILABLE = False
+    print("Warning: wandb not available. Install with: pip install wandb")
+
+# Configure logging (no file handler, only console)
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('finetune_question_generator.log'),
-        logging.StreamHandler()
+        logging.StreamHandler()  # Only console, no file logging
     ]
 )
 logger = logging.getLogger(__name__)
@@ -64,6 +72,7 @@ class TrainingConfig:
     
     # Training configuration
     max_length: int = 8 # Max tree walk length (increased to allow deeper dependency chains)
+    min_tree_walk_length: int = 4 # Minimum tree walk length to accept (filter out short walks)
     num_episodes: int = 1000  # Number of training episodes
     batch_size: int = 1  # Batch size for PPO (1 question per step)
     mini_batch_size: int = 1  # Mini batch size (must satisfy: batch_size is multiple of mini_batch_size * gradient_accumulation_steps)
@@ -112,6 +121,109 @@ class QuestionGeneratorPPOTrainer:
             max_allocated = torch.cuda.max_memory_allocated() / 1024**3  # GB
             logger.info(f"GPU Memory {stage}: Allocated={allocated:.2f}GB, Reserved={reserved:.2f}GB, Max={max_allocated:.2f}GB")
     
+    def _log_episode_results(self, episode: int, responses: List[str], rewards: List[float], 
+                            judge_scores: List[float], judge_rewards: List[float], judge_explanations: List[str], 
+                            batch: List[Dict], tree_walk_lengths: List[int] = None, 
+                            tree_walk_length_rewards: List[float] = None):
+        """
+        Log questions, rewards, and explanations to a timestamped file.
+        
+        Args:
+            episode: Episode number
+            responses: List of generated questions
+            rewards: List of combined reward values (judge + tree walk length)
+            judge_scores: List of judge scores (0-10)
+            judge_rewards: List of judge reward values (normalized -1 to 1)
+            judge_explanations: List of explanations from judge
+            batch: Batch data containing metadata
+            tree_walk_lengths: List of tree walk lengths for each question
+            tree_walk_length_rewards: List of tree walk length reward values (normalized -1 to 1)
+        """
+        # Create timestamp for filename
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        log_filename = f"episode_{episode+1:04d}_{timestamp}.json"
+        log_path = os.path.join(self.logs_dir, log_filename)
+        
+        # Prepare log data
+        log_data = {
+            "episode": episode + 1,
+            "timestamp": datetime.now().isoformat(),
+            "num_questions": len(responses),
+            "questions": []
+        }
+        
+        # Add each question with its reward and explanation
+        for i, (response, reward, score, judge_reward, explanation) in enumerate(zip(responses, rewards, judge_scores, judge_rewards, judge_explanations)):
+            question_data = {
+                "question_index": i + 1,
+                "question": response,
+                "combined_reward": float(reward),
+                "judge_score": float(score),
+                "judge_reward": float(judge_reward),
+                "explanation": explanation
+            }
+            
+            # Add tree walk length and reward if available
+            if tree_walk_lengths and i < len(tree_walk_lengths):
+                tree_walk_length = tree_walk_lengths[i]
+                question_data["tree_walk_length"] = tree_walk_length
+                question_data["max_tree_walk_length"] = self.config.max_length
+                
+                if tree_walk_length_rewards and i < len(tree_walk_length_rewards):
+                    question_data["tree_walk_length_reward"] = float(tree_walk_length_rewards[i])
+                else:
+                    # Fallback calculation if not provided
+                    normalized_length = tree_walk_length / self.config.max_length if self.config.max_length > 0 else 0.0
+                    question_data["tree_walk_length_reward"] = float(normalized_length * 2.0 - 1.0)
+            
+            # Add metadata if available
+            if i < len(batch) and "metadata" in batch[i]:
+                question_data["metadata"] = batch[i]["metadata"]
+            
+            log_data["questions"].append(question_data)
+        
+        # Calculate and add summary statistics
+        if rewards:
+            summary = {
+                "combined_reward": {
+                    "average": float(sum(rewards) / len(rewards)),
+                    "min": float(min(rewards)),
+                    "max": float(max(rewards))
+                },
+                "judge": {
+                    "average_score": float(sum(judge_scores) / len(judge_scores)) if judge_scores else 0.0,
+                    "min_score": float(min(judge_scores)) if judge_scores else 0.0,
+                    "max_score": float(max(judge_scores)) if judge_scores else 0.0,
+                    "average_reward": float(sum(judge_rewards) / len(judge_rewards)) if judge_rewards else 0.0,
+                    "min_reward": float(min(judge_rewards)) if judge_rewards else 0.0,
+                    "max_reward": float(max(judge_rewards)) if judge_rewards else 0.0
+                }
+            }
+            
+            # Add tree walk length statistics if available
+            if tree_walk_lengths:
+                summary["tree_walk_length"] = {
+                    "average_length": float(sum(tree_walk_lengths) / len(tree_walk_lengths)),
+                    "min_length": int(min(tree_walk_lengths)),
+                    "max_length": int(max(tree_walk_lengths)),
+                    "max_possible_length": self.config.max_length
+                }
+                
+                if tree_walk_length_rewards:
+                    summary["tree_walk_length"]["average_reward"] = float(sum(tree_walk_length_rewards) / len(tree_walk_length_rewards))
+                    summary["tree_walk_length"]["min_reward"] = float(min(tree_walk_length_rewards))
+                    summary["tree_walk_length"]["max_reward"] = float(max(tree_walk_length_rewards))
+            
+            log_data["summary"] = summary
+        
+        # Write to file
+        try:
+            with open(log_path, 'w', encoding='utf-8') as f:
+                json.dump(log_data, f, indent=2, ensure_ascii=False)
+            logger.info(f"Episode results logged to: {log_path}")
+        except Exception as e:
+            logger.error(f"Failed to write log file {log_path}: {e}")
+    
     def __init__(self, config: TrainingConfig):
         """
         Initialize the PPO trainer.
@@ -147,6 +259,36 @@ class QuestionGeneratorPPOTrainer:
         # Cache for deep variables (variables with deeper dependency chains)
         self._deep_variables_cache = None
         self._all_variables_cache = None
+        
+        # Create logs directory structure: logs/run_YYYYMMDD_HHMMSS/
+        base_logs_dir = os.path.join(os.path.dirname(self.config.output_dir), "logs")
+        os.makedirs(base_logs_dir, exist_ok=True)
+        
+        # Create run-specific folder with timestamp
+        run_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        self.logs_dir = os.path.join(base_logs_dir, f"run_{run_timestamp}")
+        os.makedirs(self.logs_dir, exist_ok=True)
+        logger.info(f"Run-specific logs directory created: {self.logs_dir}")
+        
+        # Initialize wandb if available
+        if WANDB_AVAILABLE:
+            wandb.init(
+                project="question-generator-ppo",
+                name=f"ppo-training-{config.policy_model_name.split('/')[-1]}",
+                config={
+                    "policy_model": config.policy_model_name,
+                    "judge_model": config.judge_model_name,
+                    "max_length": config.max_length,
+                    "batch_size": config.batch_size,
+                    "learning_rate": config.learning_rate,
+                    "ppo_epochs": config.ppo_epochs,
+                    "max_new_tokens": config.max_new_tokens,
+                    "temperature": config.temperature,
+                }
+            )
+            logger.info("Wandb initialized for logging.")
+        else:
+            logger.warning("Wandb not available. Install with: pip install wandb")
     
     def _get_quantization_config(self) -> Optional[BitsAndBytesConfig]:
         """Get quantization configuration."""
@@ -265,7 +407,7 @@ class QuestionGeneratorPPOTrainer:
             cliprange_value=self.config.cliprange_value,
             gamma=self.config.gamma,
             lam=self.config.lam,
-            log_with=None,  # Can set to "wandb" or "tensorboard" if desired
+            log_with="wandb" if WANDB_AVAILABLE else None,
             project_kwargs={"logging_dir": self.config.output_dir},
             optimize_cuda_cache=True,  # Optimize CUDA cache to reduce memory usage
             gradient_checkpointing=True,  # Use gradient checkpointing to save memory
@@ -304,12 +446,17 @@ class QuestionGeneratorPPOTrainer:
             if leaf in calculator.values:
                 given_values_list.append(leaf)
         
-        # Format given values - show EXACT values with full precision
+        # Format given values - show EXACT values with full precision AND SI units
         values_examples = []
         for idx, var in enumerate(sorted(given_values_list), 1):
             value = calculator.values[var]
-            # Show full precision - DO NOT round or simplify
-            values_examples.append(f"{idx}. {var} = {value:.10f}")
+            si_unit = calculator._get_si_unit(var)
+            # Always include SI unit if available - this is critical for the model to use correct units
+            if si_unit and si_unit.strip():
+                values_examples.append(f"{idx}. {var} = {value:.10f} {si_unit}")
+            else:
+                # Fallback: show value without unit if unit not found (shouldn't happen for defined variables)
+                values_examples.append(f"{idx}. {var} = {value:.10f} (unit not specified)")
         values_list_text = "\n".join(values_examples)
         
         allowed_vars_list = ", ".join(sorted(given_values_list))
@@ -332,59 +479,35 @@ class QuestionGeneratorPPOTrainer:
 
 Rules:
 • Use EXACT numeric values from the trace - no rounding or approximations
-• Write in plain English (ASCII only) - no LaTeX, markdown, or Unicode symbols
-• Include all given values with their exact numbers
-• End with "What is the [target]?"
-• English only - no other languages"""
+• Include all given values with their exact numbers AND their SI units (as provided in the values list)
+• Use the SI units shown in the values list when writing the question
+• End with "What is the [target]?
+
+"""
         
         # User prompt
         user_prompt = f"""Generate a physics/mathematics word problem question.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 TASK: Find the {target}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-YOU MUST USE THESE {len(given_values_list)} VALUES (include ALL with exact numbers):
-
+YOU MUST USE THESE {len(given_values_list)} VALUES (include ALL with exact numbers AND their SI units):
 {values_list_text}
 
-ALLOWED VARIABLES ONLY: {allowed_vars_list}
-
-Do NOT use: {', '.join(intermediate_nodes[:5]) if intermediate_nodes else 'any calculated/intermediate variables'}
-
-{formulas_text if formulas_text else ""}
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 EXAMPLE QUESTIONS (for phrasing style only):
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
 {questions_context if questions_context else "No examples available."}
 
-⚠️ Note: Examples show phrasing style. Use ONLY variables from the allowed list above.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
 REQUIREMENTS:
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-1. Include ALL {len(given_values_list)} values above with their EXACT numbers
-
+1. Include ALL {len(given_values_list)} values above with their EXACT numbers AND their SI units (as shown in the values list)
 2. Use ONLY these variables: {allowed_vars_list}
-
-3. Write in natural language with appropriate units
-
-4. End with: "What is the {target}?"
-
-5. Do NOT use vague terms like "certain", "some", "a distance" - use actual numbers
-
-6. Do NOT mention intermediate/calculated variables
+3. End with: "What is the {target}?"
+4. Do NOT use vague terms - use actual numbers with their units
+5. Do NOT mention intermediate/calculated variables
 
 Generate the question now:"""
+
+        print(user_prompt)
         
         # Format using chat template
         # For Qwen models, add explicit language instruction
@@ -514,7 +637,12 @@ Generate the question now:"""
         deep_variables = self._deep_variables_cache
         all_variables = self._all_variables_cache
         
-        for _ in range(batch_size):
+        attempts = 0
+        max_attempts = batch_size * 10  # Allow up to 10x attempts to find valid tree walks
+        
+        while len(batch) < batch_size and attempts < max_attempts:
+            attempts += 1
+            
             # Prefer selecting from deep variables, but allow some randomness
             # 90% chance to select from deep variables, 10% from all variables
             if deep_variables and random.random() < 0.9:
@@ -535,7 +663,33 @@ Generate the question now:"""
             )
             
             if result is None:
-                logger.warning(f"Failed to calculate {target}. Skipping...")
+                logger.warning(f"Failed to calculate {target}. Retrying...")
+                continue
+            
+            # Check tree walk length and skip if too short
+            # Tree walk length = number of levels with non-leaf nodes (excluding leaf-only levels)
+            tree_walk_length = 0
+            if hasattr(calculator, 'tree_structure') and calculator.tree_structure:
+                levels = calculator.tree_structure.get('levels', {})
+                leaf_nodes = calculator.tree_structure.get('leaf_nodes', set())
+                if levels:
+                    # Count only levels that contain at least one non-leaf node
+                    non_leaf_levels = []
+                    for level_num, level_nodes in levels.items():
+                        # Check if this level has any non-leaf nodes
+                        non_leaf_in_level = [n for n in level_nodes if n not in leaf_nodes]
+                        if non_leaf_in_level:
+                            non_leaf_levels.append(level_num)
+                    
+                    if non_leaf_levels:
+                        max_level = max(non_leaf_levels)
+                        tree_walk_length = max_level + 1  # +1 because level 0 is included
+                    else:
+                        # All nodes are leaves, so length is 1 (just the target)
+                        tree_walk_length = 1
+            
+            if tree_walk_length < self.config.min_tree_walk_length:
+                logger.debug(f"Tree walk length {tree_walk_length} is too short (min: {self.config.min_tree_walk_length}). Retrying {target}...")
                 continue
             
             # Create prompt
@@ -546,6 +700,10 @@ Generate the question now:"""
                 "calculator": calculator,
                 "metadata": metadata,
             })
+            logger.debug(f"Added tree walk with length {tree_walk_length} for target {target}")
+        
+        if len(batch) < batch_size:
+            logger.warning(f"Only collected {len(batch)}/{batch_size} valid tree walks after {attempts} attempts")
         
         return batch
     
@@ -746,7 +904,10 @@ Generate the question now:"""
             logger.info("="*60)
             rewards = []
             judge_scores = []
+            judge_rewards = []
             judge_explanations = []
+            tree_walk_lengths = []
+            tree_walk_length_rewards = []
             for i, (response, ex) in enumerate(zip(responses, batch)):
                 # Evaluate using judge (get both score and explanation)
                 result = self.judge.evaluate(ex["calculator"], response)
@@ -757,18 +918,46 @@ Generate the question now:"""
                     judge_scores.append(score)
                     judge_explanations.append(explanation)
                     # Normalize score from 0-10 to -1 to 1 for PPO
-                    reward = (score / 10.0) * 2.0 - 1.0
+                    judge_reward = (score / 10.0) * 2.0 - 1.0
                 else:
                     score = 0.0
                     explanation = "Evaluation failed"
                     judge_scores.append(0.0)
                     judge_explanations.append(explanation)
-                    reward = -1.0  # Penalty for failed evaluation
+                    judge_reward = -1.0  # Penalty for failed evaluation
                 
-                rewards.append(reward)
+                judge_rewards.append(judge_reward)
+                
+                # Calculate tree walk length reward
+                calculator = ex["calculator"]
+                tree_walk_length = 0
+                tree_walk_length_reward = 0.0
+                
+                if hasattr(calculator, 'tree_structure') and calculator.tree_structure:
+                    levels = calculator.tree_structure.get('levels', {})
+                    if levels:
+                        # Tree walk length is the maximum level + 1 (level 0 is target)
+                        max_level = max(levels.keys()) if levels else 0
+                        tree_walk_length = max_level + 1
+                        
+                        # Normalize to 0-1 range (divide by max_length)
+                        normalized_length = tree_walk_length / self.config.max_length
+                        # Normalize to -1 to 1 range for PPO (longer = better)
+                        tree_walk_length_reward = normalized_length * 2.0 - 1.0
+                
+                tree_walk_lengths.append(tree_walk_length)
+                tree_walk_length_rewards.append(tree_walk_length_reward)
+                
+                # Combine judge reward and tree walk length reward
+                combined_reward = judge_reward + tree_walk_length_reward
+                rewards.append(combined_reward)
+                
                 logger.info(f"\nQuestion {i+1}:")
                 logger.info(f"  Score: {score:.2f}/10.0")
-                logger.info(f"  Reward: {reward:.4f}")
+                logger.info(f"  Judge Reward: {judge_reward:.4f}")
+                logger.info(f"  Tree Walk Length: {tree_walk_length} (max: {self.config.max_length})")
+                logger.info(f"  Tree Walk Length Reward: {tree_walk_length_reward:.4f}")
+                logger.info(f"  Combined Reward: {combined_reward:.4f}")
                 logger.info(f"  Explanation: {explanation}")
                 logger.info("")
                 
@@ -776,6 +965,9 @@ Generate the question now:"""
                 del result
             
             logger.info("="*60)
+            
+            # Log questions, rewards, and explanations to file
+            self._log_episode_results(episode, responses, rewards, judge_scores, judge_rewards, judge_explanations, batch, tree_walk_lengths, tree_walk_length_rewards)
             
             # Clear judge pipeline cache if possible
             if hasattr(self.judge, 'judge_pipeline') and self.judge.judge_pipeline is not None:
@@ -790,6 +982,14 @@ Generate the question now:"""
             if judge_scores:
                 avg_score = sum(judge_scores) / len(judge_scores)
                 self.episode_scores.append(avg_score)
+                
+                # Log episode averages to wandb
+                if WANDB_AVAILABLE:
+                    wandb.log({
+                        "episode/avg_reward": avg_reward,
+                        "episode/avg_judge_score": avg_score,
+                    }, step=episode)
+                
                 logger.info(f"Average judge score: {avg_score:.2f}/10.0")
                 logger.info(f"Average reward: {avg_reward:.4f}")
             
@@ -805,7 +1005,6 @@ Generate the question now:"""
                     response_tensors,
                     reward_tensors
                 )
-                logger.info(f"PPO Stats: {stats}")
             except torch.cuda.OutOfMemoryError as e:
                 logger.error(f"Out of memory during PPO step at episode {episode + 1}")
                 logger.error(f"Memory stats: Allocated={torch.cuda.memory_allocated()/1024**3:.2f}GB, Reserved={torch.cuda.memory_reserved()/1024**3:.2f}GB")
@@ -866,6 +1065,10 @@ Generate the question now:"""
         logger.info(f"Average reward over all episodes: {sum(self.episode_rewards) / len(self.episode_rewards):.4f}")
         if self.episode_scores:
             logger.info(f"Average judge score over all episodes: {sum(self.episode_scores) / len(self.episode_scores):.2f}/10.0")
+        
+        # Finish wandb run
+        if WANDB_AVAILABLE:
+            wandb.finish()
 
 
 def main():
@@ -876,8 +1079,9 @@ def main():
     
     # Create configuration with memory-efficient settings
     config = TrainingConfig(
-        num_episodes=100,
+        num_episodes=1000,
         max_length=8,  # Increased from 6 to allow deeper tree walks
+        min_tree_walk_length=4,  # Minimum tree walk length to accept (filter out short walks)
         batch_size=1,  # Generate 1 question per step
         mini_batch_size=1,  # Mini batch size
         gradient_accumulation_steps=1,  # Gradient accumulation steps

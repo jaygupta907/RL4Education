@@ -13,7 +13,7 @@ Process:
 5. Calculate backwards from leaf nodes to target node, logging each step
 6. Output the final calculated value for the target node
 
-All steps are logged to both console and tree_walk_calculation.log file.
+All steps are logged to console only.
 """
 
 import json
@@ -23,13 +23,12 @@ import logging
 from collections import deque
 from typing import Dict, Set, List, Optional, Tuple
 
-# Configure logging
+# Configure logging (console only, no file logging)
 logging.basicConfig(
     level=logging.INFO,
     format='%(message)s',
     handlers=[
-        logging.FileHandler('tree_walk_calculation.log'),
-        logging.StreamHandler()
+        logging.StreamHandler()  # Only console, no file logging
     ]
 )
 logger = logging.getLogger(__name__)
@@ -51,6 +50,12 @@ class TreeWalkCalculator:
         self.defined_variables = set(self.variable_info.keys())
         self.tree_structure = {}  # Stores the tree walk structure
         self.values = {}  # Stores calculated/assigned values
+        # Create a mapping of variable to SI unit
+        self.si_units = {v['variable']: v.get('si_unit', '') for v in graph_data['variables']}
+    
+    def _get_si_unit(self, variable: str) -> str:
+        """Get SI unit for a variable."""
+        return self.si_units.get(variable, '')
     
     def _get_dependencies(self, variable: str) -> List[str]:
         """Get dependencies for a variable."""
@@ -109,13 +114,21 @@ class TreeWalkCalculator:
     def tree_walk(self, target_node: str) -> Dict:
         """
         Perform a tree walk from target node backwards to dependencies.
-        At each node, chooses a formula and only visits dependencies required by that formula.
+        At each node, selects ONE formula and visits ONLY the dependencies required by that formula.
+        This ensures the tree only contains necessary nodes - no pruning needed.
+        
+        Algorithm:
+        1. Start with target node at level 0
+        2. For each node, select one formula from available formulas
+        3. Visit only the dependencies used in that selected formula
+        4. Prevent cycles by checking if a node was already visited
+        5. Continue until max_length is reached or all dependencies are leaf nodes
         
         The walk continues to a fixed length (max_length) unless stopped by:
-        - Leaf nodes: nodes with no dependencies or base inputs
-        - Cycles: nodes already visited in the tree
+        - Leaf nodes: nodes with no dependencies, no valid formulas, or base inputs
+        - Cycles: nodes already visited in the tree (skipped to prevent cycles)
         
-        Returns the tree structure with selected formulas.
+        Returns the tree structure with selected formulas. Only necessary nodes are included.
         """
         logger.info(f"\n{'='*60}")
         logger.info(f"Starting tree walk from target node: {target_node}")
@@ -162,10 +175,21 @@ class TreeWalkCalculator:
             # Get all possible dependencies for this node
             all_dependencies = set(self._get_dependencies(current_node))
             
-            # If no dependencies, this is a leaf node - stop this branch
-            if not all_dependencies:
+            # Check if this variable has any valid formulas
+            # Variables with empty formulas/dependencies should be treated as leaf nodes
+            has_valid_formulas = False
+            if current_node in self.variable_info:
+                formulas = self.variable_info[current_node].get('formulas', [])
+                # Check if there are any non-empty formulas
+                has_valid_formulas = any(formula and formula.strip() for formula in formulas)
+            
+            # If no dependencies OR no valid formulas, this is a leaf node - stop this branch
+            if not all_dependencies or not has_valid_formulas:
                 tree['leaf_nodes'].add(current_node)
-                logger.info(f"  Found leaf node at level {level}: {current_node} (no dependencies)")
+                if not all_dependencies:
+                    logger.info(f"  Found leaf node at level {level}: {current_node} (no dependencies)")
+                else:
+                    logger.info(f"  Found leaf node at level {level}: {current_node} (no valid formulas)")
                 continue
             
             # Separate dependencies into defined variables and base inputs
@@ -182,11 +206,15 @@ class TreeWalkCalculator:
                     logger.info(f"  Found base input leaf node: {base_input}")
             
             # Choose a formula for current_node
-            # We can use base inputs and any defined dependencies (even if not visited yet)
-            # The formula selection will prefer dependencies already visited, but can also use unvisited ones
-            all_available_deps = base_input_deps | defined_deps
+            # Only consider dependencies that are:
+            # 1. Base inputs (always available as leaf nodes)
+            # 2. Already visited nodes (to allow cycles/connections)
+            # We do NOT consider unvisited defined variables - we'll only visit what the selected formula needs
+            available_deps_for_selection = base_input_deps | (defined_deps & visited_nodes)
             
-            # Try to choose a formula (preferring formulas that use already-visited dependencies)
+            # Try to choose a formula that uses only available dependencies
+            # If no such formula exists, we can still choose one that uses unvisited deps, but we'll visit them
+            all_available_deps = base_input_deps | defined_deps
             formula_result = self._choose_formula_for_node(current_node, all_available_deps, visited_nodes)
             
             if formula_result:
@@ -196,15 +224,22 @@ class TreeWalkCalculator:
                 logger.info(f"    Required dependencies: {sorted(required_deps)}")
                 
                 # Only visit dependencies required by the chosen formula
+                # Separate into base inputs (leaf nodes) and defined variables (may need calculation)
                 required_defined_deps = required_deps & defined_deps
                 required_base_inputs = required_deps & base_input_deps
                 
-                # Add required base inputs (should already be added, but ensure edges exist)
+                # Add required base inputs as leaf nodes (they don't need to be visited)
                 for base_input in required_base_inputs:
+                    if base_input not in tree['nodes']:
+                        tree['nodes'].add(base_input)
+                        tree['base_inputs'].add(base_input)
+                        tree['leaf_nodes'].add(base_input)
                     if (base_input, current_node) not in tree['edges']:
                         tree['edges'].append((base_input, current_node))
+                    logger.info(f"    Added base input: {base_input}")
                 
-                # Visit only the required defined dependencies (if we haven't reached max_length)
+                # Visit only the required defined dependencies from the selected formula
+                # These are the ONLY nodes we'll visit - no pruning needed later
                 next_level = level + 1
                 
                 # Only continue to next level if we haven't reached max_length
@@ -213,15 +248,34 @@ class TreeWalkCalculator:
                         tree['levels'][next_level] = []
                     
                     for dep in required_defined_deps:
-                        # Prevent cycles: if node already exists in the tree, skip it
-                        if dep in node_levels:
-                            logger.info(f"  Skipping {dep} (already at level {node_levels[dep]}, would create cycle)")
-                            # Still add the edge for visualization
-                            if (dep, current_node) not in tree['edges']:
-                                tree['edges'].append((dep, current_node))
+                        # Check if this dependency has valid formulas - if not, treat as leaf node
+                        dep_has_valid_formulas = False
+                        if dep in self.variable_info:
+                            dep_formulas = self.variable_info[dep].get('formulas', [])
+                            dep_has_valid_formulas = any(f and f.strip() for f in dep_formulas)
+                        
+                        # If dependency has no valid formulas, treat it as a leaf node instead of visiting it
+                        if not dep_has_valid_formulas:
+                            tree['leaf_nodes'].add(dep)
+                            tree['nodes'].add(dep)
+                            tree['edges'].append((dep, current_node))
+                            logger.info(f"    Treating {dep} as leaf node (no valid formulas)")
                             continue
                         
-                        # Add node to tree and queue for next level
+                        # Prevent cycles: if node already exists in the tree at a different level, skip visiting it again
+                        # But still add the edge to show the dependency relationship
+                        if dep in node_levels:
+                            existing_level = node_levels[dep]
+                            if existing_level != next_level:
+                                logger.info(f"    Skipping {dep} (already at level {existing_level}, would create cycle)")
+                                # Still add the edge for visualization (shows dependency even if not recalculated)
+                                if (dep, current_node) not in tree['edges']:
+                                    tree['edges'].append((dep, current_node))
+                                continue
+                            # If it's at the same level, it's already queued, skip
+                            continue
+                        
+                        # Add node to tree and queue for next level - this is the ONLY way nodes get added
                         tree['nodes'].add(dep)
                         tree['edges'].append((dep, current_node))
                         node_levels[dep] = next_level
@@ -234,38 +288,16 @@ class TreeWalkCalculator:
                     tree['leaf_nodes'].add(current_node)
                     logger.info(f"  Node {current_node} marked as leaf (next level {next_level} would exceed max_length {self.max_length})")
             else:
-                # No suitable formula found - mark as leaf and use all dependencies as fallback
+                # No suitable formula found - mark as leaf node
+                # This should not happen if formulas are properly defined, but handle gracefully
                 logger.warning(f"  Node {current_node} at level {level}: No suitable formula found")
                 logger.warning(f"    Available dependencies: {sorted(all_available_deps)}")
                 logger.warning(f"    All dependencies: {sorted(all_dependencies)}")
                 
-                # Fallback: mark as leaf and add all dependencies
+                # Mark as leaf node since we can't calculate it
                 tree['leaf_nodes'].add(current_node)
-                if current_node not in tree['node_formulas']:
-                    tree['node_formulas'][current_node] = (None, all_dependencies)
-                
-                # Still try to visit defined dependencies (if we haven't reached max_length)
-                next_level = level + 1
-                
-                if next_level < self.max_length:
-                    if next_level not in tree['levels']:
-                        tree['levels'][next_level] = []
-                    
-                    for dep in defined_deps:
-                        # Prevent cycles: if node already exists in the tree, skip it
-                        if dep in node_levels:
-                            if (dep, current_node) not in tree['edges']:
-                                tree['edges'].append((dep, current_node))
-                            continue
-                        
-                        tree['nodes'].add(dep)
-                        tree['edges'].append((dep, current_node))
-                        node_levels[dep] = next_level
-                        visited_nodes.add(dep)
-                        queue.append((dep, next_level))
-                        tree['levels'][next_level].append(dep)
-                else:
-                    logger.info(f"  Node {current_node} marked as leaf (next level {next_level} would exceed max_length {self.max_length})")
+                # Don't add a formula entry if none was found
+                # Don't visit any dependencies - this node becomes a leaf
         
         # Safety check: Mark nodes at max_length as leaves if they haven't been marked yet
         # (This should not happen since we check during the walk, but it's a safety measure)
@@ -471,7 +503,11 @@ class TreeWalkCalculator:
         for leaf in sorted(self.tree_structure['leaf_nodes'] & self.tree_structure['nodes']):
             value = random.uniform(min_val, max_val)
             self.values[leaf] = value
-            logger.info(f"  {leaf} = {value:.4f}")
+            si_unit = self._get_si_unit(leaf)
+            if si_unit:
+                logger.info(f"  {leaf} = {value:.4f} {si_unit}")
+            else:
+                logger.info(f"  {leaf} = {value:.4f}")
     
     def _safe_eval(self, formula: str, context: Dict[str, float]) -> Optional[float]:
         """
@@ -638,7 +674,11 @@ class TreeWalkCalculator:
         def _calculate_node(node: str) -> bool:
             """Calculate value for a single node using the selected formula. Returns True if successful."""
             if node in self.tree_structure['leaf_nodes']:
-                logger.info(f"\n  {node} is a leaf node, already has value: {self.values[node]:.4f}")
+                si_unit = self._get_si_unit(node)
+                if si_unit:
+                    logger.info(f"\n  {node} is a leaf node, already has value: {self.values[node]:.4f} {si_unit}")
+                else:
+                    logger.info(f"\n  {node} is a leaf node, already has value: {self.values[node]:.4f}")
                 return True
             
             # Check if all dependencies are available
@@ -743,7 +783,11 @@ class TreeWalkCalculator:
                             if break_node not in self.values:
                                 self.values[break_node] = random.uniform(1.0, 100.0)
                                 self.tree_structure['leaf_nodes'].add(break_node)
-                                logger.info(f"  Breaking cycle: assigned random value to {break_node} = {self.values[break_node]:.4f} (treating as leaf node)")
+                                si_unit = self._get_si_unit(break_node)
+                                if si_unit:
+                                    logger.info(f"  Breaking cycle: assigned random value to {break_node} = {self.values[break_node]:.4f} {si_unit} (treating as leaf node)")
+                                else:
+                                    logger.info(f"  Breaking cycle: assigned random value to {break_node} = {self.values[break_node]:.4f} (treating as leaf node)")
                                 progress_made = True  # Try again after breaking cycle
                     
                     if progress_made:
@@ -771,23 +815,23 @@ class TreeWalkCalculator:
     def run(self, target_node: str, min_val: float = 1.0, max_val: float = 100.0) -> Optional[float]:
         """
         Run the complete process:
-        1. Tree walk from target node
-        2. Prune tree to keep only necessary branches
-        3. Assign random values to leaves
-        4. Calculate backwards to target
+        1. Tree walk from target node (selects one formula per node, visits only dependencies from that formula)
+        2. Assign random values to leaves
+        3. Calculate backwards to target
+        
+        The tree walk is already selective - at each node, one formula is chosen and only
+        its dependencies are visited. No pruning is needed.
         
         Returns the calculated target value.
         """
-        # Step 1: Tree walk
+        # Step 1: Tree walk (already selective - only visits dependencies from selected formulas)
         self.tree_walk(target_node)
         
-        # Step 2: Prune tree to keep only necessary branches
-        self.prune_tree()
-        
-        # Step 3: Assign random values to leaves
+        # Step 2: Assign random values to leaves
+        # No pruning needed - tree walk already only includes necessary nodes
         self.assign_random_values_to_leaves(min_val, max_val)
         
-        # Step 4: Calculate backwards
+        # Step 3: Calculate backwards
         result = self.calculate_backwards()
         
         return result
@@ -804,7 +848,11 @@ class TreeWalkCalculator:
             logger.info("Leaf Nodes (Input Values):")
             for node in sorted(leaf_nodes):
                 if node in self.values:
-                    logger.info(f"  {node} = {self.values[node]:.4f}")
+                    si_unit = self._get_si_unit(node)
+                    if si_unit:
+                        logger.info(f"  {node} = {self.values[node]:.4f} {si_unit}")
+                    else:
+                        logger.info(f"  {node} = {self.values[node]:.4f}")
             logger.info("")
         
         # Print by level (excluding leaf nodes)

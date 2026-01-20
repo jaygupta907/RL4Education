@@ -37,13 +37,12 @@ except ImportError:
     print("Warning: transformers not available. Question judging will be disabled.")
     print("Install with: pip install transformers torch")
 
-# Configure logging
+# Configure logging (console only, no file logging)
 logging.basicConfig(
     level=logging.INFO,
     format='%(message)s',
     handlers=[
-        logging.FileHandler('question_judge.log'),
-        logging.StreamHandler()
+        logging.StreamHandler()  # Only console, no file logging
     ]
 )
 logger = logging.getLogger(__name__)
@@ -120,7 +119,11 @@ class QuestionJudge:
         # List all leaf nodes with their values
         for leaf in sorted(calculator.tree_structure['leaf_nodes']):
             if leaf in calculator.values:
-                trace_lines.append(f"  • {leaf} = {calculator.values[leaf]:.4f}")
+                si_unit = calculator._get_si_unit(leaf)
+                if si_unit:
+                    trace_lines.append(f"  • {leaf} = {calculator.values[leaf]:.4f} {si_unit}")
+                else:
+                    trace_lines.append(f"  • {leaf} = {calculator.values[leaf]:.4f}")
         
         trace_lines.append("\nCalculation Steps:")
         
@@ -294,10 +297,14 @@ EXPLANATION: [detailed explanation listing which concepts are present/missing (u
         
         # Format required values list clearly
         # Note: The LLM will use semantic matching, so exact variable names are just for reference
-        required_values_text = "\n".join([
-            f"{idx}. {var} = {val:.4f}"
-            for idx, (var, val) in enumerate(sorted(leaf_values.items()), 1)
-        ])
+        required_values_list = []
+        for idx, (var, val) in enumerate(sorted(leaf_values.items()), 1):
+            si_unit = calculator._get_si_unit(var)
+            if si_unit:
+                required_values_list.append(f"{idx}. {var} = {val:.4f} {si_unit}")
+            else:
+                required_values_list.append(f"{idx}. {var} = {val:.4f}")
+        required_values_text = "\n".join(required_values_list)
         required_values_text += "\n\nIMPORTANT: Match these semantically, not by exact name. For example:"
         required_values_text += "\n- 'change_in_length' matches 'length changed from X to Y' or 'change in length'"
         required_values_text += "\n- 'initial_velocity' matches 'starts at X m/s' or 'initial speed is X'"

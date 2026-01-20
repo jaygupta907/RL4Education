@@ -1,0 +1,106 @@
+{"time":"2026-01-14T16:57:53.838918124+05:30","level":"INFO","msg":"stream: starting","core version":"0.22.2"}
+{"time":"2026-01-14T16:57:54.281638963+05:30","level":"INFO","msg":"stream: created new stream","id":"3w17cy3m"}
+{"time":"2026-01-14T16:57:54.281773047+05:30","level":"INFO","msg":"handler: started","stream_id":"3w17cy3m"}
+{"time":"2026-01-14T16:57:54.281798786+05:30","level":"INFO","msg":"stream: started","id":"3w17cy3m"}
+{"time":"2026-01-14T16:57:54.281804657+05:30","level":"INFO","msg":"writer: started","stream_id":"3w17cy3m"}
+{"time":"2026-01-14T16:57:54.281840154+05:30","level":"INFO","msg":"sender: started","stream_id":"3w17cy3m"}
+{"time":"2026-01-14T16:57:55.403634172+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":37}
+{"time":"2026-01-14T16:57:56.723088897+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":64}
+{"time":"2026-01-14T17:09:25.104559804+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":2134}
+{"time":"2026-01-14T17:09:25.43383082+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":36}
+{"time":"2026-01-14T17:14:40.836917628+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":3077}
+{"time":"2026-01-14T17:14:41.571122939+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":58}
+{"time":"2026-01-14T17:23:25.37594252+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":4651}
+{"time":"2026-01-14T17:23:28.029498776+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":91}
+{"time":"2026-01-14T17:30:55.142834617+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":6169}
+{"time":"2026-01-14T17:30:55.48325532+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":57}
+{"time":"2026-01-14T17:46:40.465855636+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":8634}
+{"time":"2026-01-14T17:46:40.990788325+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":67}
+{"time":"2026-01-14T17:56:56.112347829+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":10654}
+{"time":"2026-01-14T17:56:56.261863418+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":36}
+{"time":"2026-01-14T18:01:40.404507452+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":11341}
+{"time":"2026-01-14T18:01:40.590957948+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":29}
+{"time":"2026-01-14T18:15:17.694765736+05:30","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/jay_gupta-indian-institute-of-technology-madras/trl/3w17cy3m/file_stream\": dial tcp 35.186.228.49:443: connect: connection timed out"}
+{"time":"2026-01-14T18:20:25.438162833+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":14384}
+{"time":"2026-01-14T18:20:25.560607702+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":48}
+{"time":"2026-01-14T18:20:41.132607802+05:30","level":"INFO","msg":"api: retrying HTTP error","status":502,"url":"https://api.wandb.ai/files/jay_gupta-indian-institute-of-technology-madras/trl/3w17cy3m/file_stream","body":"\n<html><head>\n<meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\">\n<title>502 Server Error</title>\n</head>\n<body text=#000000 bgcolor=#ffffff>\n<h1>Error: Server Error</h1>\n<h2>The server encountered a temporary error and could not complete your request.<p>Please try again in 30 seconds.</h2>\n<h2></h2>\n</body></html>\n"}
+{"time":"2026-01-14T18:27:44.675960711+05:30","level":"INFO","msg":"api: retrying HTTP error","status":502,"url":"https://api.wandb.ai/files/jay_gupta-indian-institute-of-technology-madras/trl/3w17cy3m/file_stream","body":"\n<html><head>\n<meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\">\n<title>502 Server Error</title>\n</head>\n<body text=#000000 bgcolor=#ffffff>\n<h1>Error: Server Error</h1>\n<h2>The server encountered a temporary error and could not complete your request.<p>Please try again in 30 seconds.</h2>\n<h2></h2>\n</body></html>\n"}
+{"time":"2026-01-14T18:28:40.843306784+05:30","level":"INFO","msg":"api: retrying HTTP error","status":502,"url":"https://api.wandb.ai/files/jay_gupta-indian-institute-of-technology-madras/trl/3w17cy3m/file_stream","body":"\n<html><head>\n<meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\">\n<title>502 Server Error</title>\n</head>\n<body text=#000000 bgcolor=#ffffff>\n<h1>Error: Server Error</h1>\n<h2>The server encountered a temporary error and could not complete your request.<p>Please try again in 30 seconds.</h2>\n<h2></h2>\n</body></html>\n"}
+{"time":"2026-01-14T18:29:41.125153517+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":16348}
+{"time":"2026-01-14T18:29:53.523096287+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":47}
+{"time":"2026-01-14T18:32:25.210060855+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":17030}
+{"time":"2026-01-14T18:32:35.344165008+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":48}
+{"time":"2026-01-14T18:32:44.001582567+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":17135}
+{"time":"2026-01-14T18:32:44.018258755+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":39}
+{"time":"2026-01-14T18:33:07.483673126+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":17219}
+{"time":"2026-01-14T18:33:12.077849113+05:30","level":"INFO","msg":"api: retrying HTTP error","status":500,"url":"https://api.wandb.ai/graphql","body":"{\"errors\":[{\"message\":\"context deadline exceeded\",\"path\":[\"project\",\"run\"]}],\"data\":{\"project\":{\"run\":null}}}"}
+{"time":"2026-01-14T18:33:24.217681177+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":87}
+{"time":"2026-01-14T18:36:21.620892905+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":18087}
+{"time":"2026-01-14T18:36:25.962036726+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":77}
+{"time":"2026-01-14T18:36:49.431910373+05:30","level":"INFO","msg":"api: retrying HTTP error","status":502,"url":"https://api.wandb.ai/files/jay_gupta-indian-institute-of-technology-madras/trl/3w17cy3m/file_stream","body":"\n<html><head>\n<meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\">\n<title>502 Server Error</title>\n</head>\n<body text=#000000 bgcolor=#ffffff>\n<h1>Error: Server Error</h1>\n<h2>The server encountered a temporary error and could not complete your request.<p>Please try again in 30 seconds.</h2>\n<h2></h2>\n</body></html>\n"}
+{"time":"2026-01-14T18:36:58.850793072+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":18233}
+{"time":"2026-01-14T18:37:07.403769542+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":57}
+{"time":"2026-01-14T18:37:19.528358268+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":18325}
+{"time":"2026-01-14T18:37:29.938320027+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":114}
+{"time":"2026-01-14T18:38:13.263749801+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":18610}
+{"time":"2026-01-14T18:38:26.715794932+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":46}
+{"time":"2026-01-14T18:41:10.22374486+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":19581}
+{"time":"2026-01-14T18:41:10.53328567+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":59}
+{"time":"2026-01-14T18:41:42.679853068+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":19709}
+{"time":"2026-01-14T18:41:50.147335772+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":50}
+{"time":"2026-01-14T18:42:08.289751826+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":19804}
+{"time":"2026-01-14T18:42:09.384440476+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":86}
+{"time":"2026-01-14T18:43:10.324915307+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":20069}
+{"time":"2026-01-14T18:43:10.654814615+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":65}
+{"time":"2026-01-14T18:44:51.535817613+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":20319}
+{"time":"2026-01-14T18:44:53.004807465+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":71}
+{"time":"2026-01-14T18:45:45.177501753+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":20618}
+{"time":"2026-01-14T18:45:59.418449673+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":93}
+{"time":"2026-01-14T18:46:11.34195847+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":20768}
+{"time":"2026-01-14T18:46:11.828382815+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":48}
+{"time":"2026-01-14T18:48:16.161710224+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":21322}
+{"time":"2026-01-14T18:48:28.862128913+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":73}
+{"time":"2026-01-14T18:48:41.635096296+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":21452}
+{"time":"2026-01-14T18:48:52.683730086+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":118}
+{"time":"2026-01-14T18:49:25.715802103+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":21754}
+{"time":"2026-01-14T18:49:28.02387276+05:30","level":"INFO","msg":"api: retrying HTTP error","status":500,"url":"https://api.wandb.ai/graphql","body":"{\"errors\":[{\"message\":\"context deadline exceeded\",\"path\":[\"project\",\"run\"]}],\"data\":{\"project\":{\"run\":null}}}"}
+{"time":"2026-01-14T18:49:30.834018945+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":57}
+{"time":"2026-01-14T18:52:47.404250008+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":22783}
+{"time":"2026-01-14T18:52:55.073522077+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":52}
+{"time":"2026-01-14T18:53:28.814846986+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":22993}
+{"time":"2026-01-14T18:53:40.103149501+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":80}
+{"time":"2026-01-14T18:53:44.605264519+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":23106}
+{"time":"2026-01-14T18:53:48.407745667+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":47}
+{"time":"2026-01-14T18:54:40.542118185+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":23226}
+{"time":"2026-01-14T18:54:40.916724846+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":81}
+{"time":"2026-01-14T18:59:39.729262827+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":24981}
+{"time":"2026-01-14T18:59:43.55926493+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":82}
+{"time":"2026-01-14T19:01:01.764645644+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":25490}
+{"time":"2026-01-14T19:01:06.883318902+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":31}
+{"time":"2026-01-14T19:02:10.722907563+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":25776}
+{"time":"2026-01-14T19:02:13.378057363+05:30","level":"INFO","msg":"api: retrying HTTP error","status":500,"url":"https://api.wandb.ai/graphql","body":"{\"errors\":[{\"message\":\"context deadline exceeded\",\"path\":[\"project\",\"run\"]}],\"data\":{\"project\":{\"run\":null}}}"}
+{"time":"2026-01-14T19:02:32.279734092+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":176}
+{"time":"2026-01-14T19:03:42.955687527+05:30","level":"INFO","msg":"api: retrying HTTP error","status":502,"url":"https://api.wandb.ai/graphql","body":"\n<html><head>\n<meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\">\n<title>502 Server Error</title>\n</head>\n<body text=#000000 bgcolor=#ffffff>\n<h1>Error: Server Error</h1>\n<h2>The server encountered a temporary error and could not complete your request.<p>Please try again in 30 seconds.</h2>\n<h2></h2>\n</body></html>\n"}
+{"time":"2026-01-14T19:04:39.735147952+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":26736}
+{"time":"2026-01-14T19:04:44.187117444+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":1}
+{"time":"2026-01-14T19:05:43.828628529+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":27090}
+{"time":"2026-01-14T19:05:46.742193233+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":50}
+{"time":"2026-01-14T19:07:12.207123962+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":27627}
+{"time":"2026-01-14T19:07:15.284667262+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":108}
+{"time":"2026-01-14T19:08:13.166816856+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":28075}
+{"time":"2026-01-14T19:08:20.804531938+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":48}
+{"time":"2026-01-14T19:08:46.939623288+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":28256}
+{"time":"2026-01-14T19:08:56.439894916+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":80}
+{"time":"2026-01-14T19:09:18.401638057+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":28472}
+{"time":"2026-01-14T19:09:22.841576659+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":75}
+{"time":"2026-01-14T19:09:48.309974753+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":28594}
+{"time":"2026-01-14T19:09:49.622083733+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":54}
+{"time":"2026-01-14T19:10:04.325309318+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":28693}
+{"time":"2026-01-14T19:10:06.391624027+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":103}
+{"time":"2026-01-14T19:10:29.805015609+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":28865}
+{"time":"2026-01-14T19:10:35.44391375+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":56}
+{"time":"2026-01-14T19:11:41.399778897+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":29224}
+{"time":"2026-01-14T19:11:51.722918994+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":48}
+{"time":"2026-01-14T19:12:18.051712236+05:30","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":29410}
+{"time":"2026-01-14T19:12:19.916408283+05:30","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":72}
+{"time":"2026-01-14T19:16:57.226871567+05:30","level":"INFO","msg":"stream: closing","id":"3w17cy3m"}

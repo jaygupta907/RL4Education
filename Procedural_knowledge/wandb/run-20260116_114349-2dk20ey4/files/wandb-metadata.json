@@ -1,0 +1,40 @@
+{
+  "os": "Linux-5.15.0-153-generic-x86_64-with-glibc2.35",
+  "python": "CPython 3.10.18",
+  "startedAt": "2026-01-16T06:13:49.782175Z",
+  "program": "/home/ae21b026/RL4Education/Procedural_knowledge/finetune_question_generator.py",
+  "codePath": "Procedural_knowledge/finetune_question_generator.py",
+  "codePathLocal": "finetune_question_generator.py",
+  "git": {
+    "remote": "git@github.com:jaygupta907/RL4Education.git",
+    "commit": "f5de735d28b60d7cd382b2a806bd575b8b4614bd"
+  },
+  "email": "ae21b026@smail.iitm.ac.in",
+  "root": "/home/ae21b026/RL4Education/Procedural_knowledge",
+  "host": "e2e-70-32",
+  "executable": "/home/ae21b026/miniconda3/envs/question_generation/bin/python",
+  "cpu_count": 8,
+  "cpu_count_logical": 8,
+  "gpu": "Tesla V100-PCIE-32GB",
+  "gpu_count": 1,
+  "disk": {
+    "/": {
+      "total": "872059330560",
+      "used": "812603195392"
+    }
+  },
+  "memory": {
+    "total": "123639959552"
+  },
+  "gpu_nvidia": [
+    {
+      "name": "Tesla V100-PCIE-32GB",
+      "memoryTotal": "34359738368",
+      "cudaCores": 5120,
+      "architecture": "Volta",
+      "uuid": "GPU-36b58b0b-492c-e161-c734-fc2bae860215"
+    }
+  ],
+  "cudaVersion": "12.8",
+  "writerId": "49tkhs3aiambrt2qnk6a88ena18ymoog"
+}
