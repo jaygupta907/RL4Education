@@ -58,58 +58,45 @@ class TreeWalkCalculator:
         return self.si_units.get(variable, '')
     
     def _get_dependencies(self, variable: str) -> List[str]:
-        """Get dependencies for a variable."""
-        if variable in self.variable_info:
-            return self.variable_info[variable]['dependencies']
-        return []
-    
-    def _choose_formula_for_node(self, node: str, available_deps: Set[str], visited_nodes: Set[str]) -> Optional[Tuple[str, Set[str]]]:
         """
-        Choose the best formula for a node based on available dependencies.
-        Prefers formulas that use dependencies already visited, but can also use unvisited dependencies.
+        Get combined dependencies for a variable across all its formulas.
+        Uses explicit dependency lists from the JSON when available.
+        """
+        if variable not in self.variable_info:
+            return []
         
-        Args:
-            node: The node to choose a formula for
-            available_deps: Set of dependencies that are available (can include unvisited defined variables)
-            visited_nodes: Set of nodes already visited in the tree walk
-        
-        Returns:
-            Tuple of (formula, required_deps) or None if no suitable formula found
+        deps: Set[str] = set()
+        for formula_entry in self.variable_info[variable].get('formulas', []):
+            if isinstance(formula_entry, dict):
+                deps.update(formula_entry.get('dependencies', []))
+            else:
+                deps.update(self._get_formula_dependencies(str(formula_entry)))
+        return list(deps)
+    
+    def _select_random_formula(self, node: str) -> Optional[Tuple[str, Set[str]]]:
+        """
+        Randomly select a formula for a node and return (formula_string, dependencies).
+        Only considers formulas with both a non-empty formula string and dependency list.
         """
         if node not in self.variable_info:
             return None
         
-        formulas = self.variable_info[node]['formulas']
-        best_formula = None
-        best_required_deps = None
-        best_score = -1
+        valid_formulas: List[Tuple[str, Set[str]]] = []
+        for formula_entry in self.variable_info[node].get('formulas', []):
+            if isinstance(formula_entry, dict):
+                formula_str = str(formula_entry.get('formula', '')).strip()
+                deps = set(formula_entry.get('dependencies', []))
+            else:
+                formula_str = str(formula_entry).strip()
+                deps = self._get_formula_dependencies(formula_str)
+            
+            if formula_str and deps:
+                valid_formulas.append((formula_str, deps))
         
-        for formula in formulas:
-            required_deps = self._get_formula_dependencies(formula)
-            
-            # Check if all required dependencies are available (can be unvisited defined variables)
-            if not required_deps.issubset(available_deps):
-                continue
-            
-            # Prefer formulas that use dependencies already in visited_nodes
-            # This helps create a more connected tree and reduces depth
-            score = len(required_deps & visited_nodes) * 2  # Weight visited nodes more
-            
-            # Also prefer formulas with fewer dependencies (simpler)
-            score += 1.0 / (len(required_deps) + 1)
-            
-            # Prefer formulas that use base inputs (they're always available)
-            base_inputs = required_deps - self.defined_variables
-            score += len(base_inputs) * 0.5
-            
-            if score > best_score:
-                best_score = score
-                best_formula = formula
-                best_required_deps = required_deps
+        if not valid_formulas:
+            return None
         
-        if best_formula:
-            return (best_formula, best_required_deps)
-        return None
+        return random.choice(valid_formulas)
     
     def tree_walk(self, target_node: str) -> Dict:
         """
@@ -180,8 +167,15 @@ class TreeWalkCalculator:
             has_valid_formulas = False
             if current_node in self.variable_info:
                 formulas = self.variable_info[current_node].get('formulas', [])
-                # Check if there are any non-empty formulas
-                has_valid_formulas = any(formula and formula.strip() for formula in formulas)
+                # Check for at least one formula with a formula string and dependencies
+                for f in formulas:
+                    if isinstance(f, dict):
+                        if f.get('formula') and f.get('dependencies'):
+                            has_valid_formulas = True
+                            break
+                    elif isinstance(f, str) and f.strip():
+                        has_valid_formulas = True
+                        break
             
             # If no dependencies OR no valid formulas, this is a leaf node - stop this branch
             if not all_dependencies or not has_valid_formulas:
@@ -196,26 +190,8 @@ class TreeWalkCalculator:
             defined_deps = {dep for dep in all_dependencies if dep in self.defined_variables}
             base_input_deps = {dep for dep in all_dependencies if dep not in self.defined_variables}
             
-            # Add base input dependencies as leaf nodes (they don't need to be visited further)
-            for base_input in base_input_deps:
-                if base_input not in tree['nodes']:
-                    tree['nodes'].add(base_input)
-                    tree['base_inputs'].add(base_input)
-                    tree['leaf_nodes'].add(base_input)
-                    tree['edges'].append((base_input, current_node))
-                    logger.info(f"  Found base input leaf node: {base_input}")
-            
-            # Choose a formula for current_node
-            # Only consider dependencies that are:
-            # 1. Base inputs (always available as leaf nodes)
-            # 2. Already visited nodes (to allow cycles/connections)
-            # We do NOT consider unvisited defined variables - we'll only visit what the selected formula needs
-            available_deps_for_selection = base_input_deps | (defined_deps & visited_nodes)
-            
-            # Try to choose a formula that uses only available dependencies
-            # If no such formula exists, we can still choose one that uses unvisited deps, but we'll visit them
-            all_available_deps = base_input_deps | defined_deps
-            formula_result = self._choose_formula_for_node(current_node, all_available_deps, visited_nodes)
+            # Randomly choose a formula for the current node
+            formula_result = self._select_random_formula(current_node)
             
             if formula_result:
                 formula, required_deps = formula_result
@@ -252,7 +228,14 @@ class TreeWalkCalculator:
                         dep_has_valid_formulas = False
                         if dep in self.variable_info:
                             dep_formulas = self.variable_info[dep].get('formulas', [])
-                            dep_has_valid_formulas = any(f and f.strip() for f in dep_formulas)
+                            for f in dep_formulas:
+                                if isinstance(f, dict):
+                                    if f.get('formula') and f.get('dependencies'):
+                                        dep_has_valid_formulas = True
+                                        break
+                                elif isinstance(f, str) and f.strip():
+                                    dep_has_valid_formulas = True
+                                    break
                         
                         # If dependency has no valid formulas, treat it as a leaf node instead of visiting it
                         if not dep_has_valid_formulas:
@@ -291,7 +274,6 @@ class TreeWalkCalculator:
                 # No suitable formula found - mark as leaf node
                 # This should not happen if formulas are properly defined, but handle gracefully
                 logger.warning(f"  Node {current_node} at level {level}: No suitable formula found")
-                logger.warning(f"    Available dependencies: {sorted(all_available_deps)}")
                 logger.warning(f"    All dependencies: {sorted(all_dependencies)}")
                 
                 # Mark as leaf node since we can't calculate it
@@ -336,6 +318,8 @@ class TreeWalkCalculator:
     def _get_formula_dependencies(self, formula: str) -> Set[str]:
         """Extract variable names from a formula string."""
         import re
+        if not formula:
+            return set()
         # Keywords, functions, and constants to exclude
         excluded = {
             'math', 'abs', 'sqrt', 'sin', 'cos', 'tan', 'exp', 'log', 'log10', 'pi', 'e',
@@ -359,8 +343,13 @@ class TreeWalkCalculator:
         
         exclude_deps = exclude_deps or set()
         
-        for formula in self.variable_info[variable]['formulas']:
-            required_deps = self._get_formula_dependencies(formula)
+        for formula_entry in self.variable_info[variable]['formulas']:
+            if isinstance(formula_entry, dict):
+                formula = formula_entry.get('formula', '')
+                required_deps = set(formula_entry.get('dependencies', []))
+            else:
+                formula = formula_entry
+                required_deps = self._get_formula_dependencies(formula)
             if required_deps.issubset(available_deps) and not required_deps & exclude_deps:
                 return (formula, required_deps)
         
@@ -501,13 +490,13 @@ class TreeWalkCalculator:
         logger.info(f"{'='*60}\n")
         
         for leaf in sorted(self.tree_structure['leaf_nodes'] & self.tree_structure['nodes']):
-            value = random.uniform(min_val, max_val)
+            value = round(random.uniform(min_val, max_val), 2)
             self.values[leaf] = value
             si_unit = self._get_si_unit(leaf)
             if si_unit:
-                logger.info(f"  {leaf} = {value:.4f} {si_unit}")
+                logger.info(f"  {leaf} = {value:.2f} {si_unit}")
             else:
-                logger.info(f"  {leaf} = {value:.4f}")
+                logger.info(f"  {leaf} = {value:.2f}")
     
     def _safe_eval(self, formula: str, context: Dict[str, float]) -> Optional[float]:
         """
@@ -546,7 +535,12 @@ class TreeWalkCalculator:
         
         formulas = self.variable_info[variable]['formulas']
         
-        for formula in formulas:
+        for formula_entry in formulas:
+            if isinstance(formula_entry, dict):
+                formula = formula_entry.get('formula', '')
+            else:
+                formula = formula_entry
+            
             result = self._safe_eval(formula, available_values)
             if result is not None:
                 logger.info(f"    Formula: {formula}")
@@ -639,10 +633,10 @@ class TreeWalkCalculator:
                             break
                     
                     if break_node not in self.values:
-                        self.values[break_node] = random.uniform(1.0, 100.0)
+                        self.values[break_node] = round(random.uniform(1.0, 10.0), 2)
                         self.tree_structure['leaf_nodes'].add(break_node)
                         cycle_nodes_to_break.add(break_node)
-                        logger.info(f"  Breaking cycle: assigned random value to {break_node} = {self.values[break_node]:.4f} (treating as leaf node)")
+                        logger.info(f"  Breaking cycle: assigned random value to {break_node} = {self.values[break_node]:.2f} (treating as leaf node)")
             
             if cycle_nodes_to_break:
                 logger.info(f"  Total nodes converted to leaf nodes to break cycles: {len(cycle_nodes_to_break)}\n")
@@ -676,9 +670,9 @@ class TreeWalkCalculator:
             if node in self.tree_structure['leaf_nodes']:
                 si_unit = self._get_si_unit(node)
                 if si_unit:
-                    logger.info(f"\n  {node} is a leaf node, already has value: {self.values[node]:.4f} {si_unit}")
+                    logger.info(f"\n  {node} is a leaf node, already has value: {self.values[node]:.2f} {si_unit}")
                 else:
-                    logger.info(f"\n  {node} is a leaf node, already has value: {self.values[node]:.4f}")
+                    logger.info(f"\n  {node} is a leaf node, already has value: {self.values[node]:.2f}")
                 return True
             
             # Check if all dependencies are available
@@ -701,10 +695,11 @@ class TreeWalkCalculator:
                 logger.info(f"    Using selected formula: {selected_formula}")
                 result = self._safe_eval(selected_formula, self.values)
                 if result is not None:
+                    result = round(result, 2)
                     self.values[node] = result
-                    logger.info(f"    Result: {result:.4f}")
+                    logger.info(f"    Result: {result:.2f}")
                     if had_previous_value:
-                        logger.info(f"    Updated value: {result:.4f}")
+                        logger.info(f"    Updated value: {result:.2f}")
                     return True
                 else:
                     logger.warning(f"    Selected formula failed, trying other formulas...")
@@ -713,15 +708,16 @@ class TreeWalkCalculator:
             result = self._try_formulas(node, self.values)
             
             if result is not None:
+                result = round(result, 2)
                 self.values[node] = result
                 if had_previous_value:
-                    logger.info(f"    Updated value: {result:.4f}")
+                    logger.info(f"    Updated value: {result:.2f}")
                 return True
             else:
                 logger.warning(f"    Could not calculate {node} - invalid formula")
                 if not had_previous_value:
-                    self.values[node] = random.uniform(1.0, 100.0)
-                    logger.info(f"    Assigned default random value: {self.values[node]:.4f}")
+                    self.values[node] = round(random.uniform(1.0, 100.0), 2)
+                    logger.info(f"    Assigned default random value: {self.values[node]:.2f}")
                 return False
         
         # Process levels from deepest to shallowest, but ensure dependencies are ready
@@ -781,13 +777,13 @@ class TreeWalkCalculator:
                                     break
                             
                             if break_node not in self.values:
-                                self.values[break_node] = random.uniform(1.0, 100.0)
+                                self.values[break_node] = round(random.uniform(1.0, 100.0), 2)
                                 self.tree_structure['leaf_nodes'].add(break_node)
                                 si_unit = self._get_si_unit(break_node)
                                 if si_unit:
-                                    logger.info(f"  Breaking cycle: assigned random value to {break_node} = {self.values[break_node]:.4f} {si_unit} (treating as leaf node)")
+                                    logger.info(f"  Breaking cycle: assigned random value to {break_node} = {self.values[break_node]:.2f} {si_unit} (treating as leaf node)")
                                 else:
-                                    logger.info(f"  Breaking cycle: assigned random value to {break_node} = {self.values[break_node]:.4f} (treating as leaf node)")
+                                    logger.info(f"  Breaking cycle: assigned random value to {break_node} = {self.values[break_node]:.2f} (treating as leaf node)")
                                 progress_made = True  # Try again after breaking cycle
                     
                     if progress_made:
@@ -805,7 +801,7 @@ class TreeWalkCalculator:
         # Return target value
         if target in self.values:
             logger.info(f"\n{'='*60}")
-            logger.info(f"Final target value: {target} = {self.values[target]:.4f}")
+            logger.info(f"Final target value: {target} = {self.values[target]:.2f}")
             logger.info(f"{'='*60}\n")
             return self.values[target]
         else:
@@ -850,9 +846,9 @@ class TreeWalkCalculator:
                 if node in self.values:
                     si_unit = self._get_si_unit(node)
                     if si_unit:
-                        logger.info(f"  {node} = {self.values[node]:.4f} {si_unit}")
+                        logger.info(f"  {node} = {self.values[node]:.2f} {si_unit}")
                     else:
-                        logger.info(f"  {node} = {self.values[node]:.4f}")
+                        logger.info(f"  {node} = {self.values[node]:.2f}")
             logger.info("")
         
         # Print by level (excluding leaf nodes)
@@ -862,7 +858,7 @@ class TreeWalkCalculator:
             if level_nodes:
                 logger.info(f"Level {level}:")
                 for node in level_nodes:
-                    logger.info(f"  {node} = {self.values[node]:.4f}")
+                    logger.info(f"  {node} = {self.values[node]:.2f}")
 
 
 def main():

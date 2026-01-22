@@ -1,0 +1,14 @@
+{
+  "api_key": ["dummy-key-for-vllm"],
+  "api_model": "zhuohaoyu/RewardAnything-8B-v1",
+  "api_base": ["http://localhost:8000/v1"],
+  "api_timeout": 120.0,
+  "generation_config": {
+    "temperature": 0.0,
+    "max_tokens": 4096
+  },
+  "num_workers": 8,
+  "request_limit": 500,
+  "request_limit_period": 60
+}
+

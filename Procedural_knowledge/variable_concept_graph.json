@@ -1,40 +1,32 @@
 {
     "variables": [
         {
-            "variable": "velocity",
-            "si_unit": "m/s",
-            "formulas": [
-                "displacement / time",
-                "initial_velocity + acceleration * time",
-                "math.sqrt(2 * acceleration * displacement + initial_velocity**2)"
-            ],
-            "dependencies": [
-                "displacement",
-                "time",
-                "initial_velocity",
-                "acceleration"
-            ],
-            "questions": [
-                "A car travels 120 meters in 8 seconds. What is its velocity?",
-                "An object starts with an initial velocity of 5 m/s and accelerates at 3 m/s² for 4 seconds. What is its final velocity?",
-                "A ball is thrown upward with an initial velocity of 20 m/s. If it accelerates downward at 9.8 m/s² and travels 15 meters, what is its velocity?"
-            ]
-        },
-        {
             "variable": "acceleration",
             "si_unit": "m/s²",
             "formulas": [
-                "(final_velocity - initial_velocity) / time",
-                "force / mass",
-                "(final_velocity**2 - initial_velocity**2) / (2 * displacement)"
-            ],
-            "dependencies": [
-                "final_velocity",
-                "initial_velocity",
-                "time",
-                "force",
-                "mass",
-                "displacement"
+                {
+                    "formula": "(final_velocity - initial_velocity) / time",
+                    "dependencies": [
+                        "final_velocity",
+                        "initial_velocity",
+                        "time"
+                    ]
+                },
+                {
+                    "formula": "force / mass",
+                    "dependencies": [
+                        "force",
+                        "mass"
+                    ]
+                },
+                {
+                    "formula": "(final_velocity**2 - initial_velocity**2) / (2 * displacement)",
+                    "dependencies": [
+                        "final_velocity",
+                        "initial_velocity",
+                        "displacement"
+                    ]
+                }
             ],
             "questions": [
                 "A car accelerates from 10 m/s to 30 m/s in 5 seconds. What is its acceleration?",
@@ -43,217 +35,37 @@
             ]
         },
         {
-            "variable": "force",
-            "si_unit": "N",
-            "formulas": [
-                "mass * acceleration",
-                "mass * gravity",
-                "spring_constant * displacement"
-            ],
-            "dependencies": [
-                "mass",
-                "acceleration",
-                "gravity",
-                "spring_constant",
-                "displacement"
-            ],
-            "questions": [
-                "A 5 kg object accelerates at 4 m/s². What is the force acting on it?",
-                "What is the weight of a 10 kg object on Earth where gravity is 9.8 m/s²?",
-                "A spring with a spring constant of 200 N/m is stretched 0.3 meters. What is the force?"
-            ]
-        },
-        {
-            "variable": "kinetic_energy",
-            "si_unit": "J",
-            "formulas": [
-                "0.5 * mass * velocity**2",
-                "work",
-                "total_energy - potential_energy"
-            ],
-            "dependencies": [
-                "mass",
-                "velocity",
-                "work",
-                "total_energy",
-                "potential_energy"
-            ],
-            "questions": [
-                "A 2 kg object moves at 6 m/s. What is its kinetic energy?",
-                "If 100 Joules of work is done on an object, what is its kinetic energy?",
-                "A system has total energy of 150 J and potential energy of 50 J. What is the kinetic energy?"
-            ]
-        },
-        {
-            "variable": "potential_energy",
-            "si_unit": "J",
-            "formulas": [
-                "mass * gravity * height",
-                "0.5 * spring_constant * displacement**2",
-                "total_energy - kinetic_energy"
-            ],
-            "dependencies": [
-                "mass",
-                "gravity",
-                "height",
-                "spring_constant",
-                "displacement",
-                "total_energy",
-                "kinetic_energy"
-            ],
-            "questions": [
-                "A 3 kg object is lifted to a height of 5 meters. What is its gravitational potential energy? (Use g = 9.8 m/s²)",
-                "A spring with spring constant 100 N/m is compressed 0.2 meters. What is its potential energy?",
-                "A system has total energy of 200 J and kinetic energy of 80 J. What is the potential energy?"
-            ]
-        },
-        {
-            "variable": "work",
-            "si_unit": "J",
-            "formulas": [
-                "force * displacement * math.cos(angle)",
-                "change_in_kinetic_energy",
-                "change_in_potential_energy"
-            ],
-            "dependencies": [
-                "force",
-                "displacement",
-                "angle",
-                "change_in_kinetic_energy",
-                "change_in_potential_energy"
-            ],
-            "questions": [
-                "A force of 20 N is applied at an angle of 0 degrees to move an object 5 meters. How much work is done?",
-                "An object's kinetic energy increases from 50 J to 150 J. How much work was done?",
-                "An object's potential energy decreases by 80 J. How much work was done?"
-            ]
-        },
-        {
-            "variable": "power",
-            "si_unit": "W",
-            "formulas": [
-                "work / time",
-                "force * velocity",
-                "current * voltage"
-            ],
-            "dependencies": [
-                "work",
-                "time",
-                "force",
-                "velocity",
-                "current",
-                "voltage"
-            ],
-            "questions": [
-                "1000 Joules of work is done in 5 seconds. What is the power?",
-                "A force of 50 N moves an object at 4 m/s. What is the power?",
-                "A circuit has a current of 2 Amperes and voltage of 120 Volts. What is the power?"
-            ]
-        },
-        {
-            "variable": "momentum",
-            "si_unit": "kg·m/s",
-            "formulas": [
-                "mass * velocity",
-                "force * time",
-                "initial_momentum + impulse"
-            ],
-            "dependencies": [
-                "mass",
-                "velocity",
-                "force",
-                "time",
-                "initial_momentum",
-                "impulse"
-            ],
-            "questions": [
-                "A 4 kg object moves at 7 m/s. What is its momentum?",
-                "A force of 15 N acts on an object for 3 seconds. What is the change in momentum?",
-                "An object has initial momentum of 20 kg·m/s and receives an impulse of 10 kg·m/s. What is its final momentum?"
-            ]
-        },
-        {
-            "variable": "displacement",
-            "si_unit": "m",
-            "formulas": [
-                "final_position - initial_position",
-                "velocity * time + 0.5 * acceleration * time**2",
-                "initial_velocity * time + 0.5 * acceleration * time**2"
-            ],
-            "dependencies": [
-                "final_position",
-                "initial_position",
-                "velocity",
-                "time",
-                "acceleration",
-                "initial_velocity"
-            ],
-            "questions": [
-                "An object moves from position 3 m to position 12 m. What is its displacement?",
-                "An object moves at 8 m/s for 5 seconds with an acceleration of 2 m/s². What is its displacement?",
-                "An object starts at 5 m/s and accelerates at 3 m/s² for 4 seconds. What is its displacement?"
-            ]
-        },
-        {
-            "variable": "speed",
-            "si_unit": "m/s",
-            "formulas": [
-                "abs(velocity)",
-                "distance / time",
-                "math.sqrt(velocity_x**2 + velocity_y**2)"
-            ],
-            "dependencies": [
-                "velocity",
-                "distance",
-                "time",
-                "velocity_x",
-                "velocity_y"
-            ],
-            "questions": [
-                "An object has a velocity of -15 m/s. What is its speed?",
-                "A car travels 240 kilometers in 3 hours. What is its average speed?",
-                "An object has velocity components of 6 m/s in the x-direction and 8 m/s in the y-direction. What is its speed?"
-            ]
-        },
-        {
-            "variable": "angular_velocity",
-            "si_unit": "rad/s",
-            "formulas": [
-                "angular_displacement / time",
-                "2 * math.pi * frequency",
-                "velocity / radius",
-                "(final_angle - initial_angle) / time"
-            ],
-            "dependencies": [
-                "angular_displacement",
-                "time",
-                "frequency",
-                "velocity",
-                "radius",
-                "final_angle",
-                "initial_angle"
-            ],
-            "questions": [
-                "A wheel rotates through 2π radians in 4 seconds. What is its angular velocity?",
-                "An object rotates at 3 Hz. What is its angular velocity?",
-                "A point on a wheel with radius 0.5 m has a linear velocity of 10 m/s. What is the angular velocity?"
-            ]
+            "variable": "angle",
+            "si_unit": "rad",
+            "formulas": [],
+            "questions": []
         },
         {
             "variable": "angular_acceleration",
             "si_unit": "rad/s²",
             "formulas": [
-                "(final_angular_velocity - initial_angular_velocity) / time",
-                "torque / moment_of_inertia",
-                "change_in_angular_velocity / time"
-            ],
-            "dependencies": [
-                "final_angular_velocity",
-                "initial_angular_velocity",
-                "time",
-                "torque",
-                "moment_of_inertia",
-                "change_in_angular_velocity"
+                {
+                    "formula": "(final_angular_velocity - initial_angular_velocity) / time",
+                    "dependencies": [
+                        "final_angular_velocity",
+                        "initial_angular_velocity",
+                        "time"
+                    ]
+                },
+                {
+                    "formula": "torque / moment_of_inertia",
+                    "dependencies": [
+                        "torque",
+                        "moment_of_inertia"
+                    ]
+                },
+                {
+                    "formula": "change_in_angular_velocity / time",
+                    "dependencies": [
+                        "change_in_angular_velocity",
+                        "time"
+                    ]
+                }
             ],
             "questions": [
                 "A wheel accelerates from 2 rad/s to 8 rad/s in 3 seconds. What is its angular acceleration?",
@@ -262,843 +74,41 @@
             ]
         },
         {
-            "variable": "torque",
-            "si_unit": "N·m",
-            "formulas": [
-                "force * radius * math.sin(angle)",
-                "moment_of_inertia * angular_acceleration",
-                "force_perpendicular * radius"
-            ],
-            "dependencies": [
-                "force",
-                "radius",
-                "angle",
-                "moment_of_inertia",
-                "angular_acceleration",
-                "force_perpendicular"
-            ],
-            "questions": [
-                "A force of 30 N is applied at a distance of 0.5 m at an angle of 90 degrees. What is the torque?",
-                "An object with moment of inertia 8 kg·m² has an angular acceleration of 2 rad/s². What is the torque?",
-                "A perpendicular force of 25 N is applied at a radius of 0.4 m. What is the torque?"
-            ]
-        },
-        {
-            "variable": "moment_of_inertia",
-            "si_unit": "kg·m²",
-            "formulas": [
-                "mass * radius**2",
-                "torque / angular_acceleration",
-                "angular_momentum / angular_velocity"
-            ],
-            "dependencies": [
-                "mass",
-                "radius",
-                "torque",
-                "angular_acceleration",
-                "angular_momentum",
-                "angular_velocity"
-            ],
-            "questions": [
-                "A point mass of 5 kg is located 2 m from the axis of rotation. What is its moment of inertia?",
-                "A torque of 15 N·m produces an angular acceleration of 3 rad/s². What is the moment of inertia?",
-                "An object has angular momentum of 40 kg·m²/s and angular velocity of 5 rad/s. What is its moment of inertia?"
-            ]
-        },
-        {
-            "variable": "angular_momentum",
-            "si_unit": "kg·m²/s",
-            "formulas": [
-                "moment_of_inertia * angular_velocity",
-                "mass * velocity * radius",
-                "momentum * radius"
-            ],
-            "dependencies": [
-                "moment_of_inertia",
-                "angular_velocity",
-                "mass",
-                "velocity",
-                "radius",
-                "momentum"
-            ],
-            "questions": [
-                "An object with moment of inertia 6 kg·m² rotates at 4 rad/s. What is its angular momentum?",
-                "A 3 kg object moves at 8 m/s in a circle of radius 1.5 m. What is its angular momentum?",
-                "An object has linear momentum of 20 kg·m/s and moves in a circle of radius 2 m. What is its angular momentum?"
-            ]
-        },
-        {
-            "variable": "centripetal_force",
-            "si_unit": "N",
-            "formulas": [
-                "mass * centripetal_acceleration",
-                "mass * velocity**2 / radius",
-                "mass * angular_velocity**2 * radius"
-            ],
-            "dependencies": [
-                "mass",
-                "centripetal_acceleration",
-                "velocity",
-                "radius",
-                "angular_velocity"
-            ],
-            "questions": [
-                "A 2 kg object experiences centripetal acceleration of 5 m/s². What is the centripetal force?",
-                "A 4 kg object moves at 6 m/s in a circle of radius 3 m. What is the centripetal force?",
-                "A 3 kg object rotates with angular velocity 2 rad/s at radius 2 m. What is the centripetal force?"
-            ]
-        },
-        {
-            "variable": "centripetal_acceleration",
-            "si_unit": "m/s²",
-            "formulas": [
-                "velocity**2 / radius",
-                "angular_velocity**2 * radius",
-                "centripetal_force / mass"
-            ],
-            "dependencies": [
-                "velocity",
-                "radius",
-                "angular_velocity",
-                "centripetal_force",
-                "mass"
-            ],
-            "questions": [
-                "An object moves at 10 m/s in a circle of radius 5 m. What is its centripetal acceleration?",
-                "An object rotates with angular velocity 3 rad/s at radius 2 m. What is its centripetal acceleration?",
-                "A centripetal force of 50 N acts on a 5 kg object. What is the centripetal acceleration?"
-            ]
-        },
-        {
-            "variable": "frequency",
-            "si_unit": "Hz",
-            "formulas": [
-                "1 / period",
-                "angular_velocity / (2 * math.pi)",
-                "wave_speed / wavelength",
-                "number_of_cycles / time"
-            ],
-            "dependencies": [
-                "period",
-                "angular_velocity",
-                "wave_speed",
-                "wavelength",
-                "number_of_cycles",
-                "time"
-            ],
-            "questions": [
-                "A wave has a period of 0.5 seconds. What is its frequency?",
-                "An object rotates with angular velocity 4π rad/s. What is its frequency?",
-                "A wave travels at 340 m/s with wavelength 2 m. What is its frequency?",
-                "A system completes 60 cycles in 12 seconds. What is its frequency?"
-            ]
-        },
-        {
-            "variable": "period",
-            "si_unit": "s",
-            "formulas": [
-                "1 / frequency",
-                "2 * math.pi * math.sqrt(mass / spring_constant)",
-                "2 * math.pi / angular_velocity",
-                "time / number_of_cycles"
-            ],
-            "dependencies": [
-                "frequency",
-                "mass",
-                "spring_constant",
-                "angular_velocity",
-                "time",
-                "number_of_cycles"
-            ],
-            "questions": [
-                "A wave has frequency 2 Hz. What is its period?",
-                "A spring-mass system has mass 4 kg and spring constant 100 N/m. What is its period?",
-                "An object rotates with angular velocity π rad/s. What is its period?",
-                "A system completes 20 cycles in 10 seconds. What is its period?"
-            ]
-        },
-        {
-            "variable": "wavelength",
-            "si_unit": "m",
-            "formulas": [
-                "wave_speed / frequency",
-                "wave_speed * period",
-                "2 * math.pi / wave_number"
-            ],
-            "dependencies": [
-                "wave_speed",
-                "frequency",
-                "period",
-                "wave_number"
-            ],
-            "questions": [
-                "A wave travels at 300 m/s with frequency 150 Hz. What is its wavelength?",
-                "A wave travels at 340 m/s with period 0.01 seconds. What is its wavelength?",
-                "A wave has wave number 2π m⁻¹. What is its wavelength?"
-            ]
-        },
-        {
-            "variable": "wave_speed",
-            "si_unit": "m/s",
-            "formulas": [
-                "frequency * wavelength",
-                "wavelength / period",
-                "math.sqrt(tension / linear_density)"
-            ],
-            "dependencies": [
-                "frequency",
-                "wavelength",
-                "period",
-                "tension",
-                "linear_density"
-            ],
-            "questions": [
-                "A wave has frequency 50 Hz and wavelength 4 m. What is its speed?",
-                "A wave has wavelength 6 m and period 0.02 seconds. What is its speed?",
-                "A string has tension 100 N and linear density 0.01 kg/m. What is the wave speed?"
-            ]
-        },
-        {
-            "variable": "resistance",
-            "si_unit": "Ω",
-            "formulas": [
-                "voltage / current",
-                "resistivity * length / area",
-                "power / current**2",
-                "voltage**2 / power"
-            ],
-            "dependencies": [
-                "voltage",
-                "current",
-                "resistivity",
-                "length",
-                "area",
-                "power"
-            ],
-            "questions": [
-                "A circuit has voltage 12 V and current 3 A. What is the resistance?",
-                "A wire has resistivity 1.7e-8 Ω·m, length 10 m, and cross-sectional area 2e-6 m². What is its resistance?",
-                "A resistor dissipates 100 W with current 5 A. What is its resistance?",
-                "A resistor has voltage 20 V and power 40 W. What is its resistance?"
-            ]
-        },
-        {
-            "variable": "voltage",
-            "si_unit": "V",
-            "formulas": [
-                "current * resistance",
-                "power / current",
-                "electric_field * distance",
-                "work / charge"
-            ],
-            "dependencies": [
-                "current",
-                "resistance",
-                "power",
-                "electric_field",
-                "distance",
-                "work",
-                "charge"
-            ],
-            "questions": [
-                "A circuit has current 2 A and resistance 6 Ω. What is the voltage?",
-                "A device uses 60 W of power with current 5 A. What is the voltage?",
-                "An electric field of 1000 N/C exists over a distance of 0.05 m. What is the voltage?",
-                "100 Joules of work is done moving 5 Coulombs of charge. What is the voltage?"
-            ]
-        },
-        {
-            "variable": "current",
-            "si_unit": "A",
-            "formulas": [
-                "voltage / resistance",
-                "charge / time",
-                "power / voltage",
-                "math.sqrt(power / resistance)"
-            ],
-            "dependencies": [
-                "voltage",
-                "resistance",
-                "charge",
-                "time",
-                "power"
-            ],
-            "questions": [
-                "A circuit has voltage 24 V and resistance 8 Ω. What is the current?",
-                "10 Coulombs of charge flows in 2 seconds. What is the current?",
-                "A device uses 120 W with voltage 12 V. What is the current?",
-                "A resistor dissipates 50 W with resistance 2 Ω. What is the current?"
-            ]
-        },
-        {
-            "variable": "capacitance",
-            "si_unit": "F",
-            "formulas": [
-                "charge / voltage",
-                "permittivity * area / distance",
-                "energy / (0.5 * voltage**2)"
-            ],
-            "dependencies": [
-                "charge",
-                "voltage",
-                "permittivity",
-                "area",
-                "distance",
-                "energy"
-            ],
-            "questions": [
-                "A capacitor stores 0.001 C of charge at 10 V. What is its capacitance?",
-                "A parallel plate capacitor has permittivity 8.85e-12 F/m, area 0.01 m², and plate separation 0.001 m. What is its capacitance?",
-                "A capacitor stores 0.05 J of energy at 20 V. What is its capacitance?"
-            ]
-        },
-        {
-            "variable": "electric_field",
-            "si_unit": "N/C",
-            "formulas": [
-                "force / charge",
-                "voltage / distance",
-                "coulomb_constant * charge / distance**2"
-            ],
-            "dependencies": [
-                "force",
-                "charge",
-                "voltage",
-                "distance",
-                "coulomb_constant"
-            ],
-            "questions": [
-                "A force of 0.02 N acts on a charge of 0.001 C. What is the electric field?",
-                "A voltage of 100 V exists across a distance of 0.05 m. What is the electric field?",
-                "A point charge of 2e-6 C is located 0.1 m away. What is the electric field? (Use k = 9e9 N·m²/C²)"
-            ]
-        },
-        {
-            "variable": "magnetic_field",
-            "si_unit": "T",
-            "formulas": [
-                "force / (charge * velocity)",
-                "permeability * current / (2 * math.pi * radius)",
-                "magnetic_flux / area"
-            ],
-            "dependencies": [
-                "force",
-                "charge",
-                "velocity",
-                "permeability",
-                "current",
-                "radius",
-                "magnetic_flux",
-                "area"
-            ],
-            "questions": [
-                "A charge of 0.001 C moving at 100 m/s experiences a force of 0.05 N. What is the magnetic field?",
-                "A wire carries current 5 A. At distance 0.02 m, what is the magnetic field? (Use μ₀ = 4*math.pi*1e-7 T·m/A)",
-                "A magnetic flux of 0.02 Wb passes through an area of 0.01 m². What is the magnetic field?"
-            ]
-        },
-        {
-            "variable": "density",
-            "si_unit": "kg/m³",
-            "formulas": [
-                "mass / volume",
-                "pressure / (gas_constant * temperature)"
-            ],
-            "dependencies": [
-                "mass",
-                "volume",
-                "pressure",
-                "gas_constant",
-                "temperature"
-            ],
-            "questions": [
-                "A substance has mass 5 kg and volume 0.002 m³. What is its density?",
-                "A gas has pressure 101325 Pa at temperature 300 K. What is its density? (Use R = 287 J/(kg·K))"
-            ]
-        },
-        {
-            "variable": "pressure",
-            "si_unit": "Pa",
-            "formulas": [
-                "force / area",
-                "density * gas_constant * temperature",
-                "density * gravity * height"
-            ],
-            "dependencies": [
-                "force",
-                "area",
-                "density",
-                "gas_constant",
-                "temperature",
-                "gravity",
-                "height"
-            ],
-            "questions": [
-                "A force of 500 N is applied over an area of 0.01 m². What is the pressure?",
-                "A gas has density 1.2 kg/m³ at temperature 300 K. What is its pressure? (Use R = 287 J/(kg·K))",
-                "A fluid with density 1000 kg/m³ is at height 5 m. What is the pressure? (Use g = 9.8 m/s²)"
-            ]
-        },
-        {
-            "variable": "volume",
-            "si_unit": "m³",
-            "formulas": [
-                "mass / density",
-                "area * height",
-                "gas_constant * temperature * number_of_moles / pressure",
-                "(4/3) * math.pi * radius**3"
-            ],
-            "dependencies": [
-                "mass",
-                "density",
-                "area",
-                "height",
-                "gas_constant",
-                "temperature",
-                "number_of_moles",
-                "pressure",
-                "radius"
-            ],
-            "questions": [
-                "A substance has mass 10 kg and density 2000 kg/m³. What is its volume?",
-                "A cylinder has base area 0.05 m² and height 2 m. What is its volume?",
-                "A gas at 300 K and 101325 Pa has 2 moles. What is its volume? (Use R = 8.314 J/(mol·K))",
-                "A sphere has radius 0.5 m. What is its volume?"
-            ]
-        },
-        {
-            "variable": "temperature",
-            "si_unit": "K",
-            "formulas": [
-                "pressure * volume / (gas_constant * number_of_moles)",
-                "pressure / (density * gas_constant)",
-                "average_kinetic_energy / (1.5 * boltzmann_constant)"
-            ],
-            "dependencies": [
-                "pressure",
-                "volume",
-                "gas_constant",
-                "number_of_moles",
-                "density",
-                "average_kinetic_energy",
-                "boltzmann_constant"
-            ],
-            "questions": [
-                "A gas has pressure 202650 Pa, volume 0.05 m³, and 1 mole. What is its temperature? (Use R = 8.314 J/(mol·K))",
-                "A gas has pressure 101325 Pa and density 1.2 kg/m³. What is its temperature? (Use R = 287 J/(kg·K))",
-                "A gas has average kinetic energy 6.21e-21 J per particle. What is its temperature? (Use k = 1.38e-23 J/K)"
-            ]
-        },
-        {
-            "variable": "impulse",
-            "si_unit": "N·s",
-            "formulas": [
-                "force * time",
-                "change_in_momentum",
-                "final_momentum - initial_momentum"
-            ],
-            "dependencies": [
-                "force",
-                "time",
-                "change_in_momentum",
-                "final_momentum",
-                "initial_momentum"
-            ],
-            "questions": [
-                "A force of 20 N acts for 0.5 seconds. What is the impulse?",
-                "An object's momentum changes by 15 kg·m/s. What is the impulse?",
-                "An object has initial momentum 10 kg·m/s and final momentum 25 kg·m/s. What is the impulse?"
-            ]
-        },
-        {
-            "variable": "total_energy",
-            "si_unit": "J",
-            "formulas": [
-                "kinetic_energy + potential_energy",
-                "work + initial_energy",
-                "mass * speed_of_light**2"
-            ],
-            "dependencies": [
-                "kinetic_energy",
-                "potential_energy",
-                "work",
-                "initial_energy",
-                "mass",
-                "speed_of_light"
-            ],
-            "questions": [
-                "A system has kinetic energy 50 J and potential energy 30 J. What is the total energy?",
-                "100 J of work is done on a system with initial energy 200 J. What is the total energy?",
-                "What is the rest energy of a 1 kg object? (Use c = 3e8 m/s)"
-            ]
-        },
-        {
-            "variable": "friction_force",
-            "si_unit": "N",
-            "formulas": [
-                "coefficient_of_friction * normal_force",
-                "mu_static * normal_force",
-                "mu_kinetic * normal_force"
-            ],
-            "dependencies": [
-                "coefficient_of_friction",
-                "normal_force",
-                "mu_static",
-                "mu_kinetic"
-            ],
-            "questions": [
-                "A surface has coefficient of friction 0.5 and normal force 100 N. What is the friction force?",
-                "A surface has static coefficient 0.6 and normal force 50 N. What is the static friction force?",
-                "A surface has kinetic coefficient 0.4 and normal force 80 N. What is the kinetic friction force?"
-            ]
-        },
-        {
-            "variable": "normal_force",
-            "si_unit": "N",
-            "formulas": [
-                "mass * gravity * math.cos(angle)",
-                "mass * gravity",
-                "force_applied * math.sin(angle)"
-            ],
-            "dependencies": [
-                "mass",
-                "gravity",
-                "angle",
-                "force_applied"
-            ],
-            "questions": [
-                "A 10 kg object sits on an inclined plane at 30 degrees. What is the normal force? (Use g = 9.8 m/s²)",
-                "A 5 kg object sits on a horizontal surface. What is the normal force? (Use g = 9.8 m/s²)",
-                "A force of 100 N is applied at 60 degrees to a surface. What is the normal component?"
-            ]
-        },
-        {
-            "variable": "tension",
-            "si_unit": "N",
-            "formulas": [
-                "mass * acceleration + mass * gravity",
-                "force_applied",
-                "centripetal_force + weight"
-            ],
-            "dependencies": [
-                "mass",
-                "acceleration",
-                "gravity",
-                "force_applied",
-                "centripetal_force",
-                "weight"
-            ],
-            "questions": [
-                "A 2 kg object accelerates upward at 3 m/s². What is the tension? (Use g = 9.8 m/s²)",
-                "A rope applies a force of 50 N. What is the tension?",
-                "An object has centripetal force 20 N and weight 10 N. What is the tension?"
-            ]
-        },
-        {
-            "variable": "weight",
-            "si_unit": "N",
-            "formulas": [
-                "mass * gravity",
-                "force",
-                "density * volume * gravity"
-            ],
-            "dependencies": [
-                "mass",
-                "gravity",
-                "force",
-                "density",
-                "volume"
-            ],
-            "questions": [
-                "What is the weight of a 10 kg object on Earth? (Use g = 9.8 m/s²)",
-                "An object experiences a gravitational force of 49 N. What is its weight?",
-                "A material with density 2000 kg/m³ has volume 0.01 m³. What is its weight? (Use g = 9.8 m/s²)"
-            ]
-        },
-        {
-            "variable": "buoyant_force",
-            "si_unit": "N",
-            "formulas": [
-                "density_fluid * volume_displaced * gravity",
-                "weight_displaced",
-                "density_fluid * volume * gravity"
-            ],
-            "dependencies": [
-                "density_fluid",
-                "volume_displaced",
-                "gravity",
-                "weight_displaced",
-                "volume"
-            ],
-            "questions": [
-                "An object displaces 0.002 m³ of water (density 1000 kg/m³). What is the buoyant force? (Use g = 9.8 m/s²)",
-                "An object displaces fluid with weight 19.6 N. What is the buoyant force?",
-                "An object with volume 0.001 m³ is submerged in water (density 1000 kg/m³). What is the buoyant force? (Use g = 9.8 m/s²)"
-            ]
-        },
-        {
-            "variable": "area",
-            "si_unit": "m²",
-            "formulas": [
-                "length * width",
-                "math.pi * radius**2",
-                "0.5 * base * height",
-                "pressure * force"
-            ],
-            "dependencies": [
-                "length",
-                "width",
-                "radius",
-                "base",
-                "height",
-                "pressure",
-                "force"
-            ],
-            "questions": [
-                "A rectangle has length 5 m and width 3 m. What is its area?",
-                "A circle has radius 2 m. What is its area?",
-                "A triangle has base 6 m and height 4 m. What is its area?",
-                "A force of 1000 N creates pressure 50000 Pa. What is the area?"
-            ]
-        },
-        {
-            "variable": "distance",
-            "si_unit": "m",
-            "formulas": [
-                "speed * time",
-                "math.sqrt((x2 - x1)**2 + (y2 - y1)**2)",
-                "initial_velocity * time + 0.5 * acceleration * time**2"
-            ],
-            "dependencies": [
-                "speed",
-                "time",
-                "x2",
-                "x1",
-                "y2",
-                "y1",
-                "initial_velocity",
-                "acceleration"
-            ],
-            "questions": [
-                "An object travels at 15 m/s for 4 seconds. What distance does it cover?",
-                "What is the distance between points (0, 0) and (3, 4)?",
-                "An object starts at 2 m/s and accelerates at 3 m/s² for 5 seconds. What distance does it travel?"
-            ]
-        },
-        {
-            "variable": "height",
-            "si_unit": "m",
-            "formulas": [
-                "initial_velocity_y * time - 0.5 * gravity * time**2",
-                "potential_energy / (mass * gravity)",
-                "vertical_displacement"
-            ],
-            "dependencies": [
-                "initial_velocity_y",
-                "time",
-                "gravity",
-                "potential_energy",
-                "mass",
-                "vertical_displacement"
-            ],
-            "questions": [
-                "A ball is thrown upward with initial vertical velocity 20 m/s. After 2 seconds, what is its height? (Use g = 9.8 m/s²)",
-                "An object has potential energy 196 J, mass 2 kg. What is its height? (Use g = 9.8 m/s²)",
-                "An object moves vertically by 15 m. What is its height change?"
-            ]
-        },
-        {
-            "variable": "range",
-            "si_unit": "m",
-            "formulas": [
-                "initial_velocity**2 * math.sin(2 * angle) / gravity",
-                "horizontal_velocity * time_of_flight",
-                "horizontal_displacement"
-            ],
-            "dependencies": [
-                "initial_velocity",
-                "angle",
-                "gravity",
-                "horizontal_velocity",
-                "time_of_flight",
-                "horizontal_displacement"
-            ],
-            "questions": [
-                "A projectile is launched at 20 m/s at 45 degrees. What is its range? (Use g = 9.8 m/s²)",
-                "A projectile has horizontal velocity 15 m/s and time of flight 3 seconds. What is its range?",
-                "A projectile has horizontal displacement 30 m. What is its range?"
-            ]
-        },
-        {
-            "variable": "time_of_flight",
-            "si_unit": "s",
-            "formulas": [
-                "2 * initial_velocity_y / gravity",
-                "2 * initial_velocity * math.sin(angle) / gravity",
-                "range / horizontal_velocity"
-            ],
-            "dependencies": [
-                "initial_velocity_y",
-                "gravity",
-                "initial_velocity",
-                "angle",
-                "range",
-                "horizontal_velocity"
-            ],
-            "questions": [
-                "A projectile is launched with initial vertical velocity 19.6 m/s. What is its time of flight? (Use g = 9.8 m/s²)",
-                "A projectile is launched at 30 m/s at 30 degrees. What is its time of flight? (Use g = 9.8 m/s²)",
-                "A projectile has range 60 m and horizontal velocity 20 m/s. What is its time of flight?"
-            ]
-        },
-        {
-            "variable": "maximum_height",
-            "si_unit": "m",
-            "formulas": [
-                "initial_velocity_y**2 / (2 * gravity)",
-                "initial_velocity**2 * math.sin(angle)**2 / (2 * gravity)",
-                "potential_energy_max / (mass * gravity)"
-            ],
-            "dependencies": [
-                "initial_velocity_y",
-                "gravity",
-                "initial_velocity",
-                "angle",
-                "potential_energy_max",
-                "mass"
-            ],
-            "questions": [
-                "A ball is thrown upward with initial vertical velocity 14 m/s. What is its maximum height? (Use g = 9.8 m/s²)",
-                "A projectile is launched at 20 m/s at 60 degrees. What is its maximum height? (Use g = 9.8 m/s²)",
-                "A projectile reaches maximum potential energy 98 J with mass 1 kg. What is its maximum height? (Use g = 9.8 m/s²)"
-            ]
-        },
-        {
-            "variable": "electric_potential_energy",
-            "si_unit": "J",
-            "formulas": [
-                "charge * voltage",
-                "coulomb_constant * charge1 * charge2 / distance",
-                "0.5 * capacitance * voltage**2"
-            ],
-            "dependencies": [
-                "charge",
-                "voltage",
-                "coulomb_constant",
-                "charge1",
-                "charge2",
-                "distance",
-                "capacitance"
-            ],
-            "questions": [
-                "A charge of 0.002 C is at voltage 100 V. What is its electric potential energy?",
-                "Two charges of 1e-6 C each are 0.1 m apart. What is their electric potential energy? (Use k = 9e9 N·m²/C²)",
-                "A capacitor of 0.001 F is charged to 50 V. What is its stored energy?"
-            ]
-        },
-        {
-            "variable": "magnetic_flux",
-            "si_unit": "Wb",
-            "formulas": [
-                "magnetic_field * area * math.cos(angle)",
-                "magnetic_field * area",
-                "voltage_induced * time"
-            ],
-            "dependencies": [
-                "magnetic_field",
-                "area",
-                "angle",
-                "voltage_induced",
-                "time"
-            ],
-            "questions": [
-                "A magnetic field of 0.5 T passes through an area of 0.02 m² at 0 degrees. What is the magnetic flux?",
-                "A magnetic field of 1 T passes through an area of 0.01 m². What is the magnetic flux?",
-                "A voltage of 2 V is induced for 0.5 seconds. What is the change in magnetic flux?"
-            ]
-        },
-        {
-            "variable": "inductance",
-            "si_unit": "H",
-            "formulas": [
-                "magnetic_flux / current",
-                "voltage / (change_in_current / time)",
-                "self_inductance"
-            ],
-            "dependencies": [
-                "magnetic_flux",
-                "current",
-                "voltage",
-                "change_in_current",
-                "time",
-                "self_inductance"
-            ],
-            "questions": [
-                "A coil produces magnetic flux 0.01 Wb with current 2 A. What is its inductance?",
-                "A voltage of 10 V is induced when current changes by 5 A in 0.1 seconds. What is the inductance?",
-                "A coil has self-inductance 0.05 H. What is its inductance?"
-            ]
-        },
-        {
-            "variable": "impedance",
-            "si_unit": "Ω",
-            "formulas": [
-                "math.sqrt(resistance**2 + reactance**2)",
-                "voltage / current",
-                "math.sqrt(resistance**2 + (angular_frequency * inductance - 1/(angular_frequency * capacitance))**2)"
-            ],
-            "dependencies": [
-                "resistance",
-                "reactance",
-                "voltage",
-                "current",
-                "angular_frequency",
-                "inductance",
-                "capacitance"
-            ],
-            "questions": [
-                "A circuit has resistance 3 Ω and reactance 4 Ω. What is its impedance?",
-                "A circuit has voltage 120 V and current 5 A. What is its impedance?",
-                "A circuit has resistance 5 Ω, angular frequency 100 rad/s, inductance 0.1 H, and capacitance 0.001 F. What is its impedance?"
-            ]
-        },
-        {
-            "variable": "reactance",
-            "si_unit": "Ω",
-            "formulas": [
-                "angular_frequency * inductance",
-                "1 / (angular_frequency * capacitance)",
-                "inductive_reactance - capacitive_reactance"
-            ],
-            "dependencies": [
-                "angular_frequency",
-                "inductance",
-                "capacitance",
-                "inductive_reactance",
-                "capacitive_reactance"
-            ],
-            "questions": [
-                "A circuit has angular frequency 50 rad/s and inductance 0.2 H. What is the inductive reactance?",
-                "A circuit has angular frequency 100 rad/s and capacitance 0.0001 F. What is the capacitive reactance?",
-                "A circuit has inductive reactance 10 Ω and capacitive reactance 6 Ω. What is the net reactance?"
-            ]
+            "variable": "angular_displacement",
+            "si_unit": "rad",
+            "formulas": [],
+            "questions": []
         },
         {
             "variable": "angular_frequency",
             "si_unit": "rad/s",
             "formulas": [
-                "2 * math.pi * frequency",
-                "angular_velocity",
-                "math.sqrt(spring_constant / mass)",
-                "1 / math.sqrt(inductance * capacitance)"
-            ],
-            "dependencies": [
-                "frequency",
-                "angular_velocity",
-                "spring_constant",
-                "mass",
-                "inductance",
-                "capacitance"
+                {
+                    "formula": "2 * math.pi * frequency",
+                    "dependencies": [
+                        "frequency"
+                    ]
+                },
+                {
+                    "formula": "angular_velocity",
+                    "dependencies": [
+                        "angular_velocity"
+                    ]
+                },
+                {
+                    "formula": "math.sqrt(spring_constant / mass)",
+                    "dependencies": [
+                        "spring_constant",
+                        "mass"
+                    ]
+                },
+                {
+                    "formula": "1 / math.sqrt(inductance * capacitance)",
+                    "dependencies": [
+                        "inductance",
+                        "capacitance"
+                    ]
+                }
             ],
             "questions": [
                 "A system oscillates at frequency 2 Hz. What is its angular frequency?",
@@ -1108,20 +118,509 @@
             ]
         },
         {
+            "variable": "angular_momentum",
+            "si_unit": "kg·m²/s",
+            "formulas": [
+                {
+                    "formula": "moment_of_inertia * angular_velocity",
+                    "dependencies": [
+                        "moment_of_inertia",
+                        "angular_velocity"
+                    ]
+                },
+                {
+                    "formula": "mass * velocity * radius",
+                    "dependencies": [
+                        "mass",
+                        "velocity",
+                        "radius"
+                    ]
+                },
+                {
+                    "formula": "momentum * radius",
+                    "dependencies": [
+                        "momentum",
+                        "radius"
+                    ]
+                }
+            ],
+            "questions": [
+                "An object with moment of inertia 6 kg·m² rotates at 4 rad/s. What is its angular momentum?",
+                "A 3 kg object moves at 8 m/s in a circle of radius 1.5 m. What is its angular momentum?",
+                "An object has linear momentum of 20 kg·m/s and moves in a circle of radius 2 m. What is its angular momentum?"
+            ]
+        },
+        {
+            "variable": "angular_velocity",
+            "si_unit": "rad/s",
+            "formulas": [
+                {
+                    "formula": "angular_displacement / time",
+                    "dependencies": [
+                        "angular_displacement",
+                        "time"
+                    ]
+                },
+                {
+                    "formula": "2 * math.pi * frequency",
+                    "dependencies": [
+                        "frequency"
+                    ]
+                },
+                {
+                    "formula": "velocity / radius",
+                    "dependencies": [
+                        "velocity",
+                        "radius"
+                    ]
+                },
+                {
+                    "formula": "(final_angle - initial_angle) / time",
+                    "dependencies": [
+                        "final_angle",
+                        "initial_angle",
+                        "time"
+                    ]
+                }
+            ],
+            "questions": [
+                "A wheel rotates through 2π radians in 4 seconds. What is its angular velocity?",
+                "An object rotates at 3 Hz. What is its angular velocity?",
+                "A point on a wheel with radius 0.5 m has a linear velocity of 10 m/s. What is the angular velocity?"
+            ]
+        },
+        {
+            "variable": "area",
+            "si_unit": "m²",
+            "formulas": [
+                {
+                    "formula": "length * width",
+                    "dependencies": [
+                        "length",
+                        "width"
+                    ]
+                },
+                {
+                    "formula": "math.pi * radius**2",
+                    "dependencies": [
+                        "radius"
+                    ]
+                },
+                {
+                    "formula": "0.5 * base * height",
+                    "dependencies": [
+                        "base",
+                        "height"
+                    ]
+                },
+                {
+                    "formula": "force / pressure",
+                    "dependencies": [
+                        "force",
+                        "pressure"
+                    ]
+                }
+            ],
+            "questions": [
+                "A rectangle has length 5 m and width 3 m. What is its area?",
+                "A circle has radius 2 m. What is its area?",
+                "A triangle has base 6 m and height 4 m. What is its area?",
+                "A force of 1000 N creates pressure 50000 Pa. What is the area?"
+            ]
+        },
+        {
+            "variable": "average_kinetic_energy",
+            "si_unit": "J",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "base",
+            "si_unit": "m",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "boltzmann_constant",
+            "si_unit": "J/K",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "buoyant_force",
+            "si_unit": "N",
+            "formulas": [
+                {
+                    "formula": "density_fluid * volume_displaced * gravity",
+                    "dependencies": [
+                        "density_fluid",
+                        "volume_displaced",
+                        "gravity"
+                    ]
+                },
+                {
+                    "formula": "weight_displaced",
+                    "dependencies": [
+                        "weight_displaced"
+                    ]
+                },
+                {
+                    "formula": "density_fluid * volume * gravity",
+                    "dependencies": [
+                        "density_fluid",
+                        "volume",
+                        "gravity"
+                    ]
+                }
+            ],
+            "questions": [
+                "An object displaces 0.002 m³ of water (density 1000 kg/m³). What is the buoyant force? (Use g = 9.8 m/s²)",
+                "An object displaces fluid with weight 19.6 N. What is the buoyant force?",
+                "An object with volume 0.001 m³ is submerged in water (density 1000 kg/m³). What is the buoyant force? (Use g = 9.8 m/s²)"
+            ]
+        },
+        {
+            "variable": "capacitance",
+            "si_unit": "F",
+            "formulas": [
+                {
+                    "formula": "charge / voltage",
+                    "dependencies": [
+                        "charge",
+                        "voltage"
+                    ]
+                },
+                {
+                    "formula": "permittivity * area / distance",
+                    "dependencies": [
+                        "permittivity",
+                        "area",
+                        "distance"
+                    ]
+                },
+                {
+                    "formula": "energy / (0.5 * voltage**2)",
+                    "dependencies": [
+                        "energy",
+                        "voltage"
+                    ]
+                }
+            ],
+            "questions": [
+                "A capacitor stores 0.001 C of charge at 10 V. What is its capacitance?",
+                "A parallel plate capacitor has permittivity 8.85e-12 F/m, area 0.01 m², and plate separation 0.001 m. What is its capacitance?",
+                "A capacitor stores 0.05 J of energy at 20 V. What is its capacitance?"
+            ]
+        },
+        {
+            "variable": "capacitive_reactance",
+            "si_unit": "Ω",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "centripetal_acceleration",
+            "si_unit": "m/s²",
+            "formulas": [
+                {
+                    "formula": "velocity**2 / radius",
+                    "dependencies": [
+                        "velocity",
+                        "radius"
+                    ]
+                },
+                {
+                    "formula": "angular_velocity**2 * radius",
+                    "dependencies": [
+                        "angular_velocity",
+                        "radius"
+                    ]
+                },
+                {
+                    "formula": "centripetal_force / mass",
+                    "dependencies": [
+                        "centripetal_force",
+                        "mass"
+                    ]
+                }
+            ],
+            "questions": [
+                "An object moves at 10 m/s in a circle of radius 5 m. What is its centripetal acceleration?",
+                "An object rotates with angular velocity 3 rad/s at radius 2 m. What is its centripetal acceleration?",
+                "A centripetal force of 50 N acts on a 5 kg object. What is the centripetal acceleration?"
+            ]
+        },
+        {
+            "variable": "centripetal_force",
+            "si_unit": "N",
+            "formulas": [
+                {
+                    "formula": "mass * centripetal_acceleration",
+                    "dependencies": [
+                        "mass",
+                        "centripetal_acceleration"
+                    ]
+                },
+                {
+                    "formula": "mass * velocity**2 / radius",
+                    "dependencies": [
+                        "mass",
+                        "velocity",
+                        "radius"
+                    ]
+                },
+                {
+                    "formula": "mass * angular_velocity**2 * radius",
+                    "dependencies": [
+                        "mass",
+                        "angular_velocity",
+                        "radius"
+                    ]
+                }
+            ],
+            "questions": [
+                "A 2 kg object experiences centripetal acceleration of 5 m/s². What is the centripetal force?",
+                "A 4 kg object moves at 6 m/s in a circle of radius 3 m. What is the centripetal force?",
+                "A 3 kg object rotates with angular velocity 2 rad/s at radius 2 m. What is the centripetal force?"
+            ]
+        },
+        {
+            "variable": "change_in_angular_velocity",
+            "si_unit": "rad/s",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "change_in_current",
+            "si_unit": "A",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "change_in_kinetic_energy",
+            "si_unit": "J",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "change_in_length",
+            "si_unit": "m",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "change_in_momentum",
+            "si_unit": "kg·m/s",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "change_in_potential_energy",
+            "si_unit": "J",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "charge",
+            "si_unit": "C",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "charge1",
+            "si_unit": "C",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "charge2",
+            "si_unit": "C",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "coefficient_of_friction",
+            "si_unit": "dimensionless",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "coulomb_constant",
+            "si_unit": "N·m²/C²",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "current",
+            "si_unit": "A",
+            "formulas": [
+                {
+                    "formula": "voltage / resistance",
+                    "dependencies": [
+                        "voltage",
+                        "resistance"
+                    ]
+                },
+                {
+                    "formula": "charge / time",
+                    "dependencies": [
+                        "charge",
+                        "time"
+                    ]
+                },
+                {
+                    "formula": "power / voltage",
+                    "dependencies": [
+                        "power",
+                        "voltage"
+                    ]
+                },
+                {
+                    "formula": "math.sqrt(power / resistance)",
+                    "dependencies": [
+                        "power",
+                        "resistance"
+                    ]
+                }
+            ],
+            "questions": [
+                "A circuit has voltage 24 V and resistance 8 Ω. What is the current?",
+                "10 Coulombs of charge flows in 2 seconds. What is the current?",
+                "A device uses 120 W with voltage 12 V. What is the current?",
+                "A resistor dissipates 50 W with resistance 2 Ω. What is the current?"
+            ]
+        },
+        {
+            "variable": "deformation",
+            "si_unit": "m",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "density",
+            "si_unit": "kg/m³",
+            "formulas": [
+                {
+                    "formula": "mass / volume",
+                    "dependencies": [
+                        "mass",
+                        "volume"
+                    ]
+                },
+                {
+                    "formula": "pressure / (gas_constant * temperature)",
+                    "dependencies": [
+                        "pressure",
+                        "gas_constant",
+                        "temperature"
+                    ]
+                }
+            ],
+            "questions": [
+                "A substance has mass 5 kg and volume 0.002 m³. What is its density?",
+                "A gas has pressure 101325 Pa at temperature 300 K. What is its density? (Use R = 287 J/(kg·K))"
+            ]
+        },
+        {
+            "variable": "density_fluid",
+            "si_unit": "kg/m³",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "displacement",
+            "si_unit": "m",
+            "formulas": [
+                {
+                    "formula": "final_position - initial_position",
+                    "dependencies": [
+                        "final_position",
+                        "initial_position"
+                    ]
+                },
+                {
+                    "formula": "velocity * time + 0.5 * acceleration * time**2",
+                    "dependencies": [
+                        "velocity",
+                        "time",
+                        "acceleration"
+                    ]
+                },
+                {
+                    "formula": "initial_velocity * time + 0.5 * acceleration * time**2",
+                    "dependencies": [
+                        "initial_velocity",
+                        "time",
+                        "acceleration"
+                    ]
+                }
+            ],
+            "questions": [
+                "An object moves from position 3 m to position 12 m. What is its displacement?",
+                "An object moves at 8 m/s for 5 seconds with an acceleration of 2 m/s². What is its displacement?",
+                "An object starts at 5 m/s and accelerates at 3 m/s² for 4 seconds. What is its displacement?"
+            ]
+        },
+        {
+            "variable": "distance",
+            "si_unit": "m",
+            "formulas": [
+                {
+                    "formula": "speed * time",
+                    "dependencies": [
+                        "speed",
+                        "time"
+                    ]
+                },
+                {
+                    "formula": "math.sqrt((x2 - x1)**2 + (y2 - y1)**2)",
+                    "dependencies": [
+                        "x2",
+                        "x1",
+                        "y2",
+                        "y1"
+                    ]
+                },
+                {
+                    "formula": "initial_velocity * time + 0.5 * acceleration * time**2",
+                    "dependencies": [
+                        "initial_velocity",
+                        "time",
+                        "acceleration"
+                    ]
+                }
+            ],
+            "questions": [
+                "An object travels at 15 m/s for 4 seconds. What distance does it cover?",
+                "What is the distance between points (0, 0) and (3, 4)?",
+                "An object starts at 2 m/s and accelerates at 3 m/s² for 5 seconds. What distance does it travel?"
+            ]
+        },
+        {
             "variable": "efficiency",
             "si_unit": "dimensionless",
             "formulas": [
-                "useful_output / total_input",
-                "output_power / input_power",
-                "work_output / work_input"
-            ],
-            "dependencies": [
-                "useful_output",
-                "total_input",
-                "output_power",
-                "input_power",
-                "work_output",
-                "work_input"
+                {
+                    "formula": "useful_output / total_input",
+                    "dependencies": [
+                        "useful_output",
+                        "total_input"
+                    ]
+                },
+                {
+                    "formula": "output_power / input_power",
+                    "dependencies": [
+                        "output_power",
+                        "input_power"
+                    ]
+                },
+                {
+                    "formula": "work_output / work_input",
+                    "dependencies": [
+                        "work_output",
+                        "work_input"
+                    ]
+                }
             ],
             "questions": [
                 "A machine produces 80 J of useful output from 100 J of total input. What is its efficiency?",
@@ -1130,20 +629,635 @@
             ]
         },
         {
+            "variable": "effort",
+            "si_unit": "N",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "elastic_modulus",
+            "si_unit": "Pa",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "electric_field",
+            "si_unit": "N/C",
+            "formulas": [
+                {
+                    "formula": "force / charge",
+                    "dependencies": [
+                        "force",
+                        "charge"
+                    ]
+                },
+                {
+                    "formula": "voltage / distance",
+                    "dependencies": [
+                        "voltage",
+                        "distance"
+                    ]
+                },
+                {
+                    "formula": "coulomb_constant * charge / distance**2",
+                    "dependencies": [
+                        "coulomb_constant",
+                        "charge",
+                        "distance"
+                    ]
+                }
+            ],
+            "questions": [
+                "A force of 0.02 N acts on a charge of 0.001 C. What is the electric field?",
+                "A voltage of 100 V exists across a distance of 0.05 m. What is the electric field?",
+                "A point charge of 2e-6 C is located 0.1 m away. What is the electric field? (Use k = 9e9 N·m²/C²)"
+            ]
+        },
+        {
+            "variable": "electric_potential_energy",
+            "si_unit": "J",
+            "formulas": [
+                {
+                    "formula": "charge * voltage",
+                    "dependencies": [
+                        "charge",
+                        "voltage"
+                    ]
+                },
+                {
+                    "formula": "coulomb_constant * charge1 * charge2 / distance",
+                    "dependencies": [
+                        "coulomb_constant",
+                        "charge1",
+                        "charge2",
+                        "distance"
+                    ]
+                },
+                {
+                    "formula": "0.5 * capacitance * voltage**2",
+                    "dependencies": [
+                        "capacitance",
+                        "voltage"
+                    ]
+                }
+            ],
+            "questions": [
+                "A charge of 0.002 C is at voltage 100 V. What is its electric potential energy?",
+                "Two charges of 1e-6 C each are 0.1 m apart. What is their electric potential energy? (Use k = 9e9 N·m²/C²)",
+                "A capacitor of 0.001 F is charged to 50 V. What is its stored energy?"
+            ]
+        },
+        {
+            "variable": "energy",
+            "si_unit": "J",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "final_angle",
+            "si_unit": "rad",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "final_angular_velocity",
+            "si_unit": "rad/s",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "final_momentum",
+            "si_unit": "kg·m/s",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "final_position",
+            "si_unit": "m",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "final_velocity",
+            "si_unit": "m/s",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "force",
+            "si_unit": "N",
+            "formulas": [
+                {
+                    "formula": "mass * acceleration",
+                    "dependencies": [
+                        "mass",
+                        "acceleration"
+                    ]
+                },
+                {
+                    "formula": "mass * gravity",
+                    "dependencies": [
+                        "mass",
+                        "gravity"
+                    ]
+                },
+                {
+                    "formula": "spring_constant * displacement",
+                    "dependencies": [
+                        "spring_constant",
+                        "displacement"
+                    ]
+                }
+            ],
+            "questions": [
+                "A 5 kg object accelerates at 4 m/s². What is the force acting on it?",
+                "What is the weight of a 10 kg object on Earth where gravity is 9.8 m/s²?",
+                "A spring with a spring constant of 200 N/m is stretched 0.3 meters. What is the force?"
+            ]
+        },
+        {
+            "variable": "force_applied",
+            "si_unit": "N",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "force_perpendicular",
+            "si_unit": "N",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "frequency",
+            "si_unit": "Hz",
+            "formulas": [
+                {
+                    "formula": "1 / period",
+                    "dependencies": [
+                        "period"
+                    ]
+                },
+                {
+                    "formula": "angular_velocity / (2 * math.pi)",
+                    "dependencies": [
+                        "angular_velocity"
+                    ]
+                },
+                {
+                    "formula": "wave_speed / wavelength",
+                    "dependencies": [
+                        "wave_speed",
+                        "wavelength"
+                    ]
+                },
+                {
+                    "formula": "number_of_cycles / time",
+                    "dependencies": [
+                        "number_of_cycles",
+                        "time"
+                    ]
+                }
+            ],
+            "questions": [
+                "A wave has a period of 0.5 seconds. What is its frequency?",
+                "An object rotates with angular velocity 4π rad/s. What is its frequency?",
+                "A wave travels at 340 m/s with wavelength 2 m. What is its frequency?",
+                "A system completes 60 cycles in 12 seconds. What is its frequency?"
+            ]
+        },
+        {
+            "variable": "friction_force",
+            "si_unit": "N",
+            "formulas": [
+                {
+                    "formula": "coefficient_of_friction * normal_force",
+                    "dependencies": [
+                        "coefficient_of_friction",
+                        "normal_force"
+                    ]
+                },
+                {
+                    "formula": "mu_static * normal_force",
+                    "dependencies": [
+                        "mu_static",
+                        "normal_force"
+                    ]
+                },
+                {
+                    "formula": "mu_kinetic * normal_force",
+                    "dependencies": [
+                        "mu_kinetic",
+                        "normal_force"
+                    ]
+                }
+            ],
+            "questions": [
+                "A surface has coefficient of friction 0.5 and normal force 100 N. What is the friction force?",
+                "A surface has static coefficient 0.6 and normal force 50 N. What is the static friction force?",
+                "A surface has kinetic coefficient 0.4 and normal force 80 N. What is the kinetic friction force?"
+            ]
+        },
+        {
+            "variable": "gas_constant",
+            "si_unit": "J/(mol·K)",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "gravity",
+            "si_unit": "m/s²",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "height",
+            "si_unit": "m",
+            "formulas": [
+                {
+                    "formula": "initial_velocity_y * time - 0.5 * gravity * time**2",
+                    "dependencies": [
+                        "initial_velocity_y",
+                        "time",
+                        "gravity"
+                    ]
+                },
+                {
+                    "formula": "potential_energy / (mass * gravity)",
+                    "dependencies": [
+                        "potential_energy",
+                        "mass",
+                        "gravity"
+                    ]
+                },
+                {
+                    "formula": "vertical_displacement",
+                    "dependencies": [
+                        "vertical_displacement"
+                    ]
+                }
+            ],
+            "questions": [
+                "A ball is thrown upward with initial vertical velocity 20 m/s. After 2 seconds, what is its height? (Use g = 9.8 m/s²)",
+                "An object has potential energy 196 J, mass 2 kg. What is its height? (Use g = 9.8 m/s²)",
+                "An object moves vertically by 15 m. What is its height change?"
+            ]
+        },
+        {
+            "variable": "horizontal_displacement",
+            "si_unit": "m",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "horizontal_velocity",
+            "si_unit": "m/s",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "impedance",
+            "si_unit": "Ω",
+            "formulas": [
+                {
+                    "formula": "math.sqrt(resistance**2 + reactance**2)",
+                    "dependencies": [
+                        "resistance",
+                        "reactance"
+                    ]
+                },
+                {
+                    "formula": "voltage / current",
+                    "dependencies": [
+                        "voltage",
+                        "current"
+                    ]
+                },
+                {
+                    "formula": "math.sqrt(resistance**2 + (angular_frequency * inductance - 1/(angular_frequency * capacitance))**2)",
+                    "dependencies": [
+                        "resistance",
+                        "angular_frequency",
+                        "inductance",
+                        "capacitance"
+                    ]
+                }
+            ],
+            "questions": [
+                "A circuit has resistance 3 Ω and reactance 4 Ω. What is its impedance?",
+                "A circuit has voltage 120 V and current 5 A. What is its impedance?",
+                "A circuit has resistance 5 Ω, angular frequency 100 rad/s, inductance 0.1 H, and capacitance 0.001 F. What is its impedance?"
+            ]
+        },
+        {
+            "variable": "impulse",
+            "si_unit": "N·s",
+            "formulas": [
+                {
+                    "formula": "force * time",
+                    "dependencies": [
+                        "force",
+                        "time"
+                    ]
+                },
+                {
+                    "formula": "change_in_momentum",
+                    "dependencies": [
+                        "change_in_momentum"
+                    ]
+                },
+                {
+                    "formula": "final_momentum - initial_momentum",
+                    "dependencies": [
+                        "final_momentum",
+                        "initial_momentum"
+                    ]
+                }
+            ],
+            "questions": [
+                "A force of 20 N acts for 0.5 seconds. What is the impulse?",
+                "An object's momentum changes by 15 kg·m/s. What is the impulse?",
+                "An object has initial momentum 10 kg·m/s and final momentum 25 kg·m/s. What is the impulse?"
+            ]
+        },
+        {
+            "variable": "inductance",
+            "si_unit": "H",
+            "formulas": [
+                {
+                    "formula": "magnetic_flux / current",
+                    "dependencies": [
+                        "magnetic_flux",
+                        "current"
+                    ]
+                },
+                {
+                    "formula": "voltage / (change_in_current / time)",
+                    "dependencies": [
+                        "voltage",
+                        "change_in_current",
+                        "time"
+                    ]
+                },
+                {
+                    "formula": "self_inductance",
+                    "dependencies": [
+                        "self_inductance"
+                    ]
+                }
+            ],
+            "questions": [
+                "A coil produces magnetic flux 0.01 Wb with current 2 A. What is its inductance?",
+                "A voltage of 10 V is induced when current changes by 5 A in 0.1 seconds. What is the inductance?",
+                "A coil has self-inductance 0.05 H. What is its inductance?"
+            ]
+        },
+        {
+            "variable": "inductive_reactance",
+            "si_unit": "Ω",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "initial_angle",
+            "si_unit": "rad",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "initial_angular_velocity",
+            "si_unit": "rad/s",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "initial_energy",
+            "si_unit": "J",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "initial_momentum",
+            "si_unit": "kg·m/s",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "initial_position",
+            "si_unit": "m",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "initial_velocity",
+            "si_unit": "m/s",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "initial_velocity_y",
+            "si_unit": "m/s",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "input_distance",
+            "si_unit": "m",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "input_force",
+            "si_unit": "N",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "input_power",
+            "si_unit": "W",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "kinetic_energy",
+            "si_unit": "J",
+            "formulas": [
+                {
+                    "formula": "0.5 * mass * velocity**2",
+                    "dependencies": [
+                        "mass",
+                        "velocity"
+                    ]
+                },
+                {
+                    "formula": "work",
+                    "dependencies": [
+                        "work"
+                    ]
+                },
+                {
+                    "formula": "total_energy - potential_energy",
+                    "dependencies": [
+                        "total_energy",
+                        "potential_energy"
+                    ]
+                }
+            ],
+            "questions": [
+                "A 2 kg object moves at 6 m/s. What is its kinetic energy?",
+                "If 100 Joules of work is done on an object, what is its kinetic energy?",
+                "A system has total energy of 150 J and potential energy of 50 J. What is the kinetic energy?"
+            ]
+        },
+        {
+            "variable": "length",
+            "si_unit": "m",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "linear_density",
+            "si_unit": "kg/m",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "load",
+            "si_unit": "N",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "magnetic_field",
+            "si_unit": "T",
+            "formulas": [
+                {
+                    "formula": "force / (charge * velocity)",
+                    "dependencies": [
+                        "force",
+                        "charge",
+                        "velocity"
+                    ]
+                },
+                {
+                    "formula": "permeability * current / (2 * math.pi * radius)",
+                    "dependencies": [
+                        "permeability",
+                        "current",
+                        "radius"
+                    ]
+                },
+                {
+                    "formula": "magnetic_flux / area",
+                    "dependencies": [
+                        "magnetic_flux",
+                        "area"
+                    ]
+                }
+            ],
+            "questions": [
+                "A charge of 0.001 C moving at 100 m/s experiences a force of 0.05 N. What is the magnetic field?",
+                "A wire carries current 5 A. At distance 0.02 m, what is the magnetic field? (Use μ₀ = 4*math.pi*1e-7 T·m/A)",
+                "A magnetic flux of 0.02 Wb passes through an area of 0.01 m². What is the magnetic field?"
+            ]
+        },
+        {
+            "variable": "magnetic_flux",
+            "si_unit": "Wb",
+            "formulas": [
+                {
+                    "formula": "magnetic_field * area * math.cos(angle)",
+                    "dependencies": [
+                        "magnetic_field",
+                        "area",
+                        "angle"
+                    ]
+                },
+                {
+                    "formula": "magnetic_field * area",
+                    "dependencies": [
+                        "magnetic_field",
+                        "area"
+                    ]
+                },
+                {
+                    "formula": "voltage_induced * time",
+                    "dependencies": [
+                        "voltage_induced",
+                        "time"
+                    ]
+                }
+            ],
+            "questions": [
+                "A magnetic field of 0.5 T passes through an area of 0.02 m² at 0 degrees. What is the magnetic flux?",
+                "A magnetic field of 1 T passes through an area of 0.01 m². What is the magnetic flux?",
+                "A voltage of 2 V is induced for 0.5 seconds. What is the change in magnetic flux?"
+            ]
+        },
+        {
+            "variable": "mass",
+            "si_unit": "kg",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "maximum_height",
+            "si_unit": "m",
+            "formulas": [
+                {
+                    "formula": "initial_velocity_y**2 / (2 * gravity)",
+                    "dependencies": [
+                        "initial_velocity_y",
+                        "gravity"
+                    ]
+                },
+                {
+                    "formula": "initial_velocity**2 * math.sin(angle)**2 / (2 * gravity)",
+                    "dependencies": [
+                        "initial_velocity",
+                        "angle",
+                        "gravity"
+                    ]
+                },
+                {
+                    "formula": "potential_energy_max / (mass * gravity)",
+                    "dependencies": [
+                        "potential_energy_max",
+                        "mass",
+                        "gravity"
+                    ]
+                }
+            ],
+            "questions": [
+                "A ball is thrown upward with initial vertical velocity 14 m/s. What is its maximum height? (Use g = 9.8 m/s²)",
+                "A projectile is launched at 20 m/s at 60 degrees. What is its maximum height? (Use g = 9.8 m/s²)",
+                "A projectile reaches maximum potential energy 98 J with mass 1 kg. What is its maximum height? (Use g = 9.8 m/s²)"
+            ]
+        },
+        {
             "variable": "mechanical_advantage",
             "si_unit": "dimensionless",
             "formulas": [
-                "output_force / input_force",
-                "input_distance / output_distance",
-                "load / effort"
-            ],
-            "dependencies": [
-                "output_force",
-                "input_force",
-                "input_distance",
-                "output_distance",
-                "load",
-                "effort"
+                {
+                    "formula": "output_force / input_force",
+                    "dependencies": [
+                        "output_force",
+                        "input_force"
+                    ]
+                },
+                {
+                    "formula": "input_distance / output_distance",
+                    "dependencies": [
+                        "input_distance",
+                        "output_distance"
+                    ]
+                },
+                {
+                    "formula": "load / effort",
+                    "dependencies": [
+                        "load",
+                        "effort"
+                    ]
+                }
             ],
             "questions": [
                 "A machine produces output force 200 N with input force 50 N. What is its mechanical advantage?",
@@ -1152,41 +1266,496 @@
             ]
         },
         {
-            "variable": "stress",
-            "si_unit": "Pa",
+            "variable": "moment_of_inertia",
+            "si_unit": "kg·m²",
             "formulas": [
-                "force / area",
-                "young_modulus * strain",
-                "pressure"
-            ],
-            "dependencies": [
-                "force",
-                "area",
-                "young_modulus",
-                "strain",
-                "pressure"
+                {
+                    "formula": "mass * radius**2",
+                    "dependencies": [
+                        "mass",
+                        "radius"
+                    ]
+                },
+                {
+                    "formula": "torque / angular_acceleration",
+                    "dependencies": [
+                        "torque",
+                        "angular_acceleration"
+                    ]
+                },
+                {
+                    "formula": "angular_momentum / angular_velocity",
+                    "dependencies": [
+                        "angular_momentum",
+                        "angular_velocity"
+                    ]
+                }
             ],
             "questions": [
-                "A force of 1000 N is applied to an area of 0.001 m². What is the stress?",
-                "A material has Young's modulus 2e11 Pa and strain 0.001. What is the stress?",
-                "A material experiences pressure 50000 Pa. What is the stress?"
+                "A point mass of 5 kg is located 2 m from the axis of rotation. What is its moment of inertia?",
+                "A torque of 15 N·m produces an angular acceleration of 3 rad/s². What is the moment of inertia?",
+                "An object has angular momentum of 40 kg·m²/s and angular velocity of 5 rad/s. What is its moment of inertia?"
             ]
+        },
+        {
+            "variable": "momentum",
+            "si_unit": "kg·m/s",
+            "formulas": [
+                {
+                    "formula": "mass * velocity",
+                    "dependencies": [
+                        "mass",
+                        "velocity"
+                    ]
+                },
+                {
+                    "formula": "force * time",
+                    "dependencies": [
+                        "force",
+                        "time"
+                    ]
+                },
+                {
+                    "formula": "initial_momentum + impulse",
+                    "dependencies": [
+                        "initial_momentum",
+                        "impulse"
+                    ]
+                }
+            ],
+            "questions": [
+                "A 4 kg object moves at 7 m/s. What is its momentum?",
+                "A force of 15 N acts on an object for 3 seconds. What is the change in momentum?",
+                "An object has initial momentum of 20 kg·m/s and receives an impulse of 10 kg·m/s. What is its final momentum?"
+            ]
+        },
+        {
+            "variable": "mu_kinetic",
+            "si_unit": "dimensionless",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "mu_static",
+            "si_unit": "dimensionless",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "normal_force",
+            "si_unit": "N",
+            "formulas": [
+                {
+                    "formula": "mass * gravity * math.cos(angle)",
+                    "dependencies": [
+                        "mass",
+                        "gravity",
+                        "angle"
+                    ]
+                },
+                {
+                    "formula": "mass * gravity",
+                    "dependencies": [
+                        "mass",
+                        "gravity"
+                    ]
+                },
+                {
+                    "formula": "force_applied * math.sin(angle)",
+                    "dependencies": [
+                        "force_applied",
+                        "angle"
+                    ]
+                }
+            ],
+            "questions": [
+                "A 10 kg object sits on an inclined plane at 30 degrees. What is the normal force? (Use g = 9.8 m/s²)",
+                "A 5 kg object sits on a horizontal surface. What is the normal force? (Use g = 9.8 m/s²)",
+                "A force of 100 N is applied at 60 degrees to a surface. What is the normal component?"
+            ]
+        },
+        {
+            "variable": "number_of_cycles",
+            "si_unit": "dimensionless",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "number_of_moles",
+            "si_unit": "mol",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "original_length",
+            "si_unit": "m",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "output_distance",
+            "si_unit": "m",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "output_force",
+            "si_unit": "N",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "output_power",
+            "si_unit": "W",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "period",
+            "si_unit": "s",
+            "formulas": [
+                {
+                    "formula": "1 / frequency",
+                    "dependencies": [
+                        "frequency"
+                    ]
+                },
+                {
+                    "formula": "2 * math.pi * math.sqrt(mass / spring_constant)",
+                    "dependencies": [
+                        "mass",
+                        "spring_constant"
+                    ]
+                },
+                {
+                    "formula": "2 * math.pi / angular_velocity",
+                    "dependencies": [
+                        "angular_velocity"
+                    ]
+                },
+                {
+                    "formula": "time / number_of_cycles",
+                    "dependencies": [
+                        "time",
+                        "number_of_cycles"
+                    ]
+                }
+            ],
+            "questions": [
+                "A wave has frequency 2 Hz. What is its period?",
+                "A spring-mass system has mass 4 kg and spring constant 100 N/m. What is its period?",
+                "An object rotates with angular velocity π rad/s. What is its period?",
+                "A system completes 20 cycles in 10 seconds. What is its period?"
+            ]
+        },
+        {
+            "variable": "permeability",
+            "si_unit": "H/m",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "permittivity",
+            "si_unit": "F/m",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "potential_energy",
+            "si_unit": "J",
+            "formulas": [
+                {
+                    "formula": "mass * gravity * height",
+                    "dependencies": [
+                        "mass",
+                        "gravity",
+                        "height"
+                    ]
+                },
+                {
+                    "formula": "0.5 * spring_constant * displacement**2",
+                    "dependencies": [
+                        "spring_constant",
+                        "displacement"
+                    ]
+                },
+                {
+                    "formula": "total_energy - kinetic_energy",
+                    "dependencies": [
+                        "total_energy",
+                        "kinetic_energy"
+                    ]
+                }
+            ],
+            "questions": [
+                "A 3 kg object is lifted to a height of 5 meters. What is its gravitational potential energy? (Use g = 9.8 m/s²)",
+                "A spring with spring constant 100 N/m is compressed 0.2 meters. What is its potential energy?",
+                "A system has total energy of 200 J and kinetic energy of 80 J. What is the potential energy?"
+            ]
+        },
+        {
+            "variable": "potential_energy_max",
+            "si_unit": "J",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "power",
+            "si_unit": "W",
+            "formulas": [
+                {
+                    "formula": "work / time",
+                    "dependencies": [
+                        "work",
+                        "time"
+                    ]
+                },
+                {
+                    "formula": "force * velocity",
+                    "dependencies": [
+                        "force",
+                        "velocity"
+                    ]
+                },
+                {
+                    "formula": "current * voltage",
+                    "dependencies": [
+                        "current",
+                        "voltage"
+                    ]
+                }
+            ],
+            "questions": [
+                "1000 Joules of work is done in 5 seconds. What is the power?",
+                "A force of 50 N moves an object at 4 m/s. What is the power?",
+                "A circuit has a current of 2 Amperes and voltage of 120 Volts. What is the power?"
+            ]
+        },
+        {
+            "variable": "pressure",
+            "si_unit": "Pa",
+            "formulas": [
+                {
+                    "formula": "force / area",
+                    "dependencies": [
+                        "force",
+                        "area"
+                    ]
+                },
+                {
+                    "formula": "density * gas_constant * temperature",
+                    "dependencies": [
+                        "density",
+                        "gas_constant",
+                        "temperature"
+                    ]
+                },
+                {
+                    "formula": "density * gravity * height",
+                    "dependencies": [
+                        "density",
+                        "gravity",
+                        "height"
+                    ]
+                }
+            ],
+            "questions": [
+                "A force of 500 N is applied over an area of 0.01 m². What is the pressure?",
+                "A gas has density 1.2 kg/m³ at temperature 300 K. What is its pressure? (Use R = 287 J/(kg·K))",
+                "A fluid with density 1000 kg/m³ is at height 5 m. What is the pressure? (Use g = 9.8 m/s²)"
+            ]
+        },
+        {
+            "variable": "radius",
+            "si_unit": "m",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "range",
+            "si_unit": "m",
+            "formulas": [
+                {
+                    "formula": "initial_velocity**2 * math.sin(2 * angle) / gravity",
+                    "dependencies": [
+                        "initial_velocity",
+                        "angle",
+                        "gravity"
+                    ]
+                },
+                {
+                    "formula": "horizontal_velocity * time_of_flight",
+                    "dependencies": [
+                        "horizontal_velocity",
+                        "time_of_flight"
+                    ]
+                },
+                {
+                    "formula": "horizontal_displacement",
+                    "dependencies": [
+                        "horizontal_displacement"
+                    ]
+                }
+            ],
+            "questions": [
+                "A projectile is launched at 20 m/s at 45 degrees. What is its range? (Use g = 9.8 m/s²)",
+                "A projectile has horizontal velocity 15 m/s and time of flight 3 seconds. What is its range?",
+                "A projectile has horizontal displacement 30 m. What is its range?"
+            ]
+        },
+        {
+            "variable": "reactance",
+            "si_unit": "Ω",
+            "formulas": [
+                {
+                    "formula": "angular_frequency * inductance",
+                    "dependencies": [
+                        "angular_frequency",
+                        "inductance"
+                    ]
+                },
+                {
+                    "formula": "1 / (angular_frequency * capacitance)",
+                    "dependencies": [
+                        "angular_frequency",
+                        "capacitance"
+                    ]
+                },
+                {
+                    "formula": "inductive_reactance - capacitive_reactance",
+                    "dependencies": [
+                        "inductive_reactance",
+                        "capacitive_reactance"
+                    ]
+                }
+            ],
+            "questions": [
+                "A circuit has angular frequency 50 rad/s and inductance 0.2 H. What is the inductive reactance?",
+                "A circuit has angular frequency 100 rad/s and capacitance 0.0001 F. What is the capacitive reactance?",
+                "A circuit has inductive reactance 10 Ω and capacitive reactance 6 Ω. What is the net reactance?"
+            ]
+        },
+        {
+            "variable": "resistance",
+            "si_unit": "Ω",
+            "formulas": [
+                {
+                    "formula": "voltage / current",
+                    "dependencies": [
+                        "voltage",
+                        "current"
+                    ]
+                },
+                {
+                    "formula": "resistivity * length / area",
+                    "dependencies": [
+                        "resistivity",
+                        "length",
+                        "area"
+                    ]
+                },
+                {
+                    "formula": "power / current**2",
+                    "dependencies": [
+                        "power",
+                        "current"
+                    ]
+                },
+                {
+                    "formula": "voltage**2 / power",
+                    "dependencies": [
+                        "voltage",
+                        "power"
+                    ]
+                }
+            ],
+            "questions": [
+                "A circuit has voltage 12 V and current 3 A. What is the resistance?",
+                "A wire has resistivity 1.7e-8 Ω·m, length 10 m, and cross-sectional area 2e-6 m². What is its resistance?",
+                "A resistor dissipates 100 W with current 5 A. What is its resistance?",
+                "A resistor has voltage 20 V and power 40 W. What is its resistance?"
+            ]
+        },
+        {
+            "variable": "resistivity",
+            "si_unit": "Ω·m",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "self_inductance",
+            "si_unit": "H",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "speed",
+            "si_unit": "m/s",
+            "formulas": [
+                {
+                    "formula": "abs(velocity)",
+                    "dependencies": [
+                        "velocity"
+                    ]
+                },
+                {
+                    "formula": "distance / time",
+                    "dependencies": [
+                        "distance",
+                        "time"
+                    ]
+                },
+                {
+                    "formula": "math.sqrt(velocity_x**2 + velocity_y**2)",
+                    "dependencies": [
+                        "velocity_x",
+                        "velocity_y"
+                    ]
+                }
+            ],
+            "questions": [
+                "An object has a velocity of -15 m/s. What is its speed?",
+                "A car travels 240 kilometers in 3 hours. What is its average speed?",
+                "An object has velocity components of 6 m/s in the x-direction and 8 m/s in the y-direction. What is its speed?"
+            ]
+        },
+        {
+            "variable": "speed_of_light",
+            "si_unit": "m/s",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "spring_constant",
+            "si_unit": "N/m",
+            "formulas": [],
+            "questions": []
         },
         {
             "variable": "strain",
             "si_unit": "dimensionless",
             "formulas": [
-                "change_in_length / original_length",
-                "stress / young_modulus",
-                "deformation / length"
-            ],
-            "dependencies": [
-                "change_in_length",
-                "original_length",
-                "stress",
-                "young_modulus",
-                "deformation",
-                "length"
+                {
+                    "formula": "change_in_length / original_length",
+                    "dependencies": [
+                        "change_in_length",
+                        "original_length"
+                    ]
+                },
+                {
+                    "formula": "stress / young_modulus",
+                    "dependencies": [
+                        "stress",
+                        "young_modulus"
+                    ]
+                },
+                {
+                    "formula": "deformation / length",
+                    "dependencies": [
+                        "deformation",
+                        "length"
+                    ]
+                }
             ],
             "questions": [
                 "A rod of original length 2 m stretches by 0.002 m. What is the strain?",
@@ -1195,202 +1764,576 @@
             ]
         },
         {
-            "variable": "young_modulus",
+            "variable": "stress",
             "si_unit": "Pa",
             "formulas": [
-                "stress / strain",
-                "force * original_length / (area * change_in_length)",
-                "elastic_modulus"
-            ],
-            "dependencies": [
-                "stress",
-                "strain",
-                "force",
-                "original_length",
-                "area",
-                "change_in_length",
-                "elastic_modulus"
+                {
+                    "formula": "force / area",
+                    "dependencies": [
+                        "force",
+                        "area"
+                    ]
+                },
+                {
+                    "formula": "young_modulus * strain",
+                    "dependencies": [
+                        "young_modulus",
+                        "strain"
+                    ]
+                },
+                {
+                    "formula": "pressure",
+                    "dependencies": [
+                        "pressure"
+                    ]
+                }
             ],
             "questions": [
-                "A material has stress 1e8 Pa and strain 0.0005. What is its Young's modulus?",
-                "A force of 5000 N is applied to a rod of original length 1 m and area 0.0001 m², causing it to stretch 0.0005 m. What is the Young's modulus?",
-                "A material has elastic modulus 2e11 Pa. What is its Young's modulus?"
+                "A force of 1000 N is applied to an area of 0.001 m². What is the stress?",
+                "A material has Young's modulus 2e11 Pa and strain 0.001. What is the stress?",
+                "A material experiences pressure 50000 Pa. What is the stress?"
+            ]
+        },
+        {
+            "variable": "temperature",
+            "si_unit": "K",
+            "formulas": [
+                {
+                    "formula": "pressure * volume / (gas_constant * number_of_moles)",
+                    "dependencies": [
+                        "pressure",
+                        "volume",
+                        "gas_constant",
+                        "number_of_moles"
+                    ]
+                },
+                {
+                    "formula": "pressure / (density * gas_constant)",
+                    "dependencies": [
+                        "pressure",
+                        "density",
+                        "gas_constant"
+                    ]
+                },
+                {
+                    "formula": "average_kinetic_energy / (1.5 * boltzmann_constant)",
+                    "dependencies": [
+                        "average_kinetic_energy",
+                        "boltzmann_constant"
+                    ]
+                }
+            ],
+            "questions": [
+                "A gas has pressure 202650 Pa, volume 0.05 m³, and 1 mole. What is its temperature? (Use R = 8.314 J/(mol·K))",
+                "A gas has pressure 101325 Pa and density 1.2 kg/m³. What is its temperature? (Use R = 287 J/(kg·K))",
+                "A gas has average kinetic energy 6.21e-21 J per particle. What is its temperature? (Use k = 1.38e-23 J/K)"
+            ]
+        },
+        {
+            "variable": "tension",
+            "si_unit": "N",
+            "formulas": [
+                {
+                    "formula": "mass * acceleration + mass * gravity",
+                    "dependencies": [
+                        "mass",
+                        "acceleration",
+                        "gravity"
+                    ]
+                },
+                {
+                    "formula": "force_applied",
+                    "dependencies": [
+                        "force_applied"
+                    ]
+                },
+                {
+                    "formula": "centripetal_force + weight",
+                    "dependencies": [
+                        "centripetal_force",
+                        "weight"
+                    ]
+                }
+            ],
+            "questions": [
+                "A 2 kg object accelerates upward at 3 m/s². What is the tension? (Use g = 9.8 m/s²)",
+                "A rope applies a force of 50 N. What is the tension?",
+                "An object has centripetal force 20 N and weight 10 N. What is the tension?"
             ]
         },
         {
             "variable": "time",
             "si_unit": "s",
             "formulas": [],
-            "dependencies": [],
             "questions": []
         },
         {
-            "variable": "radius",
-            "si_unit": "m",
+            "variable": "time_of_flight",
+            "si_unit": "s",
+            "formulas": [
+                {
+                    "formula": "2 * initial_velocity_y / gravity",
+                    "dependencies": [
+                        "initial_velocity_y",
+                        "gravity"
+                    ]
+                },
+                {
+                    "formula": "2 * initial_velocity * math.sin(angle) / gravity",
+                    "dependencies": [
+                        "initial_velocity",
+                        "angle",
+                        "gravity"
+                    ]
+                },
+                {
+                    "formula": "range / horizontal_velocity",
+                    "dependencies": [
+                        "range",
+                        "horizontal_velocity"
+                    ]
+                }
+            ],
+            "questions": [
+                "A projectile is launched with initial vertical velocity 19.6 m/s. What is its time of flight? (Use g = 9.8 m/s²)",
+                "A projectile is launched at 30 m/s at 30 degrees. What is its time of flight? (Use g = 9.8 m/s²)",
+                "A projectile has range 60 m and horizontal velocity 20 m/s. What is its time of flight?"
+            ]
+        },
+        {
+            "variable": "torque",
+            "si_unit": "N·m",
+            "formulas": [
+                {
+                    "formula": "force * radius * math.sin(angle)",
+                    "dependencies": [
+                        "force",
+                        "radius",
+                        "angle"
+                    ]
+                },
+                {
+                    "formula": "moment_of_inertia * angular_acceleration",
+                    "dependencies": [
+                        "moment_of_inertia",
+                        "angular_acceleration"
+                    ]
+                },
+                {
+                    "formula": "force_perpendicular * radius",
+                    "dependencies": [
+                        "force_perpendicular",
+                        "radius"
+                    ]
+                }
+            ],
+            "questions": [
+                "A force of 30 N is applied at a distance of 0.5 m at an angle of 90 degrees. What is the torque?",
+                "An object with moment of inertia 8 kg·m² has an angular acceleration of 2 rad/s². What is the torque?",
+                "A perpendicular force of 25 N is applied at a radius of 0.4 m. What is the torque?"
+            ]
+        },
+        {
+            "variable": "total_energy",
+            "si_unit": "J",
+            "formulas": [
+                {
+                    "formula": "kinetic_energy + potential_energy",
+                    "dependencies": [
+                        "kinetic_energy",
+                        "potential_energy"
+                    ]
+                },
+                {
+                    "formula": "work + initial_energy",
+                    "dependencies": [
+                        "work",
+                        "initial_energy"
+                    ]
+                },
+                {
+                    "formula": "mass * speed_of_light**2",
+                    "dependencies": [
+                        "mass",
+                        "speed_of_light"
+                    ]
+                }
+            ],
+            "questions": [
+                "A system has kinetic energy 50 J and potential energy 30 J. What is the total energy?",
+                "100 J of work is done on a system with initial energy 200 J. What is the total energy?",
+                "What is the rest energy of a 1 kg object? (Use c = 3e8 m/s)"
+            ]
+        },
+        {
+            "variable": "total_input",
+            "si_unit": "J",
             "formulas": [],
-            "dependencies": [],
             "questions": []
         },
         {
-            "variable": "final_velocity",
+            "variable": "useful_output",
+            "si_unit": "J",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "velocity",
+            "si_unit": "m/s",
+            "formulas": [
+                {
+                    "formula": "displacement / time",
+                    "dependencies": [
+                        "displacement",
+                        "time"
+                    ]
+                },
+                {
+                    "formula": "initial_velocity + acceleration * time",
+                    "dependencies": [
+                        "initial_velocity",
+                        "acceleration",
+                        "time"
+                    ]
+                },
+                {
+                    "formula": "math.sqrt(2 * acceleration * displacement + initial_velocity**2)",
+                    "dependencies": [
+                        "acceleration",
+                        "displacement",
+                        "initial_velocity"
+                    ]
+                }
+            ],
+            "questions": [
+                "A car travels 120 meters in 8 seconds. What is its velocity?",
+                "An object starts with an initial velocity of 5 m/s and accelerates at 3 m/s² for 4 seconds. What is its final velocity?",
+                "A ball is thrown upward with an initial velocity of 20 m/s. If it accelerates downward at 9.8 m/s² and travels 15 meters, what is its velocity?"
+            ]
+        },
+        {
+            "variable": "velocity_x",
             "si_unit": "m/s",
             "formulas": [],
-            "dependencies": [],
             "questions": []
         },
         {
-            "variable": "initial_velocity",
+            "variable": "velocity_y",
             "si_unit": "m/s",
             "formulas": [],
-            "dependencies": [],
             "questions": []
         },
         {
-            "variable": "mass",
-            "si_unit": "kg",
-            "formulas": [],
-            "dependencies": [],
-            "questions": []
-        },
-        {
-            "variable": "gravity",
-            "si_unit": "m/s²",
-            "formulas": [],
-            "dependencies": [],
-            "questions": []
-        },
-        {
-            "variable": "gas_constant",
-            "si_unit": "J/(mol·K)",
-            "formulas": [],
-            "dependencies": [],
-            "questions": []
-        },
-        {
-            "variable": "boltzmann_constant",
-            "si_unit": "J/K",
-            "formulas": [],
-            "dependencies": [],
-            "questions": []
-        },
-        {
-            "variable": "number_of_moles",
-            "si_unit": "mol",
-            "formulas": [],
-            "dependencies": [],
-            "questions": []
-        },
-        {
-            "variable": "length",
+            "variable": "vertical_displacement",
             "si_unit": "m",
             "formulas": [],
-            "dependencies": [],
+            "questions": []
+        },
+        {
+            "variable": "voltage",
+            "si_unit": "V",
+            "formulas": [
+                {
+                    "formula": "current * resistance",
+                    "dependencies": [
+                        "current",
+                        "resistance"
+                    ]
+                },
+                {
+                    "formula": "power / current",
+                    "dependencies": [
+                        "power",
+                        "current"
+                    ]
+                },
+                {
+                    "formula": "electric_field * distance",
+                    "dependencies": [
+                        "electric_field",
+                        "distance"
+                    ]
+                },
+                {
+                    "formula": "work / charge",
+                    "dependencies": [
+                        "work",
+                        "charge"
+                    ]
+                }
+            ],
+            "questions": [
+                "A circuit has current 2 A and resistance 6 Ω. What is the voltage?",
+                "A device uses 60 W of power with current 5 A. What is the voltage?",
+                "An electric field of 1000 N/C exists over a distance of 0.05 m. What is the voltage?",
+                "100 Joules of work is done moving 5 Coulombs of charge. What is the voltage?"
+            ]
+        },
+        {
+            "variable": "voltage_induced",
+            "si_unit": "V",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "volume",
+            "si_unit": "m³",
+            "formulas": [
+                {
+                    "formula": "mass / density",
+                    "dependencies": [
+                        "mass",
+                        "density"
+                    ]
+                },
+                {
+                    "formula": "area * height",
+                    "dependencies": [
+                        "area",
+                        "height"
+                    ]
+                },
+                {
+                    "formula": "gas_constant * temperature * number_of_moles / pressure",
+                    "dependencies": [
+                        "gas_constant",
+                        "temperature",
+                        "number_of_moles",
+                        "pressure"
+                    ]
+                },
+                {
+                    "formula": "(4/3) * math.pi * radius**3",
+                    "dependencies": [
+                        "radius"
+                    ]
+                }
+            ],
+            "questions": [
+                "A substance has mass 10 kg and density 2000 kg/m³. What is its volume?",
+                "A cylinder has base area 0.05 m² and height 2 m. What is its volume?",
+                "A gas at 300 K and 101325 Pa has 2 moles. What is its volume? (Use R = 8.314 J/(mol·K))",
+                "A sphere has radius 0.5 m. What is its volume?"
+            ]
+        },
+        {
+            "variable": "volume_displaced",
+            "si_unit": "m³",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "wave_number",
+            "si_unit": "rad/m",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "wave_speed",
+            "si_unit": "m/s",
+            "formulas": [
+                {
+                    "formula": "frequency * wavelength",
+                    "dependencies": [
+                        "frequency",
+                        "wavelength"
+                    ]
+                },
+                {
+                    "formula": "wavelength / period",
+                    "dependencies": [
+                        "wavelength",
+                        "period"
+                    ]
+                },
+                {
+                    "formula": "math.sqrt(tension / linear_density)",
+                    "dependencies": [
+                        "tension",
+                        "linear_density"
+                    ]
+                }
+            ],
+            "questions": [
+                "A wave has frequency 50 Hz and wavelength 4 m. What is its speed?",
+                "A wave has wavelength 6 m and period 0.02 seconds. What is its speed?",
+                "A string has tension 100 N and linear density 0.01 kg/m. What is the wave speed?"
+            ]
+        },
+        {
+            "variable": "wavelength",
+            "si_unit": "m",
+            "formulas": [
+                {
+                    "formula": "wave_speed / frequency",
+                    "dependencies": [
+                        "wave_speed",
+                        "frequency"
+                    ]
+                },
+                {
+                    "formula": "wave_speed * period",
+                    "dependencies": [
+                        "wave_speed",
+                        "period"
+                    ]
+                },
+                {
+                    "formula": "2 * math.pi / wave_number",
+                    "dependencies": [
+                        "wave_number"
+                    ]
+                }
+            ],
+            "questions": [
+                "A wave travels at 300 m/s with frequency 150 Hz. What is its wavelength?",
+                "A wave travels at 340 m/s with period 0.01 seconds. What is its wavelength?",
+                "A wave has wave number 2π m⁻¹. What is its wavelength?"
+            ]
+        },
+        {
+            "variable": "weight",
+            "si_unit": "N",
+            "formulas": [
+                {
+                    "formula": "mass * gravity",
+                    "dependencies": [
+                        "mass",
+                        "gravity"
+                    ]
+                },
+                {
+                    "formula": "force",
+                    "dependencies": [
+                        "force"
+                    ]
+                },
+                {
+                    "formula": "density * volume * gravity",
+                    "dependencies": [
+                        "density",
+                        "volume",
+                        "gravity"
+                    ]
+                }
+            ],
+            "questions": [
+                "What is the weight of a 10 kg object on Earth? (Use g = 9.8 m/s²)",
+                "An object experiences a gravitational force of 49 N. What is its weight?",
+                "A material with density 2000 kg/m³ has volume 0.01 m³. What is its weight? (Use g = 9.8 m/s²)"
+            ]
+        },
+        {
+            "variable": "weight_displaced",
+            "si_unit": "N",
+            "formulas": [],
             "questions": []
         },
         {
             "variable": "width",
             "si_unit": "m",
             "formulas": [],
-            "dependencies": [],
             "questions": []
         },
         {
-            "variable": "base",
+            "variable": "work",
+            "si_unit": "J",
+            "formulas": [
+                {
+                    "formula": "force * displacement * math.cos(angle)",
+                    "dependencies": [
+                        "force",
+                        "displacement",
+                        "angle"
+                    ]
+                },
+                {
+                    "formula": "change_in_kinetic_energy",
+                    "dependencies": [
+                        "change_in_kinetic_energy"
+                    ]
+                },
+                {
+                    "formula": "change_in_potential_energy",
+                    "dependencies": [
+                        "change_in_potential_energy"
+                    ]
+                }
+            ],
+            "questions": [
+                "A force of 20 N is applied at an angle of 0 degrees to move an object 5 meters. How much work is done?",
+                "An object's kinetic energy increases from 50 J to 150 J. How much work was done?",
+                "An object's potential energy decreases by 80 J. How much work was done?"
+            ]
+        },
+        {
+            "variable": "work_input",
+            "si_unit": "J",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "work_output",
+            "si_unit": "J",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "x1",
             "si_unit": "m",
             "formulas": [],
-            "dependencies": [],
             "questions": []
         },
         {
-            "variable": "change_in_length",
+            "variable": "x2",
             "si_unit": "m",
             "formulas": [],
-            "dependencies": [],
             "questions": []
         },
         {
-            "variable": "original_length",
+            "variable": "y1",
             "si_unit": "m",
             "formulas": [],
-            "dependencies": [],
             "questions": []
         },
         {
-            "variable": "elastic_modulus",
+            "variable": "y2",
+            "si_unit": "m",
+            "formulas": [],
+            "questions": []
+        },
+        {
+            "variable": "young_modulus",
             "si_unit": "Pa",
-            "formulas": [],
-            "dependencies": [],
-            "questions": []
-        },
-        {
-            "variable": "spring_constant",
-            "si_unit": "N/m",
-            "formulas": [],
-            "dependencies": [],
-            "questions": []
-        },
-        {
-            "variable": "average_kinetic_energy",
-            "si_unit": "J",
-            "formulas": [],
-            "dependencies": [],
-            "questions": []
-        },
-        {
-            "variable": "resistivity",
-            "si_unit": "Ω·m",
-            "formulas": [],
-            "dependencies": [],
-            "questions": []
-        },
-        {
-            "variable": "capacitive_reactance",
-            "si_unit": "Ω",
-            "formulas": [],
-            "dependencies": [],
-            "questions": []
-        },
-        {
-            "variable": "inductive_reactance",
-            "si_unit": "Ω",
-            "formulas": [],
-            "dependencies": [],
-            "questions": []
-        },
-        {
-            "variable": "change_in_current",
-            "si_unit": "A",
-            "formulas": [],
-            "dependencies": [],
-            "questions": []
-        },
-        {
-            "variable": "charge",
-            "si_unit": "C",
-            "formulas": [],
-            "dependencies": [],
-            "questions": []
-        },
-        {
-            "variable": "energy",
-            "si_unit": "J",
-            "formulas": [],
-            "dependencies": [],
-            "questions": []
-        },
-        {
-            "variable": "permittivity",
-            "si_unit": "F/m",
-            "formulas": [],
-            "dependencies": [],
-            "questions": []
-        },
-        {
-            "variable": "self_inductance",
-            "si_unit": "H",
-            "formulas": [],
-            "dependencies": [],
-            "questions": []
+            "formulas": [
+                {
+                    "formula": "stress / strain",
+                    "dependencies": [
+                        "stress",
+                        "strain"
+                    ]
+                },
+                {
+                    "formula": "force * original_length / (area * change_in_length)",
+                    "dependencies": [
+                        "force",
+                        "original_length",
+                        "area",
+                        "change_in_length"
+                    ]
+                },
+                {
+                    "formula": "elastic_modulus",
+                    "dependencies": [
+                        "elastic_modulus"
+                    ]
+                }
+            ],
+            "questions": [
+                "A material has stress 1e8 Pa and strain 0.0005. What is its Young's modulus?",
+                "A force of 5000 N is applied to a rod of original length 1 m and area 0.0001 m², causing it to stretch 0.0005 m. What is the Young's modulus?",
+                "A material has elastic modulus 2e11 Pa. What is its Young's modulus?"
+            ]
         }
     ]
 }
