@@ -10,62 +10,35 @@ logger = logging.getLogger(__name__)
 def compute_rewards_batched(
     responses: List[str],
     batch: List[Dict],
-    reward_model,
-    max_length: int,
-    judge_reward_weight: float = 1.0,
-    length_reward_weight: float = 0.2
-) -> Tuple[List[float], List[float], List[float], List[str], List[int], List[float]]:
-    """OPTIMIZATION: Batch compute rewards for all responses at once."""
-    rewards = []
+    reward_model
+) -> Tuple[List[float], List[float], List[float], List[str]]:
+    """Compute rewards based on question hardness/difficulty."""
     judge_scores = []
     judge_rewards = []
     judge_explanations = []
-    tree_walk_lengths = []
-    tree_walk_length_rewards = []
     
     # Build all evaluation data - each response gets its OWN prompt/principle
     evaluations = []
     
     for i, (response, ex) in enumerate(zip(responses, batch)):
-        calculator = ex["calculator"]
-        target = calculator.tree_structure["target"]
+        # Use the original prompt that was given to the question generator
+        prompt = ex.get("query", "")
         
-        # Format given values
-        leaves = [
-            leaf for leaf in sorted(calculator.tree_structure.get("leaf_nodes", set()))
-            if leaf in calculator.values
-        ]
-        value_lines = []
-        for leaf in leaves:
-            value = calculator.values[leaf]
-            unit = calculator._get_si_unit(leaf)
-            value_lines.append(f"{leaf} = {value:.4f}{f' {unit}' if unit else ''}")
+        if not prompt:
+            logger.warning(f"No prompt found in batch item {i}, skipping evaluation")
+            judge_scores.append(0.0)
+            judge_rewards.append(-1.0)
+            judge_explanations.append("No prompt found in batch")
+            continue
         
-        values_text = "\n".join(f"  {line}" for line in value_lines) if value_lines else "  (no values found)"
-        allowed_vars = ", ".join(leaves) if leaves else "None"
-        
-        prompt = (
-            f"You are scoring candidate word problems that must ask for the value of {target}.\n"
-            "The question should be grammatically correct and should be a valid question."
-            "A good question must:\n"
-            "• Include every given value as provided with its SI unit.\n"
-            "• Use only the allowed variables (no intermediate or invented variables).\n"
-            f"• End with asking for target variable\n\n"
-            f"Allowed variables: {allowed_vars}\n"
-            f"Given values:\n{values_text}\n\n"
-            f"If the values are not exact then also consider it good\n"
-            "Score the question on a scale from 0 to 10, where:\n"
-            "- 10 = Perfect: All requirements met perfectly\n"
-            "- 7-9 = Good: Minor issues\n"
-            "- 4-6 = Acceptable: Some requirements missing\n"
-            "- 0-3 = Poor: Major requirements missing\n"
-        )
-        
+        # The principle contains the evaluation/scoring instructions
         principle = (
-            "If the physical scenario in question is not realistic given the variables give it 0 reward. Give Non zero reward only when it's realistic"
-            "Score questions on a 0-10 scale. Rank higher (8-10) any question that restates every provided value with its unit, "
-            f"sticks to the allowed variable names, stays concise, and ends with asking for value of {target}. "
-            "Penalize (lower scores 0-7) missing values, invented variables, and vague language. "
+            "Score questions based on their DIFFICULTY and COMPLEXITY on a 0-10 scale. "
+            "Rank higher (8-10) questions that require: multiple physics concepts, several calculation steps, "
+            "complex reasoning, integration of different principles, or realistic multi-step scenarios. "
+            "Rank lower (0-4) questions that are trivial, require only direct substitution, "
+            "or involve a single simple formula. "
+            "Focus on cognitive difficulty and problem-solving complexity, not on value accuracy or formatting. "
             "Return scores as numeric values between 0 and 10."
         )
         
@@ -167,35 +140,26 @@ def compute_rewards_batched(
         # Fallback: evaluate individually
         for i, (response, ex) in enumerate(zip(responses, batch)):
             try:
-                calculator = ex["calculator"]
-                target = calculator.tree_structure["target"]
+                # Use the original prompt that was given to the question generator
+                prompt = ex.get("query", "")
                 
-                leaves = [
-                    leaf for leaf in sorted(calculator.tree_structure.get("leaf_nodes", set()))
-                    if leaf in calculator.values
-                ]
-                value_lines = []
-                for leaf in leaves:
-                    value = calculator.values[leaf]
-                    unit = calculator._get_si_unit(leaf)
-                    value_lines.append(f"{leaf} = {value:.4f}{f' {unit}' if unit else ''}")
+                if not prompt:
+                    logger.warning(f"No prompt found in batch item {i} during fallback")
+                    judge_scores.append(0.0)
+                    judge_rewards.append(-1.0)
+                    judge_explanations.append("No prompt found in batch")
+                    continue
                 
-                values_text = "\n".join(f"  {line}" for line in value_lines) if value_lines else "  (no values found)"
-                allowed_vars = ", ".join(leaves) if leaves else "None"
-                
-                prompt = (
-                    f"You are scoring candidate word problems that must ask for the value of {target}.\n"
-                    "A good question must:\n"
-                    "• Include every given value exactly as provided (no rounding) with its SI unit.\n"
-                    "• Use only the allowed variables (no intermediate or invented variables).\n"
-                    f"• End with: \"What is the {target}?\"\n\n"
-                    f"Allowed variables: {allowed_vars}\n"
-                    f"Given values:\n{values_text}\n\n"
-                    "Score the question on a scale from 0 to 10."
-                )
-                
+                # The principle contains the evaluation/scoring instructions
                 principle = (
-                    "Score questions on a 0-10 scale. Return scores as numeric values between 0 and 10."
+                    "Score questions based on their DIFFICULTY and COMPLEXITY on a 0-10 scale. "
+                    "Rank higher (8-10) questions that require: multiple physics concepts, several calculation steps, "
+                    "complex reasoning, integration of different principles, or realistic multi-step scenarios. "
+                    "Rank lower (0-4) questions that are trivial, require only direct substitution, "
+                    "or involve a single simple formula. "
+                    "Return scores as numeric values between 0 and 10."
+                    "If the question is not concise penalize it"
+
                 )
                 
                 result = reward_model.judge(
@@ -222,41 +186,6 @@ def compute_rewards_batched(
                 judge_explanations.append(f"Evaluation failed: {str(e2)}")
                 judge_rewards.append(-1.0)
     
-    # Calculate tree walk length rewards
-    for i, ex in enumerate(batch):
-        calculator = ex["calculator"]
-        tree_walk_length = 0
-        tree_walk_length_reward = 0.0
-        
-        if hasattr(calculator, 'tree_structure') and calculator.tree_structure:
-            levels = calculator.tree_structure.get('levels', {})
-            leaf_nodes = calculator.tree_structure.get('leaf_nodes', set())
-            if levels:
-                non_leaf_levels = []
-                for level_num, level_nodes in levels.items():
-                    non_leaf_in_level = [n for n in level_nodes if n not in leaf_nodes]
-                    if non_leaf_in_level:
-                        non_leaf_levels.append(level_num)
-                
-                if non_leaf_levels:
-                    max_level = max(non_leaf_levels)
-                    tree_walk_length = max_level + 1
-                else:
-                    tree_walk_length = 1
-                
-                normalized_length = tree_walk_length / max_length
-                tree_walk_length_reward = normalized_length * 2.0 - 1.0
-        
-        tree_walk_lengths.append(tree_walk_length)
-        tree_walk_length_rewards.append(tree_walk_length_reward)
-    
-    # Combine rewards with weights
-    for i in range(len(responses)):
-        combined_reward = (
-            judge_reward_weight * judge_rewards[i] + 
-            length_reward_weight * tree_walk_length_rewards[i]
-        )
-        rewards.append(combined_reward)
-    
-    return rewards, judge_scores, judge_rewards, judge_explanations, tree_walk_lengths, tree_walk_length_rewards
+    # Use judge rewards directly (no combination)
+    return judge_rewards, judge_scores, judge_rewards, judge_explanations
 

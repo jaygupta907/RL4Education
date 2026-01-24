@@ -4,6 +4,7 @@ Main PPO Trainer for fine-tuning question generation model.
 import os
 import logging
 import torch
+import numpy as np
 from datetime import datetime
 from typing import Dict, List
 from concurrent.futures import ThreadPoolExecutor
@@ -107,8 +108,8 @@ class QuestionGeneratorPPOTrainer:
         self.episode_rewards = []
         self.episode_scores = []
         
-        # Create logs directory
-        base_logs_dir = os.path.join(os.path.dirname(self.config.output_dir), "logs")
+        # Create logs directory (in current directory, not with checkpoints)
+        base_logs_dir = self.config.logs_dir
         os.makedirs(base_logs_dir, exist_ok=True)
         
         run_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -136,16 +137,14 @@ class QuestionGeneratorPPOTrainer:
             logger.info("Wandb initialized for logging.")
     
     def _log_episode_results_async(self, episode, responses, rewards, judge_scores, 
-                                   judge_rewards, judge_explanations, batch, 
-                                   tree_walk_lengths, tree_walk_length_rewards):
+                                   judge_rewards, judge_explanations, batch):
         """Async wrapper for logging (non-blocking)."""
         # Use thread pool to avoid blocking training
         self.log_executor.submit(
             log_episode_results_sync,
             episode, responses, rewards, judge_scores,
             judge_rewards, judge_explanations, batch,
-            self.logs_dir, self.config,
-            tree_walk_lengths, tree_walk_length_rewards
+            self.logs_dir, self.config
         )
     
     def train(self):
@@ -270,23 +269,20 @@ class QuestionGeneratorPPOTrainer:
                 if detailed_logging:
                     logger.info("Computing rewards (batched)...")
                 
-                rewards, judge_scores, judge_rewards, judge_explanations, tree_walk_lengths, tree_walk_length_rewards = \
+                rewards, judge_scores, judge_rewards, judge_explanations = \
                     compute_rewards_batched(
-                        responses, batch, self.reward_model, self.config.max_length,
-                        judge_reward_weight=self.config.judge_reward_weight,
-                        length_reward_weight=self.config.length_reward_weight
+                        responses, batch, self.reward_model
                     )
                 
                 # Log statistics
                 avg_reward = sum(rewards) / len(rewards) if rewards else 0.0
                 avg_score = sum(judge_scores) / len(judge_scores) if judge_scores else 0.0
-                avg_tree_length = sum(tree_walk_lengths) / len(tree_walk_lengths) if tree_walk_lengths else 0.0
                 
                 self.episode_rewards.append(avg_reward)
                 self.episode_scores.append(avg_score)
                 
                 if detailed_logging:
-                    logger.info(f"Avg judge score: {avg_score:.2f}/10.0, Avg reward: {avg_reward:.4f}, Avg tree length: {avg_tree_length:.1f}")
+                    logger.info(f"Avg judge score: {avg_score:.2f}/10.0, Avg reward: {avg_reward:.4f}")
                 else:
                     logger.info(f"Avg score: {avg_score:.2f}, Avg reward: {avg_reward:.4f}")
                 
@@ -294,8 +290,7 @@ class QuestionGeneratorPPOTrainer:
                 if detailed_logging:
                     self._log_episode_results_async(
                         episode, responses, rewards, judge_scores,
-                        judge_rewards, judge_explanations, batch,
-                        tree_walk_lengths, tree_walk_length_rewards
+                        judge_rewards, judge_explanations, batch
                     )
                 
                 # Log to wandb
@@ -303,7 +298,6 @@ class QuestionGeneratorPPOTrainer:
                     wandb.log({
                         "episode/avg_reward": avg_reward,
                         "episode/avg_judge_score": avg_score,
-                        "episode/avg_tree_length": avg_tree_length,
                     }, step=episode)
                 
                 # Convert rewards to tensors
@@ -336,6 +330,60 @@ class QuestionGeneratorPPOTrainer:
                             response_tensors,
                             reward_tensors
                         )
+                    
+                    # Extract KL divergence and entropy from stats
+                    kl_div_raw = stats.get('ppo/kl', stats.get('ppo/policy/approxkl', 0.0))
+                    entropy_raw = stats.get('ppo/entropy', stats.get('ppo/policy/entropy', 0.0))
+                    
+                    # Convert to float (handle numpy arrays and tensors)
+                    if isinstance(kl_div_raw, (np.ndarray, np.generic)):
+                        kl_div = float(kl_div_raw.item() if hasattr(kl_div_raw, 'item') else kl_div_raw)
+                    elif isinstance(kl_div_raw, torch.Tensor):
+                        kl_div = float(kl_div_raw.item())
+                    else:
+                        kl_div = float(kl_div_raw)
+                    
+                    if isinstance(entropy_raw, (np.ndarray, np.generic)):
+                        entropy = float(entropy_raw.item() if hasattr(entropy_raw, 'item') else entropy_raw)
+                    elif isinstance(entropy_raw, torch.Tensor):
+                        entropy = float(entropy_raw.item())
+                    else:
+                        entropy = float(entropy_raw)
+                    
+                    # Log PPO metrics to wandb
+                    if WANDB_AVAILABLE:
+                        wandb_metrics = {
+                            "ppo/kl_divergence": kl_div,
+                            "ppo/entropy": entropy,
+                        }
+                        # Add other useful PPO metrics if available
+                        if 'ppo/policy/loss' in stats:
+                            loss_val = stats['ppo/policy/loss']
+                            if isinstance(loss_val, (np.ndarray, np.generic)):
+                                loss_val = float(loss_val.item() if hasattr(loss_val, 'item') else loss_val)
+                            elif isinstance(loss_val, torch.Tensor):
+                                loss_val = float(loss_val.item())
+                            wandb_metrics["ppo/policy/loss"] = loss_val
+                        if 'ppo/val/loss' in stats:
+                            loss_val = stats['ppo/val/loss']
+                            if isinstance(loss_val, (np.ndarray, np.generic)):
+                                loss_val = float(loss_val.item() if hasattr(loss_val, 'item') else loss_val)
+                            elif isinstance(loss_val, torch.Tensor):
+                                loss_val = float(loss_val.item())
+                            wandb_metrics["ppo/val/loss"] = loss_val
+                        if 'ppo/mean_non_score_reward' in stats:
+                            reward_val = stats['ppo/mean_non_score_reward']
+                            if isinstance(reward_val, (np.ndarray, np.generic)):
+                                reward_val = float(reward_val.item() if hasattr(reward_val, 'item') else reward_val)
+                            elif isinstance(reward_val, torch.Tensor):
+                                reward_val = float(reward_val.item())
+                            wandb_metrics["ppo/mean_non_score_reward"] = reward_val
+                        
+                        wandb.log(wandb_metrics, step=episode)
+                    
+                    if detailed_logging:
+                        logger.info(f"PPO stats - KL divergence: {kl_div:.4f}, Entropy: {entropy:.4f}")
+                        
                 except torch.cuda.OutOfMemoryError as e:
                     logger.error(f"Out of memory at episode {episode + 1}")
                     if torch.cuda.is_available():

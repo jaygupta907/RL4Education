@@ -31,103 +31,29 @@ def create_prompt(calculator: TreeWalkCalculator, tokenizer) -> Tuple[str, Dict]
     
     values_list_text = "\n".join(values_examples)
     allowed_vars_list = ", ".join(given_values_list)
-    examples = """
-CORRECT Examples (follow these):
-
-Example 1 (CORRECT):
-Given values: force = 5.20 N, displacement = 3.50 m, mass = 7.20 kg
-Target: kinetic_energy
-Question: A sled is pulled along level snow by a constant horizontal force of 5.20 N through a displacement of 3.50 m. The sled and payload have a total mass of 7.20 kg. First determine the work done by the pull, then use that work (all converted to kinetic) to find the kinetic_energy of the sled. Determine the kinetic_energy.
-
-Example 2 (CORRECT):
-Given values: mass = 3.60 kg, specific_heat = 4.50 J/(kg·K), initial_temperature = 5.20 K, heat = 8.50 J
-Target: final_temperature
-Question: An aluminum block of mass 3.60 kg and specific heat 4.50 J/(kg·K) starts at an initial temperature of 5.20 K and absorbs 8.50 J of heat with no losses. First compute the temperature rise from the heat input, then determine the final_temperature of the block. Calculate the final_temperature.
-
-
----
-
-INCORRECT Examples (avoid these mistakes):
-
-Example 4 (WRONG - rounded values):
-Given values: force = 5.20 N, displacement = 3.50 m, mass = 7.20 kg
-Target: kinetic_energy
-Question: A sled is pulled by a force of 5 N through a displacement of 3.5 m. The mass is 7 kg. Find the kinetic_energy.
-❌ WRONG: Values were rounded (5.20 → 5, 3.50 → 3.5, 7.20 → 7). Use EXACT values.
-
-Example 5 (WRONG - missing variables):
-Given values: mass = 3.60 kg, specific_heat = 4.50 J/(kg·K), initial_temperature = 5.20 K, heat = 8.50 J
-Target: final_temperature
-Question: An aluminum block of mass 3.60 kg starts at 5.20 K. Calculate the final_temperature.
-❌ WRONG: Missing variables (specific_heat and heat). Use ALL provided variables.
-
-Example 6 (WRONG - added extra values):
-Given values: force = 5.20 N, displacement = 3.50 m
-Target: work
-Question: A force of 5.20 N acts through 3.50 m. The object has mass 2.00 kg. Find the work.
-❌ WRONG: Added mass (2.00 kg) which was not in given values. Use ONLY variables from allowed_variables.
-        """
 
     # For Llama 8B Instruct, use the proper chat template format
     system_prompt = """You are a physics problem generator. Generate clear, realistic physics word problems in English using exact numerical values provided.
 
 Your task:
-- Use ALL provided numeric values EXACTLY as given (no rounding, no modifications) otherwise you will be penalized heavily.
-- Include proper SI units for each value
-- Create a realistic physical scenario that naturally incorporates all given variables
-- End by asking for the target variable
-- Generate ONLY the problem text, no preamble or explanations"""
+1. Use ONLY variables from the allowed variables list above
+2. Use EXACT values from the given values with full precision
+4. Create a realistic physical scenario that naturally incorporates all given variables
+5. Do NOT include phrases like "Here is the problem:" - start directly with the problem
+6. Do NOT use placeholder symbols - use the actual numeric values provided
+7. Generate ONLY the problem text, no preamble or explanations
+8. WRITE in plain English, no LaTeX, markdown, or Unicode symbols"""
     
-    user_prompt = f"""
+    user_prompt = f"""Use EXACT numeric values from the provided list. Do NOT round, modify, or approximate any numbers.
 
-<critical_instructions>
-
-Use EXACT numeric values from the provided list.
-
-Do NOT round, modify, or approximate any numbers.
-
-</critical_instructions>
-
-<given_values count="{len(given_values_list)}">
-
+Given values ({len(given_values_list)} total):
 {values_list_text}
 
-</given_values>
+Allowed variables: {allowed_vars_list}
 
-<allowed_variables>
+Target variable: {target}
 
-{allowed_vars_list}
-
-</allowed_variables>
-
-<requirements priority="high">
-
-1. Use ONLY variables from <allowed_variables>
-
-2. Use EXACT values from <given_values> with full precision
-
-3. End with asking for target variable"
-
-4. Create a realistic physical scenario that naturally incorporates all given variables.
-
-5. Do NOT include phrases like "Here is the problem:" - start directly with the problem.
-
-6. Do NOT use placeholder symbols  - use the actual numeric values provided.
-
-5. Generate ONLY the problem text, no preamble or explanations.
-
-7. WRITE in plain English, no LaTeX, markdown, or Unicode symbols.
-
-</requirements>
-
-<examples>
-
-{examples}
-
-</examples>
-
-Generate the problem now, strictly following <critical_instructions> and <requirements>.
-
+Generate the problem now, strictly following the requirements above.
 """
     
     # Apply Llama 3 Chat Template

@@ -10,6 +10,7 @@ class TrainingConfig:
     """Configuration for fine-tuning."""
     # Model configuration
     policy_model_name: str = "meta-llama/Meta-Llama-3-8B-Instruct"
+    instruction_tuned_model_path: Optional[str] = None  # Path to instruction-tuned model (if available)
     judge_model_name: str = "meta-llama/Meta-Llama-3-8B-Instruct"
     graph_file: str = "variable_concept_graph.json"
     
@@ -22,19 +23,17 @@ class TrainingConfig:
     gradient_accumulation_steps: int = 2  # OPTIMIZED: Adjusted for larger batch
     
     # PPO hyperparameters
-    learning_rate: float = 1.41e-5
-    ppo_epochs: int = 4
-    cliprange: float = 0.2
-    cliprange_value: float = 0.2
+    learning_rate: float = 1.41e-6
+    ppo_epochs: int = 2
+    cliprange: float = 0.05
+    cliprange_value: float = 0.05
     gamma: float = 1.0
     lam: float = 0.95
-    init_kl_coef: float = 0.2  # Increase from default 0.05
-    target_kl: float = 10.0
-    max_grad_norm: float = 0.5  # Gradient clipping norm 
-
+    init_kl_coef: float = 2.0
+    target_kl: float = 0.001
     
     # Generation configuration - OPTIMIZED
-    max_new_tokens: int = 3000  # OPTIMIZED: Reduced from 500 (3x speedup)
+    max_new_tokens: int = 300  
     temperature: float = 0.5
     top_p: float = 0.9
     top_k: int = 50
@@ -42,7 +41,8 @@ class TrainingConfig:
     no_repeat_ngram_size: int = 2
     
     # Output configuration - OPTIMIZED
-    output_dir: str = "./checkpoints/question_generator_ppo"
+    output_dir: str = "/mnt/storage/ae21b026/models/ppo_checkpoints"
+    logs_dir: str = "./checkpoints/logs"  # Logs stay in current directory
     save_steps: int = 50  # OPTIMIZED: Save less frequently
     logging_steps: int = 10  # OPTIMIZED: Log less frequently
     
@@ -59,7 +59,4 @@ class TrainingConfig:
     use_vllm_reward: bool = True  # Use vLLM deployment instead of local inference
     reward_server_url: str = "http://localhost:8001"  # RewardAnything server URL
     
-    # Reward weights
-    judge_reward_weight: float = 1.0  # Weight for judge reward (higher = more important)
-    length_reward_weight: float = 0.4  # Weight for length reward (lower = less important)
 

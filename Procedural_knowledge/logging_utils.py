@@ -109,9 +109,8 @@ def log_episode_results_sync(
         question_data = {
             "question_index": i + 1,
             "question": response,
-            "combined_reward": float(reward),
-            "judge_score": float(score),
             "judge_reward": float(judge_reward),
+            "judge_score": float(score),
             "explanation": explanation
         }
         
@@ -143,11 +142,6 @@ def log_episode_results_sync(
     
     if rewards:
         summary = {
-            "combined_reward": {
-                "average": float(sum(rewards) / len(rewards)),
-                "min": float(min(rewards)),
-                "max": float(max(rewards))
-            },
             "judge": {
                 "average_score": float(sum(judge_scores) / len(judge_scores)) if judge_scores else 0.0,
                 "min_score": float(min(judge_scores)) if judge_scores else 0.0,

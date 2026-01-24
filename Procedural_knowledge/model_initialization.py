@@ -11,7 +11,13 @@ logger = logging.getLogger(__name__)
 
 def initialize_policy_model(config, device):
     """Initialize the policy model with value head."""
-    logger.info(f"Loading policy model: {config.policy_model_name}")
+    # Use instruction-tuned model if available, otherwise use base model
+    model_path = config.instruction_tuned_model_path if config.instruction_tuned_model_path else config.policy_model_name
+    
+    if config.instruction_tuned_model_path:
+        logger.info(f"Loading instruction-tuned model: {config.instruction_tuned_model_path}")
+    else:
+        logger.info(f"Loading base policy model: {config.policy_model_name}")
     
     model_kwargs = {
         "device_map": "auto",
@@ -31,7 +37,7 @@ def initialize_policy_model(config, device):
         model_kwargs["max_memory"] = config.max_memory
     
     model = AutoModelForCausalLMWithValueHead.from_pretrained(
-        config.policy_model_name,
+        model_path,
         **model_kwargs
     )
     
@@ -43,8 +49,9 @@ def initialize_policy_model(config, device):
     logger.info(f"Trainable parameters: {sum(p.numel() for p in model.parameters() if p.requires_grad):,}")
     
     logger.info("Loading reference model...")
+    # Reference model should use the same model as policy (instruction-tuned if available)
     ref_model = AutoModelForCausalLMWithValueHead.from_pretrained(
-        config.policy_model_name,
+        model_path,
         **model_kwargs
     )
     for param in ref_model.parameters():
