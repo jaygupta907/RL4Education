@@ -1,0 +1,204 @@
+/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/trl/trainer/ppo_trainer.py:266: UserWarning: No dataset is provided. Make sure to set config.batch_size to the correct value before training.
+  warnings.warn(
+2026-01-24 12:03:41,683 - model_initialization - INFO - PPO trainer initialized successfully.
+/home/ae21b026/RL4Education/Hypergraph/trainer.py:101: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  self.scaler = GradScaler()
+2026-01-24 12:03:41,683 - trainer - INFO - Mixed precision training enabled
+2026-01-24 12:03:41,684 - trainer - INFO - Run-specific logs directory created: ./checkpoints/logs/run_20260124_120341
+[34m[1mwandb[0m: wandb.init() called while a run is active and reinit is set to 'default', so returning the previous run.
+2026-01-24 12:03:41,686 - trainer - INFO - Wandb initialized for logging.
+2026-01-24 12:03:41,686 - trainer - INFO - Starting OPTIMIZED PPO training with hypergraph traces...
+2026-01-24 12:03:41,687 - trainer - INFO - Configuration: TrainingConfig(policy_model_name='meta-llama/Meta-Llama-3-8B-Instruct', instruction_tuned_model_path=None, judge_model_name='meta-llama/Meta-Llama-3-8B-Instruct', hypergraph_file='formula_hypergraph.json', max_depth=10, max_traces=100, min_trace_length=2, num_episodes=1000, batch_size=4, mini_batch_size=2, gradient_accumulation_steps=2, learning_rate=1.41e-06, ppo_epochs=2, cliprange=0.05, cliprange_value=0.05, gamma=1.0, lam=0.95, init_kl_coef=2.0, target_kl=0.001, max_new_tokens=300, temperature=0.5, top_p=0.9, top_k=50, repetition_penalty=1.2, no_repeat_ngram_size=2, output_dir='/mnt/storage/ae21b026/models/ppo_checkpoints_hypergraph', logs_dir='./checkpoints/logs', save_steps=50, logging_steps=10, use_mixed_precision=True, use_quantization=False, num_workers=4, log_detailed_every=1, max_memory=None, use_vllm_reward=True, reward_server_url='http://localhost:8001')
+2026-01-24 12:03:41,687 - trainer - INFO - Optimizations enabled: batch_size=4, max_tokens=300, parallel_workers=4
+2026-01-24 12:03:41,687 - trainer - INFO -
+============================================================
+2026-01-24 12:03:41,687 - trainer - INFO - Episode 1/1000
+2026-01-24 12:03:41,688 - trainer - INFO - ============================================================
+2026-01-24 12:03:41,688 - trainer - INFO - Collecting batch (parallel)...
+Asking to truncate to max_length but no maximum length is provided and the model has no predefined maximum length. Default to no truncation.
+2026-01-24 12:03:42,131 - trainer - INFO - Generating questions...
+/home/ae21b026/RL4Education/Hypergraph/trainer.py:226: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+You're using a PreTrainedTokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
+2026-01-24 12:03:55,203 - trainer - INFO -
+Generated 4 questions
+2026-01-24 12:03:55,203 - trainer - INFO -   Q1: A charged capacitor of capacitance C = 0.000001 Farads has an initial potential difference between its plates of V0 = +9 volts. The charge on one plate changes by dQ = -0 J and the other plate remains at constant potential energy.
+
+The process takes t =.05 seconds to complete. What was the average rate of change in electric potential across the resistor?...
+2026-01-24 12:03:55,204 - trainer - INFO -   Q2: A particle of mass 25 kg moves along a circular path of radius 10 meters. It starts at position (-15 meters,0 radians) and has an initial velocity of 8 m/min. The particle accelerates uniformly to reach its final position at (20 meters,-π/2 radians). If it maintains this constant acceleration for 12 seconds, what is its moment of inertia?...
+2026-01-24 12:03:55,204 - trainer - INFO -   Q3: Here's your generated problem:
+
+A small object of mass m = 0.25 kg and charge q = +2 C is placed on top of a frictionless surface at rest for t =. The gravitational acceleration due to the Earth is g =9.8 N/kg. What is its initial velocity v_0 after falling through this distance?...
+2026-01-24 12:03:55,205 - trainer - INFO -   Q4: A block of mass 20 kg is released from rest at an angle of π/4 radians to the horizontal ground and slides down an inclined plane having a coefficient of kinetic friction μ=0 between it and the surface. The gravitational constant g has a value of 9.8 m/s^2 on this planet.
+
+Find its final velocity after t = 10 seconds when the block reaches the bottom of the incline, assuming there's no air resistance acting upon it. What is its total energy?...
+2026-01-24 12:03:55,205 - trainer - INFO - Computing rewards (batched)...
+2026-01-24 12:04:25,237 - rewardanything.client - WARNING - Request failed (attempt 1), retrying in 1s: HTTPConnectionPool(host='localhost', port=8001): Read timed out. (read timeout=30.0)
+2026-01-24 12:04:56,270 - rewardanything.client - WARNING - Request failed (attempt 2), retrying in 2s: HTTPConnectionPool(host='localhost', port=8001): Read timed out. (read timeout=30.0)
+2026-01-24 12:05:28,305 - rewardanything.client - WARNING - Request failed (attempt 3), retrying in 4s: HTTPConnectionPool(host='localhost', port=8001): Read timed out. (read timeout=30.0)
+2026-01-24 12:05:32,311 - rewardanything.client - ERROR - Request failed after 4 attempts: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/rewardanything (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f3fd011a9e0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2026-01-24 12:05:32,311 - rewardanything.client - ERROR - Failed to evaluate with principle 'Score questions based on their DIFFICULTY and COMPLEXITY on a 0-10 scale. Rank higher (8-10) questions that require: multiple physics concepts, several calculation steps, complex reasoning, integration of different principles, or realistic multi-step scenarios. Rank lower (0-4) questions that are trivial, require only direct substitution, or involve a single simple formula. Focus on cognitive difficulty and problem-solving complexity, not on value accuracy or formatting. Return scores as numeric values between 0 and 10.': HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/rewardanything (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f3fd011a9e0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2026-01-24 12:05:32,312 - reward_computer - ERROR - Individual evaluation failed for response 0: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/rewardanything (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f3fd011a9e0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2026-01-24 12:05:32,313 - rewardanything.client - WARNING - Request failed (attempt 1), retrying in 1s: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/rewardanything (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f3fd011b550>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2026-01-24 12:05:33,316 - rewardanything.client - WARNING - Request failed (attempt 2), retrying in 2s: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/rewardanything (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f3fd011bdc0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2026-01-24 12:05:35,320 - rewardanything.client - WARNING - Request failed (attempt 3), retrying in 4s: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/rewardanything (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f3fd01005e0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2026-01-24 12:05:39,326 - rewardanything.client - ERROR - Request failed after 4 attempts: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/rewardanything (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f3fd011a380>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2026-01-24 12:05:39,327 - rewardanything.client - ERROR - Failed to evaluate with principle 'Score questions based on their DIFFICULTY and COMPLEXITY on a 0-10 scale. Rank higher (8-10) questions that require: multiple physics concepts, several calculation steps, complex reasoning, integration of different principles, or realistic multi-step scenarios. Rank lower (0-4) questions that are trivial, require only direct substitution, or involve a single simple formula. Focus on cognitive difficulty and problem-solving complexity, not on value accuracy or formatting. Return scores as numeric values between 0 and 10.': HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/rewardanything (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f3fd011a380>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2026-01-24 12:05:39,327 - reward_computer - ERROR - Individual evaluation failed for response 1: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/rewardanything (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f3fd011a380>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2026-01-24 12:05:39,328 - rewardanything.client - WARNING - Request failed (attempt 1), retrying in 1s: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/rewardanything (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f3fd01e0a90>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2026-01-24 12:05:40,331 - rewardanything.client - WARNING - Request failed (attempt 2), retrying in 2s: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/rewardanything (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f3fd0100ca0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2026-01-24 12:05:42,335 - rewardanything.client - WARNING - Request failed (attempt 3), retrying in 4s: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/rewardanything (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f3fd01015d0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2026-01-24 12:05:46,341 - rewardanything.client - ERROR - Request failed after 4 attempts: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/rewardanything (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f3fd011a770>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2026-01-24 12:05:46,342 - rewardanything.client - ERROR - Failed to evaluate with principle 'Score questions based on their DIFFICULTY and COMPLEXITY on a 0-10 scale. Rank higher (8-10) questions that require: multiple physics concepts, several calculation steps, complex reasoning, integration of different principles, or realistic multi-step scenarios. Rank lower (0-4) questions that are trivial, require only direct substitution, or involve a single simple formula. Focus on cognitive difficulty and problem-solving complexity, not on value accuracy or formatting. Return scores as numeric values between 0 and 10.': HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/rewardanything (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f3fd011a770>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2026-01-24 12:05:46,342 - reward_computer - ERROR - Individual evaluation failed for response 2: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/rewardanything (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f3fd011a770>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2026-01-24 12:05:46,344 - rewardanything.client - WARNING - Request failed (attempt 1), retrying in 1s: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/rewardanything (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f3fd0101840>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2026-01-24 12:05:47,346 - rewardanything.client - WARNING - Request failed (attempt 2), retrying in 2s: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/rewardanything (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f3fd0100370>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2026-01-24 12:05:49,350 - rewardanything.client - WARNING - Request failed (attempt 3), retrying in 4s: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/rewardanything (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f3fd0101e40>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2026-01-24 12:05:53,357 - rewardanything.client - ERROR - Request failed after 4 attempts: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/rewardanything (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f3fd011b550>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2026-01-24 12:05:53,358 - rewardanything.client - ERROR - Failed to evaluate with principle 'Score questions based on their DIFFICULTY and COMPLEXITY on a 0-10 scale. Rank higher (8-10) questions that require: multiple physics concepts, several calculation steps, complex reasoning, integration of different principles, or realistic multi-step scenarios. Rank lower (0-4) questions that are trivial, require only direct substitution, or involve a single simple formula. Focus on cognitive difficulty and problem-solving complexity, not on value accuracy or formatting. Return scores as numeric values between 0 and 10.': HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/rewardanything (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f3fd011b550>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2026-01-24 12:05:53,358 - reward_computer - ERROR - Individual evaluation failed for response 3: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/rewardanything (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f3fd011b550>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2026-01-24 12:05:53,358 - trainer - INFO - Avg judge score: 0.00/10.0, Avg reward: -1.0000
+2026-01-24 12:05:53,361 - trainer - INFO - Training with PPO...
+/home/ae21b026/RL4Education/Hypergraph/trainer.py:320: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+2026-01-24 12:05:58,470 - trainer - ERROR - Out of memory at episode 1
+2026-01-24 12:05:58,681 - trainer - INFO -
+============================================================
+2026-01-24 12:05:58,682 - trainer - INFO - Episode 2/1000
+2026-01-24 12:05:58,682 - trainer - INFO - ============================================================
+2026-01-24 12:05:58,683 - trainer - INFO - Collecting batch (parallel)...
+2026-01-24 12:05:59,115 - trainer - INFO - Generating questions...
+/home/ae21b026/RL4Education/Hypergraph/trainer.py:226: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Traceback (most recent call last):
+  File "/home/ae21b026/RL4Education/Hypergraph/main.py", line 98, in <module>
+    main()
+  File "/home/ae21b026/RL4Education/Hypergraph/main.py", line 94, in main
+    trainer.train()
+  File "/home/ae21b026/RL4Education/Hypergraph/trainer.py", line 227, in train
+    response_tensors = self.ppo_trainer.generate(query_tensors, **generation_kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/trl/trainer/ppo_trainer.py", line 488, in generate
+    response = self._generate_batched(
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/trl/trainer/ppo_trainer.py", line 575, in _generate_batched
+    generations = unwrapped_model.generate(**padded_inputs, **generation_kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/trl/models/modeling_value_head.py", line 209, in generate
+    return self.pretrained_model.generate(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/generation/utils.py", line 2566, in generate
+    result = decoding_method(
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/generation/utils.py", line 2786, in _sample
+    outputs = self(**model_inputs, return_dict=True)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/accelerate/hooks.py", line 175, in new_forward
+    output = module._old_forward(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/utils/generic.py", line 918, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/models/llama/modeling_llama.py", line 459, in forward
+    outputs: BaseModelOutputWithPast = self.model(
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/utils/generic.py", line 1072, in wrapper
+    outputs = func(self, *args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/models/llama/modeling_llama.py", line 395, in forward
+    hidden_states = decoder_layer(
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/modeling_layers.py", line 94, in __call__
+    return super().__call__(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/accelerate/hooks.py", line 175, in new_forward
+    output = module._old_forward(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/utils/deprecation.py", line 172, in wrapped_func
+    return func(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/models/llama/modeling_llama.py", line 309, in forward
+    hidden_states = self.mlp(hidden_states)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/accelerate/hooks.py", line 175, in new_forward
+    output = module._old_forward(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/models/llama/modeling_llama.py", line 155, in forward
+    down_proj = self.down_proj(self.act_fn(self.gate_proj(x)) * self.up_proj(x))
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/accelerate/hooks.py", line 175, in new_forward
+    output = module._old_forward(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/torch/nn/modules/linear.py", line 134, in forward
+    return F.linear(input, self.weight, self.bias)
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 112.00 MiB. GPU 1 has a total capacity of 79.25 GiB of which 91.19 MiB is free. Process 4079552 has 36.90 GiB memory in use. Including non-PyTorch memory, this process has 42.25 GiB memory in use. Of the allocated memory 41.56 GiB is allocated by PyTorch, and 188.93 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Traceback (most recent call last):
+  File "/home/ae21b026/RL4Education/Hypergraph/main.py", line 98, in <module>
+    main()
+  File "/home/ae21b026/RL4Education/Hypergraph/main.py", line 94, in main
+    trainer.train()
+  File "/home/ae21b026/RL4Education/Hypergraph/trainer.py", line 227, in train
+    response_tensors = self.ppo_trainer.generate(query_tensors, **generation_kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/trl/trainer/ppo_trainer.py", line 488, in generate
+    response = self._generate_batched(
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/trl/trainer/ppo_trainer.py", line 575, in _generate_batched
+    generations = unwrapped_model.generate(**padded_inputs, **generation_kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/trl/models/modeling_value_head.py", line 209, in generate
+    return self.pretrained_model.generate(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/generation/utils.py", line 2566, in generate
+    result = decoding_method(
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/generation/utils.py", line 2786, in _sample
+    outputs = self(**model_inputs, return_dict=True)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/accelerate/hooks.py", line 175, in new_forward
+    output = module._old_forward(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/utils/generic.py", line 918, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/models/llama/modeling_llama.py", line 459, in forward
+    outputs: BaseModelOutputWithPast = self.model(
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/utils/generic.py", line 1072, in wrapper
+    outputs = func(self, *args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/models/llama/modeling_llama.py", line 395, in forward
+    hidden_states = decoder_layer(
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/modeling_layers.py", line 94, in __call__
+    return super().__call__(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/accelerate/hooks.py", line 175, in new_forward
+    output = module._old_forward(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/utils/deprecation.py", line 172, in wrapped_func
+    return func(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/models/llama/modeling_llama.py", line 309, in forward
+    hidden_states = self.mlp(hidden_states)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/accelerate/hooks.py", line 175, in new_forward
+    output = module._old_forward(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/transformers/models/llama/modeling_llama.py", line 155, in forward
+    down_proj = self.down_proj(self.act_fn(self.gate_proj(x)) * self.up_proj(x))
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/accelerate/hooks.py", line 175, in new_forward
+    output = module._old_forward(*args, **kwargs)
+  File "/home/ae21b026/miniconda3/envs/question_generation/lib/python3.10/site-packages/torch/nn/modules/linear.py", line 134, in forward
+    return F.linear(input, self.weight, self.bias)
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 112.00 MiB. GPU 1 has a total capacity of 79.25 GiB of which 91.19 MiB is free. Process 4079552 has 36.90 GiB memory in use. Including non-PyTorch memory, this process has 42.25 GiB memory in use. Of the allocated memory 41.56 GiB is allocated by PyTorch, and 188.93 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
