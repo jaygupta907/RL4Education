@@ -31,30 +31,43 @@ def create_prompt(calculator: TreeWalkCalculator, tokenizer) -> Tuple[str, Dict]
     
     values_list_text = "\n".join(values_examples)
     allowed_vars_list = ", ".join(given_values_list)
+    
+    # Extract calculation steps from tree structure
+    steps_text = ""
+    if 'levels' in calculator.tree_structure and 'node_formulas' in calculator.tree_structure:
+        steps_list = []
+        all_levels = sorted([l for l in calculator.tree_structure['levels'].keys() if l > 0])  # Skip level 0 (target)
+        
+        step_num = 1
+        for level in all_levels:
+            level_nodes = calculator.tree_structure['levels'].get(level, [])
+            for node in sorted(level_nodes):
+                if node not in leaf_nodes_set and node in calculator.tree_structure['node_formulas']:
+                    formula, deps = calculator.tree_structure['node_formulas'][node]
+                    if formula:
+                        si_unit = calculator._get_si_unit(node)
+                        unit_str = f" ({si_unit})" if si_unit else ""
+                        inputs_str = ", ".join(sorted(deps)) if deps else ""
+                        steps_list.append(f"Step {step_num}: Calculate {node}{unit_str} using {formula} with inputs: {inputs_str}")
+                        step_num += 1
+        
+        if steps_list:
+            steps_text = "\n".join(steps_list)
 
     # For Llama 8B Instruct, use the proper chat template format
-    system_prompt = """You are a physics problem generator. Generate clear, realistic physics word problems in English using exact numerical values provided.
-
-Your task:
-1. Use ONLY variables from the allowed variables list above
-2. Use EXACT values from the given values with full precision
-4. Create a realistic physical scenario that naturally incorporates all given variables
-5. Do NOT include phrases like "Here is the problem:" - start directly with the problem
-6. Do NOT use placeholder symbols - use the actual numeric values provided
-7. Generate ONLY the problem text, no preamble or explanations
-8. WRITE in plain English, no LaTeX, markdown, or Unicode symbols"""
+    system_prompt = """You are a physics problem generator. Generate clear, realistic physics word problems """
     
-    user_prompt = f"""Use EXACT numeric values from the provided list. Do NOT round, modify, or approximate any numbers.
+    # Build user prompt with calculation steps
+    if steps_text:
+        user_prompt = f""" Given the following values: {values_list_text} and target variable: {target}
 
-Given values ({len(given_values_list)} total):
-{values_list_text}
+Calculation steps:
+{steps_text}
 
-Allowed variables: {allowed_vars_list}
+Generate a deep-reasoning physics question that tests a student's understanding of the relationship between  target variable: {target} and the variables {allowed_vars_list}"""
 
-Target variable: {target}
-
-Generate the problem now, strictly following the requirements above.
-"""
+    else:
+        user_prompt = f""" Given the following values: {values_list_text} and allowed variables: {allowed_vars_list} Generate a deep-reasoning physics question that tests a student's understanding of the relationship between {target} and the variables {allowed_vars_list}"""
     
     # Apply Llama 3 Chat Template
     if hasattr(tokenizer, 'apply_chat_template'):

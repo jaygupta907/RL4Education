@@ -6,20 +6,6 @@ with rewards from the judge LLM. The judge evaluates whether generated questions
 ask for the solution trace based on the hypergraph traces.
 
 The script first performs instruction fine-tuning on the dataset, then proceeds with RL training.
-
-PERFORMANCE OPTIMIZATIONS IMPLEMENTED:
-1. Increased batch size from 1 to 4 (4x speedup)
-2. Reduced max_new_tokens from 500 to 300 (1.7x speedup)
-3. Batched reward computation (2x speedup)
-4. Parallel trace generation (2-4x speedup)
-5. Reduced logging frequency (1.2x speedup)
-6. Mixed precision training (1.5x speedup)
-7. Pre-cached hypergraph data and question contexts
-8. Optimized memory cleanup
-9. Async logging to avoid blocking
-
-Expected total speedup: 20-50x faster than original
-
 Requirements:
     - transformers library: pip install transformers torch
     - trl library: pip install trl
@@ -60,7 +46,7 @@ def main():
     
     # OPTIMIZED configuration for Llama 3 with hypergraph traces
     config = TrainingConfig(
-        num_episodes=1000,
+        num_episodes=10000,
         max_depth=10,  # Maximum depth for hypergraph traversal
         max_traces=100,  # Maximum number of traces to consider per target
         min_trace_length=2,  # Minimum number of formulas in trace

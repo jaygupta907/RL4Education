@@ -1,5 +1,0 @@
-2026-01-24 12:03:41,685 INFO    MainThread:4112046 [wandb_init.py:setup_run_log_directory():705] Logging user logs to /home/ae21b026/RL4Education/Hypergraph/wandb/run-20260124_120341-q7pd9ltm/logs/debug.log
-2026-01-24 12:03:41,686 INFO    MainThread:4112046 [wandb_init.py:setup_run_log_directory():706] Logging internal logs to /home/ae21b026/RL4Education/Hypergraph/wandb/run-20260124_120341-q7pd9ltm/logs/debug-internal.log
-2026-01-24 12:03:41,686 INFO    MainThread:4112046 [wandb_init.py:init():832] calling init triggers
-2026-01-24 12:03:41,686 INFO    MainThread:4112046 [wandb_init.py:init():837] wandb.init called with sweep_config: {}
-config: {'policy_model': 'meta-llama/Meta-Llama-3-8B-Instruct', 'judge_model': 'meta-llama/Meta-Llama-3-8B-Instruct', 'max_depth': 10, 'batch_size': 4, 'learning_rate': 1.41e-06, 'ppo_epochs': 2, 'max_new_tokens': 300, 'temperature': 0.5, 'optimizations': 'batch_size=4, max_tokens=300, batched_rewards, parallel_generation, mixed_precision', '_wandb': {}}

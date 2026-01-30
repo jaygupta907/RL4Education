@@ -1,8 +1,16 @@
 """
 Prompt generation utilities for hypergraph traces.
 """
+import random
 from typing import Dict, Tuple
 from hypergraph_traverser import HypergraphTraverser
+
+
+def generate_value() -> float:
+    """
+    Generate a random value between 1 and 10 with up to 2 decimal places.
+    """
+    return round(random.uniform(1.0, 10.0), 2)
 
 
 def create_prompt(traverser: HypergraphTraverser, trace: Dict, target: str, tokenizer) -> Tuple[str, Dict]:
@@ -16,51 +24,61 @@ def create_prompt(traverser: HypergraphTraverser, trace: Dict, target: str, toke
     # Extract formulas (calculation steps)
     formulas = trace.get('formulas', [])
     
-    # Format the list of given values with SI units
+    # Format the list of given values with SI units and actual values
     values_examples = []
+    generated_values = {}  # Store generated values for logging
     for idx, var in enumerate(leaf_nodes, 1):
         # Get SI unit from hypergraph if available
+        # Leaf nodes are INPUT variables, so we need to check input_si_units
         si_unit = ""
         for hyperedge in traverser.hypergraph['hyperedges']:
-            if hyperedge['output'] == var:
-                si_unit = hyperedge.get('output_si_unit', '')
+            input_si_units = hyperedge.get('input_si_units', {})
+            if var in input_si_units:
+                si_unit = input_si_units[var]
                 break
         
         unit_str = si_unit if (si_unit and si_unit.strip()) else "(unit not specified)"
-        values_examples.append(f"{idx}. {var} = [value] {unit_str}")
+        # Generate actual value instead of placeholder (random value between 1 and 10)
+        value = generate_value()
+        generated_values[var] = {"value": value, "unit": unit_str}
+        values_examples.append(f"{idx}. {var} = {value} {unit_str}")
     
     values_list_text = "\n".join(values_examples)
     allowed_vars_list = ", ".join(leaf_nodes)
     
     # Extract calculation steps for context
     calculation_steps = trace.get('calculation_steps', [])
+    formulas = trace.get('formulas', [])
+    
+    # Format calculation steps
+    steps_text = ""
+    if formulas:
+        steps_list = []
+        for i, formula_info in enumerate(formulas, 1):
+            step_var = formula_info.get('output', '')
+            step_formula = formula_info.get('formula', '')
+            step_inputs = formula_info.get('inputs', [])
+            step_unit = formula_info.get('output_si_unit', '')
+            unit_str = f" ({step_unit})" if step_unit else ""
+            inputs_str = ", ".join(step_inputs)
+            steps_list.append(f"Step {i}: Calculate {step_var}{unit_str} using {step_formula} with inputs: {inputs_str}")
+        steps_text = "\n".join(steps_list)
     
     # For Llama 8B Instruct, use the proper chat template format
-    system_prompt = """You are a physics problem generator. Generate clear, realistic physics word problems in English using exact numerical values provided.
-
-Your task:
-1. Use ONLY variables from the allowed variables list above
-2. Use EXACT values from the given values with full precision
-3. Create a realistic physical scenario that naturally incorporates all given variables
-4. Do NOT include phrases like "Here is the problem:" - start directly with the problem
-5. Do NOT use placeholder symbols - use the actual numeric values provided
-6. Generate ONLY the problem text, no preamble or explanations
-7. WRITE in plain English, no LaTeX, markdown, or Unicode symbols"""
+    system_prompt = """You are a physics problem generator. Generate clear, realistic physics word problems """
     
-    user_prompt = f"""Use EXACT numeric values from the provided list. Do NOT round, modify, or approximate any numbers.
+    # Build user prompt with calculation steps
+    if steps_text:
+        user_prompt = f""" Given the following values: {values_list_text} and target variable: {target}
 
-Given values ({len(leaf_nodes)} total):
-{values_list_text}
+Calculation steps:
+{steps_text}
 
-Allowed variables: {allowed_vars_list}
+Generate a deep-reasoning physics question that tests a student's understanding of the relationship between  target variable: {target} and the variables {allowed_vars_list}"""
 
-Target variable: {target}
-
-Calculation steps ({len(formulas)} steps):
-{chr(10).join(calculation_steps[:5])}  # Show first 5 steps
-
-Generate the problem now, strictly following the requirements above.
-"""
+        print(user_prompt)
+    else:
+        user_prompt = f""" Given the following values: {values_list_text} and allowed variables: {allowed_vars_list} Generate a deep-reasoning physics question that tests a student's understanding of the relationship between {target} and the variables {allowed_vars_list}"""
     
     # Apply Llama 3 Chat Template
     if hasattr(tokenizer, 'apply_chat_template'):
@@ -99,6 +117,8 @@ Generate the problem now, strictly following the requirements above.
         "num_formulas": len(formulas),
         "depth": trace.get('depth', 0),
         "trace_path": [f['output'] for f in formulas],
+        "user_prompt": user_prompt,  # Store user prompt for logging
+        "generated_values": generated_values,  # Store generated values for reference
     }
     
     return prompt_text, metadata

@@ -27,11 +27,11 @@ class TrainingConfig:
     learning_rate: float = 1.41e-6
     ppo_epochs: int = 2
     cliprange: float = 0.05
-    cliprange_value: float = 0.05
+    cliprange_value: float = 0.2
     gamma: float = 1.0
     lam: float = 0.95
-    init_kl_coef: float = 2.0
-    target_kl: float = 0.001
+    init_kl_coef: float = 1.0
+    target_kl: float = 2.0
     
     # Generation configuration - OPTIMIZED
     max_new_tokens: int = 300  

@@ -31,10 +31,12 @@ def format_solution_trace(traverser: HypergraphTraverser, trace: Dict, target: s
     given_values = []
     for leaf in sorted(leaf_nodes):
         # Get SI unit from hypergraph if available
+        # Leaf nodes are INPUT variables, so we need to check input_si_units
         si_unit = ""
         for hyperedge in traverser.hypergraph['hyperedges']:
-            if hyperedge['output'] == leaf:
-                si_unit = hyperedge.get('output_si_unit', '')
+            input_si_units = hyperedge.get('input_si_units', {})
+            if leaf in input_si_units:
+                si_unit = input_si_units[leaf]
                 break
         
         given_values.append({
@@ -99,6 +101,12 @@ def log_episode_results_sync(
             "judge_score": float(score),
             "explanation": explanation
         }
+        
+        # Add user prompt if available
+        if i < len(batch) and "user_prompt" in batch[i]:
+            question_data["user_prompt"] = batch[i]["user_prompt"]
+        elif i < len(batch) and "metadata" in batch[i] and "user_prompt" in batch[i]["metadata"]:
+            question_data["user_prompt"] = batch[i]["metadata"]["user_prompt"]
         
         if i < len(batch) and "metadata" in batch[i]:
             question_data["metadata"] = batch[i]["metadata"]

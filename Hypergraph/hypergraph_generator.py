@@ -55,6 +55,7 @@ def generate_single_trace(
             "trace": trace,
             "target": target,
             "metadata": metadata,
+            "user_prompt": metadata.get("user_prompt", ""),  # Extract user prompt from metadata for easy access
         }
     except Exception as e:
         logger.debug(f"Error generating trace: {e}")

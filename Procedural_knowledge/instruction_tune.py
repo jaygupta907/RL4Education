@@ -39,9 +39,9 @@ logger = logging.getLogger(__name__)
 class InstructionTuningConfig:
     """Configuration for instruction fine-tuning."""
     # Model configuration
-    model_name: str = "meta-llama/Meta-Llama-3-8B-Instruct"
-    dataset_path: str = "dataset.json"
-    output_dir: str = "/mnt/storage/ae21b026/models/instruction_tuned_model"
+    model_name: str = "meta-llama/Meta-Llama-3-8B"
+    dataset_path: str = "dataset_new_format.json"
+    output_dir: str = "/mnt/storage/ae21b026/models/instruction_tuned_model_pretrained"
     
     # Training configuration
     num_train_epochs: int = 6
@@ -84,19 +84,7 @@ def load_and_prepare_dataset(dataset_path: str, tokenizer):
     def format_chat_messages(example):
         """Format prompt-response pairs into Llama 3 chat format."""
         # Use the same system prompt as in prompt_generator.py for consistency
-        system_message = """You are a physics problem generator. Generate clear, realistic physics word problems in English using exact numerical values provided.
-
-Your task:
-1. Use ONLY variables from the allowed variables list above
-2. Use EXACT values from the given values with full precision
-3. End with asking for target variable
-4. Create a realistic physical scenario that naturally incorporates all given variables
-5. Do NOT include phrases like "Here is the problem:" - start directly with the problem
-6. Do NOT use placeholder symbols - use the actual numeric values provided
-7. Generate ONLY the problem text, no preamble or explanations
-8. WRITE in plain English, no LaTeX, markdown, or Unicode symbols
-
-"""
+        system_message = """You are a physics problem generator. Generate clear, realistic physics word problems """
         
         user_message = example['prompt']
         assistant_message = example['response']
@@ -267,137 +255,103 @@ def test_model_generation(model, tokenizer):
     test_examples = [
         {
             "name": "Cart on frictionless track",
-            "prompt": """Use EXACT numeric values from the provided list. Do NOT round, modify, or approximate any numbers.
-
-Given values (4 total):
+            "prompt": """ Given the following values: 
 1. mass = 6.50 kg
 2. initial_velocity = 4.20 m/s
 3. force = 5.50 N
 4. time = 6.00 s
+ and target_variable: final_velocity  
 
-Allowed variables: mass, initial_velocity, force, time
+Calculation steps:
+Step 1: Calculate acceleration (m/s²) using force / mass with inputs: force, mass
+Step 2: Calculate final_velocity (m/s) using initial_velocity + acceleration * time with inputs: initial_velocity, acceleration, time
 
-Target variable: final_velocity
-
-Generate the problem now, strictly following the requirements above."""
+Generate a deep-reasoning physics question that tests a student's understanding of the relationship between final_velocity and the variables mass, initial_velocity, force, time"""
         },
         {
             "name": "Worker pushing crate",
-            "prompt": """Use EXACT numeric values from the provided list. Do NOT round, modify, or approximate any numbers.
-
-Given values (2 total):
+            "prompt": """ Given the following values: 
 1. force = 5.20 N
 2. displacement = 3.50 m
+ and target_variable: work
 
-Allowed variables: force, displacement
+Calculation steps:
+Step 1: Calculate work (J) using force * displacement with inputs: force, displacement
 
-Target variable: work
-
-Generate the problem now, strictly following the requirements above."""
+Generate a deep-reasoning physics question that tests a student's understanding of the relationship between work and the variables force, displacement"""
         },
         {
             "name": "Construction worker lifting toolbox",
-            "prompt": """Use EXACT numeric values from the provided list. Do NOT round, modify, or approximate any numbers.
-
-Given values (3 total):
+            "prompt": """ Given the following values: 
 1. mass = 5.25 kg
 2. height = 8.40 m
-3. gravity = 9.81 m/s2
+3. gravity = 9.81 m/s²
+ and target_variable: potential_energy
 
-Allowed variables: mass, height, gravity
+Calculation steps:
+Step 1: Calculate potential_energy (J) using mass * gravity * height with inputs: mass, gravity, height
 
-Target variable: potential_energy
-
-Generate the problem now, strictly following the requirements above."""
+Generate a deep-reasoning physics question that tests a student's understanding of the relationship between potential_energy and the variables mass, height, gravity"""
         },
         {
             "name": "Electrical circuit",
-            "prompt": """Use EXACT numeric values from the provided list. Do NOT round, modify, or approximate any numbers.
-
-Given values (3 total):
+            "prompt": """ Given the following values: 
 1. voltage = 9.20 V
-2. resistance = 8.30 Ohm
+2. resistance = 8.30 Ω
 3. time = 4.50 s
+ and target_variable: energy
 
-Allowed variables: voltage, resistance, time
+Calculation steps:
+Step 1: Calculate current (A) using voltage / resistance with inputs: voltage, resistance
+Step 2: Calculate power (W) using voltage * current with inputs: voltage, current
+Step 3: Calculate energy (J) using power * time with inputs: power, time
 
-Target variable: energy
-
-Generate the problem now, strictly following the requirements above."""
+Generate a deep-reasoning physics question that tests a student's understanding of the relationship between energy and the variables voltage, resistance, time"""
         },
         {
             "name": "Hockey puck deceleration",
-            "prompt": """Use EXACT numeric values from the provided list. Do NOT round, modify, or approximate any numbers.
-
-Given values (4 total):
+            "prompt": """ Given the following values: 
 1. mass = 1.85 kg
 2. initial_velocity = 7.20 m/s
 3. final_velocity = 3.40 m/s
 4. time = 2.80 s
+ and target_variable: friction_force
 
-Allowed variables: mass, initial_velocity, final_velocity, time
+Calculation steps:
+Step 1: Calculate acceleration (m/s²) using (final_velocity - initial_velocity) / time with inputs: final_velocity, initial_velocity, time
+Step 2: Calculate friction_force (N) using mass * acceleration with inputs: mass, acceleration
 
-Target variable: friction_force
-
-Generate the problem now, strictly following the requirements above."""
-        },
-        {
-            "name": "Ball on string circular motion",
-            "prompt": """Use EXACT numeric values from the provided list. Do NOT round, modify, or approximate any numbers.
-
-Given values (3 total):
-1. mass = 2.75 kg
-2. velocity = 6.40 m/s
-3. radius = 3.20 m
-
-Allowed variables: mass, velocity, radius
-
-Target variable: centripetal_force
-
-Generate the problem now, strictly following the requirements above."""
+Generate a deep-reasoning physics question that tests a student's understanding of the relationship between friction_force and the variables mass, initial_velocity, final_velocity, time"""
         },
         {
             "name": "Copper block heating",
-            "prompt": """Use EXACT numeric values from the provided list. Do NOT round, modify, or approximate any numbers.
-
-Given values (3 total):
+            "prompt": """ Given the following values: 
 1. mass = 8.50 kg
 2. specific_heat = 2.40 J/(kg K)
 3. temperature_change = 6.75 K
+ and target_variable: heat
 
-Allowed variables: mass, specific_heat, temperature_change
+Calculation steps:
+Step 1: Calculate heat (J) using mass * specific_heat * temperature_change with inputs: mass, specific_heat, temperature_change
 
-Target variable: heat
-
-Generate the problem now, strictly following the requirements above."""
+Generate a deep-reasoning physics question that tests a student's understanding of the relationship between heat and the variables mass, specific_heat, temperature_change"""
         },
         {
             "name": "Rocket launch",
-            "prompt": """Use EXACT numeric values from the provided list. Do NOT round, modify, or approximate any numbers.
-
-Given values (3 total):
+            "prompt": """ Given the following values: 
 1. initial_velocity = 0.00 m/s
-2. acceleration = 2.85 m/s2
+2. acceleration = 2.85 m/s²
 3. time = 5.60 s
+ and target_variable: displacement
 
-Allowed variables: initial_velocity, acceleration, time
+Calculation steps:
+Step 1: Calculate displacement (m) using initial_velocity * time + 0.5 * acceleration * time**2 with inputs: initial_velocity, acceleration, time
 
-Target variable: displacement
-
-Generate the problem now, strictly following the requirements above."""
+Generate a deep-reasoning physics question that tests a student's understanding of the relationship between displacement and the variables initial_velocity, acceleration, time"""
         }
     ]
 
-    system_message = """You are a physics problem generator. Generate clear, realistic physics word problems in English using exact numerical values provided.
-
-Your task:
-1. Use ONLY variables from the allowed variables list above
-2. Use EXACT values from the given values with full precision
-4. Create a realistic physical scenario that naturally incorporates all given variables
-5. Do NOT include phrases like "Here is the problem:" - start directly with the problem
-6. Do NOT use placeholder symbols - use the actual numeric values provided
-7. Generate ONLY the problem text, no preamble or explanations
-8. WRITE in plain English, no LaTeX, markdown, or Unicode symbols"""
+    system_message = """You are a physics problem generator. Generate clear, realistic physics word problems """
 
     # Create log file for test results
     log_dir = "./checkpoints/logs"
@@ -476,7 +430,7 @@ def main():
     """Main entry point."""
     config = InstructionTuningConfig(
         model_name="meta-llama/Meta-Llama-3-8B-Instruct",
-        dataset_path="dataset.json",
+        dataset_path="dataset_new_format.json",
         output_dir="/mnt/storage/ae21b026/models/instruction_tuned_model",
         num_train_epochs=10,
         per_device_train_batch_size=4,
