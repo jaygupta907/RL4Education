@@ -159,16 +159,22 @@ class InstructionModelEvaluator:
         generated_question: str,
         prompt: str,
         target: str,
-        trace: Dict
+        trace: Dict,
+        generated_values: Dict = None
     ) -> Tuple[float, str]:
         """
         Compute faithfulness score for a generated question.
+        Simplified to check only:
+        1. Given variables are present
+        2. Values match
+        3. Question asks for target variable
         
         Args:
             generated_question: The generated question text
             prompt: The original prompt used for generation
             target: Target variable
             trace: The hypergraph trace used
+            generated_values: Dictionary of generated values for variables
             
         Returns:
             Tuple of (score, explanation) where score is between 1-10
@@ -176,40 +182,57 @@ class InstructionModelEvaluator:
         if self.reward_model is None:
             return None, "Reward model not available"
         
-        # Build faithfulness principle
+        # Build faithfulness principle - simplified to check only:
+        # 1. Given variables are present
+        # 2. Values match
+        # 3. Question asks for target variable
         leaf_nodes = trace.get('leaf_nodes', [])
-        formulas = trace.get('formulas', [])
-        calculation_steps = trace.get('calculation_steps', [])
         
-        # Create detailed trace description for evaluation
-        trace_description = f"""
-Target variable: {target}
-Given variables (leaf nodes): {', '.join(sorted(leaf_nodes))}
-Number of calculation steps: {len(formulas)}
-Calculation steps:
-{chr(10).join(calculation_steps) if calculation_steps else 'No intermediate steps'}
-"""
+        # Build list of given variables with their values
+        given_vars_with_values = []
+        if generated_values:
+            for var in sorted(leaf_nodes):
+                if var in generated_values:
+                    value = generated_values[var].get('value', 'N/A')
+                    unit = generated_values[var].get('unit', '')
+                    unit_str = f" {unit}" if unit else ""
+                    given_vars_with_values.append(f"{var} = {value}{unit_str}")
+                else:
+                    given_vars_with_values.append(f"{var} = (value not specified)")
+        else:
+            given_vars_with_values = [var for var in sorted(leaf_nodes)]
         
-        principle = f"""Score the faithfulness of the generated physics question to the hypergraph traversal on a scale of 1-10.
+        given_vars_text = "\n".join(given_vars_with_values)
+        num_variables = len(leaf_nodes)
+        
+        # Calculate thresholds for partial credit
+        most_threshold = max(1, int(num_variables * 0.8))  # 80% of variables
+        some_threshold = max(1, int(num_variables * 0.5))  # 50% of variables
+        
+        principle = f"""Score the faithfulness of the generated physics question on a scale of 1-10.
 
-A faithful question (score 8-10) should:
-- Correctly ask for the target variable: {target}
-- Use only the given variables from the trace: {', '.join(sorted(leaf_nodes))}
-- Follow the calculation steps in the correct order
-- Be consistent with the physics relationships shown in the trace
-- Not introduce variables or concepts not present in the trace
+Check these three things:
 
-A less faithful question (score 1-4) may:
-- Ask for a different variable than the target
-- Use variables not in the trace
-- Skip or reorder calculation steps incorrectly
-- Introduce unrelated physics concepts
-- Contradict the trace structure
+1. Given variables are present: The question should mention or use these variables:
+{given_vars_text}
+
+2. Values match: The question should use the exact same values. Count how many values are present and match:
+{chr(10).join(given_vars_with_values)}
+Total variables to check: {num_variables}
+
+3. Target variable: The question should ask for: {target}
+
+Scoring Guidelines (give partial credit - missing one value should NOT cause complete failure):
+- Score 9-10: All {num_variables} values present AND match exactly AND asks for correct target
+- Score 7-8: Most values present (at least {most_threshold} out of {num_variables}) AND values match AND asks for correct target
+- Score 5-6: Some values present (at least {some_threshold} out of {num_variables}) AND asks for correct target
+- Score 3-4: Few values present (less than {some_threshold}) OR wrong target variable
+- Score 1-2: Missing most values AND wrong target variable
+
+IMPORTANT: Missing one or two values should NOT cause complete failure. Give partial credit based on how many values are present and correct.
+A question can still be faithful (score 7-8) even if it doesn't include every single value, as long as it includes most of them ({most_threshold}+) and asks for the correct target.
 
 Return scores as numeric values between 1 and 10.
-
-Trace details:
-{trace_description}
 """
         
         try:
@@ -276,7 +299,8 @@ Trace details:
         traces_by_length: Dict[int, List[Dict]],
         min_length: int = 2,
         max_length: int = 10,
-        num_samples_per_length: int = 10
+        num_samples_per_length: int = 10,
+        max_samples_per_length: int = 20
     ) -> List[Dict]:
         """
         Sample traces for specific length range (2-10 by default).
@@ -286,11 +310,15 @@ Trace details:
             min_length: Minimum trace length to include
             max_length: Maximum trace length to include
             num_samples_per_length: Number of traces to sample per length
+            max_samples_per_length: Maximum number of samples per length (caps num_samples_per_length)
             
         Returns:
             List of sampled traces
         """
         sampled_traces = []
+        
+        # Cap num_samples_per_length at max_samples_per_length
+        num_samples_per_length = min(num_samples_per_length, max_samples_per_length)
         
         # Only process lengths in the specified range
         for length in range(min_length, max_length + 1):
@@ -300,7 +328,8 @@ Trace details:
             
             traces = traces_by_length[length]
             # Sample exactly num_samples_per_length traces (or all if fewer available)
-            num_to_sample = min(num_samples_per_length, len(traces))
+            # But never exceed max_samples_per_length
+            num_to_sample = min(num_samples_per_length, len(traces), max_samples_per_length)
             if num_to_sample == 0:
                 logger.warning(f"No traces available for length {length}")
                 continue
@@ -354,7 +383,8 @@ Trace details:
         max_length: int = 10,
         num_samples_per_length: int = 10,
         num_targets: int = None,
-        output_dir: str = "./checkpoints/logs"
+        output_dir: str = "./checkpoints/logs",
+        max_samples_per_length: int = 20
     ) -> Dict:
         """
         Run evaluation on multiple targets with traces of specific lengths.
@@ -399,6 +429,7 @@ Trace details:
                 "min_length": min_length,
                 "max_length": max_length,
                 "num_samples_per_length": num_samples_per_length,
+                "max_samples_per_length": max_samples_per_length,
                 "max_new_tokens": self.max_new_tokens,
                 "temperature": self.temperature,
                 "top_p": self.top_p,
@@ -430,11 +461,13 @@ Trace details:
                     continue
                 
                 # Sample traces for specific length range (2-10)
+                # Ensure max 20 examples per length
                 sampled_traces = self.sample_traces_by_length_range(
                     traces_by_length,
                     min_length=min_length,
                     max_length=max_length,
-                    num_samples_per_length=num_samples_per_length
+                    num_samples_per_length=num_samples_per_length,
+                    max_samples_per_length=max_samples_per_length
                 )
                 
                 # Evaluate each sampled trace
@@ -463,20 +496,42 @@ Trace details:
                                 generated_question=generated_question,
                                 prompt=metadata.get('user_prompt', ''),
                                 target=target,
-                                trace=trace
+                                trace=trace,
+                                generated_values=metadata.get('generated_values', {})
                             )
                             if faithfulness_score is not None:
                                 logger.info(f"    Faithfulness score: {faithfulness_score:.2f}/10")
                         
-                        # Store minimal result (only length and score)
+                        # Store detailed result with all information
                         trace_length = trace['num_formulas']
-                        minimal_result = {
+                        leaf_nodes = trace.get('leaf_nodes', [])
+                        generated_values = metadata.get('generated_values', {})
+                        
+                        # Build given variables with values
+                        given_variables = {}
+                        for var in leaf_nodes:
+                            if var in generated_values:
+                                given_variables[var] = {
+                                    "value": generated_values[var].get("value"),
+                                    "unit": generated_values[var].get("unit", "")
+                                }
+                            else:
+                                given_variables[var] = {"value": None, "unit": ""}
+                        
+                        detailed_result = {
                             "length": trace_length,
-                            "score": faithfulness_score
+                            "score": faithfulness_score,
+                            "question": generated_question,
+                            "target_variable": target,
+                            "given_variables": given_variables,
+                            "faithfulness_explanation": faithfulness_explanation,
+                            "trace_depth": trace['depth'],
+                            "formulas": trace['formulas'],
+                            "calculation_steps": trace.get('calculation_steps', []),
                         }
                         
-                        # Save minimal result immediately to JSONL file
-                        jsonl_file.write(json.dumps(minimal_result) + '\n')
+                        # Save detailed result immediately to JSONL file
+                        jsonl_file.write(json.dumps(detailed_result) + '\n')
                         jsonl_file.flush()  # Ensure it's written to disk immediately
                         
                         # Also store full result for statistics
@@ -717,7 +772,13 @@ def main():
         "--num_samples_per_length",
         type=int,
         default=10,
-        help="Number of traces to sample per length (default: 10)"
+        help="Number of traces to sample per length (default: 10, max: 20)"
+    )
+    parser.add_argument(
+        "--max_samples_per_length",
+        type=int,
+        default=20,
+        help="Maximum number of samples per length (default: 20)"
     )
     parser.add_argument(
         "--num_targets",
@@ -727,7 +788,7 @@ def main():
     )
     parser.add_argument(
         "--use_quantization",
-        action="store_true",
+        default=False,
         help="Use 4-bit quantization"
     )
     parser.add_argument(
@@ -788,6 +849,7 @@ def main():
     )
     
     # Run evaluation (results are saved incrementally during evaluation)
+    # Ensure max_samples_per_length is used
     results = evaluator.evaluate(
         targets=None,
         max_depth=args.max_depth,
@@ -796,7 +858,8 @@ def main():
         max_length=args.max_length,
         num_samples_per_length=args.num_samples_per_length,
         num_targets=args.num_targets,
-        output_dir=args.output_dir
+        output_dir=args.output_dir,
+        max_samples_per_length=args.max_samples_per_length
     )
     
     # Save final summary with statistics and plots

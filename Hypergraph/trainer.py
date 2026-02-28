@@ -1,11 +1,14 @@
 """
 Main PPO Trainer for fine-tuning question generation model with hypergraph traces.
 """
+import json
 import os
 import logging
+import gc
 import torch
 import numpy as np
 from datetime import datetime
+from collections import deque
 from typing import Dict, List
 from concurrent.futures import ThreadPoolExecutor
 
@@ -13,7 +16,7 @@ from config import TrainingConfig
 from model_initialization import initialize_policy_model, initialize_tokenizer, initialize_ppo_trainer
 from graph_utils import preload_hypergraph_data
 from hypergraph_generator import collect_batch_parallel
-from reward_computer import compute_rewards_batched
+from reward_computer import compute_rewards_batched, compute_faithfulness_scores
 from logging_utils import log_episode_results_sync
 from utils import training_step_context, clean_decoded_text, extract_question
 
@@ -103,9 +106,10 @@ class QuestionGeneratorPPOTrainer:
         else:
             self.scaler = None
         
-        # Statistics
-        self.episode_rewards = []
-        self.episode_scores = []
+        # Statistics (bounded to avoid unbounded memory growth over long runs)
+        self._max_episode_history = 5000
+        self.episode_rewards = deque(maxlen=self._max_episode_history)
+        self.episode_scores = deque(maxlen=self._max_episode_history)
         
         # Create logs directory (in current directory, not with checkpoints)
         base_logs_dir = self.config.logs_dir
@@ -114,6 +118,7 @@ class QuestionGeneratorPPOTrainer:
         run_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         self.logs_dir = os.path.join(base_logs_dir, f"run_{run_timestamp}")
         os.makedirs(self.logs_dir, exist_ok=True)
+        self.faithfulness_jsonl_path = os.path.join(self.logs_dir, "faithfulness_scores.jsonl")
         logger.info(f"Run-specific logs directory created: {self.logs_dir}")
         
         # Initialize wandb if available
@@ -154,7 +159,9 @@ class QuestionGeneratorPPOTrainer:
         
         for episode in range(self.config.num_episodes):
             detailed_logging = (episode % self.config.log_detailed_every == 0)
-            
+            # Initialize to None so we can safely delete at end of iteration (avoids GPU leak)
+            query_tensors = response_tensors = reward_tensors = None
+
             if detailed_logging:
                 logger.info(f"\n{'='*60}")
                 logger.info(f"Episode {episode + 1}/{self.config.num_episodes}")
@@ -181,10 +188,10 @@ class QuestionGeneratorPPOTrainer:
                 if len(batch) < self.config.mini_batch_size:
                     logger.warning(f"Batch size ({len(batch)}) too small. Skipping episode...")
                     continue
-                
+
                 # Extract queries
                 queries = [ex["query"] for ex in batch]
-                
+
                 # OPTIMIZATION: Batch tokenize all queries at once
                 tokenized = self.tokenizer(
                     queries,
@@ -193,8 +200,9 @@ class QuestionGeneratorPPOTrainer:
                     truncation=True,
                     padding_side="left",
                 )
-                
+                # Move to device and free tokenized to avoid holding duplicate tensors
                 query_tensors = [ids.to(self.device) for ids in tokenized.input_ids]
+                del tokenized
                 
                 # Generate responses
                 if detailed_logging:
@@ -218,19 +226,24 @@ class QuestionGeneratorPPOTrainer:
                 }
                 
                 # OPTIMIZATION: Use mixed precision if enabled
-                # Suppress gradient checkpointing warning during generation (expected behavior)
+                # CRITICAL: torch.no_grad() during generation to avoid building graph and leaking GPU memory
                 import warnings
-                with warnings.catch_warnings():
-                    warnings.filterwarnings("ignore", message=".*None of the inputs have requires_grad=True.*")
-                    if self.config.use_mixed_precision and torch.cuda.is_available():
-                        with autocast():
+                with torch.no_grad():
+                    with warnings.catch_warnings():
+                        warnings.filterwarnings("ignore", message=".*None of the inputs have requires_grad=True.*")
+                        if self.config.use_mixed_precision and torch.cuda.is_available():
+                            with autocast():
+                                response_tensors = self.ppo_trainer.generate(query_tensors, **generation_kwargs)
+                        else:
                             response_tensors = self.ppo_trainer.generate(query_tensors, **generation_kwargs)
-                    else:
-                        response_tensors = self.ppo_trainer.generate(query_tensors, **generation_kwargs)
                 
                 # Set model back to train mode for training step
                 self.model.train()
-                
+                # Free generation buffers before reward/PPO phase to reduce fragmentation
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
+                gc.collect()
+
                 # Decode responses and track valid indices
                 responses = []
                 valid_indices = []
@@ -256,8 +269,12 @@ class QuestionGeneratorPPOTrainer:
                 
                 if not responses:
                     logger.warning("No valid responses generated. Skipping episode...")
+                    del query_tensors, response_tensors
+                    if torch.cuda.is_available():
+                        torch.cuda.empty_cache()
+                    gc.collect()
                     continue
-                
+
                 # Trim batch, query_tensors, and response_tensors to match valid responses
                 if len(responses) != len(batch):
                     batch = [batch[i] for i in valid_indices]
@@ -298,10 +315,30 @@ class QuestionGeneratorPPOTrainer:
                         "episode/avg_reward": avg_reward,
                         "episode/avg_judge_score": avg_score,
                     }, step=episode)
+
+                # Compute faithfulness scores and append to separate JSONL file (question, length, score, faithfulness)
+                faithfulness_results = compute_faithfulness_scores(
+                    responses, batch, self.reward_model
+                )
+                with open(self.faithfulness_jsonl_path, "a", encoding="utf-8") as f:
+                    for i, (question, ex, judge_score, (f_score, f_explanation)) in enumerate(
+                        zip(responses, batch, judge_scores, faithfulness_results)
+                    ):
+                        trace = ex.get("trace", {})
+                        length = len(trace.get("formulas", []))
+                        record = {
+                            "episode": episode,
+                            "question": question,
+                            "length": length,
+                            "score": float(judge_score),
+                            "faithfulness_score": float(f_score) if f_score is not None else None,
+                            "faithfulness_explanation": f_explanation,
+                        }
+                        f.write(json.dumps(record, ensure_ascii=False) + "\n")
                 
                 # Convert rewards to tensors
                 reward_tensors = [torch.tensor(reward, dtype=torch.float32, device='cpu') for reward in rewards]
-                
+
                 # Check if batch sizes match - skip step if they don't
                 if len(query_tensors) != len(response_tensors) or len(query_tensors) != len(reward_tensors):
                     logger.warning(
@@ -309,6 +346,10 @@ class QuestionGeneratorPPOTrainer:
                         f"responses={len(response_tensors)}, rewards={len(reward_tensors)}. "
                         f"Skipping PPO step for this episode."
                     )
+                    del query_tensors, response_tensors, reward_tensors
+                    if torch.cuda.is_available():
+                        torch.cuda.empty_cache()
+                    gc.collect()
                     continue
                 
                 # Train with PPO
@@ -387,8 +428,15 @@ class QuestionGeneratorPPOTrainer:
                     logger.error(f"Out of memory at episode {episode + 1}")
                     if torch.cuda.is_available():
                         torch.cuda.empty_cache()
+                    gc.collect()
                     continue
-            
+                finally:
+                    # Clear cache only; do NOT del tensors passed to PPO trainer - it may
+                    # hold internal references; freeing them causes illegal memory access.
+                    if torch.cuda.is_available():
+                        torch.cuda.empty_cache()
+                    gc.collect()
+
             # Save checkpoint
             if (episode + 1) % self.config.save_steps == 0:
                 checkpoint_path = f"{self.config.output_dir}/checkpoint-{episode + 1}"
@@ -407,8 +455,9 @@ class QuestionGeneratorPPOTrainer:
         self.log_executor.shutdown(wait=True)
         
         logger.info("Training completed!")
-        logger.info(f"Average reward: {sum(self.episode_rewards) / len(self.episode_rewards):.4f}")
-        logger.info(f"Average judge score: {sum(self.episode_scores) / len(self.episode_scores):.2f}/10.0")
+        n = len(self.episode_rewards)
+        logger.info(f"Average reward: {sum(self.episode_rewards) / n:.4f}" if n else "N/A")
+        logger.info(f"Average judge score: {sum(self.episode_scores) / n:.2f}/10.0" if n else "N/A")
         
         if WANDB_AVAILABLE:
             wandb.finish()

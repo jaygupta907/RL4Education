@@ -80,8 +80,9 @@ Generate a deep-reasoning physics question that tests a student's understanding 
     else:
         user_prompt = f""" Given the following values: {values_list_text} and allowed variables: {allowed_vars_list} Generate a deep-reasoning physics question that tests a student's understanding of the relationship between {target} and the variables {allowed_vars_list}"""
     
-    # Apply Llama 3 Chat Template
-    if hasattr(tokenizer, 'apply_chat_template'):
+    # Apply chat template (works for both Instruct and pretrained models)
+    if hasattr(tokenizer, 'apply_chat_template') and tokenizer.chat_template is not None:
+        # Use chat template if available (for Instruct models)
         messages = [
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt}
@@ -93,22 +94,11 @@ Generate a deep-reasoning physics question that tests a student's understanding 
                 add_generation_prompt=True
             )
         except Exception:
-            # Fallback manual format for Llama 3
-            prompt_text = (
-                f"<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n"
-                f"{system_prompt}<|eot_id|>"
-                f"<|start_header_id|>user<|end_header_id|>\n\n"
-                f"{user_prompt}<|eot_id|>"
-                f"<|start_header_id|>assistant<|end_header_id|>\n\n"
-            )
+            # Fallback to simple format for pretrained models
+            prompt_text = f"{system_prompt}\n\nUser: {user_prompt}\n\nAssistant:"
     else:
-        prompt_text = (
-            f"<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n"
-            f"{system_prompt}<|eot_id|>"
-            f"<|start_header_id|>user<|end_header_id|>\n\n"
-            f"{user_prompt}<|eot_id|>"
-            f"<|start_header_id|>assistant<|end_header_id|>\n\n"
-        )
+        # Simple format for pretrained models (RL-compatible)
+        prompt_text = f"{system_prompt}\n\nUser: {user_prompt}\n\nAssistant:"
     
     metadata = {
         "target": target,

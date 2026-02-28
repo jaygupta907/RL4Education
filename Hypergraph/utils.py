@@ -16,10 +16,9 @@ def training_step_context():
     try:
         yield
     finally:
-        # Consolidated cleanup
+        # Consolidated cleanup (no synchronize to avoid illegal access if tensors were freed elsewhere)
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
-            torch.cuda.synchronize()
         gc.collect()
 
 

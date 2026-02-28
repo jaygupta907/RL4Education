@@ -27,13 +27,16 @@ def initialize_policy_model(config, device):
     # OPTIMIZATION: Add quantization config if enabled
     if config.use_quantization:
         logger.info("Enabling 8-bit quantization for faster inference...")
+        # ValueHead models do not support CPU/disk offload; keep full model on GPU(s).
         quantization_config = BitsAndBytesConfig(
             load_in_8bit=True,
             llm_int8_threshold=6.0,
         )
         model_kwargs["quantization_config"] = quantization_config
+        # Force all layers onto the first GPU so nothing is offloaded to CPU
+        model_kwargs["device_map"] = {"": 0}
     
-    if config.max_memory:
+    if config.max_memory and not config.use_quantization:
         model_kwargs["max_memory"] = config.max_memory
     
     model = AutoModelForCausalLMWithValueHead.from_pretrained(
@@ -64,7 +67,15 @@ def initialize_policy_model(config, device):
 def initialize_tokenizer(config):
     """Initialize the tokenizer."""
     logger.info("Loading tokenizer...")
-    tokenizer = AutoTokenizer.from_pretrained(config.policy_model_name)
+    # Use instruction-tuned model path if available, otherwise use base model
+    tokenizer_path = config.instruction_tuned_model_path if config.instruction_tuned_model_path else config.policy_model_name
+    
+    if config.instruction_tuned_model_path:
+        logger.info(f"Loading tokenizer from instruction-tuned model: {tokenizer_path}")
+    else:
+        logger.info(f"Loading tokenizer from base model: {tokenizer_path}")
+    
+    tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
     
     # Llama 3 specific tokenizer setup
     if tokenizer.pad_token is None:

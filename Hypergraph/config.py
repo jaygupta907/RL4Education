@@ -9,9 +9,9 @@ from typing import Dict, Optional
 class TrainingConfig:
     """Configuration for fine-tuning with hypergraph traces."""
     # Model configuration
-    policy_model_name: str = "meta-llama/Meta-Llama-3-8B-Instruct"
+    policy_model_name: str = "meta-llama/Meta-Llama-3-8B"  # Pretrained model (not Instruct)
     instruction_tuned_model_path: Optional[str] = None  # Path to instruction-tuned model (if available)
-    judge_model_name: str = "meta-llama/Meta-Llama-3-8B-Instruct"
+    judge_model_name: str = "meta-llama/Meta-Llama-3-8B-Instruct"  # Judge can still use Instruct
     hypergraph_file: str = "formula_hypergraph.json"
     
     # Training configuration - OPTIMIZED
@@ -48,7 +48,7 @@ class TrainingConfig:
     logging_steps: int = 10  # OPTIMIZED: Log less frequently
     
     # Performance configuration
-    use_mixed_precision: bool = True  # NEW: Enable mixed precision training
+    use_mixed_precision: bool = False  # NEW: Enable mixed precision training
     use_quantization: bool = False  # NEW: Enable 8-bit quantization (set to True for more speed)
     num_workers: int = 4  # NEW: Number of parallel workers for trace generation
     log_detailed_every: int = 1  # NEW: Log detailed results every N episodes (1 = every episode)
