@@ -160,7 +160,8 @@
                 "initial_velocity": "m/s",
                 "time": "s"
             },
-            "output_si_unit": "m/s²"
+            "output_si_unit": "m/s\u00b2",
+            "domain": "kinematics"
         },
         {
             "id": "formula_1",
@@ -179,7 +180,8 @@
                 "force": "N",
                 "mass": "kg"
             },
-            "output_si_unit": "m/s²"
+            "output_si_unit": "m/s\u00b2",
+            "domain": "dynamics"
         },
         {
             "id": "formula_2",
@@ -201,7 +203,8 @@
                 "initial_velocity": "m/s",
                 "displacement": "m"
             },
-            "output_si_unit": "m/s²"
+            "output_si_unit": "m/s\u00b2",
+            "domain": "kinematics"
         },
         {
             "id": "formula_3",
@@ -223,7 +226,8 @@
                 "initial_angular_velocity": "rad/s",
                 "time": "s"
             },
-            "output_si_unit": "rad/s²"
+            "output_si_unit": "rad/s\u00b2",
+            "domain": "rotational"
         },
         {
             "id": "formula_4",
@@ -239,10 +243,11 @@
                 "moment_of_inertia"
             ],
             "input_si_units": {
-                "torque": "N·m",
-                "moment_of_inertia": "kg·m²"
+                "torque": "N\u00b7m",
+                "moment_of_inertia": "kg\u00b7m\u00b2"
             },
-            "output_si_unit": "rad/s²"
+            "output_si_unit": "rad/s\u00b2",
+            "domain": "rotational"
         },
         {
             "id": "formula_5",
@@ -261,7 +266,8 @@
                 "change_in_angular_velocity": "rad/s",
                 "time": "s"
             },
-            "output_si_unit": "rad/s²"
+            "output_si_unit": "rad/s\u00b2",
+            "domain": "rotational"
         },
         {
             "id": "formula_6",
@@ -277,23 +283,8 @@
             "input_si_units": {
                 "frequency": "Hz"
             },
-            "output_si_unit": "rad/s"
-        },
-        {
-            "id": "formula_7",
-            "label": "angular_velocity",
-            "output": "angular_frequency",
-            "inputs": [
-                "angular_velocity"
-            ],
-            "nodes": [
-                "angular_frequency",
-                "angular_velocity"
-            ],
-            "input_si_units": {
-                "angular_velocity": "rad/s"
-            },
-            "output_si_unit": "rad/s"
+            "output_si_unit": "rad/s",
+            "domain": "rotational"
         },
         {
             "id": "formula_8",
@@ -312,7 +303,8 @@
                 "spring_constant": "N/m",
                 "mass": "kg"
             },
-            "output_si_unit": "rad/s"
+            "output_si_unit": "rad/s",
+            "domain": "rotational"
         },
         {
             "id": "formula_9",
@@ -331,7 +323,8 @@
                 "inductance": "H",
                 "capacitance": "F"
             },
-            "output_si_unit": "rad/s"
+            "output_si_unit": "rad/s",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_10",
@@ -347,10 +340,11 @@
                 "angular_velocity"
             ],
             "input_si_units": {
-                "moment_of_inertia": "kg·m²",
+                "moment_of_inertia": "kg\u00b7m\u00b2",
                 "angular_velocity": "rad/s"
             },
-            "output_si_unit": "kg·m²/s"
+            "output_si_unit": "kg\u00b7m\u00b2/s",
+            "domain": "rotational"
         },
         {
             "id": "formula_11",
@@ -372,7 +366,8 @@
                 "velocity": "m/s",
                 "radius": "m"
             },
-            "output_si_unit": "kg·m²/s"
+            "output_si_unit": "kg\u00b7m\u00b2/s",
+            "domain": "rotational"
         },
         {
             "id": "formula_12",
@@ -388,10 +383,11 @@
                 "radius"
             ],
             "input_si_units": {
-                "momentum": "kg·m/s",
+                "momentum": "kg\u00b7m/s",
                 "radius": "m"
             },
-            "output_si_unit": "kg·m²/s"
+            "output_si_unit": "kg\u00b7m\u00b2/s",
+            "domain": "rotational"
         },
         {
             "id": "formula_13",
@@ -410,42 +406,8 @@
                 "angular_displacement": "rad",
                 "time": "s"
             },
-            "output_si_unit": "rad/s"
-        },
-        {
-            "id": "formula_14",
-            "label": "2 * math.pi * frequency",
-            "output": "angular_velocity",
-            "inputs": [
-                "frequency"
-            ],
-            "nodes": [
-                "angular_velocity",
-                "frequency"
-            ],
-            "input_si_units": {
-                "frequency": "Hz"
-            },
-            "output_si_unit": "rad/s"
-        },
-        {
-            "id": "formula_15",
-            "label": "velocity / radius",
-            "output": "angular_velocity",
-            "inputs": [
-                "velocity",
-                "radius"
-            ],
-            "nodes": [
-                "angular_velocity",
-                "velocity",
-                "radius"
-            ],
-            "input_si_units": {
-                "velocity": "m/s",
-                "radius": "m"
-            },
-            "output_si_unit": "rad/s"
+            "output_si_unit": "rad/s",
+            "domain": "rotational"
         },
         {
             "id": "formula_16",
@@ -467,7 +429,8 @@
                 "initial_angle": "rad",
                 "time": "s"
             },
-            "output_si_unit": "rad/s"
+            "output_si_unit": "rad/s",
+            "domain": "rotational"
         },
         {
             "id": "formula_17",
@@ -486,7 +449,8 @@
                 "length": "m",
                 "width": "m"
             },
-            "output_si_unit": "m²"
+            "output_si_unit": "m\u00b2",
+            "domain": "geometry"
         },
         {
             "id": "formula_18",
@@ -502,7 +466,8 @@
             "input_si_units": {
                 "radius": "m"
             },
-            "output_si_unit": "m²"
+            "output_si_unit": "m\u00b2",
+            "domain": "geometry"
         },
         {
             "id": "formula_19",
@@ -521,7 +486,8 @@
                 "base": "m",
                 "height": "m"
             },
-            "output_si_unit": "m²"
+            "output_si_unit": "m\u00b2",
+            "domain": "geometry"
         },
         {
             "id": "formula_20",
@@ -540,7 +506,8 @@
                 "force": "N",
                 "pressure": "Pa"
             },
-            "output_si_unit": "m²"
+            "output_si_unit": "m\u00b2",
+            "domain": "dynamics"
         },
         {
             "id": "formula_21",
@@ -558,11 +525,12 @@
                 "gravity"
             ],
             "input_si_units": {
-                "density_fluid": "kg/m³",
-                "volume_displaced": "m³",
-                "gravity": "m/s²"
+                "density_fluid": "kg/m\u00b3",
+                "volume_displaced": "m\u00b3",
+                "gravity": "m/s\u00b2"
             },
-            "output_si_unit": "N"
+            "output_si_unit": "N",
+            "domain": "thermodynamics"
         },
         {
             "id": "formula_22",
@@ -578,29 +546,8 @@
             "input_si_units": {
                 "weight_displaced": "N"
             },
-            "output_si_unit": "N"
-        },
-        {
-            "id": "formula_23",
-            "label": "density_fluid * volume * gravity",
-            "output": "buoyant_force",
-            "inputs": [
-                "density_fluid",
-                "volume",
-                "gravity"
-            ],
-            "nodes": [
-                "buoyant_force",
-                "density_fluid",
-                "volume",
-                "gravity"
-            ],
-            "input_si_units": {
-                "density_fluid": "kg/m³",
-                "volume": "m³",
-                "gravity": "m/s²"
-            },
-            "output_si_unit": "N"
+            "output_si_unit": "N",
+            "domain": "thermodynamics"
         },
         {
             "id": "formula_24",
@@ -619,7 +566,8 @@
                 "charge": "C",
                 "voltage": "V"
             },
-            "output_si_unit": "F"
+            "output_si_unit": "F",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_25",
@@ -638,10 +586,11 @@
             ],
             "input_si_units": {
                 "permittivity": "F/m",
-                "area": "m²",
+                "area": "m\u00b2",
                 "distance": "m"
             },
-            "output_si_unit": "F"
+            "output_si_unit": "F",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_26",
@@ -660,7 +609,8 @@
                 "energy": "J",
                 "voltage": "V"
             },
-            "output_si_unit": "F"
+            "output_si_unit": "F",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_27",
@@ -679,7 +629,8 @@
                 "velocity": "m/s",
                 "radius": "m"
             },
-            "output_si_unit": "m/s²"
+            "output_si_unit": "m/s\u00b2",
+            "domain": "rotational"
         },
         {
             "id": "formula_28",
@@ -698,7 +649,8 @@
                 "angular_velocity": "rad/s",
                 "radius": "m"
             },
-            "output_si_unit": "m/s²"
+            "output_si_unit": "m/s\u00b2",
+            "domain": "rotational"
         },
         {
             "id": "formula_29",
@@ -717,7 +669,8 @@
                 "centripetal_force": "N",
                 "mass": "kg"
             },
-            "output_si_unit": "m/s²"
+            "output_si_unit": "m/s\u00b2",
+            "domain": "rotational"
         },
         {
             "id": "formula_30",
@@ -734,9 +687,10 @@
             ],
             "input_si_units": {
                 "mass": "kg",
-                "centripetal_acceleration": "m/s²"
+                "centripetal_acceleration": "m/s\u00b2"
             },
-            "output_si_unit": "N"
+            "output_si_unit": "N",
+            "domain": "rotational"
         },
         {
             "id": "formula_31",
@@ -758,7 +712,8 @@
                 "velocity": "m/s",
                 "radius": "m"
             },
-            "output_si_unit": "N"
+            "output_si_unit": "N",
+            "domain": "rotational"
         },
         {
             "id": "formula_32",
@@ -780,7 +735,8 @@
                 "angular_velocity": "rad/s",
                 "radius": "m"
             },
-            "output_si_unit": "N"
+            "output_si_unit": "N",
+            "domain": "rotational"
         },
         {
             "id": "formula_33",
@@ -797,9 +753,10 @@
             ],
             "input_si_units": {
                 "voltage": "V",
-                "resistance": "Ω"
+                "resistance": "\u03a9"
             },
-            "output_si_unit": "A"
+            "output_si_unit": "A",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_34",
@@ -818,7 +775,8 @@
                 "charge": "C",
                 "time": "s"
             },
-            "output_si_unit": "A"
+            "output_si_unit": "A",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_35",
@@ -837,7 +795,8 @@
                 "power": "W",
                 "voltage": "V"
             },
-            "output_si_unit": "A"
+            "output_si_unit": "A",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_36",
@@ -854,9 +813,10 @@
             ],
             "input_si_units": {
                 "power": "W",
-                "resistance": "Ω"
+                "resistance": "\u03a9"
             },
-            "output_si_unit": "A"
+            "output_si_unit": "A",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_37",
@@ -873,9 +833,10 @@
             ],
             "input_si_units": {
                 "mass": "kg",
-                "volume": "m³"
+                "volume": "m\u00b3"
             },
-            "output_si_unit": "kg/m³"
+            "output_si_unit": "kg/m\u00b3",
+            "domain": "thermodynamics"
         },
         {
             "id": "formula_38",
@@ -894,10 +855,11 @@
             ],
             "input_si_units": {
                 "pressure": "Pa",
-                "gas_constant": "J/(mol·K)",
+                "gas_constant": "J/(mol\u00b7K)",
                 "temperature": "K"
             },
-            "output_si_unit": "kg/m³"
+            "output_si_unit": "kg/m\u00b3",
+            "domain": "thermodynamics"
         },
         {
             "id": "formula_39",
@@ -916,7 +878,8 @@
                 "final_position": "m",
                 "initial_position": "m"
             },
-            "output_si_unit": "m"
+            "output_si_unit": "m",
+            "domain": "kinematics"
         },
         {
             "id": "formula_41",
@@ -936,9 +899,10 @@
             "input_si_units": {
                 "initial_velocity": "m/s",
                 "time": "s",
-                "acceleration": "m/s²"
+                "acceleration": "m/s\u00b2"
             },
-            "output_si_unit": "m"
+            "output_si_unit": "m",
+            "domain": "kinematics"
         },
         {
             "id": "formula_42",
@@ -957,7 +921,8 @@
                 "speed": "m/s",
                 "time": "s"
             },
-            "output_si_unit": "m"
+            "output_si_unit": "m",
+            "domain": "kinematics"
         },
         {
             "id": "formula_43",
@@ -982,29 +947,8 @@
                 "y2": "m",
                 "y1": "m"
             },
-            "output_si_unit": "m"
-        },
-        {
-            "id": "formula_44",
-            "label": "initial_velocity * time + 0.5 * acceleration * time**2",
-            "output": "distance",
-            "inputs": [
-                "initial_velocity",
-                "time",
-                "acceleration"
-            ],
-            "nodes": [
-                "distance",
-                "initial_velocity",
-                "time",
-                "acceleration"
-            ],
-            "input_si_units": {
-                "initial_velocity": "m/s",
-                "time": "s",
-                "acceleration": "m/s²"
-            },
-            "output_si_unit": "m"
+            "output_si_unit": "m",
+            "domain": "kinematics"
         },
         {
             "id": "formula_45",
@@ -1023,7 +967,8 @@
                 "useful_output": "J",
                 "total_input": "J"
             },
-            "output_si_unit": "dimensionless"
+            "output_si_unit": "dimensionless",
+            "domain": "energy"
         },
         {
             "id": "formula_46",
@@ -1042,7 +987,8 @@
                 "output_power": "W",
                 "input_power": "W"
             },
-            "output_si_unit": "dimensionless"
+            "output_si_unit": "dimensionless",
+            "domain": "energy"
         },
         {
             "id": "formula_47",
@@ -1061,7 +1007,8 @@
                 "work_output": "J",
                 "work_input": "J"
             },
-            "output_si_unit": "dimensionless"
+            "output_si_unit": "dimensionless",
+            "domain": "energy"
         },
         {
             "id": "formula_48",
@@ -1080,26 +1027,8 @@
                 "force": "N",
                 "charge": "C"
             },
-            "output_si_unit": "N/C"
-        },
-        {
-            "id": "formula_49",
-            "label": "voltage / distance",
-            "output": "electric_field",
-            "inputs": [
-                "voltage",
-                "distance"
-            ],
-            "nodes": [
-                "electric_field",
-                "voltage",
-                "distance"
-            ],
-            "input_si_units": {
-                "voltage": "V",
-                "distance": "m"
-            },
-            "output_si_unit": "N/C"
+            "output_si_unit": "N/C",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_50",
@@ -1117,11 +1046,12 @@
                 "distance"
             ],
             "input_si_units": {
-                "coulomb_constant": "N·m²/C²",
+                "coulomb_constant": "N\u00b7m\u00b2/C\u00b2",
                 "charge": "C",
                 "distance": "m"
             },
-            "output_si_unit": "N/C"
+            "output_si_unit": "N/C",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_51",
@@ -1140,7 +1070,8 @@
                 "charge": "C",
                 "voltage": "V"
             },
-            "output_si_unit": "J"
+            "output_si_unit": "J",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_52",
@@ -1160,31 +1091,13 @@
                 "distance"
             ],
             "input_si_units": {
-                "coulomb_constant": "N·m²/C²",
+                "coulomb_constant": "N\u00b7m\u00b2/C\u00b2",
                 "charge1": "C",
                 "charge2": "C",
                 "distance": "m"
             },
-            "output_si_unit": "J"
-        },
-        {
-            "id": "formula_53",
-            "label": "0.5 * capacitance * voltage**2",
-            "output": "electric_potential_energy",
-            "inputs": [
-                "capacitance",
-                "voltage"
-            ],
-            "nodes": [
-                "electric_potential_energy",
-                "capacitance",
-                "voltage"
-            ],
-            "input_si_units": {
-                "capacitance": "F",
-                "voltage": "V"
-            },
-            "output_si_unit": "J"
+            "output_si_unit": "J",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_54",
@@ -1201,47 +1114,10 @@
             ],
             "input_si_units": {
                 "mass": "kg",
-                "acceleration": "m/s²"
+                "acceleration": "m/s\u00b2"
             },
-            "output_si_unit": "N"
-        },
-        {
-            "id": "formula_55",
-            "label": "mass * gravity",
-            "output": "force",
-            "inputs": [
-                "mass",
-                "gravity"
-            ],
-            "nodes": [
-                "force",
-                "mass",
-                "gravity"
-            ],
-            "input_si_units": {
-                "mass": "kg",
-                "gravity": "m/s²"
-            },
-            "output_si_unit": "N"
-        },
-        {
-            "id": "formula_56",
-            "label": "spring_constant * displacement",
-            "output": "force",
-            "inputs": [
-                "spring_constant",
-                "displacement"
-            ],
-            "nodes": [
-                "force",
-                "spring_constant",
-                "displacement"
-            ],
-            "input_si_units": {
-                "spring_constant": "N/m",
-                "displacement": "m"
-            },
-            "output_si_unit": "N"
+            "output_si_unit": "N",
+            "domain": "dynamics"
         },
         {
             "id": "formula_57",
@@ -1257,23 +1133,8 @@
             "input_si_units": {
                 "period": "s"
             },
-            "output_si_unit": "Hz"
-        },
-        {
-            "id": "formula_58",
-            "label": "angular_velocity / (2 * math.pi)",
-            "output": "frequency",
-            "inputs": [
-                "angular_velocity"
-            ],
-            "nodes": [
-                "frequency",
-                "angular_velocity"
-            ],
-            "input_si_units": {
-                "angular_velocity": "rad/s"
-            },
-            "output_si_unit": "Hz"
+            "output_si_unit": "Hz",
+            "domain": "waves"
         },
         {
             "id": "formula_59",
@@ -1292,7 +1153,8 @@
                 "wave_speed": "m/s",
                 "wavelength": "m"
             },
-            "output_si_unit": "Hz"
+            "output_si_unit": "Hz",
+            "domain": "waves"
         },
         {
             "id": "formula_60",
@@ -1311,7 +1173,8 @@
                 "number_of_cycles": "dimensionless",
                 "time": "s"
             },
-            "output_si_unit": "Hz"
+            "output_si_unit": "Hz",
+            "domain": "waves"
         },
         {
             "id": "formula_61",
@@ -1330,7 +1193,8 @@
                 "coefficient_of_friction": "dimensionless",
                 "normal_force": "N"
             },
-            "output_si_unit": "N"
+            "output_si_unit": "N",
+            "domain": "friction"
         },
         {
             "id": "formula_62",
@@ -1349,7 +1213,8 @@
                 "mu_static": "dimensionless",
                 "normal_force": "N"
             },
-            "output_si_unit": "N"
+            "output_si_unit": "N",
+            "domain": "friction"
         },
         {
             "id": "formula_63",
@@ -1368,29 +1233,8 @@
                 "mu_kinetic": "dimensionless",
                 "normal_force": "N"
             },
-            "output_si_unit": "N"
-        },
-        {
-            "id": "formula_64",
-            "label": "initial_velocity_y * time - 0.5 * gravity * time**2",
-            "output": "height",
-            "inputs": [
-                "initial_velocity_y",
-                "time",
-                "gravity"
-            ],
-            "nodes": [
-                "height",
-                "initial_velocity_y",
-                "time",
-                "gravity"
-            ],
-            "input_si_units": {
-                "initial_velocity_y": "m/s",
-                "time": "s",
-                "gravity": "m/s²"
-            },
-            "output_si_unit": "m"
+            "output_si_unit": "N",
+            "domain": "friction"
         },
         {
             "id": "formula_65",
@@ -1410,25 +1254,10 @@
             "input_si_units": {
                 "potential_energy": "J",
                 "mass": "kg",
-                "gravity": "m/s²"
+                "gravity": "m/s\u00b2"
             },
-            "output_si_unit": "m"
-        },
-        {
-            "id": "formula_66",
-            "label": "vertical_displacement",
-            "output": "height",
-            "inputs": [
-                "vertical_displacement"
-            ],
-            "nodes": [
-                "height",
-                "vertical_displacement"
-            ],
-            "input_si_units": {
-                "vertical_displacement": "m"
-            },
-            "output_si_unit": "m"
+            "output_si_unit": "m",
+            "domain": "energy"
         },
         {
             "id": "formula_67",
@@ -1444,10 +1273,11 @@
                 "reactance"
             ],
             "input_si_units": {
-                "resistance": "Ω",
-                "reactance": "Ω"
+                "resistance": "\u03a9",
+                "reactance": "\u03a9"
             },
-            "output_si_unit": "Ω"
+            "output_si_unit": "\u03a9",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_68",
@@ -1466,7 +1296,8 @@
                 "voltage": "V",
                 "current": "A"
             },
-            "output_si_unit": "Ω"
+            "output_si_unit": "\u03a9",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_69",
@@ -1486,12 +1317,13 @@
                 "capacitance"
             ],
             "input_si_units": {
-                "resistance": "Ω",
+                "resistance": "\u03a9",
                 "angular_frequency": "rad/s",
                 "inductance": "H",
                 "capacitance": "F"
             },
-            "output_si_unit": "Ω"
+            "output_si_unit": "\u03a9",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_70",
@@ -1510,7 +1342,8 @@
                 "force": "N",
                 "time": "s"
             },
-            "output_si_unit": "N·s"
+            "output_si_unit": "N\u00b7s",
+            "domain": "dynamics"
         },
         {
             "id": "formula_71",
@@ -1524,9 +1357,10 @@
                 "change_in_momentum"
             ],
             "input_si_units": {
-                "change_in_momentum": "kg·m/s"
+                "change_in_momentum": "kg\u00b7m/s"
             },
-            "output_si_unit": "N·s"
+            "output_si_unit": "N\u00b7s",
+            "domain": "dynamics"
         },
         {
             "id": "formula_72",
@@ -1542,10 +1376,11 @@
                 "initial_momentum"
             ],
             "input_si_units": {
-                "final_momentum": "kg·m/s",
-                "initial_momentum": "kg·m/s"
+                "final_momentum": "kg\u00b7m/s",
+                "initial_momentum": "kg\u00b7m/s"
             },
-            "output_si_unit": "N·s"
+            "output_si_unit": "N\u00b7s",
+            "domain": "dynamics"
         },
         {
             "id": "formula_73",
@@ -1564,7 +1399,8 @@
                 "magnetic_flux": "Wb",
                 "current": "A"
             },
-            "output_si_unit": "H"
+            "output_si_unit": "H",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_74",
@@ -1586,7 +1422,8 @@
                 "change_in_current": "A",
                 "time": "s"
             },
-            "output_si_unit": "H"
+            "output_si_unit": "H",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_75",
@@ -1602,7 +1439,8 @@
             "input_si_units": {
                 "self_inductance": "H"
             },
-            "output_si_unit": "H"
+            "output_si_unit": "H",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_76",
@@ -1621,23 +1459,8 @@
                 "mass": "kg",
                 "velocity": "m/s"
             },
-            "output_si_unit": "J"
-        },
-        {
-            "id": "formula_77",
-            "label": "work",
-            "output": "kinetic_energy",
-            "inputs": [
-                "work"
-            ],
-            "nodes": [
-                "kinetic_energy",
-                "work"
-            ],
-            "input_si_units": {
-                "work": "J"
-            },
-            "output_si_unit": "J"
+            "output_si_unit": "J",
+            "domain": "energy"
         },
         {
             "id": "formula_78",
@@ -1656,7 +1479,8 @@
                 "total_energy": "J",
                 "potential_energy": "J"
             },
-            "output_si_unit": "J"
+            "output_si_unit": "J",
+            "domain": "energy"
         },
         {
             "id": "formula_79",
@@ -1678,7 +1502,8 @@
                 "charge": "C",
                 "velocity": "m/s"
             },
-            "output_si_unit": "T"
+            "output_si_unit": "T",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_80",
@@ -1700,7 +1525,8 @@
                 "current": "A",
                 "radius": "m"
             },
-            "output_si_unit": "T"
+            "output_si_unit": "T",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_81",
@@ -1717,9 +1543,10 @@
             ],
             "input_si_units": {
                 "magnetic_flux": "Wb",
-                "area": "m²"
+                "area": "m\u00b2"
             },
-            "output_si_unit": "T"
+            "output_si_unit": "T",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_82",
@@ -1738,10 +1565,11 @@
             ],
             "input_si_units": {
                 "magnetic_field": "T",
-                "area": "m²",
+                "area": "m\u00b2",
                 "angle": "rad"
             },
-            "output_si_unit": "Wb"
+            "output_si_unit": "Wb",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_83",
@@ -1758,9 +1586,10 @@
             ],
             "input_si_units": {
                 "magnetic_field": "T",
-                "area": "m²"
+                "area": "m\u00b2"
             },
-            "output_si_unit": "Wb"
+            "output_si_unit": "Wb",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_84",
@@ -1779,70 +1608,8 @@
                 "voltage_induced": "V",
                 "time": "s"
             },
-            "output_si_unit": "Wb"
-        },
-        {
-            "id": "formula_85",
-            "label": "initial_velocity_y**2 / (2 * gravity)",
-            "output": "maximum_height",
-            "inputs": [
-                "initial_velocity_y",
-                "gravity"
-            ],
-            "nodes": [
-                "maximum_height",
-                "initial_velocity_y",
-                "gravity"
-            ],
-            "input_si_units": {
-                "initial_velocity_y": "m/s",
-                "gravity": "m/s²"
-            },
-            "output_si_unit": "m"
-        },
-        {
-            "id": "formula_86",
-            "label": "initial_velocity**2 * math.sin(angle)**2 / (2 * gravity)",
-            "output": "maximum_height",
-            "inputs": [
-                "initial_velocity",
-                "angle",
-                "gravity"
-            ],
-            "nodes": [
-                "maximum_height",
-                "initial_velocity",
-                "angle",
-                "gravity"
-            ],
-            "input_si_units": {
-                "initial_velocity": "m/s",
-                "angle": "rad",
-                "gravity": "m/s²"
-            },
-            "output_si_unit": "m"
-        },
-        {
-            "id": "formula_87",
-            "label": "potential_energy_max / (mass * gravity)",
-            "output": "maximum_height",
-            "inputs": [
-                "potential_energy_max",
-                "mass",
-                "gravity"
-            ],
-            "nodes": [
-                "maximum_height",
-                "potential_energy_max",
-                "mass",
-                "gravity"
-            ],
-            "input_si_units": {
-                "potential_energy_max": "J",
-                "mass": "kg",
-                "gravity": "m/s²"
-            },
-            "output_si_unit": "m"
+            "output_si_unit": "Wb",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_88",
@@ -1861,7 +1628,8 @@
                 "output_force": "N",
                 "input_force": "N"
             },
-            "output_si_unit": "dimensionless"
+            "output_si_unit": "dimensionless",
+            "domain": "dynamics"
         },
         {
             "id": "formula_89",
@@ -1880,7 +1648,8 @@
                 "input_distance": "m",
                 "output_distance": "m"
             },
-            "output_si_unit": "dimensionless"
+            "output_si_unit": "dimensionless",
+            "domain": "dynamics"
         },
         {
             "id": "formula_90",
@@ -1899,26 +1668,8 @@
                 "load": "N",
                 "effort": "N"
             },
-            "output_si_unit": "dimensionless"
-        },
-        {
-            "id": "formula_91",
-            "label": "mass * radius**2",
-            "output": "moment_of_inertia",
-            "inputs": [
-                "mass",
-                "radius"
-            ],
-            "nodes": [
-                "moment_of_inertia",
-                "mass",
-                "radius"
-            ],
-            "input_si_units": {
-                "mass": "kg",
-                "radius": "m"
-            },
-            "output_si_unit": "kg·m²"
+            "output_si_unit": "dimensionless",
+            "domain": "dynamics"
         },
         {
             "id": "formula_92",
@@ -1934,10 +1685,11 @@
                 "angular_acceleration"
             ],
             "input_si_units": {
-                "torque": "N·m",
-                "angular_acceleration": "rad/s²"
+                "torque": "N\u00b7m",
+                "angular_acceleration": "rad/s\u00b2"
             },
-            "output_si_unit": "kg·m²"
+            "output_si_unit": "kg\u00b7m\u00b2",
+            "domain": "rotational"
         },
         {
             "id": "formula_93",
@@ -1953,10 +1705,11 @@
                 "angular_velocity"
             ],
             "input_si_units": {
-                "angular_momentum": "kg·m²/s",
+                "angular_momentum": "kg\u00b7m\u00b2/s",
                 "angular_velocity": "rad/s"
             },
-            "output_si_unit": "kg·m²"
+            "output_si_unit": "kg\u00b7m\u00b2",
+            "domain": "rotational"
         },
         {
             "id": "formula_94",
@@ -1975,26 +1728,8 @@
                 "mass": "kg",
                 "velocity": "m/s"
             },
-            "output_si_unit": "kg·m/s"
-        },
-        {
-            "id": "formula_95",
-            "label": "force * time",
-            "output": "momentum",
-            "inputs": [
-                "force",
-                "time"
-            ],
-            "nodes": [
-                "momentum",
-                "force",
-                "time"
-            ],
-            "input_si_units": {
-                "force": "N",
-                "time": "s"
-            },
-            "output_si_unit": "kg·m/s"
+            "output_si_unit": "kg\u00b7m/s",
+            "domain": "dynamics"
         },
         {
             "id": "formula_96",
@@ -2010,70 +1745,11 @@
                 "impulse"
             ],
             "input_si_units": {
-                "initial_momentum": "kg·m/s",
-                "impulse": "N·s"
+                "initial_momentum": "kg\u00b7m/s",
+                "impulse": "N\u00b7s"
             },
-            "output_si_unit": "kg·m/s"
-        },
-        {
-            "id": "formula_97",
-            "label": "mass * gravity * math.cos(angle)",
-            "output": "normal_force",
-            "inputs": [
-                "mass",
-                "gravity",
-                "angle"
-            ],
-            "nodes": [
-                "normal_force",
-                "mass",
-                "gravity",
-                "angle"
-            ],
-            "input_si_units": {
-                "mass": "kg",
-                "gravity": "m/s²",
-                "angle": "rad"
-            },
-            "output_si_unit": "N"
-        },
-        {
-            "id": "formula_98",
-            "label": "mass * gravity",
-            "output": "normal_force",
-            "inputs": [
-                "mass",
-                "gravity"
-            ],
-            "nodes": [
-                "normal_force",
-                "mass",
-                "gravity"
-            ],
-            "input_si_units": {
-                "mass": "kg",
-                "gravity": "m/s²"
-            },
-            "output_si_unit": "N"
-        },
-        {
-            "id": "formula_99",
-            "label": "force_applied * math.sin(angle)",
-            "output": "normal_force",
-            "inputs": [
-                "force_applied",
-                "angle"
-            ],
-            "nodes": [
-                "normal_force",
-                "force_applied",
-                "angle"
-            ],
-            "input_si_units": {
-                "force_applied": "N",
-                "angle": "rad"
-            },
-            "output_si_unit": "N"
+            "output_si_unit": "kg\u00b7m/s",
+            "domain": "dynamics"
         },
         {
             "id": "formula_100",
@@ -2089,7 +1765,8 @@
             "input_si_units": {
                 "frequency": "Hz"
             },
-            "output_si_unit": "s"
+            "output_si_unit": "s",
+            "domain": "rotational"
         },
         {
             "id": "formula_101",
@@ -2108,7 +1785,8 @@
                 "mass": "kg",
                 "spring_constant": "N/m"
             },
-            "output_si_unit": "s"
+            "output_si_unit": "s",
+            "domain": "rotational"
         },
         {
             "id": "formula_102",
@@ -2124,7 +1802,8 @@
             "input_si_units": {
                 "angular_velocity": "rad/s"
             },
-            "output_si_unit": "s"
+            "output_si_unit": "s",
+            "domain": "rotational"
         },
         {
             "id": "formula_103",
@@ -2143,7 +1822,8 @@
                 "time": "s",
                 "number_of_cycles": "dimensionless"
             },
-            "output_si_unit": "s"
+            "output_si_unit": "s",
+            "domain": "rotational"
         },
         {
             "id": "formula_104",
@@ -2162,29 +1842,11 @@
             ],
             "input_si_units": {
                 "mass": "kg",
-                "gravity": "m/s²",
+                "gravity": "m/s\u00b2",
                 "height": "m"
             },
-            "output_si_unit": "J"
-        },
-        {
-            "id": "formula_105",
-            "label": "0.5 * spring_constant * displacement**2",
-            "output": "potential_energy",
-            "inputs": [
-                "spring_constant",
-                "displacement"
-            ],
-            "nodes": [
-                "potential_energy",
-                "spring_constant",
-                "displacement"
-            ],
-            "input_si_units": {
-                "spring_constant": "N/m",
-                "displacement": "m"
-            },
-            "output_si_unit": "J"
+            "output_si_unit": "J",
+            "domain": "energy"
         },
         {
             "id": "formula_106",
@@ -2203,7 +1865,8 @@
                 "total_energy": "J",
                 "kinetic_energy": "J"
             },
-            "output_si_unit": "J"
+            "output_si_unit": "J",
+            "domain": "energy"
         },
         {
             "id": "formula_107",
@@ -2222,26 +1885,8 @@
                 "work": "J",
                 "time": "s"
             },
-            "output_si_unit": "W"
-        },
-        {
-            "id": "formula_108",
-            "label": "force * velocity",
-            "output": "power",
-            "inputs": [
-                "force",
-                "velocity"
-            ],
-            "nodes": [
-                "power",
-                "force",
-                "velocity"
-            ],
-            "input_si_units": {
-                "force": "N",
-                "velocity": "m/s"
-            },
-            "output_si_unit": "W"
+            "output_si_unit": "W",
+            "domain": "energy"
         },
         {
             "id": "formula_109",
@@ -2260,7 +1905,8 @@
                 "current": "A",
                 "voltage": "V"
             },
-            "output_si_unit": "W"
+            "output_si_unit": "W",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_110",
@@ -2277,110 +1923,10 @@
             ],
             "input_si_units": {
                 "force": "N",
-                "area": "m²"
+                "area": "m\u00b2"
             },
-            "output_si_unit": "Pa"
-        },
-        {
-            "id": "formula_111",
-            "label": "density * gas_constant * temperature",
-            "output": "pressure",
-            "inputs": [
-                "density",
-                "gas_constant",
-                "temperature"
-            ],
-            "nodes": [
-                "pressure",
-                "density",
-                "gas_constant",
-                "temperature"
-            ],
-            "input_si_units": {
-                "density": "kg/m³",
-                "gas_constant": "J/(mol·K)",
-                "temperature": "K"
-            },
-            "output_si_unit": "Pa"
-        },
-        {
-            "id": "formula_112",
-            "label": "density * gravity * height",
-            "output": "pressure",
-            "inputs": [
-                "density",
-                "gravity",
-                "height"
-            ],
-            "nodes": [
-                "pressure",
-                "density",
-                "gravity",
-                "height"
-            ],
-            "input_si_units": {
-                "density": "kg/m³",
-                "gravity": "m/s²",
-                "height": "m"
-            },
-            "output_si_unit": "Pa"
-        },
-        {
-            "id": "formula_113",
-            "label": "initial_velocity**2 * math.sin(2 * angle) / gravity",
-            "output": "range",
-            "inputs": [
-                "initial_velocity",
-                "angle",
-                "gravity"
-            ],
-            "nodes": [
-                "range",
-                "initial_velocity",
-                "angle",
-                "gravity"
-            ],
-            "input_si_units": {
-                "initial_velocity": "m/s",
-                "angle": "rad",
-                "gravity": "m/s²"
-            },
-            "output_si_unit": "m"
-        },
-        {
-            "id": "formula_114",
-            "label": "horizontal_velocity * time_of_flight",
-            "output": "range",
-            "inputs": [
-                "horizontal_velocity",
-                "time_of_flight"
-            ],
-            "nodes": [
-                "range",
-                "horizontal_velocity",
-                "time_of_flight"
-            ],
-            "input_si_units": {
-                "horizontal_velocity": "m/s",
-                "time_of_flight": "s"
-            },
-            "output_si_unit": "m"
-        },
-        {
-            "id": "formula_115",
-            "label": "horizontal_displacement",
-            "output": "range",
-            "inputs": [
-                "horizontal_displacement"
-            ],
-            "nodes": [
-                "range",
-                "horizontal_displacement"
-            ],
-            "input_si_units": {
-                "horizontal_displacement": "m"
-            },
-            "output_si_unit": "m"
+            "output_si_unit": "Pa",
+            "domain": "dynamics"
         },
         {
             "id": "formula_116",
@@ -2399,7 +1945,8 @@
                 "angular_frequency": "rad/s",
                 "inductance": "H"
             },
-            "output_si_unit": "Ω"
+            "output_si_unit": "\u03a9",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_117",
@@ -2418,7 +1965,8 @@
                 "angular_frequency": "rad/s",
                 "capacitance": "F"
             },
-            "output_si_unit": "Ω"
+            "output_si_unit": "\u03a9",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_118",
@@ -2434,10 +1982,11 @@
                 "capacitive_reactance"
             ],
             "input_si_units": {
-                "inductive_reactance": "Ω",
-                "capacitive_reactance": "Ω"
+                "inductive_reactance": "\u03a9",
+                "capacitive_reactance": "\u03a9"
             },
-            "output_si_unit": "Ω"
+            "output_si_unit": "\u03a9",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_119",
@@ -2456,7 +2005,8 @@
                 "voltage": "V",
                 "current": "A"
             },
-            "output_si_unit": "Ω"
+            "output_si_unit": "\u03a9",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_120",
@@ -2474,11 +2024,12 @@
                 "area"
             ],
             "input_si_units": {
-                "resistivity": "Ω·m",
+                "resistivity": "\u03a9\u00b7m",
                 "length": "m",
-                "area": "m²"
+                "area": "m\u00b2"
             },
-            "output_si_unit": "Ω"
+            "output_si_unit": "\u03a9",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_121",
@@ -2497,7 +2048,8 @@
                 "power": "W",
                 "current": "A"
             },
-            "output_si_unit": "Ω"
+            "output_si_unit": "\u03a9",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_122",
@@ -2516,7 +2068,8 @@
                 "voltage": "V",
                 "power": "W"
             },
-            "output_si_unit": "Ω"
+            "output_si_unit": "\u03a9",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_123",
@@ -2532,7 +2085,8 @@
             "input_si_units": {
                 "velocity": "m/s"
             },
-            "output_si_unit": "m/s"
+            "output_si_unit": "m/s",
+            "domain": "kinematics"
         },
         {
             "id": "formula_124",
@@ -2551,7 +2105,8 @@
                 "distance": "m",
                 "time": "s"
             },
-            "output_si_unit": "m/s"
+            "output_si_unit": "m/s",
+            "domain": "kinematics"
         },
         {
             "id": "formula_125",
@@ -2570,7 +2125,8 @@
                 "velocity_x": "m/s",
                 "velocity_y": "m/s"
             },
-            "output_si_unit": "m/s"
+            "output_si_unit": "m/s",
+            "domain": "kinematics"
         },
         {
             "id": "formula_126",
@@ -2589,7 +2145,8 @@
                 "change_in_length": "m",
                 "original_length": "m"
             },
-            "output_si_unit": "dimensionless"
+            "output_si_unit": "dimensionless",
+            "domain": "elasticity"
         },
         {
             "id": "formula_127",
@@ -2608,7 +2165,8 @@
                 "stress": "Pa",
                 "young_modulus": "Pa"
             },
-            "output_si_unit": "dimensionless"
+            "output_si_unit": "dimensionless",
+            "domain": "elasticity"
         },
         {
             "id": "formula_128",
@@ -2627,7 +2185,8 @@
                 "deformation": "m",
                 "length": "m"
             },
-            "output_si_unit": "dimensionless"
+            "output_si_unit": "dimensionless",
+            "domain": "elasticity"
         },
         {
             "id": "formula_129",
@@ -2644,9 +2203,10 @@
             ],
             "input_si_units": {
                 "force": "N",
-                "area": "m²"
+                "area": "m\u00b2"
             },
-            "output_si_unit": "Pa"
+            "output_si_unit": "Pa",
+            "domain": "dynamics"
         },
         {
             "id": "formula_130",
@@ -2665,23 +2225,8 @@
                 "young_modulus": "Pa",
                 "strain": "dimensionless"
             },
-            "output_si_unit": "Pa"
-        },
-        {
-            "id": "formula_131",
-            "label": "pressure",
-            "output": "stress",
-            "inputs": [
-                "pressure"
-            ],
-            "nodes": [
-                "stress",
-                "pressure"
-            ],
-            "input_si_units": {
-                "pressure": "Pa"
-            },
-            "output_si_unit": "Pa"
+            "output_si_unit": "Pa",
+            "domain": "elasticity"
         },
         {
             "id": "formula_132",
@@ -2702,33 +2247,12 @@
             ],
             "input_si_units": {
                 "pressure": "Pa",
-                "volume": "m³",
-                "gas_constant": "J/(mol·K)",
+                "volume": "m\u00b3",
+                "gas_constant": "J/(mol\u00b7K)",
                 "number_of_moles": "mol"
             },
-            "output_si_unit": "K"
-        },
-        {
-            "id": "formula_133",
-            "label": "pressure / (density * gas_constant)",
-            "output": "temperature",
-            "inputs": [
-                "pressure",
-                "density",
-                "gas_constant"
-            ],
-            "nodes": [
-                "temperature",
-                "pressure",
-                "density",
-                "gas_constant"
-            ],
-            "input_si_units": {
-                "pressure": "Pa",
-                "density": "kg/m³",
-                "gas_constant": "J/(mol·K)"
-            },
-            "output_si_unit": "K"
+            "output_si_unit": "K",
+            "domain": "thermodynamics"
         },
         {
             "id": "formula_134",
@@ -2747,124 +2271,8 @@
                 "average_kinetic_energy": "J",
                 "boltzmann_constant": "J/K"
             },
-            "output_si_unit": "K"
-        },
-        {
-            "id": "formula_135",
-            "label": "mass * acceleration + mass * gravity",
-            "output": "tension",
-            "inputs": [
-                "mass",
-                "acceleration",
-                "gravity"
-            ],
-            "nodes": [
-                "tension",
-                "mass",
-                "acceleration",
-                "gravity"
-            ],
-            "input_si_units": {
-                "mass": "kg",
-                "acceleration": "m/s²",
-                "gravity": "m/s²"
-            },
-            "output_si_unit": "N"
-        },
-        {
-            "id": "formula_136",
-            "label": "force_applied",
-            "output": "tension",
-            "inputs": [
-                "force_applied"
-            ],
-            "nodes": [
-                "tension",
-                "force_applied"
-            ],
-            "input_si_units": {
-                "force_applied": "N"
-            },
-            "output_si_unit": "N"
-        },
-        {
-            "id": "formula_137",
-            "label": "centripetal_force + weight",
-            "output": "tension",
-            "inputs": [
-                "centripetal_force",
-                "weight"
-            ],
-            "nodes": [
-                "tension",
-                "centripetal_force",
-                "weight"
-            ],
-            "input_si_units": {
-                "centripetal_force": "N",
-                "weight": "N"
-            },
-            "output_si_unit": "N"
-        },
-        {
-            "id": "formula_138",
-            "label": "2 * initial_velocity_y / gravity",
-            "output": "time_of_flight",
-            "inputs": [
-                "initial_velocity_y",
-                "gravity"
-            ],
-            "nodes": [
-                "time_of_flight",
-                "initial_velocity_y",
-                "gravity"
-            ],
-            "input_si_units": {
-                "initial_velocity_y": "m/s",
-                "gravity": "m/s²"
-            },
-            "output_si_unit": "s"
-        },
-        {
-            "id": "formula_139",
-            "label": "2 * initial_velocity * math.sin(angle) / gravity",
-            "output": "time_of_flight",
-            "inputs": [
-                "initial_velocity",
-                "angle",
-                "gravity"
-            ],
-            "nodes": [
-                "time_of_flight",
-                "initial_velocity",
-                "angle",
-                "gravity"
-            ],
-            "input_si_units": {
-                "initial_velocity": "m/s",
-                "angle": "rad",
-                "gravity": "m/s²"
-            },
-            "output_si_unit": "s"
-        },
-        {
-            "id": "formula_140",
-            "label": "range / horizontal_velocity",
-            "output": "time_of_flight",
-            "inputs": [
-                "range",
-                "horizontal_velocity"
-            ],
-            "nodes": [
-                "time_of_flight",
-                "range",
-                "horizontal_velocity"
-            ],
-            "input_si_units": {
-                "range": "m",
-                "horizontal_velocity": "m/s"
-            },
-            "output_si_unit": "s"
+            "output_si_unit": "K",
+            "domain": "thermodynamics"
         },
         {
             "id": "formula_141",
@@ -2886,7 +2294,8 @@
                 "radius": "m",
                 "angle": "rad"
             },
-            "output_si_unit": "N·m"
+            "output_si_unit": "N\u00b7m",
+            "domain": "rotational"
         },
         {
             "id": "formula_142",
@@ -2902,10 +2311,11 @@
                 "angular_acceleration"
             ],
             "input_si_units": {
-                "moment_of_inertia": "kg·m²",
-                "angular_acceleration": "rad/s²"
+                "moment_of_inertia": "kg\u00b7m\u00b2",
+                "angular_acceleration": "rad/s\u00b2"
             },
-            "output_si_unit": "N·m"
+            "output_si_unit": "N\u00b7m",
+            "domain": "rotational"
         },
         {
             "id": "formula_143",
@@ -2924,7 +2334,8 @@
                 "force_perpendicular": "N",
                 "radius": "m"
             },
-            "output_si_unit": "N·m"
+            "output_si_unit": "N\u00b7m",
+            "domain": "rotational"
         },
         {
             "id": "formula_144",
@@ -2943,7 +2354,8 @@
                 "kinetic_energy": "J",
                 "potential_energy": "J"
             },
-            "output_si_unit": "J"
+            "output_si_unit": "J",
+            "domain": "energy"
         },
         {
             "id": "formula_145",
@@ -2962,26 +2374,8 @@
                 "work": "J",
                 "initial_energy": "J"
             },
-            "output_si_unit": "J"
-        },
-        {
-            "id": "formula_146",
-            "label": "mass * speed_of_light**2",
-            "output": "total_energy",
-            "inputs": [
-                "mass",
-                "speed_of_light"
-            ],
-            "nodes": [
-                "total_energy",
-                "mass",
-                "speed_of_light"
-            ],
-            "input_si_units": {
-                "mass": "kg",
-                "speed_of_light": "m/s"
-            },
-            "output_si_unit": "J"
+            "output_si_unit": "J",
+            "domain": "energy"
         },
         {
             "id": "formula_147",
@@ -3000,7 +2394,8 @@
                 "displacement": "m",
                 "time": "s"
             },
-            "output_si_unit": "m/s"
+            "output_si_unit": "m/s",
+            "domain": "kinematics"
         },
         {
             "id": "formula_148",
@@ -3019,10 +2414,11 @@
             ],
             "input_si_units": {
                 "initial_velocity": "m/s",
-                "acceleration": "m/s²",
+                "acceleration": "m/s\u00b2",
                 "time": "s"
             },
-            "output_si_unit": "m/s"
+            "output_si_unit": "m/s",
+            "domain": "kinematics"
         },
         {
             "id": "formula_149",
@@ -3040,11 +2436,12 @@
                 "initial_velocity"
             ],
             "input_si_units": {
-                "acceleration": "m/s²",
+                "acceleration": "m/s\u00b2",
                 "displacement": "m",
                 "initial_velocity": "m/s"
             },
-            "output_si_unit": "m/s"
+            "output_si_unit": "m/s",
+            "domain": "kinematics"
         },
         {
             "id": "formula_150",
@@ -3061,9 +2458,10 @@
             ],
             "input_si_units": {
                 "current": "A",
-                "resistance": "Ω"
+                "resistance": "\u03a9"
             },
-            "output_si_unit": "V"
+            "output_si_unit": "V",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_151",
@@ -3082,7 +2480,8 @@
                 "power": "W",
                 "current": "A"
             },
-            "output_si_unit": "V"
+            "output_si_unit": "V",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_152",
@@ -3101,7 +2500,8 @@
                 "electric_field": "N/C",
                 "distance": "m"
             },
-            "output_si_unit": "V"
+            "output_si_unit": "V",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_153",
@@ -3120,7 +2520,8 @@
                 "work": "J",
                 "charge": "C"
             },
-            "output_si_unit": "V"
+            "output_si_unit": "V",
+            "domain": "electromagnetism"
         },
         {
             "id": "formula_154",
@@ -3137,9 +2538,10 @@
             ],
             "input_si_units": {
                 "mass": "kg",
-                "density": "kg/m³"
+                "density": "kg/m\u00b3"
             },
-            "output_si_unit": "m³"
+            "output_si_unit": "m\u00b3",
+            "domain": "thermodynamics"
         },
         {
             "id": "formula_155",
@@ -3155,10 +2557,11 @@
                 "height"
             ],
             "input_si_units": {
-                "area": "m²",
+                "area": "m\u00b2",
                 "height": "m"
             },
-            "output_si_unit": "m³"
+            "output_si_unit": "m\u00b3",
+            "domain": "geometry"
         },
         {
             "id": "formula_156",
@@ -3178,12 +2581,13 @@
                 "pressure"
             ],
             "input_si_units": {
-                "gas_constant": "J/(mol·K)",
+                "gas_constant": "J/(mol\u00b7K)",
                 "temperature": "K",
                 "number_of_moles": "mol",
                 "pressure": "Pa"
             },
-            "output_si_unit": "m³"
+            "output_si_unit": "m\u00b3",
+            "domain": "thermodynamics"
         },
         {
             "id": "formula_157",
@@ -3199,7 +2603,8 @@
             "input_si_units": {
                 "radius": "m"
             },
-            "output_si_unit": "m³"
+            "output_si_unit": "m\u00b3",
+            "domain": "geometry"
         },
         {
             "id": "formula_158",
@@ -3218,7 +2623,8 @@
                 "frequency": "Hz",
                 "wavelength": "m"
             },
-            "output_si_unit": "m/s"
+            "output_si_unit": "m/s",
+            "domain": "waves"
         },
         {
             "id": "formula_159",
@@ -3237,7 +2643,8 @@
                 "wavelength": "m",
                 "period": "s"
             },
-            "output_si_unit": "m/s"
+            "output_si_unit": "m/s",
+            "domain": "waves"
         },
         {
             "id": "formula_160",
@@ -3256,7 +2663,8 @@
                 "tension": "N",
                 "linear_density": "kg/m"
             },
-            "output_si_unit": "m/s"
+            "output_si_unit": "m/s",
+            "domain": "waves"
         },
         {
             "id": "formula_161",
@@ -3275,7 +2683,8 @@
                 "wave_speed": "m/s",
                 "frequency": "Hz"
             },
-            "output_si_unit": "m"
+            "output_si_unit": "m",
+            "domain": "waves"
         },
         {
             "id": "formula_162",
@@ -3294,7 +2703,8 @@
                 "wave_speed": "m/s",
                 "period": "s"
             },
-            "output_si_unit": "m"
+            "output_si_unit": "m",
+            "domain": "waves"
         },
         {
             "id": "formula_163",
@@ -3310,7 +2720,8 @@
             "input_si_units": {
                 "wave_number": "rad/m"
             },
-            "output_si_unit": "m"
+            "output_si_unit": "m",
+            "domain": "waves"
         },
         {
             "id": "formula_164",
@@ -3327,25 +2738,10 @@
             ],
             "input_si_units": {
                 "mass": "kg",
-                "gravity": "m/s²"
+                "gravity": "m/s\u00b2"
             },
-            "output_si_unit": "N"
-        },
-        {
-            "id": "formula_165",
-            "label": "force",
-            "output": "weight",
-            "inputs": [
-                "force"
-            ],
-            "nodes": [
-                "weight",
-                "force"
-            ],
-            "input_si_units": {
-                "force": "N"
-            },
-            "output_si_unit": "N"
+            "output_si_unit": "N",
+            "domain": "dynamics"
         },
         {
             "id": "formula_166",
@@ -3363,11 +2759,12 @@
                 "gravity"
             ],
             "input_si_units": {
-                "density": "kg/m³",
-                "volume": "m³",
-                "gravity": "m/s²"
+                "density": "kg/m\u00b3",
+                "volume": "m\u00b3",
+                "gravity": "m/s\u00b2"
             },
-            "output_si_unit": "N"
+            "output_si_unit": "N",
+            "domain": "dynamics"
         },
         {
             "id": "formula_167",
@@ -3389,39 +2786,8 @@
                 "displacement": "m",
                 "angle": "rad"
             },
-            "output_si_unit": "J"
-        },
-        {
-            "id": "formula_168",
-            "label": "change_in_kinetic_energy",
-            "output": "work",
-            "inputs": [
-                "change_in_kinetic_energy"
-            ],
-            "nodes": [
-                "work",
-                "change_in_kinetic_energy"
-            ],
-            "input_si_units": {
-                "change_in_kinetic_energy": "J"
-            },
-            "output_si_unit": "J"
-        },
-        {
-            "id": "formula_169",
-            "label": "change_in_potential_energy",
-            "output": "work",
-            "inputs": [
-                "change_in_potential_energy"
-            ],
-            "nodes": [
-                "work",
-                "change_in_potential_energy"
-            ],
-            "input_si_units": {
-                "change_in_potential_energy": "J"
-            },
-            "output_si_unit": "J"
+            "output_si_unit": "J",
+            "domain": "energy"
         },
         {
             "id": "formula_170",
@@ -3440,7 +2806,8 @@
                 "stress": "Pa",
                 "strain": "dimensionless"
             },
-            "output_si_unit": "Pa"
+            "output_si_unit": "Pa",
+            "domain": "elasticity"
         },
         {
             "id": "formula_171",
@@ -3462,10 +2829,11 @@
             "input_si_units": {
                 "force": "N",
                 "original_length": "m",
-                "area": "m²",
+                "area": "m\u00b2",
                 "change_in_length": "m"
             },
-            "output_si_unit": "Pa"
+            "output_si_unit": "Pa",
+            "domain": "elasticity"
         },
         {
             "id": "formula_172",
@@ -3481,7 +2849,8 @@
             "input_si_units": {
                 "elastic_modulus": "Pa"
             },
-            "output_si_unit": "Pa"
+            "output_si_unit": "Pa",
+            "domain": "elasticity"
         }
     ],
     "statistics": {

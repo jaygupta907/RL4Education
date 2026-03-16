@@ -18,7 +18,7 @@ from graph_utils import preload_hypergraph_data
 from hypergraph_generator import collect_batch_parallel
 from reward_computer import compute_rewards_batched, compute_faithfulness_scores
 from logging_utils import log_episode_results_sync
-from utils import training_step_context, clean_decoded_text, extract_question
+from utils import training_step_context, clean_decoded_text, extract_question, log_memory_usage
 
 # Try to import rewardanything
 try:
@@ -41,6 +41,32 @@ from torch.cuda.amp import autocast, GradScaler
 logger = logging.getLogger(__name__)
 
 
+def _faithfulness_score_to_reward(score: float) -> float:
+    """Map faithfulness score from [1, 10] to reward scale [-1, 1]."""
+    clipped = max(1.0, min(10.0, float(score)))
+    return ((clipped - 1.0) / 9.0) * 2.0 - 1.0
+
+
+def _mean_faithfulness_by_trace_length(
+    batch: List[Dict],
+    faithfulness_scores: List[float],
+) -> Dict[int, float]:
+    """Aggregate mean faithfulness for each trace length from valid scores only."""
+    score_buckets: Dict[int, List[float]] = {}
+    for ex, score in zip(batch, faithfulness_scores):
+        if score is None:
+            continue
+        trace = ex.get("trace", {})
+        length = len(trace.get("formulas", []))
+        score_buckets.setdefault(length, []).append(float(score))
+
+    return {
+        length: sum(scores) / len(scores)
+        for length, scores in sorted(score_buckets.items())
+        if scores
+    }
+
+
 class QuestionGeneratorPPOTrainer:
     """Optimized PPO Trainer for fine-tuning question generation model with hypergraph traces."""
     
@@ -50,8 +76,9 @@ class QuestionGeneratorPPOTrainer:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         logger.info(f"Using device: {self.device}")
         
-        # Initialize thread pool for async logging
-        self.log_executor = ThreadPoolExecutor(max_workers=1)
+        # Disable async logging while debugging memory behavior so completed
+        # episodes do not stay referenced by a background worker queue.
+        self.log_executor = None
         
         # Initialize RewardAnything reward model
         if not REWARDANYTHING_AVAILABLE:
@@ -128,7 +155,6 @@ class QuestionGeneratorPPOTrainer:
                 name=f"ppo-training-hypergraph-{config.policy_model_name.split('/')[-1]}",
                 config={
                     "policy_model": config.policy_model_name,
-                    "judge_model": config.judge_model_name,
                     "max_depth": config.max_depth,
                     "batch_size": config.batch_size,
                     "learning_rate": config.learning_rate,
@@ -143,9 +169,7 @@ class QuestionGeneratorPPOTrainer:
     def _log_episode_results_async(self, episode, responses, rewards, judge_scores, 
                                    judge_rewards, judge_explanations, batch):
         """Async wrapper for logging (non-blocking)."""
-        # Use thread pool to avoid blocking training
-        self.log_executor.submit(
-            log_episode_results_sync,
+        log_episode_results_sync(
             episode, responses, rewards, judge_scores,
             judge_rewards, judge_explanations, batch,
             self.logs_dir, self.config
@@ -171,6 +195,7 @@ class QuestionGeneratorPPOTrainer:
             
             # OPTIMIZATION: Use context manager for cleanup
             with training_step_context():
+                log_memory_usage(f"episode_{episode + 1}_start")
                 # OPTIMIZATION: Parallel batch collection
                 if detailed_logging:
                     logger.info("Collecting batch (parallel)...")
@@ -213,13 +238,9 @@ class QuestionGeneratorPPOTrainer:
                 
                 generation_kwargs = {
                     "max_new_tokens": self.config.max_new_tokens,
-                    "min_new_tokens": 10,
                     "temperature": self.config.temperature,
                     "do_sample": True,
                     "top_p": self.config.top_p,
-                    "top_k": self.config.top_k,
-                    "repetition_penalty": self.config.repetition_penalty,
-                    "no_repeat_ngram_size": self.config.no_repeat_ngram_size,
                     "pad_token_id": self.tokenizer.pad_token_id,
                     "eos_token_id": self.tokenizer.eos_token_id,
                     "return_prompt": False,
@@ -236,6 +257,7 @@ class QuestionGeneratorPPOTrainer:
                                 response_tensors = self.ppo_trainer.generate(query_tensors, **generation_kwargs)
                         else:
                             response_tensors = self.ppo_trainer.generate(query_tensors, **generation_kwargs)
+                log_memory_usage(f"episode_{episode + 1}_after_generate")
                 
                 # Set model back to train mode for training step
                 self.model.train()
@@ -258,7 +280,7 @@ class QuestionGeneratorPPOTrainer:
                         continue
                     
                     # Extract question
-                    decoded_text = extract_question(decoded_text)
+                    # decoded_text = extract_question(decoded_text)
                     responses.append(decoded_text)
                     valid_indices.append(i)
                 
@@ -285,22 +307,88 @@ class QuestionGeneratorPPOTrainer:
                 if detailed_logging:
                     logger.info("Computing rewards (batched)...")
                 
-                rewards, judge_scores, judge_rewards, judge_explanations = \
+                _, judge_scores, judge_rewards, judge_explanations = \
                     compute_rewards_batched(
                         responses, batch, self.reward_model
                     )
+                log_memory_usage(f"episode_{episode + 1}_after_difficulty_reward")
+
+                # Compute faithfulness and optimize PPO with a composite reward:
+                # difficulty + faithfulness (weighted).
+                faithfulness_results = compute_faithfulness_scores(
+                    responses, batch, self.reward_model
+                )
+                log_memory_usage(f"episode_{episode + 1}_after_faithfulness_reward")
+                faithfulness_scores = []
+                faithfulness_rewards = []
+                for f_score, _ in faithfulness_results:
+                    if f_score is None:
+                        faithfulness_scores.append(None)
+                        faithfulness_rewards.append(0.0)  # neutral reward if scoring failed
+                    else:
+                        score_val = max(1.0, min(10.0, float(f_score)))
+                        faithfulness_scores.append(score_val)
+                        faithfulness_rewards.append(_faithfulness_score_to_reward(score_val))
+
+                # Normalize weights defensively if user config does not sum to 1.
+                difficulty_weight = float(self.config.difficulty_weight)
+                faithfulness_weight = float(self.config.faithfulness_weight)
+                total_weight = difficulty_weight + faithfulness_weight
+                if total_weight <= 0.0:
+                    difficulty_weight, faithfulness_weight = 0.5, 0.5
+                else:
+                    difficulty_weight /= total_weight
+                    faithfulness_weight /= total_weight
+
+                rewards = []
+                for d_reward, f_reward in zip(judge_rewards, faithfulness_rewards):
+                    rewards.append((difficulty_weight * float(d_reward)) + (faithfulness_weight * float(f_reward)))
                 
                 # Log statistics
                 avg_reward = sum(rewards) / len(rewards) if rewards else 0.0
                 avg_score = sum(judge_scores) / len(judge_scores) if judge_scores else 0.0
+                valid_faithfulness_scores = [s for s in faithfulness_scores if s is not None]
+                avg_faithfulness = (
+                    sum(valid_faithfulness_scores) / len(valid_faithfulness_scores)
+                    if valid_faithfulness_scores else 0.0
+                )
+                mean_faithfulness_by_length = _mean_faithfulness_by_trace_length(
+                    batch, faithfulness_scores
+                )
+                avg_difficulty_reward = (
+                    sum(judge_rewards) / len(judge_rewards) if judge_rewards else 0.0
+                )
+                avg_faithfulness_reward = (
+                    sum(faithfulness_rewards) / len(faithfulness_rewards) if faithfulness_rewards else 0.0
+                )
                 
                 self.episode_rewards.append(avg_reward)
                 self.episode_scores.append(avg_score)
                 
                 if detailed_logging:
-                    logger.info(f"Avg judge score: {avg_score:.2f}/10.0, Avg reward: {avg_reward:.4f}")
+                    logger.info(
+                        f"Avg judge score: {avg_score:.2f}/10.0, "
+                        f"Avg faithfulness: {avg_faithfulness:.2f}/10.0, "
+                        f"Avg reward: {avg_reward:.4f}"
+                    )
+                    if mean_faithfulness_by_length:
+                        length_summary = ", ".join(
+                            f"L{length}={mean_score:.2f}"
+                            for length, mean_score in mean_faithfulness_by_length.items()
+                        )
+                        logger.info(f"Mean faithfulness by trace length: {length_summary}")
                 else:
-                    logger.info(f"Avg score: {avg_score:.2f}, Avg reward: {avg_reward:.4f}")
+                    logger.info(
+                        f"Avg score: {avg_score:.2f}, "
+                        f"Avg faithfulness: {avg_faithfulness:.2f}, "
+                        f"Avg reward: {avg_reward:.4f}"
+                    )
+                    if mean_faithfulness_by_length:
+                        length_summary = ", ".join(
+                            f"L{length}={mean_score:.2f}"
+                            for length, mean_score in mean_faithfulness_by_length.items()
+                        )
+                        logger.info(f"Faithfulness by length: {length_summary}")
                 
                 # OPTIMIZATION: Async logging (non-blocking)
                 if detailed_logging:
@@ -314,15 +402,29 @@ class QuestionGeneratorPPOTrainer:
                     wandb.log({
                         "episode/avg_reward": avg_reward,
                         "episode/avg_judge_score": avg_score,
+                        "episode/avg_faithfulness_score": avg_faithfulness,
+                        "episode/avg_difficulty_reward": avg_difficulty_reward,
+                        "episode/avg_faithfulness_reward": avg_faithfulness_reward,
                     }, step=episode)
-
-                # Compute faithfulness scores and append to separate JSONL file (question, length, score, faithfulness)
-                faithfulness_results = compute_faithfulness_scores(
-                    responses, batch, self.reward_model
-                )
                 with open(self.faithfulness_jsonl_path, "a", encoding="utf-8") as f:
-                    for i, (question, ex, judge_score, (f_score, f_explanation)) in enumerate(
-                        zip(responses, batch, judge_scores, faithfulness_results)
+                    for i, (
+                        question,
+                        ex,
+                        judge_score,
+                        judge_reward,
+                        reward,
+                        (f_score, f_explanation),
+                        faithfulness_reward,
+                    ) in enumerate(
+                        zip(
+                            responses,
+                            batch,
+                            judge_scores,
+                            judge_rewards,
+                            rewards,
+                            faithfulness_results,
+                            faithfulness_rewards,
+                        )
                     ):
                         trace = ex.get("trace", {})
                         length = len(trace.get("formulas", []))
@@ -331,7 +433,10 @@ class QuestionGeneratorPPOTrainer:
                             "question": question,
                             "length": length,
                             "score": float(judge_score),
+                            "difficulty_reward": float(judge_reward),
+                            "combined_reward": float(reward),
                             "faithfulness_score": float(f_score) if f_score is not None else None,
+                            "faithfulness_reward": float(faithfulness_reward),
                             "faithfulness_explanation": f_explanation,
                         }
                         f.write(json.dumps(record, ensure_ascii=False) + "\n")
@@ -370,6 +475,7 @@ class QuestionGeneratorPPOTrainer:
                             response_tensors,
                             reward_tensors
                         )
+                    log_memory_usage(f"episode_{episode + 1}_after_ppo_step")
                     
                     # Extract KL divergence and entropy from stats
                     kl_div_raw = stats.get('ppo/kl', stats.get('ppo/policy/approxkl', 0.0))
@@ -396,6 +502,8 @@ class QuestionGeneratorPPOTrainer:
                             "ppo/kl_divergence": kl_div,
                             "ppo/entropy": entropy,
                         }
+                        for length, mean_score in mean_faithfulness_by_length.items():
+                            wandb_metrics[f"faithfulness_by_length/len_{length}"] = mean_score
                         # Add other useful PPO metrics if available
                         if 'ppo/policy/loss' in stats:
                             loss_val = stats['ppo/policy/loss']
@@ -431,10 +539,12 @@ class QuestionGeneratorPPOTrainer:
                     gc.collect()
                     continue
                 finally:
-                    # Clear cache only; do NOT del tensors passed to PPO trainer - it may
-                    # hold internal references; freeing them causes illegal memory access.
+                    # Keep memory diagnostics explicit so we can distinguish retained
+                    # tensors from allocator fragmentation across episodes.
+                    log_memory_usage(f"episode_{episode + 1}_before_cleanup")
                     if torch.cuda.is_available():
                         torch.cuda.empty_cache()
+                    log_memory_usage(f"episode_{episode + 1}_after_cleanup")
                     gc.collect()
 
             # Save checkpoint
@@ -451,9 +561,6 @@ class QuestionGeneratorPPOTrainer:
         self.model.save_pretrained(self.config.output_dir)
         self.tokenizer.save_pretrained(self.config.output_dir)
         
-        # Shutdown thread pool
-        self.log_executor.shutdown(wait=True)
-        
         logger.info("Training completed!")
         n = len(self.episode_rewards)
         logger.info(f"Average reward: {sum(self.episode_rewards) / n:.4f}" if n else "N/A")
@@ -461,4 +568,3 @@ class QuestionGeneratorPPOTrainer:
         
         if WANDB_AVAILABLE:
             wandb.finish()
-

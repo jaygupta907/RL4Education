@@ -123,7 +123,7 @@ def compute_rewards_batched(
             "complex reasoning, integration of different principles, or realistic multi-step scenarios. "
             "Rank lower (0-4) questions that are trivial, require only direct substitution, "
             "or involve a single simple formula. "
-            "Focus on cognitive difficulty and problem-solving complexity, not on value accuracy or formatting. "
+            "Focus on cognitive difficulty and problem-solving complexity"
             "Return scores as numeric values between 0 and 10."
         )
         

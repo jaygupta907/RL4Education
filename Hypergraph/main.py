@@ -20,6 +20,14 @@ import logging
 from config import TrainingConfig
 from trainer import QuestionGeneratorPPOTrainer
 
+import warnings
+
+warnings.filterwarnings(
+    "ignore",
+    category=UserWarning,
+)
+
+
 # Try to import required libraries
 try:
     from trl import PPOTrainer, PPOConfig, AutoModelForCausalLMWithValueHead
@@ -47,9 +55,9 @@ def main():
         logger.error("Required libraries not available. Please install: pip install transformers torch trl accelerate")
         return
     
-    # Check if instruction-tuned model exists
-    instruction_tuned_model_path = "/mnt/storage/ae21b026/models/instruction_tuned_model"
-    if not os.path.exists(instruction_tuned_model_path):
+    # Check if instruction-tuned model exists (single fixed path)
+    instruction_tuned_model_path = "/mnt/storage/ae21b026/models/instruction_tuned_model_new"
+    if not (os.path.exists(instruction_tuned_model_path) and os.path.exists(os.path.join(instruction_tuned_model_path, "config.json"))):
         logger.warning(f"Instruction-tuned model not found at {instruction_tuned_model_path}")
         logger.warning("RL training will use the pretrained model instead.")
         logger.warning("To use instruction-tuned model, run instruction_tune.py first.")
@@ -71,8 +79,8 @@ def main():
         # OPTIMIZATION: Reduced token generation to lower peak memory
         max_new_tokens=300,
         # OPTIMIZATION: Performance settings
-        use_mixed_precision=False,  # 1.5x speedup
-        use_quantization=False,  # Set to True for 2x more speedup (if memory allows)
+        use_mixed_precision=True,  # 1.5x speedup
+        use_quantization=True,  # Set to True for 2x more speedup (if memory allows)
         num_workers=4,  # Parallel trace generation
         log_detailed_every=1,  # Log details every episode
         save_steps=50,
@@ -100,4 +108,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

@@ -39,13 +39,13 @@ logger = logging.getLogger(__name__)
 class InstructionTuningConfig:
     """Configuration for instruction fine-tuning."""
     # Model configuration - Using pretrained model (not instruct) for RL compatibility
-    model_name: str = "meta-llama/Meta-Llama-3-8B"  # Pretrained model, not Instruct
+    model_name: str = "Qwen/Qwen2.5-3B"  
     dataset_path: str = "dataset_new_format.json"
-    output_dir: str = "/mnt/storage/ae21b026/models/instruction_tuned_model_pretrained"
+    output_dir: str = "/mnt/storage/ae21b026/models/instruction_tuned_model_qwen"
     
     # Training configuration
-    num_train_epochs: int = 6
-    per_device_train_batch_size: int = 4
+    num_train_epochs: int = 20
+    per_device_train_batch_size: int = 8
     gradient_accumulation_steps: int = 4
     learning_rate: float = 2e-5
     warmup_steps: int = 100
@@ -448,15 +448,22 @@ Generate a deep-reasoning physics question that tests a student's understanding 
         
         # Generate
         model.eval()
+        generation_kwargs = {
+            "max_new_tokens": 300,
+            "min_new_tokens": 10,
+            "temperature": 0.5,
+            "do_sample": True,
+            "top_p": 0.9,
+            "top_k": 50,
+            "repetition_penalty": 1.2,
+            "no_repeat_ngram_size": 2,
+            "pad_token_id": tokenizer.pad_token_id,
+            "eos_token_id": tokenizer.eos_token_id,
+        }
         with torch.no_grad():
             outputs = model.generate(
                 **inputs,
-                max_new_tokens=512,
-                temperature=0.7,
-                top_p=0.9,
-                do_sample=True,
-                pad_token_id=tokenizer.pad_token_id,
-                eos_token_id=tokenizer.eos_token_id,
+                **generation_kwargs,
             )
         
         # Decode response (only the new tokens)
@@ -484,11 +491,11 @@ Generate a deep-reasoning physics question that tests a student's understanding 
 def main():
     """Main entry point."""
     config = InstructionTuningConfig(
-        model_name="meta-llama/Meta-Llama-3-8B",  # Using pretrained model, not Instruct
-        dataset_path="dataset_new_format.json",
-        output_dir="/mnt/storage/ae21b026/models/instruction_tuned_model_pretrained",
+        model_name = "Qwen/Qwen2.5-3B"  ,
+        dataset_path = "dataset_new_format.json",
+        output_dir = "/mnt/storage/ae21b026/models/instruction_tuned_model_qwen",
         num_train_epochs=30,
-        per_device_train_batch_size=4,
+        per_device_train_batch_size=8,
         gradient_accumulation_steps=4,
         learning_rate=2e-5,
         max_seq_length=2048,
@@ -499,4 +506,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

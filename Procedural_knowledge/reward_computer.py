@@ -158,7 +158,7 @@ def compute_rewards_batched(
                     "Rank lower (0-4) questions that are trivial, require only direct substitution, "
                     "or involve a single simple formula. "
                     "Return scores as numeric values between 0 and 10."
-                    "If the question is not concise penalize it"
+                    "If the question is not concise penalize it."
 
                 )
                 

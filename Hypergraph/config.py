@@ -24,22 +24,19 @@ class TrainingConfig:
     gradient_accumulation_steps: int = 2  # OPTIMIZED: Adjusted for larger batch
     
     # PPO hyperparameters
-    learning_rate: float = 1.41e-6
+    learning_rate: float = 5e-7
     ppo_epochs: int = 2
-    cliprange: float = 0.05
-    cliprange_value: float = 0.2
+    cliprange: float = 0.1
+    cliprange_value: float = 0.1
     gamma: float = 1.0
     lam: float = 0.95
-    init_kl_coef: float = 1.0
-    target_kl: float = 2.0
+    init_kl_coef: float =3.0
+    target_kl: float = 0.1
     
     # Generation configuration - OPTIMIZED
-    max_new_tokens: int = 300  
-    temperature: float = 0.5
+    max_new_tokens: int = 500
+    temperature: float = 0.7
     top_p: float = 0.9
-    top_k: int = 50
-    repetition_penalty: float = 1.2
-    no_repeat_ngram_size: int = 2
     
     # Output configuration - OPTIMIZED
     output_dir: str = "/mnt/storage/ae21b026/models/ppo_checkpoints_hypergraph"
@@ -48,8 +45,8 @@ class TrainingConfig:
     logging_steps: int = 10  # OPTIMIZED: Log less frequently
     
     # Performance configuration
-    use_mixed_precision: bool = False  # NEW: Enable mixed precision training
-    use_quantization: bool = False  # NEW: Enable 8-bit quantization (set to True for more speed)
+    use_mixed_precision: bool = True  # NEW: Enable mixed precision training
+    use_quantization: bool = True  # NEW: Enable 8-bit quantization (set to True for more speed)
     num_workers: int = 4  # NEW: Number of parallel workers for trace generation
     log_detailed_every: int = 1  # NEW: Log detailed results every N episodes (1 = every episode)
     
@@ -60,3 +57,8 @@ class TrainingConfig:
     use_vllm_reward: bool = True  # Use vLLM deployment instead of local inference
     reward_server_url: str = "http://localhost:8001"  # RewardAnything server URL
 
+    # Composite reward configuration
+    # PPO reward = (difficulty_weight * difficulty_reward) + (faithfulness_weight * faithfulness_reward)
+    # difficulty_reward is in [-1, 1], faithfulness score is mapped from [1, 10] -> [-1, 1].
+    difficulty_weight: float = 0.0
+    faithfulness_weight: float = 1.0

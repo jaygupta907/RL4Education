@@ -33,8 +33,8 @@ class TrainingConfig:
     target_kl: float = 0.001
     
     # Generation configuration - OPTIMIZED
-    max_new_tokens: int = 300  
-    temperature: float = 0.5
+    max_new_tokens: int = 512  
+    temperature: float = 0.7
     top_p: float = 0.9
     top_k: int = 50
     repetition_penalty: float = 1.2

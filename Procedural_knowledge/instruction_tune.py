@@ -432,7 +432,7 @@ def main():
         model_name="meta-llama/Meta-Llama-3-8B-Instruct",
         dataset_path="dataset_new_format.json",
         output_dir="/mnt/storage/ae21b026/models/instruction_tuned_model",
-        num_train_epochs=10,
+        num_train_epochs=30,
         per_device_train_batch_size=4,
         gradient_accumulation_steps=4,
         learning_rate=2e-5,

@@ -38,7 +38,74 @@ class HypergraphTraverser:
         
         # Get all nodes for reference
         self.all_nodes = set(self.hypergraph['nodes'])
-    
+
+    # ------------------------------------------------------------------
+    # Domain compatibility: which producer domains may feed into which
+    # consumer domains.  A computed intermediate is only allowed as input
+    # to a formula whose domain appears in the producer's allowed set.
+    # Domains not listed here are self-contained (only feed themselves).
+    # ------------------------------------------------------------------
+    _DOMAIN_COMPAT: Dict[str, Set[str]] = {
+        # kinematics outputs (velocity, displacement, acceleration) may feed
+        # dynamics and energy — all physically natural chains
+        "kinematics":      {"kinematics", "dynamics", "energy", "rotational", "waves"},
+        # dynamics outputs (force, pressure, momentum) may feed thermo (gas laws
+        # use mechanical pressure) but NOT geometry — F/A pressure must not
+        # become a geometric area source
+        "dynamics":        {"dynamics", "kinematics", "energy", "thermodynamics", "rotational"},
+        "rotational":      {"rotational", "dynamics", "energy"},
+        # energy outputs (KE, PE, height, work) stay within energy/kinematics —
+        # height derived from PE must NOT feed geometry formulas (the key fix)
+        "energy":          {"energy", "kinematics", "dynamics"},
+        # thermodynamics is self-contained: density/volume/temperature stay thermo
+        "thermodynamics":  {"thermodynamics"},
+        # geometry outputs (area, volume) may feed thermo (e.g. V in ideal gas)
+        # and elasticity (area in stress), but NOT energy or dynamics
+        "geometry":        {"geometry", "thermodynamics", "elasticity"},
+        "elasticity":      {"elasticity"},
+        "friction":        {"friction", "dynamics"},
+        "waves":           {"waves", "electromagnetism"},
+        "electromagnetism":{"electromagnetism", "waves"},
+        # unknown/untagged formulas are never blocked
+        "unknown":         {"kinematics","dynamics","rotational","energy",
+                            "thermodynamics","geometry","elasticity",
+                            "friction","waves","electromagnetism","unknown"},
+    }
+
+    def _check_domain_coherence(self, execution_order: List[Dict]) -> bool:
+        """
+        Reject traces where an intermediate variable computed in domain A
+        is consumed by a formula in an incompatible domain B.
+
+        Only *computed* intermediates are checked — leaf/given variables
+        (not produced by any formula in this trace) are always allowed.
+
+        Returns True if coherent, False if a violation is found.
+        """
+        # variable -> domain of the formula that produces it in this trace
+        produced_domain: Dict[str, str] = {
+            he["output"]: he.get("domain", "unknown")
+            for he in execution_order
+        }
+
+        for formula in execution_order:
+            consumer_domain = formula.get("domain", "unknown")
+            for inp in formula["inputs"]:
+                if inp not in produced_domain:
+                    continue  # leaf node — always OK
+                producer_domain = produced_domain[inp]
+                if producer_domain == consumer_domain:
+                    continue
+                allowed = self._DOMAIN_COMPAT.get(producer_domain, {"unknown"})
+                if consumer_domain not in allowed:
+                    logger.debug(
+                        f"Domain coherence violation: '{formula['id']}' "
+                        f"(domain={consumer_domain}) consumes '{inp}' "
+                        f"produced by domain='{producer_domain}'. Rejecting trace."
+                    )
+                    return False
+        return True
+
     def _get_execution_order(self, trace_path: List[Dict]) -> Optional[List[Dict]]:
         """
         Get the correct execution order for formulas using topological sort.
@@ -136,7 +203,11 @@ class HypergraphTraverser:
             # Circular dependency - reject trace
             logger.debug(f"Rejecting trace: circular dependency detected")
             return None
-        
+
+        # Reject cross-domain absurd traces (e.g. height from energy fed into geometry)
+        if not self._check_domain_coherence(execution_order):
+            return None
+
         # Track which variables are calculated by formulas in this trace
         calculated_outputs = {he['output'] for he in trace_path}
         
@@ -445,4 +516,3 @@ if __name__ == "__main__":
                 print(f"    Input Units: {', '.join(input_units)}")
         
         print("\n")
-
