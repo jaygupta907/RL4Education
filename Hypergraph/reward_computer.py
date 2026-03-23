@@ -6,6 +6,12 @@ from typing import Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
+# RewardAnything batch responses are not guaranteed to preserve request order in
+# this setup, and the client does not provide a stable request id per result.
+# Use per-sample evaluation so scores/explanations are always matched to the
+# correct prompt/response pair.
+USE_ORDER_SAFE_REWARD_EVAL = True
+
 
 def _build_faithfulness_principle(trace: Dict, target: str, generated_values: Optional[Dict] = None) -> str:
     """Build the principle text for faithfulness scoring (same logic as evaluate_instruction_model)."""
@@ -61,7 +67,9 @@ def compute_faithfulness_scores(
     Compute faithfulness score (1-10) for each generated question.
     Returns list of (score, explanation) per response; (None, None) on failure.
     """
-    results: List[Tuple[Optional[float], Optional[str]]] = []
+    results: List[Tuple[Optional[float], Optional[str]]] = [(None, None)] * len(responses)
+    evaluations = []
+
     for i, (response, ex) in enumerate(zip(responses, batch)):
         prompt = ex.get("query", "")
         trace = ex.get("trace", {})
@@ -70,25 +78,63 @@ def compute_faithfulness_scores(
         generated_values = metadata.get("generated_values")
         if not prompt or not trace:
             logger.warning(f"Faithfulness: missing prompt or trace for item {i}, skipping")
-            results.append((None, None))
             continue
         principle = _build_faithfulness_principle(trace, target, generated_values)
+        evaluations.append({
+            "index": i,
+            "principle": principle,
+            "prompt": prompt,
+            "response": response,
+        })
+
+    if not evaluations:
+        return results
+
+    if hasattr(reward_model, "judge_batch") and not USE_ORDER_SAFE_REWARD_EVAL:
+        batch_requests = [
+            {
+                "principle": eval_data["principle"],
+                "prompt": eval_data["prompt"],
+                "responses": {"response": eval_data["response"]},
+            }
+            for eval_data in evaluations
+        ]
+        try:
+            batch_results = reward_model.judge_batch(batch_requests)
+            if len(batch_results) != len(evaluations):
+                raise ValueError(
+                    f"Expected {len(evaluations)} faithfulness results, got {len(batch_results)}"
+                )
+
+            for eval_data, result in zip(evaluations, batch_results):
+                if result.scores and "response" in result.scores:
+                    raw = result.scores["response"]
+                    score = max(1.0, min(10.0, float(raw)))
+                    explanation = getattr(result, "reasoning", None) or "No explanation provided"
+                    results[eval_data["index"]] = (score, explanation)
+                else:
+                    results[eval_data["index"]] = (5.0, "Score extraction failed")
+            return results
+        except Exception as e:
+            logger.warning(f"Faithfulness batch evaluation failed, falling back to individual calls: {e}")
+
+    for eval_data in evaluations:
         try:
             result = reward_model.judge(
-                principle=principle,
-                prompt=prompt,
-                responses={"response": response},
+                principle=eval_data["principle"],
+                prompt=eval_data["prompt"],
+                responses={"response": eval_data["response"]},
             )
             if result.scores and "response" in result.scores:
                 raw = result.scores["response"]
                 score = max(1.0, min(10.0, float(raw)))
                 explanation = getattr(result, "reasoning", None) or "No explanation provided"
-                results.append((score, explanation))
+                results[eval_data["index"]] = (score, explanation)
             else:
-                results.append((5.0, "Score extraction failed"))
+                results[eval_data["index"]] = (5.0, "Score extraction failed")
         except Exception as e:
-            logger.warning(f"Faithfulness evaluation failed for item {i}: {e}")
-            results.append((None, str(e)))
+            logger.warning(f"Faithfulness evaluation failed for item {eval_data['index']}: {e}")
+            results[eval_data["index"]] = (None, str(e))
     return results
 
 
@@ -98,9 +144,9 @@ def compute_rewards_batched(
     reward_model
 ) -> Tuple[List[float], List[float], List[float], List[str]]:
     """Compute rewards based on question hardness/difficulty."""
-    judge_scores = []
-    judge_rewards = []
-    judge_explanations = []
+    judge_scores = [0.0] * len(responses)
+    judge_rewards = [-1.0] * len(responses)
+    judge_explanations = ["Evaluation not run"] * len(responses)
     
     # Build all evaluation data - each response gets its OWN prompt/principle
     evaluations = []
@@ -111,9 +157,9 @@ def compute_rewards_batched(
         
         if not prompt:
             logger.warning(f"No prompt found in batch item {i}, skipping evaluation")
-            judge_scores.append(0.0)
-            judge_rewards.append(-1.0)
-            judge_explanations.append("No prompt found in batch")
+            judge_scores[i] = 0.0
+            judge_rewards[i] = -1.0
+            judge_explanations[i] = "No prompt found in batch"
             continue
         
         # The principle contains the evaluation/scoring instructions
@@ -140,11 +186,7 @@ def compute_rewards_batched(
     # Batch API may return results out of order, so we use individual evaluation for correctness
     try:
         # Check if reward_model is a Client (vLLM) or local model
-        is_client = hasattr(reward_model, 'judge_batch')
-        
-        # Use individual evaluation to ensure correct matching (batch may have ordering issues)
-        # This ensures each response is evaluated with its own prompt/principle
-        is_client = False
+        is_client = hasattr(reward_model, 'judge_batch') and not USE_ORDER_SAFE_REWARD_EVAL
         
         if is_client:
             # Use batch processing for vLLM client (more efficient)
@@ -167,9 +209,7 @@ def compute_rewards_batched(
                     is_client = False
                 else:
                     # Process results in the same order as evaluations to ensure correct matching
-                    for i in range(len(evaluations)):
-                        eval_data = evaluations[i]
-                        result = batch_results[i]
+                    for eval_data, result in zip(evaluations, batch_results):
                         try:
                             if result.scores and "response" in result.scores:
                                 raw_score = result.scores["response"]
@@ -179,15 +219,15 @@ def compute_rewards_batched(
                                 score = 5.0
                                 explanation = f"Score extraction failed. Raw scores: {result.scores}"
                             
-                            judge_scores.append(score)
-                            judge_explanations.append(explanation)
+                            judge_scores[eval_data["index"]] = score
+                            judge_explanations[eval_data["index"]] = explanation
                             judge_reward = (score / 10.0) * 2.0 - 1.0
-                            judge_rewards.append(judge_reward)
+                            judge_rewards[eval_data["index"]] = judge_reward
                         except Exception as e:
-                            logger.error(f"Failed to process batch result {i} (eval index {eval_data['index']}): {e}")
-                            judge_scores.append(0.0)
-                            judge_explanations.append(f"Batch processing failed: {str(e)}")
-                            judge_rewards.append(-1.0)
+                            logger.error(f"Failed to process batch result for eval index {eval_data['index']}: {e}")
+                            judge_scores[eval_data["index"]] = 0.0
+                            judge_explanations[eval_data["index"]] = f"Batch processing failed: {str(e)}"
+                            judge_rewards[eval_data["index"]] = -1.0
             except Exception as e:
                 logger.error(f"Batch evaluation failed: {e}. Falling back to individual evaluation.")
                 is_client = False  # Fall through to individual evaluation
@@ -210,16 +250,16 @@ def compute_rewards_batched(
                         score = 5.0
                         explanation = f"Score extraction failed. Raw scores: {result.scores}"
                     
-                    judge_scores.append(score)
-                    judge_explanations.append(explanation)
+                    judge_scores[eval_data["index"]] = score
+                    judge_explanations[eval_data["index"]] = explanation
                     judge_reward = (score / 10.0) * 2.0 - 1.0
-                    judge_rewards.append(judge_reward)
+                    judge_rewards[eval_data["index"]] = judge_reward
                     
                 except Exception as e:
                     logger.error(f"Individual evaluation failed for response {eval_data['index']}: {e}")
-                    judge_scores.append(0.0)
-                    judge_explanations.append(f"Evaluation failed: {str(e)}")
-                    judge_rewards.append(-1.0)
+                    judge_scores[eval_data["index"]] = 0.0
+                    judge_explanations[eval_data["index"]] = f"Evaluation failed: {str(e)}"
+                    judge_rewards[eval_data["index"]] = -1.0
     except Exception as e:
         logger.error(f"Batched evaluation failed: {e}. Falling back to individual evaluation.")
         # Fallback: evaluate individually
@@ -230,9 +270,9 @@ def compute_rewards_batched(
                 
                 if not prompt:
                     logger.warning(f"No prompt found in batch item {i} during fallback")
-                    judge_scores.append(0.0)
-                    judge_rewards.append(-1.0)
-                    judge_explanations.append("No prompt found in batch")
+                    judge_scores[i] = 0.0
+                    judge_rewards[i] = -1.0
+                    judge_explanations[i] = "No prompt found in batch"
                     continue
                 
                 # The principle contains the evaluation/scoring instructions
@@ -261,16 +301,15 @@ def compute_rewards_batched(
                     score = 5.0
                     explanation = "Score extraction failed"
                 
-                judge_scores.append(score)
-                judge_explanations.append(explanation)
+                judge_scores[i] = score
+                judge_explanations[i] = explanation
                 judge_reward = (score / 10.0) * 2.0 - 1.0
-                judge_rewards.append(judge_reward)
+                judge_rewards[i] = judge_reward
             except Exception as e2:
                 logger.error(f"Individual evaluation failed for response {i}: {e2}")
-                judge_scores.append(0.0)
-                judge_explanations.append(f"Evaluation failed: {str(e2)}")
-                judge_rewards.append(-1.0)
+                judge_scores[i] = 0.0
+                judge_explanations[i] = f"Evaluation failed: {str(e2)}"
+                judge_rewards[i] = -1.0
     
     # Use judge rewards directly (no combination)
     return judge_rewards, judge_scores, judge_rewards, judge_explanations
-

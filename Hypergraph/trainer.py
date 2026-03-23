@@ -36,6 +36,13 @@ except ImportError:
     WANDB_AVAILABLE = False
     print("Warning: wandb not available. Install with: pip install wandb")
 
+try:
+    import plotly.graph_objects as go
+    PLOTLY_AVAILABLE = True
+except ImportError:
+    go = None
+    PLOTLY_AVAILABLE = False
+
 from torch.cuda.amp import autocast, GradScaler
 
 logger = logging.getLogger(__name__)
@@ -45,6 +52,17 @@ def _faithfulness_score_to_reward(score: float) -> float:
     """Map faithfulness score from [1, 10] to reward scale [-1, 1]."""
     clipped = max(1.0, min(10.0, float(score)))
     return ((clipped - 1.0) / 9.0) * 2.0 - 1.0
+
+
+def _get_model_input_device(model) -> torch.device:
+    """Resolve the device used by the model input embeddings."""
+    try:
+        input_embeddings = model.pretrained_model.get_input_embeddings()
+        if input_embeddings is not None:
+            return next(input_embeddings.parameters()).device
+    except Exception:
+        pass
+    return next(model.parameters()).device
 
 
 def _mean_faithfulness_by_trace_length(
@@ -64,6 +82,28 @@ def _mean_faithfulness_by_trace_length(
         length: sum(scores) / len(scores)
         for length, scores in sorted(score_buckets.items())
         if scores
+    }
+
+
+def _update_cumulative_faithfulness_by_length(
+    totals_by_length: Dict[int, float],
+    counts_by_length: Dict[int, int],
+    batch: List[Dict],
+    faithfulness_scores: List[float],
+) -> Dict[int, float]:
+    """Update running faithfulness totals/counts and return cumulative means."""
+    for ex, score in zip(batch, faithfulness_scores):
+        if score is None:
+            continue
+        trace = ex.get("trace", {})
+        length = len(trace.get("formulas", []))
+        totals_by_length[length] = totals_by_length.get(length, 0.0) + float(score)
+        counts_by_length[length] = counts_by_length.get(length, 0) + 1
+
+    return {
+        length: totals_by_length[length] / counts_by_length[length]
+        for length in sorted(totals_by_length)
+        if counts_by_length.get(length, 0) > 0
     }
 
 
@@ -113,6 +153,8 @@ class QuestionGeneratorPPOTrainer:
         
         # Initialize policy model
         self.model, self.ref_model = initialize_policy_model(self.config, self.device)
+        self.model_input_device = _get_model_input_device(self.model)
+        logger.info(f"Model input device: {self.model_input_device}")
         
         # Initialize tokenizer
         self.tokenizer = initialize_tokenizer(self.config)
@@ -137,6 +179,8 @@ class QuestionGeneratorPPOTrainer:
         self._max_episode_history = 5000
         self.episode_rewards = deque(maxlen=self._max_episode_history)
         self.episode_scores = deque(maxlen=self._max_episode_history)
+        self.faithfulness_total_by_length: Dict[int, float] = {}
+        self.faithfulness_count_by_length: Dict[int, int] = {}
         
         # Create logs directory (in current directory, not with checkpoints)
         base_logs_dir = self.config.logs_dir
@@ -151,9 +195,12 @@ class QuestionGeneratorPPOTrainer:
         # Initialize wandb if available
         if WANDB_AVAILABLE:
             wandb.init(
-                project="question-generator-ppo-hypergraph",
-                name=f"ppo-training-hypergraph-{config.policy_model_name.split('/')[-1]}",
+                project=config.wandb_project,
+                name=config.experiment_name,
+                group=config.experiment_name,
                 config={
+                    "wandb_project": config.wandb_project,
+                    "experiment_name": config.experiment_name,
                     "policy_model": config.policy_model_name,
                     "max_depth": config.max_depth,
                     "batch_size": config.batch_size,
@@ -226,7 +273,7 @@ class QuestionGeneratorPPOTrainer:
                     padding_side="left",
                 )
                 # Move to device and free tokenized to avoid holding duplicate tensors
-                query_tensors = [ids.to(self.device) for ids in tokenized.input_ids]
+                query_tensors = [ids.to(self.model_input_device) for ids in tokenized.input_ids]
                 del tokenized
                 
                 # Generate responses
@@ -352,8 +399,11 @@ class QuestionGeneratorPPOTrainer:
                     sum(valid_faithfulness_scores) / len(valid_faithfulness_scores)
                     if valid_faithfulness_scores else 0.0
                 )
-                mean_faithfulness_by_length = _mean_faithfulness_by_trace_length(
-                    batch, faithfulness_scores
+                cumulative_faithfulness_by_length = _update_cumulative_faithfulness_by_length(
+                    self.faithfulness_total_by_length,
+                    self.faithfulness_count_by_length,
+                    batch,
+                    faithfulness_scores,
                 )
                 avg_difficulty_reward = (
                     sum(judge_rewards) / len(judge_rewards) if judge_rewards else 0.0
@@ -371,24 +421,24 @@ class QuestionGeneratorPPOTrainer:
                         f"Avg faithfulness: {avg_faithfulness:.2f}/10.0, "
                         f"Avg reward: {avg_reward:.4f}"
                     )
-                    if mean_faithfulness_by_length:
+                    if cumulative_faithfulness_by_length:
                         length_summary = ", ".join(
                             f"L{length}={mean_score:.2f}"
-                            for length, mean_score in mean_faithfulness_by_length.items()
+                            for length, mean_score in cumulative_faithfulness_by_length.items()
                         )
-                        logger.info(f"Mean faithfulness by trace length: {length_summary}")
+                        logger.info(f"Cumulative mean faithfulness by trace length: {length_summary}")
                 else:
                     logger.info(
                         f"Avg score: {avg_score:.2f}, "
                         f"Avg faithfulness: {avg_faithfulness:.2f}, "
                         f"Avg reward: {avg_reward:.4f}"
                     )
-                    if mean_faithfulness_by_length:
+                    if cumulative_faithfulness_by_length:
                         length_summary = ", ".join(
                             f"L{length}={mean_score:.2f}"
-                            for length, mean_score in mean_faithfulness_by_length.items()
+                            for length, mean_score in cumulative_faithfulness_by_length.items()
                         )
-                        logger.info(f"Faithfulness by length: {length_summary}")
+                        logger.info(f"Cumulative faithfulness by length: {length_summary}")
                 
                 # OPTIMIZATION: Async logging (non-blocking)
                 if detailed_logging:
@@ -502,8 +552,26 @@ class QuestionGeneratorPPOTrainer:
                             "ppo/kl_divergence": kl_div,
                             "ppo/entropy": entropy,
                         }
-                        for length, mean_score in mean_faithfulness_by_length.items():
-                            wandb_metrics[f"faithfulness_by_length/len_{length}"] = mean_score
+                        if cumulative_faithfulness_by_length and PLOTLY_AVAILABLE:
+                            lengths = list(cumulative_faithfulness_by_length.keys())
+                            mean_scores = [cumulative_faithfulness_by_length[length] for length in lengths]
+                            fig = go.Figure(
+                                data=[
+                                    go.Scatter(
+                                        x=lengths,
+                                        y=mean_scores,
+                                        mode="lines+markers",
+                                        name="Mean faithfulness",
+                                    )
+                                ]
+                            )
+                            fig.update_layout(
+                                title=f"Cumulative Mean Faithfulness vs Trace Length (Episode {episode + 1})",
+                                xaxis_title="Trace length",
+                                yaxis_title="Mean faithfulness",
+                                yaxis=dict(range=[1, 10]),
+                            )
+                            wandb_metrics["faithfulness_by_trace_length"] = fig
                         # Add other useful PPO metrics if available
                         if 'ppo/policy/loss' in stats:
                             loss_val = stats['ppo/policy/loss']

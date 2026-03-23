@@ -9,6 +9,22 @@ from trl import PPOTrainer, PPOConfig, AutoModelForCausalLMWithValueHead
 logger = logging.getLogger(__name__)
 
 
+def _build_auto_max_memory(config):
+    """Build per-device max_memory for balanced multi-GPU loading."""
+    if not torch.cuda.is_available():
+        return None
+
+    utilization = float(getattr(config, "max_memory_utilization", 0.85))
+    cpu_max_memory = getattr(config, "cpu_max_memory", "64GiB")
+    max_memory = {}
+    for device_idx in range(torch.cuda.device_count()):
+        total_bytes = torch.cuda.get_device_properties(device_idx).total_memory
+        allowed_gib = max(1, int((total_bytes * utilization) / (1024 ** 3)))
+        max_memory[device_idx] = f"{allowed_gib}GiB"
+    max_memory["cpu"] = cpu_max_memory
+    return max_memory
+
+
 def initialize_policy_model(config, device):
     """Initialize the policy model with value head."""
     # Use instruction-tuned model if available, otherwise use base model
@@ -27,17 +43,16 @@ def initialize_policy_model(config, device):
     # OPTIMIZATION: Add quantization config if enabled
     if config.use_quantization:
         logger.info("Enabling 8-bit quantization for faster inference...")
-        # ValueHead models do not support CPU/disk offload; keep full model on GPU(s).
         quantization_config = BitsAndBytesConfig(
             load_in_8bit=True,
             llm_int8_threshold=6.0,
         )
         model_kwargs["quantization_config"] = quantization_config
-        # Force all layers onto the first GPU so nothing is offloaded to CPU
-        model_kwargs["device_map"] = {"": 0}
-    
-    if config.max_memory and not config.use_quantization:
-        model_kwargs["max_memory"] = config.max_memory
+
+    auto_max_memory = config.max_memory or _build_auto_max_memory(config)
+    if auto_max_memory is not None:
+        model_kwargs["max_memory"] = auto_max_memory
+        logger.info(f"Using max_memory for model loading: {auto_max_memory}")
     
     model = AutoModelForCausalLMWithValueHead.from_pretrained(
         model_path,
@@ -107,7 +122,9 @@ def initialize_ppo_trainer(config, model, ref_model, tokenizer, wandb_available=
         cliprange_value=config.cliprange_value,
         gamma=config.gamma,
         lam=config.lam,
-        log_with="wandb" if wandb_available else None,
+        # Wandb is initialized explicitly in trainer.py so TRL does not create
+        # a second run with its default project/name.
+        log_with=None,
         project_kwargs={"logging_dir": config.output_dir},
         optimize_cuda_cache=True,
         gradient_checkpointing=True,
@@ -127,4 +144,3 @@ def initialize_ppo_trainer(config, model, ref_model, tokenizer, wandb_available=
     logger.info("PPO trainer initialized successfully.")
     
     return ppo_trainer
-

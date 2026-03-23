@@ -9,7 +9,7 @@
     "api_timeout": 120.0,
     "generation_config": {
         "temperature": 0.5,
-        "max_tokens": 4096
+        "max_tokens": 2048
     },
     "num_workers": 8,
     "request_limit": 500,
