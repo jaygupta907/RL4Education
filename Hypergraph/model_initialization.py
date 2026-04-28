@@ -9,17 +9,23 @@ from trl import PPOTrainer, PPOConfig, AutoModelForCausalLMWithValueHead
 logger = logging.getLogger(__name__)
 
 
-def _build_auto_max_memory(config):
-    """Build per-device max_memory for balanced multi-GPU loading."""
+def _build_auto_max_memory(config, concurrent_model_copies: int = 1):
+    """Build per-device max_memory for balanced multi-GPU loading.
+
+    PPO keeps both the policy model and a reference model resident. If each
+    model is loaded with the full per-GPU budget, the pair can overcommit the
+    device once optimizer state and activations appear during training.
+    """
     if not torch.cuda.is_available():
         return None
 
     utilization = float(getattr(config, "max_memory_utilization", 0.85))
     cpu_max_memory = getattr(config, "cpu_max_memory", "64GiB")
+    effective_utilization = utilization / max(1, int(concurrent_model_copies))
     max_memory = {}
     for device_idx in range(torch.cuda.device_count()):
         total_bytes = torch.cuda.get_device_properties(device_idx).total_memory
-        allowed_gib = max(1, int((total_bytes * utilization) / (1024 ** 3)))
+        allowed_gib = max(1, int((total_bytes * effective_utilization) / (1024 ** 3)))
         max_memory[device_idx] = f"{allowed_gib}GiB"
     max_memory["cpu"] = cpu_max_memory
     return max_memory
@@ -49,10 +55,16 @@ def initialize_policy_model(config, device):
         )
         model_kwargs["quantization_config"] = quantization_config
 
-    auto_max_memory = config.max_memory or _build_auto_max_memory(config)
+    auto_max_memory = config.max_memory or _build_auto_max_memory(
+        config,
+        concurrent_model_copies=2,
+    )
     if auto_max_memory is not None:
         model_kwargs["max_memory"] = auto_max_memory
-        logger.info(f"Using max_memory for model loading: {auto_max_memory}")
+        logger.info(
+            "Using per-model max_memory for PPO policy/reference pair: "
+            f"{auto_max_memory}"
+        )
     
     model = AutoModelForCausalLMWithValueHead.from_pretrained(
         model_path,

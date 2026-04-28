@@ -1,7 +1,6 @@
 """
 Main PPO Trainer for fine-tuning question generation model with hypergraph traces.
 """
-import json
 import os
 import logging
 import gc
@@ -9,8 +8,7 @@ import torch
 import numpy as np
 from datetime import datetime
 from collections import deque
-from typing import Dict, List
-from concurrent.futures import ThreadPoolExecutor
+from typing import List
 
 from config import TrainingConfig
 from model_initialization import initialize_policy_model, initialize_tokenizer, initialize_ppo_trainer
@@ -18,7 +16,7 @@ from graph_utils import preload_hypergraph_data
 from hypergraph_generator import collect_batch_parallel
 from reward_computer import compute_rewards_batched, compute_faithfulness_scores
 from logging_utils import log_episode_results_sync
-from utils import training_step_context, clean_decoded_text, extract_question, log_memory_usage
+from utils import training_step_context, clean_decoded_text, log_memory_usage
 
 # Try to import rewardanything
 try:
@@ -35,13 +33,6 @@ try:
 except ImportError:
     WANDB_AVAILABLE = False
     print("Warning: wandb not available. Install with: pip install wandb")
-
-try:
-    import plotly.graph_objects as go
-    PLOTLY_AVAILABLE = True
-except ImportError:
-    go = None
-    PLOTLY_AVAILABLE = False
 
 from torch.cuda.amp import autocast, GradScaler
 
@@ -63,48 +54,6 @@ def _get_model_input_device(model) -> torch.device:
     except Exception:
         pass
     return next(model.parameters()).device
-
-
-def _mean_faithfulness_by_trace_length(
-    batch: List[Dict],
-    faithfulness_scores: List[float],
-) -> Dict[int, float]:
-    """Aggregate mean faithfulness for each trace length from valid scores only."""
-    score_buckets: Dict[int, List[float]] = {}
-    for ex, score in zip(batch, faithfulness_scores):
-        if score is None:
-            continue
-        trace = ex.get("trace", {})
-        length = len(trace.get("formulas", []))
-        score_buckets.setdefault(length, []).append(float(score))
-
-    return {
-        length: sum(scores) / len(scores)
-        for length, scores in sorted(score_buckets.items())
-        if scores
-    }
-
-
-def _update_cumulative_faithfulness_by_length(
-    totals_by_length: Dict[int, float],
-    counts_by_length: Dict[int, int],
-    batch: List[Dict],
-    faithfulness_scores: List[float],
-) -> Dict[int, float]:
-    """Update running faithfulness totals/counts and return cumulative means."""
-    for ex, score in zip(batch, faithfulness_scores):
-        if score is None:
-            continue
-        trace = ex.get("trace", {})
-        length = len(trace.get("formulas", []))
-        totals_by_length[length] = totals_by_length.get(length, 0.0) + float(score)
-        counts_by_length[length] = counts_by_length.get(length, 0) + 1
-
-    return {
-        length: totals_by_length[length] / counts_by_length[length]
-        for length in sorted(totals_by_length)
-        if counts_by_length.get(length, 0) > 0
-    }
 
 
 class QuestionGeneratorPPOTrainer:
@@ -179,9 +128,6 @@ class QuestionGeneratorPPOTrainer:
         self._max_episode_history = 5000
         self.episode_rewards = deque(maxlen=self._max_episode_history)
         self.episode_scores = deque(maxlen=self._max_episode_history)
-        self.faithfulness_total_by_length: Dict[int, float] = {}
-        self.faithfulness_count_by_length: Dict[int, int] = {}
-        
         # Create logs directory (in current directory, not with checkpoints)
         base_logs_dir = self.config.logs_dir
         os.makedirs(base_logs_dir, exist_ok=True)
@@ -189,7 +135,6 @@ class QuestionGeneratorPPOTrainer:
         run_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         self.logs_dir = os.path.join(base_logs_dir, f"run_{run_timestamp}")
         os.makedirs(self.logs_dir, exist_ok=True)
-        self.faithfulness_jsonl_path = os.path.join(self.logs_dir, "faithfulness_scores.jsonl")
         logger.info(f"Run-specific logs directory created: {self.logs_dir}")
         
         # Initialize wandb if available
@@ -212,6 +157,16 @@ class QuestionGeneratorPPOTrainer:
                 }
             )
             logger.info("Wandb initialized for logging.")
+
+    def _save_evaluation_checkpoint(self, step_num: int):
+        """Save the underlying causal LM in a format usable by evaluate_instruction_model.py."""
+        checkpoint_path = os.path.join(self.config.output_dir, f"checkpoint-{step_num}")
+        os.makedirs(checkpoint_path, exist_ok=True)
+        logger.info(f"Saving evaluation checkpoint to {checkpoint_path}...")
+
+        model_to_save = getattr(self.model, "pretrained_model", self.model)
+        model_to_save.save_pretrained(checkpoint_path)
+        self.tokenizer.save_pretrained(checkpoint_path)
     
     def _log_episode_results_async(self, episode, responses, rewards, judge_scores, 
                                    judge_rewards, judge_explanations, batch):
@@ -232,6 +187,10 @@ class QuestionGeneratorPPOTrainer:
             detailed_logging = (episode % self.config.log_detailed_every == 0)
             # Initialize to None so we can safely delete at end of iteration (avoids GPU leak)
             query_tensors = response_tensors = reward_tensors = None
+            batch = queries = responses = valid_indices = None
+            judge_scores = judge_rewards = judge_explanations = None
+            faithfulness_results = faithfulness_scores = faithfulness_rewards = None
+            rewards = stats = None
 
             if detailed_logging:
                 logger.info(f"\n{'='*60}")
@@ -399,12 +358,6 @@ class QuestionGeneratorPPOTrainer:
                     sum(valid_faithfulness_scores) / len(valid_faithfulness_scores)
                     if valid_faithfulness_scores else 0.0
                 )
-                cumulative_faithfulness_by_length = _update_cumulative_faithfulness_by_length(
-                    self.faithfulness_total_by_length,
-                    self.faithfulness_count_by_length,
-                    batch,
-                    faithfulness_scores,
-                )
                 avg_difficulty_reward = (
                     sum(judge_rewards) / len(judge_rewards) if judge_rewards else 0.0
                 )
@@ -421,24 +374,12 @@ class QuestionGeneratorPPOTrainer:
                         f"Avg faithfulness: {avg_faithfulness:.2f}/10.0, "
                         f"Avg reward: {avg_reward:.4f}"
                     )
-                    if cumulative_faithfulness_by_length:
-                        length_summary = ", ".join(
-                            f"L{length}={mean_score:.2f}"
-                            for length, mean_score in cumulative_faithfulness_by_length.items()
-                        )
-                        logger.info(f"Cumulative mean faithfulness by trace length: {length_summary}")
                 else:
                     logger.info(
                         f"Avg score: {avg_score:.2f}, "
                         f"Avg faithfulness: {avg_faithfulness:.2f}, "
                         f"Avg reward: {avg_reward:.4f}"
                     )
-                    if cumulative_faithfulness_by_length:
-                        length_summary = ", ".join(
-                            f"L{length}={mean_score:.2f}"
-                            for length, mean_score in cumulative_faithfulness_by_length.items()
-                        )
-                        logger.info(f"Cumulative faithfulness by length: {length_summary}")
                 
                 # OPTIMIZATION: Async logging (non-blocking)
                 if detailed_logging:
@@ -456,41 +397,6 @@ class QuestionGeneratorPPOTrainer:
                         "episode/avg_difficulty_reward": avg_difficulty_reward,
                         "episode/avg_faithfulness_reward": avg_faithfulness_reward,
                     }, step=episode)
-                with open(self.faithfulness_jsonl_path, "a", encoding="utf-8") as f:
-                    for i, (
-                        question,
-                        ex,
-                        judge_score,
-                        judge_reward,
-                        reward,
-                        (f_score, f_explanation),
-                        faithfulness_reward,
-                    ) in enumerate(
-                        zip(
-                            responses,
-                            batch,
-                            judge_scores,
-                            judge_rewards,
-                            rewards,
-                            faithfulness_results,
-                            faithfulness_rewards,
-                        )
-                    ):
-                        trace = ex.get("trace", {})
-                        length = len(trace.get("formulas", []))
-                        record = {
-                            "episode": episode,
-                            "question": question,
-                            "length": length,
-                            "score": float(judge_score),
-                            "difficulty_reward": float(judge_reward),
-                            "combined_reward": float(reward),
-                            "faithfulness_score": float(f_score) if f_score is not None else None,
-                            "faithfulness_reward": float(faithfulness_reward),
-                            "faithfulness_explanation": f_explanation,
-                        }
-                        f.write(json.dumps(record, ensure_ascii=False) + "\n")
-                
                 # Convert rewards to tensors
                 reward_tensors = [torch.tensor(reward, dtype=torch.float32, device='cpu') for reward in rewards]
 
@@ -552,26 +458,6 @@ class QuestionGeneratorPPOTrainer:
                             "ppo/kl_divergence": kl_div,
                             "ppo/entropy": entropy,
                         }
-                        if cumulative_faithfulness_by_length and PLOTLY_AVAILABLE:
-                            lengths = list(cumulative_faithfulness_by_length.keys())
-                            mean_scores = [cumulative_faithfulness_by_length[length] for length in lengths]
-                            fig = go.Figure(
-                                data=[
-                                    go.Scatter(
-                                        x=lengths,
-                                        y=mean_scores,
-                                        mode="lines+markers",
-                                        name="Mean faithfulness",
-                                    )
-                                ]
-                            )
-                            fig.update_layout(
-                                title=f"Cumulative Mean Faithfulness vs Trace Length (Episode {episode + 1})",
-                                xaxis_title="Trace length",
-                                yaxis_title="Mean faithfulness",
-                                yaxis=dict(range=[1, 10]),
-                            )
-                            wandb_metrics["faithfulness_by_trace_length"] = fig
                         # Add other useful PPO metrics if available
                         if 'ppo/policy/loss' in stats:
                             loss_val = stats['ppo/policy/loss']
@@ -607,6 +493,23 @@ class QuestionGeneratorPPOTrainer:
                     gc.collect()
                     continue
                 finally:
+                    # `empty_cache()` only releases unreferenced blocks. Keep episode
+                    # locals from surviving into the next episode or checkpoint save.
+                    query_tensors = None
+                    response_tensors = None
+                    reward_tensors = None
+                    batch = None
+                    queries = None
+                    responses = None
+                    valid_indices = None
+                    judge_scores = None
+                    judge_rewards = None
+                    judge_explanations = None
+                    faithfulness_results = None
+                    faithfulness_scores = None
+                    faithfulness_rewards = None
+                    rewards = None
+                    stats = None
                     # Keep memory diagnostics explicit so we can distinguish retained
                     # tensors from allocator fragmentation across episodes.
                     log_memory_usage(f"episode_{episode + 1}_before_cleanup")
@@ -615,18 +518,15 @@ class QuestionGeneratorPPOTrainer:
                     log_memory_usage(f"episode_{episode + 1}_after_cleanup")
                     gc.collect()
 
-            # Save checkpoint
+            # Save periodic checkpoint for offline evaluation.
             if (episode + 1) % self.config.save_steps == 0:
-                checkpoint_path = f"{self.config.output_dir}/checkpoint-{episode + 1}"
-                os.makedirs(checkpoint_path, exist_ok=True)
-                logger.info(f"Saving checkpoint to {checkpoint_path}...")
-                self.model.save_pretrained(checkpoint_path)
-                self.tokenizer.save_pretrained(checkpoint_path)
-        
+                self._save_evaluation_checkpoint(episode + 1)
+
         # Save final model
         os.makedirs(self.config.output_dir, exist_ok=True)
         logger.info(f"Saving final model to {self.config.output_dir}...")
-        self.model.save_pretrained(self.config.output_dir)
+        final_model = getattr(self.model, "pretrained_model", self.model)
+        final_model.save_pretrained(self.config.output_dir)
         self.tokenizer.save_pretrained(self.config.output_dir)
         
         logger.info("Training completed!")

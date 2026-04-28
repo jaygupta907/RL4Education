@@ -19,7 +19,7 @@ class TrainingConfig:
     max_depth: int = 10  # Maximum depth for hypergraph traversal
     max_traces: int = 100  # Maximum number of traces to consider per target
     min_trace_length: int = 2  # Minimum number of formulas in trace
-    num_episodes: int = 1000
+    num_episodes: int = 300
     batch_size: int = 4  # UPDATED: Reduced from 8 to 4
     mini_batch_size: int = 2  # UPDATED: Reduced from 4 to 2
     gradient_accumulation_steps: int = 2  # OPTIMIZED: Adjusted for larger batch
@@ -40,11 +40,11 @@ class TrainingConfig:
     top_p: float = 0.9
 
     # Output configuration - OPTIMIZED
-    output_dir: str = "/mnt/storage/ae21b026/models/ppo_checkpoints_hypergraph"
+    output_dir: str = "/mnt/storage/ae21b026/models/ppo_checkpoints_hypergraph_rl_no_quant"
     logs_dir: str = "./checkpoints/logs"  # Logs stay in current directory
     wandb_project: str = "verifiable-question-generation"
     experiment_name: str = "ppo-hypergraph-question-generation"
-    save_steps: int = 50  # OPTIMIZED: Save less frequently
+    save_steps: int = 20  # Save evaluator-compatible checkpoints every 10 PPO steps
     logging_steps: int = 10  # OPTIMIZED: Log less frequently
 
     # Performance configuration
@@ -81,3 +81,8 @@ def get_default_config() -> TrainingConfig:
     return TrainingConfig(
         instruction_tuned_model_path=instruction_tuned_model_path,
     )
+
+
+def get_default_rl_training_config() -> TrainingConfig:
+    """Backward-compatible alias used by the RL training entrypoint."""
+    return get_default_config()
