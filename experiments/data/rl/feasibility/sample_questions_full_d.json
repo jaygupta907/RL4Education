@@ -1,0 +1,4005 @@
+{
+  "meta": {
+    "graph": "/home/ae21b026/RL4Education/experiments/data/physics_hypergraph.json",
+    "sft_dir": "/mnt/storage/ae21b026/rl_lora_feasibility",
+    "base_model": "meta-llama/Meta-Llama-3-8B-Instruct",
+    "num_targets_sampled": 10,
+    "difficulties": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "with_cot": false,
+    "with_judges": false,
+    "seed": 42
+  },
+  "samples": [
+    {
+      "target": "potential_energy_shm",
+      "requested_difficulty": 1,
+      "trace_str": "  1. angular_frequency = sqrt(spring_constant / mass)  [uses: spring_constant, mass]  (shm)\n  2. displacement = amplitude * cos(angular_frequency * time)  [uses: amplitude, angular_frequency, time]  (shm)\n  3. potential_energy_shm = 0.5 * spring_constant * displacement^2  [uses: spring_constant, displacement]  (shm)",
+      "trace": {
+        "leafs": [
+          "amplitude",
+          "mass",
+          "spring_constant",
+          "time"
+        ],
+        "chapters": [
+          "shm"
+        ],
+        "subdomains": [
+          "shm"
+        ],
+        "hypernym": "shm",
+        "path": [
+          {
+            "id": "f63",
+            "output": "angular_frequency",
+            "inputs": [
+              "spring_constant",
+              "mass"
+            ],
+            "label": "sqrt(spring_constant / mass)",
+            "domain": "shm"
+          },
+          {
+            "id": "f64",
+            "output": "displacement",
+            "inputs": [
+              "amplitude",
+              "angular_frequency",
+              "time"
+            ],
+            "label": "amplitude * cos(angular_frequency * time)",
+            "domain": "shm"
+          },
+          {
+            "id": "f153",
+            "output": "potential_energy_shm",
+            "inputs": [
+              "spring_constant",
+              "displacement"
+            ],
+            "label": "0.5 * spring_constant * displacement^2",
+            "domain": "shm"
+          }
+        ]
+      },
+      "raw_model_output": "A block weighing 5 kg is attached to a spring with a spring constant of 10 N/m. The block is displaced from its equilibrium position by 2 cm and then released. If it takes 3 seconds for the block to complete one oscillation, what is the heat dissipated by the block as it returns to its equilibrium position?",
+      "question": "A block weighing 5 kg is attached to a spring with a spring constant of 10 N/m. The block is displaced from its equilibrium position by 2 cm and then released. If it takes 3 seconds for the block to complete one oscillation, what is the heat dissipated by the block as it returns to its equilibrium position?"
+    },
+    {
+      "target": "potential_energy_shm",
+      "requested_difficulty": 2,
+      "trace_str": "  1. angular_frequency = sqrt(spring_constant / mass)  [uses: spring_constant, mass]  (shm)\n  2. displacement = amplitude * cos(angular_frequency * time)  [uses: amplitude, angular_frequency, time]  (shm)\n  3. potential_energy_shm = 0.5 * spring_constant * displacement^2  [uses: spring_constant, displacement]  (shm)",
+      "trace": {
+        "leafs": [
+          "amplitude",
+          "mass",
+          "spring_constant",
+          "time"
+        ],
+        "chapters": [
+          "shm"
+        ],
+        "subdomains": [
+          "shm"
+        ],
+        "hypernym": "shm",
+        "path": [
+          {
+            "id": "f63",
+            "output": "angular_frequency",
+            "inputs": [
+              "spring_constant",
+              "mass"
+            ],
+            "label": "sqrt(spring_constant / mass)",
+            "domain": "shm"
+          },
+          {
+            "id": "f64",
+            "output": "displacement",
+            "inputs": [
+              "amplitude",
+              "angular_frequency",
+              "time"
+            ],
+            "label": "amplitude * cos(angular_frequency * time)",
+            "domain": "shm"
+          },
+          {
+            "id": "f153",
+            "output": "potential_energy_shm",
+            "inputs": [
+              "spring_constant",
+              "displacement"
+            ],
+            "label": "0.5 * spring_constant * displacement^2",
+            "domain": "shm"
+          }
+        ]
+      },
+      "raw_model_output": "A small, compact spring is attached to a mass of 2.5 kg and is oscillating with an amplitude of 0.15 m. The spring constant is 100 N/m. After 0.5 seconds, how much potential energy is stored in the spring?",
+      "question": "A small, compact spring is attached to a mass of 2.5 kg and is oscillating with an amplitude of 0.15 m. The spring constant is 100 N/m. After 0.5 seconds, how much potential energy is stored in the spring?"
+    },
+    {
+      "target": "potential_energy_shm",
+      "requested_difficulty": 3,
+      "trace_str": "  1. angular_frequency = sqrt(spring_constant / mass)  [uses: spring_constant, mass]  (shm)\n  2. displacement = amplitude * cos(angular_frequency * time)  [uses: amplitude, angular_frequency, time]  (shm)\n  3. potential_energy_shm = 0.5 * spring_constant * displacement^2  [uses: spring_constant, displacement]  (shm)",
+      "trace": {
+        "leafs": [
+          "amplitude",
+          "mass",
+          "spring_constant",
+          "time"
+        ],
+        "chapters": [
+          "shm"
+        ],
+        "subdomains": [
+          "shm"
+        ],
+        "hypernym": "shm",
+        "path": [
+          {
+            "id": "f63",
+            "output": "angular_frequency",
+            "inputs": [
+              "spring_constant",
+              "mass"
+            ],
+            "label": "sqrt(spring_constant / mass)",
+            "domain": "shm"
+          },
+          {
+            "id": "f64",
+            "output": "displacement",
+            "inputs": [
+              "amplitude",
+              "angular_frequency",
+              "time"
+            ],
+            "label": "amplitude * cos(angular_frequency * time)",
+            "domain": "shm"
+          },
+          {
+            "id": "f153",
+            "output": "potential_energy_shm",
+            "inputs": [
+              "spring_constant",
+              "displacement"
+            ],
+            "label": "0.5 * spring_constant * displacement^2",
+            "domain": "shm"
+          }
+        ]
+      },
+      "raw_model_output": "A block weighing 5 kg is attached to a spring with a spring constant of 100 N/m. The block is displaced by 0.2 m from its equilibrium position and then released. Assuming the motion is simple harmonic, find the heat dissipated by the spring at a time of 0.5 seconds.",
+      "question": "A block weighing 5 kg is attached to a spring with a spring constant of 100 N/m. The block is displaced by 0.2 m from its equilibrium position and then released. Assuming the motion is simple harmonic, find the heat dissipated by the spring at a time of 0.5 seconds."
+    },
+    {
+      "target": "potential_energy_shm",
+      "requested_difficulty": 4,
+      "trace_str": "  1. angular_frequency = sqrt(spring_constant / mass)  [uses: spring_constant, mass]  (shm)\n  2. displacement = amplitude * cos(angular_frequency * time)  [uses: amplitude, angular_frequency, time]  (shm)\n  3. potential_energy_shm = 0.5 * spring_constant * displacement^2  [uses: spring_constant, displacement]  (shm)",
+      "trace": {
+        "leafs": [
+          "amplitude",
+          "mass",
+          "spring_constant",
+          "time"
+        ],
+        "chapters": [
+          "shm"
+        ],
+        "subdomains": [
+          "shm"
+        ],
+        "hypernym": "shm",
+        "path": [
+          {
+            "id": "f63",
+            "output": "angular_frequency",
+            "inputs": [
+              "spring_constant",
+              "mass"
+            ],
+            "label": "sqrt(spring_constant / mass)",
+            "domain": "shm"
+          },
+          {
+            "id": "f64",
+            "output": "displacement",
+            "inputs": [
+              "amplitude",
+              "angular_frequency",
+              "time"
+            ],
+            "label": "amplitude * cos(angular_frequency * time)",
+            "domain": "shm"
+          },
+          {
+            "id": "f153",
+            "output": "potential_energy_shm",
+            "inputs": [
+              "spring_constant",
+              "displacement"
+            ],
+            "label": "0.5 * spring_constant * displacement^2",
+            "domain": "shm"
+          }
+        ]
+      },
+      "raw_model_output": "A small, oscillating mass is attached to a spring with a spring constant of 10 N/m. The mass weighs 2 kg and is initially displaced by 5 cm from its equilibrium position. After 0.2 seconds, the amplitude of the oscillation is still 5 cm. What is the potential energy stored in the spring at this moment?",
+      "question": "A small, oscillating mass is attached to a spring with a spring constant of 10 N/m. The mass weighs 2 kg and is initially displaced by 5 cm from its equilibrium position. After 0.2 seconds, the amplitude of the oscillation is still 5 cm. What is the potential energy stored in the spring at this moment?"
+    },
+    {
+      "target": "potential_energy_shm",
+      "requested_difficulty": 5,
+      "trace_str": "  1. angular_frequency = sqrt(spring_constant / mass)  [uses: spring_constant, mass]  (shm)\n  2. displacement = amplitude * cos(angular_frequency * time)  [uses: amplitude, angular_frequency, time]  (shm)\n  3. potential_energy_shm = 0.5 * spring_constant * displacement^2  [uses: spring_constant, displacement]  (shm)",
+      "trace": {
+        "leafs": [
+          "amplitude",
+          "mass",
+          "spring_constant",
+          "time"
+        ],
+        "chapters": [
+          "shm"
+        ],
+        "subdomains": [
+          "shm"
+        ],
+        "hypernym": "shm",
+        "path": [
+          {
+            "id": "f63",
+            "output": "angular_frequency",
+            "inputs": [
+              "spring_constant",
+              "mass"
+            ],
+            "label": "sqrt(spring_constant / mass)",
+            "domain": "shm"
+          },
+          {
+            "id": "f64",
+            "output": "displacement",
+            "inputs": [
+              "amplitude",
+              "angular_frequency",
+              "time"
+            ],
+            "label": "amplitude * cos(angular_frequency * time)",
+            "domain": "shm"
+          },
+          {
+            "id": "f153",
+            "output": "potential_energy_shm",
+            "inputs": [
+              "spring_constant",
+              "displacement"
+            ],
+            "label": "0.5 * spring_constant * displacement^2",
+            "domain": "shm"
+          }
+        ]
+      },
+      "raw_model_output": "A small, 5-kg block is attached to a horizontal, massless spring with a spring constant of 100 N/m. The block is displaced from its equilibrium position by 0.1 m and then released. If the block oscillates with an amplitude of 0.08 m and a period of 2 seconds, what is the potential energy stored in the spring at the instant when the block is 0.03 m from its equilibrium position?",
+      "question": "A small, 5-kg block is attached to a horizontal, massless spring with a spring constant of 100 N/m. The block is displaced from its equilibrium position by 0.1 m and then released. If the block oscillates with an amplitude of 0.08 m and a period of 2 seconds, what is the potential energy stored in the spring at the instant when the block is 0.03 m from its equilibrium position?"
+    },
+    {
+      "target": "potential_energy_shm",
+      "requested_difficulty": 6,
+      "trace_str": "  1. angular_frequency = sqrt(spring_constant / mass)  [uses: spring_constant, mass]  (shm)\n  2. displacement = amplitude * cos(angular_frequency * time)  [uses: amplitude, angular_frequency, time]  (shm)\n  3. potential_energy_shm = 0.5 * spring_constant * displacement^2  [uses: spring_constant, displacement]  (shm)",
+      "trace": {
+        "leafs": [
+          "amplitude",
+          "mass",
+          "spring_constant",
+          "time"
+        ],
+        "chapters": [
+          "shm"
+        ],
+        "subdomains": [
+          "shm"
+        ],
+        "hypernym": "shm",
+        "path": [
+          {
+            "id": "f63",
+            "output": "angular_frequency",
+            "inputs": [
+              "spring_constant",
+              "mass"
+            ],
+            "label": "sqrt(spring_constant / mass)",
+            "domain": "shm"
+          },
+          {
+            "id": "f64",
+            "output": "displacement",
+            "inputs": [
+              "amplitude",
+              "angular_frequency",
+              "time"
+            ],
+            "label": "amplitude * cos(angular_frequency * time)",
+            "domain": "shm"
+          },
+          {
+            "id": "f153",
+            "output": "potential_energy_shm",
+            "inputs": [
+              "spring_constant",
+              "displacement"
+            ],
+            "label": "0.5 * spring_constant * displacement^2",
+            "domain": "shm"
+          }
+        ]
+      },
+      "raw_model_output": "A block weighing 5 kg is attached to a spring with a spring constant of 20 N/m. The block is displaced from its equilibrium position by 0.1 m and then released. If the block is oscillating with a frequency of 2 Hz, how much potential energy does it have at any given moment 0.05 seconds after release?",
+      "question": "A block weighing 5 kg is attached to a spring with a spring constant of 20 N/m. The block is displaced from its equilibrium position by 0.1 m and then released. If the block is oscillating with a frequency of 2 Hz, how much potential energy does it have at any given moment 0.05 seconds after release?"
+    },
+    {
+      "target": "potential_energy_shm",
+      "requested_difficulty": 7,
+      "trace_str": "  1. angular_frequency = sqrt(spring_constant / mass)  [uses: spring_constant, mass]  (shm)\n  2. displacement = amplitude * cos(angular_frequency * time)  [uses: amplitude, angular_frequency, time]  (shm)\n  3. potential_energy_shm = 0.5 * spring_constant * displacement^2  [uses: spring_constant, displacement]  (shm)",
+      "trace": {
+        "leafs": [
+          "amplitude",
+          "mass",
+          "spring_constant",
+          "time"
+        ],
+        "chapters": [
+          "shm"
+        ],
+        "subdomains": [
+          "shm"
+        ],
+        "hypernym": "shm",
+        "path": [
+          {
+            "id": "f63",
+            "output": "angular_frequency",
+            "inputs": [
+              "spring_constant",
+              "mass"
+            ],
+            "label": "sqrt(spring_constant / mass)",
+            "domain": "shm"
+          },
+          {
+            "id": "f64",
+            "output": "displacement",
+            "inputs": [
+              "amplitude",
+              "angular_frequency",
+              "time"
+            ],
+            "label": "amplitude * cos(angular_frequency * time)",
+            "domain": "shm"
+          },
+          {
+            "id": "f153",
+            "output": "potential_energy_shm",
+            "inputs": [
+              "spring_constant",
+              "displacement"
+            ],
+            "label": "0.5 * spring_constant * displacement^2",
+            "domain": "shm"
+          }
+        ]
+      },
+      "raw_model_output": "A 5.0 kg block is attached to a spring with a spring constant of 200 N/m and is displaced from its equilibrium position by 0.2 m. The block is then released from rest and begins to oscillate. If it takes 4.0 seconds for the block to complete one full cycle, what is the energy stored in the spring when the block is at its maximum displacement?",
+      "question": "A 5.0 kg block is attached to a spring with a spring constant of 200 N/m and is displaced from its equilibrium position by 0.2 m. The block is then released from rest and begins to oscillate. If it takes 4.0 seconds for the block to complete one full cycle, what is the energy stored in the spring when the block is at its maximum displacement?"
+    },
+    {
+      "target": "potential_energy_shm",
+      "requested_difficulty": 8,
+      "trace_str": "  1. angular_frequency = sqrt(spring_constant / mass)  [uses: spring_constant, mass]  (shm)\n  2. displacement = amplitude * cos(angular_frequency * time)  [uses: amplitude, angular_frequency, time]  (shm)\n  3. potential_energy_shm = 0.5 * spring_constant * displacement^2  [uses: spring_constant, displacement]  (shm)",
+      "trace": {
+        "leafs": [
+          "amplitude",
+          "mass",
+          "spring_constant",
+          "time"
+        ],
+        "chapters": [
+          "shm"
+        ],
+        "subdomains": [
+          "shm"
+        ],
+        "hypernym": "shm",
+        "path": [
+          {
+            "id": "f63",
+            "output": "angular_frequency",
+            "inputs": [
+              "spring_constant",
+              "mass"
+            ],
+            "label": "sqrt(spring_constant / mass)",
+            "domain": "shm"
+          },
+          {
+            "id": "f64",
+            "output": "displacement",
+            "inputs": [
+              "amplitude",
+              "angular_frequency",
+              "time"
+            ],
+            "label": "amplitude * cos(angular_frequency * time)",
+            "domain": "shm"
+          },
+          {
+            "id": "f153",
+            "output": "potential_energy_shm",
+            "inputs": [
+              "spring_constant",
+              "displacement"
+            ],
+            "label": "0.5 * spring_constant * displacement^2",
+            "domain": "shm"
+          }
+        ]
+      },
+      "raw_model_output": "A sensitive instrument, designed to measure the oscillations of a pendulum, is attached to a spring with a spring constant of 100 N/m. The instrument is initially displaced by 0.2 m from its equilibrium position, and then released. If the mass of the instrument is 0.5 kg, and it takes 0.05 seconds for the instrument to complete one oscillation, what is the energy stored in the spring at this instant?",
+      "question": "A sensitive instrument, designed to measure the oscillations of a pendulum, is attached to a spring with a spring constant of 100 N/m. The instrument is initially displaced by 0.2 m from its equilibrium position, and then released. If the mass of the instrument is 0.5 kg, and it takes 0.05 seconds for the instrument to complete one oscillation, what is the energy stored in the spring at this instant?"
+    },
+    {
+      "target": "potential_energy_shm",
+      "requested_difficulty": 9,
+      "trace_str": "  1. angular_frequency = sqrt(spring_constant / mass)  [uses: spring_constant, mass]  (shm)\n  2. displacement = amplitude * cos(angular_frequency * time)  [uses: amplitude, angular_frequency, time]  (shm)\n  3. potential_energy_shm = 0.5 * spring_constant * displacement^2  [uses: spring_constant, displacement]  (shm)",
+      "trace": {
+        "leafs": [
+          "amplitude",
+          "mass",
+          "spring_constant",
+          "time"
+        ],
+        "chapters": [
+          "shm"
+        ],
+        "subdomains": [
+          "shm"
+        ],
+        "hypernym": "shm",
+        "path": [
+          {
+            "id": "f63",
+            "output": "angular_frequency",
+            "inputs": [
+              "spring_constant",
+              "mass"
+            ],
+            "label": "sqrt(spring_constant / mass)",
+            "domain": "shm"
+          },
+          {
+            "id": "f64",
+            "output": "displacement",
+            "inputs": [
+              "amplitude",
+              "angular_frequency",
+              "time"
+            ],
+            "label": "amplitude * cos(angular_frequency * time)",
+            "domain": "shm"
+          },
+          {
+            "id": "f153",
+            "output": "potential_energy_shm",
+            "inputs": [
+              "spring_constant",
+              "displacement"
+            ],
+            "label": "0.5 * spring_constant * displacement^2",
+            "domain": "shm"
+          }
+        ]
+      },
+      "raw_model_output": "A massive, 5-kilogram block is attached to a horizontal, massless spring with a spring constant of 100 N/m. The block is displaced 0.2 meters from its equilibrium position and then released from rest. After 0.5 seconds, the block's position can be described by the equation displacement = 0.2 meters * cos(sqrt(100 N/m / 5 kg) * 0.5 seconds). How much energy has been stored in the spring at this moment?",
+      "question": "A massive, 5-kilogram block is attached to a horizontal, massless spring with a spring constant of 100 N/m. The block is displaced 0.2 meters from its equilibrium position and then released from rest. After 0.5 seconds, the block's position can be described by the equation displacement = 0.2 meters * cos(sqrt(100 N/m / 5 kg) * 0.5 seconds). How much energy has been stored in the spring at this moment?"
+    },
+    {
+      "target": "potential_energy_shm",
+      "requested_difficulty": 10,
+      "trace_str": "  1. angular_frequency = sqrt(spring_constant / mass)  [uses: spring_constant, mass]  (shm)\n  2. displacement = amplitude * cos(angular_frequency * time)  [uses: amplitude, angular_frequency, time]  (shm)\n  3. potential_energy_shm = 0.5 * spring_constant * displacement^2  [uses: spring_constant, displacement]  (shm)",
+      "trace": {
+        "leafs": [
+          "amplitude",
+          "mass",
+          "spring_constant",
+          "time"
+        ],
+        "chapters": [
+          "shm"
+        ],
+        "subdomains": [
+          "shm"
+        ],
+        "hypernym": "shm",
+        "path": [
+          {
+            "id": "f63",
+            "output": "angular_frequency",
+            "inputs": [
+              "spring_constant",
+              "mass"
+            ],
+            "label": "sqrt(spring_constant / mass)",
+            "domain": "shm"
+          },
+          {
+            "id": "f64",
+            "output": "displacement",
+            "inputs": [
+              "amplitude",
+              "angular_frequency",
+              "time"
+            ],
+            "label": "amplitude * cos(angular_frequency * time)",
+            "domain": "shm"
+          },
+          {
+            "id": "f153",
+            "output": "potential_energy_shm",
+            "inputs": [
+              "spring_constant",
+              "displacement"
+            ],
+            "label": "0.5 * spring_constant * displacement^2",
+            "domain": "shm"
+          }
+        ]
+      },
+      "raw_model_output": "As the engineer-in-charge of a high-speed train maintenance facility, you are tasked with designing a shock-absorbing system to reduce the impact of wheel-rail interactions on the track. The system consists of a spring with a constant of 500 N/m, attached to a mass of 100 kg, and an amplitude of 0.05 m. The train travels at a constant speed of 30 m/s, which means that the wheels experience a sinusoidal displacement of 0.05 m * cos(2\u03c0f*t), where f is the angular frequency of the system. What is the potential energy stored in the spring at the instant when the wheels are at their maximum displacement?",
+      "question": "As the engineer-in-charge of a high-speed train maintenance facility, you are tasked with designing a shock-absorbing system to reduce the impact of wheel-rail interactions on the track. The system consists of a spring with a constant of 500 N/m, attached to a mass of 100 kg, and an amplitude of 0.05 m. The train travels at a constant speed of 30 m/s, which means that the wheels experience a sinusoidal displacement of 0.05 m * cos(2\u03c0f*t), where f is the angular frequency of the system. What is the potential energy stored in the spring at the instant when the wheels are at their maximum displacement?"
+    },
+    {
+      "target": "angular_frequency",
+      "requested_difficulty": 1,
+      "trace_str": "  1. wave_speed = sqrt(tension / linear_density)  [uses: tension, linear_density]  (waves)\n  2. frequency = wave_speed / wavelength  [uses: wave_speed, wavelength]  (waves)\n  3. angular_frequency = 2*pi * frequency  [uses: frequency]  (waves)",
+      "trace": {
+        "leafs": [
+          "linear_density",
+          "tension",
+          "wavelength"
+        ],
+        "chapters": [
+          "waves"
+        ],
+        "subdomains": [
+          "waves"
+        ],
+        "hypernym": "shm",
+        "path": [
+          {
+            "id": "f157",
+            "output": "wave_speed",
+            "inputs": [
+              "tension",
+              "linear_density"
+            ],
+            "label": "sqrt(tension / linear_density)",
+            "domain": "waves"
+          },
+          {
+            "id": "f76",
+            "output": "frequency",
+            "inputs": [
+              "wave_speed",
+              "wavelength"
+            ],
+            "label": "wave_speed / wavelength",
+            "domain": "waves"
+          },
+          {
+            "id": "f79",
+            "output": "angular_frequency",
+            "inputs": [
+              "frequency"
+            ],
+            "label": "2*pi * frequency",
+            "domain": "waves"
+          }
+        ]
+      },
+      "raw_model_output": "A rope with a linear mass density of 0.05 kg/m is stretched between two fixed points. When a 50 N tension is applied to the rope, it begins to vibrate. If the wavelength of these vibrations is 2.5 m, what is the angular frequency of the rope's oscillations?",
+      "question": "A rope with a linear mass density of 0.05 kg/m is stretched between two fixed points. When a 50 N tension is applied to the rope, it begins to vibrate. If the wavelength of these vibrations is 2.5 m, what is the angular frequency of the rope's oscillations?"
+    },
+    {
+      "target": "angular_frequency",
+      "requested_difficulty": 2,
+      "trace_str": "  1. wave_speed = sqrt(tension / linear_density)  [uses: tension, linear_density]  (waves)\n  2. frequency = wave_speed / wavelength  [uses: wave_speed, wavelength]  (waves)\n  3. angular_frequency = 2*pi * frequency  [uses: frequency]  (waves)",
+      "trace": {
+        "leafs": [
+          "linear_density",
+          "tension",
+          "wavelength"
+        ],
+        "chapters": [
+          "waves"
+        ],
+        "subdomains": [
+          "waves"
+        ],
+        "hypernym": "shm",
+        "path": [
+          {
+            "id": "f157",
+            "output": "wave_speed",
+            "inputs": [
+              "tension",
+              "linear_density"
+            ],
+            "label": "sqrt(tension / linear_density)",
+            "domain": "waves"
+          },
+          {
+            "id": "f76",
+            "output": "frequency",
+            "inputs": [
+              "wave_speed",
+              "wavelength"
+            ],
+            "label": "wave_speed / wavelength",
+            "domain": "waves"
+          },
+          {
+            "id": "f79",
+            "output": "angular_frequency",
+            "inputs": [
+              "frequency"
+            ],
+            "label": "2*pi * frequency",
+            "domain": "waves"
+          }
+        ]
+      },
+      "raw_model_output": "A rope of linear density 0.05 kg/m is stretched between two pillars. The tension in the rope is 50 N. A wave of wavelength 0.2 m propagates along the rope. What is the angular frequency of this wave?",
+      "question": "A rope of linear density 0.05 kg/m is stretched between two pillars. The tension in the rope is 50 N. A wave of wavelength 0.2 m propagates along the rope. What is the angular frequency of this wave?"
+    },
+    {
+      "target": "angular_frequency",
+      "requested_difficulty": 3,
+      "trace_str": "  1. wave_speed = sqrt(tension / linear_density)  [uses: tension, linear_density]  (waves)\n  2. frequency = wave_speed / wavelength  [uses: wave_speed, wavelength]  (waves)\n  3. angular_frequency = 2*pi * frequency  [uses: frequency]  (waves)",
+      "trace": {
+        "leafs": [
+          "linear_density",
+          "tension",
+          "wavelength"
+        ],
+        "chapters": [
+          "waves"
+        ],
+        "subdomains": [
+          "waves"
+        ],
+        "hypernym": "shm",
+        "path": [
+          {
+            "id": "f157",
+            "output": "wave_speed",
+            "inputs": [
+              "tension",
+              "linear_density"
+            ],
+            "label": "sqrt(tension / linear_density)",
+            "domain": "waves"
+          },
+          {
+            "id": "f76",
+            "output": "frequency",
+            "inputs": [
+              "wave_speed",
+              "wavelength"
+            ],
+            "label": "wave_speed / wavelength",
+            "domain": "waves"
+          },
+          {
+            "id": "f79",
+            "output": "angular_frequency",
+            "inputs": [
+              "frequency"
+            ],
+            "label": "2*pi * frequency",
+            "domain": "waves"
+          }
+        ]
+      },
+      "raw_model_output": "A cord of length 2.5 meters is stretched between two fixed points. The tension in the cord is 12 Newtons. A wave travels along the cord with a wavelength of 0.5 meters. If the cord has a linear density of 0.1 kg/m, what is the angular frequency of the wave?",
+      "question": "A cord of length 2.5 meters is stretched between two fixed points. The tension in the cord is 12 Newtons. A wave travels along the cord with a wavelength of 0.5 meters. If the cord has a linear density of 0.1 kg/m, what is the angular frequency of the wave?"
+    },
+    {
+      "target": "angular_frequency",
+      "requested_difficulty": 4,
+      "trace_str": "  1. wave_speed = sqrt(tension / linear_density)  [uses: tension, linear_density]  (waves)\n  2. frequency = wave_speed / wavelength  [uses: wave_speed, wavelength]  (waves)\n  3. angular_frequency = 2*pi * frequency  [uses: frequency]  (waves)",
+      "trace": {
+        "leafs": [
+          "linear_density",
+          "tension",
+          "wavelength"
+        ],
+        "chapters": [
+          "waves"
+        ],
+        "subdomains": [
+          "waves"
+        ],
+        "hypernym": "shm",
+        "path": [
+          {
+            "id": "f157",
+            "output": "wave_speed",
+            "inputs": [
+              "tension",
+              "linear_density"
+            ],
+            "label": "sqrt(tension / linear_density)",
+            "domain": "waves"
+          },
+          {
+            "id": "f76",
+            "output": "frequency",
+            "inputs": [
+              "wave_speed",
+              "wavelength"
+            ],
+            "label": "wave_speed / wavelength",
+            "domain": "waves"
+          },
+          {
+            "id": "f79",
+            "output": "angular_frequency",
+            "inputs": [
+              "frequency"
+            ],
+            "label": "2*pi * frequency",
+            "domain": "waves"
+          }
+        ]
+      },
+      "raw_model_output": "A rope, weighing 0.5 kg and 20 m long, is stretched between two supports. When a wave is sent down the rope, its frequency is found to be 5 Hz. If the tension in the rope is 50 N, what is the angular frequency of the wave?",
+      "question": "A rope, weighing 0.5 kg and 20 m long, is stretched between two supports. When a wave is sent down the rope, its frequency is found to be 5 Hz. If the tension in the rope is 50 N, what is the angular frequency of the wave?"
+    },
+    {
+      "target": "angular_frequency",
+      "requested_difficulty": 5,
+      "trace_str": "  1. wave_speed = sqrt(tension / linear_density)  [uses: tension, linear_density]  (waves)\n  2. frequency = wave_speed / wavelength  [uses: wave_speed, wavelength]  (waves)\n  3. angular_frequency = 2*pi * frequency  [uses: frequency]  (waves)",
+      "trace": {
+        "leafs": [
+          "linear_density",
+          "tension",
+          "wavelength"
+        ],
+        "chapters": [
+          "waves"
+        ],
+        "subdomains": [
+          "waves"
+        ],
+        "hypernym": "shm",
+        "path": [
+          {
+            "id": "f157",
+            "output": "wave_speed",
+            "inputs": [
+              "tension",
+              "linear_density"
+            ],
+            "label": "sqrt(tension / linear_density)",
+            "domain": "waves"
+          },
+          {
+            "id": "f76",
+            "output": "frequency",
+            "inputs": [
+              "wave_speed",
+              "wavelength"
+            ],
+            "label": "wave_speed / wavelength",
+            "domain": "waves"
+          },
+          {
+            "id": "f79",
+            "output": "angular_frequency",
+            "inputs": [
+              "frequency"
+            ],
+            "label": "2*pi * frequency",
+            "domain": "waves"
+          }
+        ]
+      },
+      "raw_model_output": "In a shallow ocean, a rope is stretched between two buoys, with a tension of 20 N. A wave with a wavelength of 0.5 m travels along the rope. The linear density of the rope is 0.1 kg/m. What is the angular frequency of this wave?",
+      "question": "In a shallow ocean, a rope is stretched between two buoys, with a tension of 20 N. A wave with a wavelength of 0.5 m travels along the rope. The linear density of the rope is 0.1 kg/m. What is the angular frequency of this wave?"
+    },
+    {
+      "target": "angular_frequency",
+      "requested_difficulty": 6,
+      "trace_str": "  1. wave_speed = sqrt(tension / linear_density)  [uses: tension, linear_density]  (waves)\n  2. frequency = wave_speed / wavelength  [uses: wave_speed, wavelength]  (waves)\n  3. angular_frequency = 2*pi * frequency  [uses: frequency]  (waves)",
+      "trace": {
+        "leafs": [
+          "linear_density",
+          "tension",
+          "wavelength"
+        ],
+        "chapters": [
+          "waves"
+        ],
+        "subdomains": [
+          "waves"
+        ],
+        "hypernym": "shm",
+        "path": [
+          {
+            "id": "f157",
+            "output": "wave_speed",
+            "inputs": [
+              "tension",
+              "linear_density"
+            ],
+            "label": "sqrt(tension / linear_density)",
+            "domain": "waves"
+          },
+          {
+            "id": "f76",
+            "output": "frequency",
+            "inputs": [
+              "wave_speed",
+              "wavelength"
+            ],
+            "label": "wave_speed / wavelength",
+            "domain": "waves"
+          },
+          {
+            "id": "f79",
+            "output": "angular_frequency",
+            "inputs": [
+              "frequency"
+            ],
+            "label": "2*pi * frequency",
+            "domain": "waves"
+          }
+        ]
+      },
+      "raw_model_output": "A sonar wave emitted by a submarine travels through seawater with a linear density of 1.03 g/cm and is reflected back to the submarine with a tension of 2.5 N. If the wavelength of the wave is 0.2 m, what is the angular frequency of the reflected wave?",
+      "question": "A sonar wave emitted by a submarine travels through seawater with a linear density of 1.03 g/cm and is reflected back to the submarine with a tension of 2.5 N. If the wavelength of the wave is 0.2 m, what is the angular frequency of the reflected wave?"
+    },
+    {
+      "target": "angular_frequency",
+      "requested_difficulty": 7,
+      "trace_str": "  1. wave_speed = sqrt(tension / linear_density)  [uses: tension, linear_density]  (waves)\n  2. frequency = wave_speed / wavelength  [uses: wave_speed, wavelength]  (waves)\n  3. angular_frequency = 2*pi * frequency  [uses: frequency]  (waves)",
+      "trace": {
+        "leafs": [
+          "linear_density",
+          "tension",
+          "wavelength"
+        ],
+        "chapters": [
+          "waves"
+        ],
+        "subdomains": [
+          "waves"
+        ],
+        "hypernym": "shm",
+        "path": [
+          {
+            "id": "f157",
+            "output": "wave_speed",
+            "inputs": [
+              "tension",
+              "linear_density"
+            ],
+            "label": "sqrt(tension / linear_density)",
+            "domain": "waves"
+          },
+          {
+            "id": "f76",
+            "output": "frequency",
+            "inputs": [
+              "wave_speed",
+              "wavelength"
+            ],
+            "label": "wave_speed / wavelength",
+            "domain": "waves"
+          },
+          {
+            "id": "f79",
+            "output": "angular_frequency",
+            "inputs": [
+              "frequency"
+            ],
+            "label": "2*pi * frequency",
+            "domain": "waves"
+          }
+        ]
+      },
+      "raw_model_output": "A sonar wave with a wavelength of 1.2 meters travels through a medium with a linear density of 0.08 kg/m. The tension in the medium is 1200 N. If a transducer is oscillating at a frequency of 20 Hz, what is the angular frequency of the wave?",
+      "question": "A sonar wave with a wavelength of 1.2 meters travels through a medium with a linear density of 0.08 kg/m. The tension in the medium is 1200 N. If a transducer is oscillating at a frequency of 20 Hz, what is the angular frequency of the wave?"
+    },
+    {
+      "target": "angular_frequency",
+      "requested_difficulty": 8,
+      "trace_str": "  1. wave_speed = sqrt(tension / linear_density)  [uses: tension, linear_density]  (waves)\n  2. frequency = wave_speed / wavelength  [uses: wave_speed, wavelength]  (waves)\n  3. angular_frequency = 2*pi * frequency  [uses: frequency]  (waves)",
+      "trace": {
+        "leafs": [
+          "linear_density",
+          "tension",
+          "wavelength"
+        ],
+        "chapters": [
+          "waves"
+        ],
+        "subdomains": [
+          "waves"
+        ],
+        "hypernym": "shm",
+        "path": [
+          {
+            "id": "f157",
+            "output": "wave_speed",
+            "inputs": [
+              "tension",
+              "linear_density"
+            ],
+            "label": "sqrt(tension / linear_density)",
+            "domain": "waves"
+          },
+          {
+            "id": "f76",
+            "output": "frequency",
+            "inputs": [
+              "wave_speed",
+              "wavelength"
+            ],
+            "label": "wave_speed / wavelength",
+            "domain": "waves"
+          },
+          {
+            "id": "f79",
+            "output": "angular_frequency",
+            "inputs": [
+              "frequency"
+            ],
+            "label": "2*pi * frequency",
+            "domain": "waves"
+          }
+        ]
+      },
+      "raw_model_output": "A long-distance swimmer, training for an upcoming triathlon, observes a rope wave propagating through a calm lake. The rope's linear density is approximately 0.1 kg/m, and its tension is maintained at 50 N. As the wave approaches the swimmer, she measures the wavelength to be 2.5 meters. Assuming the wave's speed is related to its tension and linear density, and further assuming that the wave's frequency is inversely proportional to its wavelength, what is the angular frequency of this rope wave?",
+      "question": "A long-distance swimmer, training for an upcoming triathlon, observes a rope wave propagating through a calm lake. The rope's linear density is approximately 0.1 kg/m, and its tension is maintained at 50 N. As the wave approaches the swimmer, she measures the wavelength to be 2.5 meters. Assuming the wave's speed is related to its tension and linear density, and further assuming that the wave's frequency is inversely proportional to its wavelength, what is the angular frequency of this rope wave?"
+    },
+    {
+      "target": "angular_frequency",
+      "requested_difficulty": 9,
+      "trace_str": "  1. wave_speed = sqrt(tension / linear_density)  [uses: tension, linear_density]  (waves)\n  2. frequency = wave_speed / wavelength  [uses: wave_speed, wavelength]  (waves)\n  3. angular_frequency = 2*pi * frequency  [uses: frequency]  (waves)",
+      "trace": {
+        "leafs": [
+          "linear_density",
+          "tension",
+          "wavelength"
+        ],
+        "chapters": [
+          "waves"
+        ],
+        "subdomains": [
+          "waves"
+        ],
+        "hypernym": "shm",
+        "path": [
+          {
+            "id": "f157",
+            "output": "wave_speed",
+            "inputs": [
+              "tension",
+              "linear_density"
+            ],
+            "label": "sqrt(tension / linear_density)",
+            "domain": "waves"
+          },
+          {
+            "id": "f76",
+            "output": "frequency",
+            "inputs": [
+              "wave_speed",
+              "wavelength"
+            ],
+            "label": "wave_speed / wavelength",
+            "domain": "waves"
+          },
+          {
+            "id": "f79",
+            "output": "angular_frequency",
+            "inputs": [
+              "frequency"
+            ],
+            "label": "2*pi * frequency",
+            "domain": "waves"
+          }
+        ]
+      },
+      "raw_model_output": "A deep-sea sonar system is used to detect a school of fish swimming in a narrow, 30-meter-long channel. The sonar wave has a wavelength of 1.2 meters and is emitted with a tension of 50 Newtons. The linear density of the water is approximately 0.1 kilograms per meter. Assuming the sonar wave travels undisturbed, what is the angular frequency of the wave as it reaches the receiver?",
+      "question": "A deep-sea sonar system is used to detect a school of fish swimming in a narrow, 30-meter-long channel. The sonar wave has a wavelength of 1.2 meters and is emitted with a tension of 50 Newtons. The linear density of the water is approximately 0.1 kilograms per meter. Assuming the sonar wave travels undisturbed, what is the angular frequency of the wave as it reaches the receiver?"
+    },
+    {
+      "target": "angular_frequency",
+      "requested_difficulty": 10,
+      "trace_str": "  1. wave_speed = sqrt(tension / linear_density)  [uses: tension, linear_density]  (waves)\n  2. frequency = wave_speed / wavelength  [uses: wave_speed, wavelength]  (waves)\n  3. angular_frequency = 2*pi * frequency  [uses: frequency]  (waves)",
+      "trace": {
+        "leafs": [
+          "linear_density",
+          "tension",
+          "wavelength"
+        ],
+        "chapters": [
+          "waves"
+        ],
+        "subdomains": [
+          "waves"
+        ],
+        "hypernym": "shm",
+        "path": [
+          {
+            "id": "f157",
+            "output": "wave_speed",
+            "inputs": [
+              "tension",
+              "linear_density"
+            ],
+            "label": "sqrt(tension / linear_density)",
+            "domain": "waves"
+          },
+          {
+            "id": "f76",
+            "output": "frequency",
+            "inputs": [
+              "wave_speed",
+              "wavelength"
+            ],
+            "label": "wave_speed / wavelength",
+            "domain": "waves"
+          },
+          {
+            "id": "f79",
+            "output": "angular_frequency",
+            "inputs": [
+              "frequency"
+            ],
+            "label": "2*pi * frequency",
+            "domain": "waves"
+          }
+        ]
+      },
+      "raw_model_output": "A deep-sea explorer, studying the behavior of ocean waves, measures the tension in a wave's crest to be 1500 N, its linear density to be 0.1 kg/m, and its wavelength to be 20 meters. As the wave propagates through the water, its frequency is found to be 5 Hz. If the wave's amplitude remains constant, what is the angular frequency of the wave's oscillations?",
+      "question": "A deep-sea explorer, studying the behavior of ocean waves, measures the tension in a wave's crest to be 1500 N, its linear density to be 0.1 kg/m, and its wavelength to be 20 meters. As the wave propagates through the water, its frequency is found to be 5 Hz. If the wave's amplitude remains constant, what is the angular frequency of the wave's oscillations?"
+    },
+    {
+      "target": "flow_velocity",
+      "requested_difficulty": 1,
+      "trace_str": "  1. flow_velocity = A1*v1/A2  [uses: area1, velocity1, area2]  (fluids)",
+      "trace": {
+        "leafs": [
+          "area1",
+          "area2",
+          "velocity1"
+        ],
+        "chapters": [
+          "fluids"
+        ],
+        "subdomains": [
+          "fluids"
+        ],
+        "hypernym": "fluids",
+        "path": [
+          {
+            "id": "f96",
+            "output": "flow_velocity",
+            "inputs": [
+              "area1",
+              "velocity1",
+              "area2"
+            ],
+            "label": "A1*v1/A2",
+            "domain": "fluids"
+          }
+        ]
+      },
+      "raw_model_output": "A small water tank with a cross-sectional area of 0.05 m^2 is connected to a larger tank with a cross-sectional area of 0.2 m^2 through a pipe. Water flows from the small tank into the large tank at a velocity of 0.5 m/s. What is the flow velocity of the water into the larger tank?",
+      "question": "A small water tank with a cross-sectional area of 0.05 m^2 is connected to a larger tank with a cross-sectional area of 0.2 m^2 through a pipe. Water flows from the small tank into the large tank at a velocity of 0.5 m/s. What is the flow velocity of the water into the larger tank?"
+    },
+    {
+      "target": "flow_velocity",
+      "requested_difficulty": 2,
+      "trace_str": "  1. flow_velocity = A1*v1/A2  [uses: area1, velocity1, area2]  (fluids)",
+      "trace": {
+        "leafs": [
+          "area1",
+          "area2",
+          "velocity1"
+        ],
+        "chapters": [
+          "fluids"
+        ],
+        "subdomains": [
+          "fluids"
+        ],
+        "hypernym": "fluids",
+        "path": [
+          {
+            "id": "f96",
+            "output": "flow_velocity",
+            "inputs": [
+              "area1",
+              "velocity1",
+              "area2"
+            ],
+            "label": "A1*v1/A2",
+            "domain": "fluids"
+          }
+        ]
+      },
+      "raw_model_output": "A water pump is designed to circulate water from a large tank with an area of 10 square meters to a smaller tank with an area of 5 square meters. If the water flows through a pipe at a velocity of 2 meters per second, what is the flow velocity of the water as it exits the pipe?",
+      "question": "A water pump is designed to circulate water from a large tank with an area of 10 square meters to a smaller tank with an area of 5 square meters. If the water flows through a pipe at a velocity of 2 meters per second, what is the flow velocity of the water as it exits the pipe?"
+    },
+    {
+      "target": "flow_velocity",
+      "requested_difficulty": 3,
+      "trace_str": "  1. flow_velocity = A1*v1/A2  [uses: area1, velocity1, area2]  (fluids)",
+      "trace": {
+        "leafs": [
+          "area1",
+          "area2",
+          "velocity1"
+        ],
+        "chapters": [
+          "fluids"
+        ],
+        "subdomains": [
+          "fluids"
+        ],
+        "hypernym": "fluids",
+        "path": [
+          {
+            "id": "f96",
+            "output": "flow_velocity",
+            "inputs": [
+              "area1",
+              "velocity1",
+              "area2"
+            ],
+            "label": "A1*v1/A2",
+            "domain": "fluids"
+          }
+        ]
+      },
+      "raw_model_output": "A water pump is designed to transfer water from a large tank with an outlet area of 0.5 square meters to a smaller tank with an inlet area of 0.2 square meters. The water flows from the large tank at a velocity of 2 meters per second. If the pump is operating at maximum capacity, what is the flow velocity of the water as it enters the smaller tank?",
+      "question": "A water pump is designed to transfer water from a large tank with an outlet area of 0.5 square meters to a smaller tank with an inlet area of 0.2 square meters. The water flows from the large tank at a velocity of 2 meters per second. If the pump is operating at maximum capacity, what is the flow velocity of the water as it enters the smaller tank?"
+    },
+    {
+      "target": "flow_velocity",
+      "requested_difficulty": 4,
+      "trace_str": "  1. flow_velocity = A1*v1/A2  [uses: area1, velocity1, area2]  (fluids)",
+      "trace": {
+        "leafs": [
+          "area1",
+          "area2",
+          "velocity1"
+        ],
+        "chapters": [
+          "fluids"
+        ],
+        "subdomains": [
+          "fluids"
+        ],
+        "hypernym": "fluids",
+        "path": [
+          {
+            "id": "f96",
+            "output": "flow_velocity",
+            "inputs": [
+              "area1",
+              "velocity1",
+              "area2"
+            ],
+            "label": "A1*v1/A2",
+            "domain": "fluids"
+          }
+        ]
+      },
+      "raw_model_output": "A water treatment plant uses a pipe with a cross-sectional area of 0.1 m\u00b2 to transport water at a velocity of 2 m/s from a reservoir to a processing facility. The pipe then merges with a larger pipe having a cross-sectional area of 0.5 m\u00b2. What is the flow velocity of the water in the larger pipe?",
+      "question": "A water treatment plant uses a pipe with a cross-sectional area of 0.1 m\u00b2 to transport water at a velocity of 2 m/s from a reservoir to a processing facility. The pipe then merges with a larger pipe having a cross-sectional area of 0.5 m\u00b2. What is the flow velocity of the water in the larger pipe?"
+    },
+    {
+      "target": "flow_velocity",
+      "requested_difficulty": 5,
+      "trace_str": "  1. flow_velocity = A1*v1/A2  [uses: area1, velocity1, area2]  (fluids)",
+      "trace": {
+        "leafs": [
+          "area1",
+          "area2",
+          "velocity1"
+        ],
+        "chapters": [
+          "fluids"
+        ],
+        "subdomains": [
+          "fluids"
+        ],
+        "hypernym": "fluids",
+        "path": [
+          {
+            "id": "f96",
+            "output": "flow_velocity",
+            "inputs": [
+              "area1",
+              "velocity1",
+              "area2"
+            ],
+            "label": "A1*v1/A2",
+            "domain": "fluids"
+          }
+        ]
+      },
+      "raw_model_output": "A water pump is used to fill a large tank at a rate of 2.5 meters per second. The pump's outlet pipe has a cross-sectional area of 0.05 square meters, while the pipe that feeds into the tank has a cross-sectional area of 0.1 square meters. What is the velocity of the water flowing from the pump into the tank?",
+      "question": "A water pump is used to fill a large tank at a rate of 2.5 meters per second. The pump's outlet pipe has a cross-sectional area of 0.05 square meters, while the pipe that feeds into the tank has a cross-sectional area of 0.1 square meters. What is the velocity of the water flowing from the pump into the tank?"
+    },
+    {
+      "target": "flow_velocity",
+      "requested_difficulty": 6,
+      "trace_str": "  1. flow_velocity = A1*v1/A2  [uses: area1, velocity1, area2]  (fluids)",
+      "trace": {
+        "leafs": [
+          "area1",
+          "area2",
+          "velocity1"
+        ],
+        "chapters": [
+          "fluids"
+        ],
+        "subdomains": [
+          "fluids"
+        ],
+        "hypernym": "fluids",
+        "path": [
+          {
+            "id": "f96",
+            "output": "flow_velocity",
+            "inputs": [
+              "area1",
+              "velocity1",
+              "area2"
+            ],
+            "label": "A1*v1/A2",
+            "domain": "fluids"
+          }
+        ]
+      },
+      "raw_model_output": "A water tank with a cross-sectional area of 0.5 square meters is connected to a pipe with a cross-sectional area of 0.1 square meters. If water flows through the pipe at a velocity of 2 meters per second, what is the flow velocity of the water as it exits the tank?",
+      "question": "A water tank with a cross-sectional area of 0.5 square meters is connected to a pipe with a cross-sectional area of 0.1 square meters. If water flows through the pipe at a velocity of 2 meters per second, what is the flow velocity of the water as it exits the tank?"
+    },
+    {
+      "target": "flow_velocity",
+      "requested_difficulty": 7,
+      "trace_str": "  1. flow_velocity = A1*v1/A2  [uses: area1, velocity1, area2]  (fluids)",
+      "trace": {
+        "leafs": [
+          "area1",
+          "area2",
+          "velocity1"
+        ],
+        "chapters": [
+          "fluids"
+        ],
+        "subdomains": [
+          "fluids"
+        ],
+        "hypernym": "fluids",
+        "path": [
+          {
+            "id": "f96",
+            "output": "flow_velocity",
+            "inputs": [
+              "area1",
+              "velocity1",
+              "area2"
+            ],
+            "label": "A1*v1/A2",
+            "domain": "fluids"
+          }
+        ]
+      },
+      "raw_model_output": "A water pump is installed in a large tank with a circular inlet of diameter 0.5 meters and a circular outlet of diameter 0.8 meters. The pump delivers water at a velocity of 2.5 meters per second into the tank. If the inlet and outlet are perpendicular to each other and the flow is laminar, what is the velocity of the water leaving the tank through the outlet?",
+      "question": "A water pump is installed in a large tank with a circular inlet of diameter 0.5 meters and a circular outlet of diameter 0.8 meters. The pump delivers water at a velocity of 2.5 meters per second into the tank. If the inlet and outlet are perpendicular to each other and the flow is laminar, what is the velocity of the water leaving the tank through the outlet?"
+    },
+    {
+      "target": "flow_velocity",
+      "requested_difficulty": 8,
+      "trace_str": "  1. flow_velocity = A1*v1/A2  [uses: area1, velocity1, area2]  (fluids)",
+      "trace": {
+        "leafs": [
+          "area1",
+          "area2",
+          "velocity1"
+        ],
+        "chapters": [
+          "fluids"
+        ],
+        "subdomains": [
+          "fluids"
+        ],
+        "hypernym": "fluids",
+        "path": [
+          {
+            "id": "f96",
+            "output": "flow_velocity",
+            "inputs": [
+              "area1",
+              "velocity1",
+              "area2"
+            ],
+            "label": "A1*v1/A2",
+            "domain": "fluids"
+          }
+        ]
+      },
+      "raw_model_output": "In a water treatment plant, a mixture of wastewater and treated water flows from a large tank with an outlet area of 0.5 square meters to a smaller tank with an outlet area of 0.2 square meters. If the velocity of the flow at the larger tank is 0.8 meters per second, what is the flow velocity at the smaller tank?",
+      "question": "In a water treatment plant, a mixture of wastewater and treated water flows from a large tank with an outlet area of 0.5 square meters to a smaller tank with an outlet area of 0.2 square meters. If the velocity of the flow at the larger tank is 0.8 meters per second, what is the flow velocity at the smaller tank?"
+    },
+    {
+      "target": "flow_velocity",
+      "requested_difficulty": 9,
+      "trace_str": "  1. flow_velocity = A1*v1/A2  [uses: area1, velocity1, area2]  (fluids)",
+      "trace": {
+        "leafs": [
+          "area1",
+          "area2",
+          "velocity1"
+        ],
+        "chapters": [
+          "fluids"
+        ],
+        "subdomains": [
+          "fluids"
+        ],
+        "hypernym": "fluids",
+        "path": [
+          {
+            "id": "f96",
+            "output": "flow_velocity",
+            "inputs": [
+              "area1",
+              "velocity1",
+              "area2"
+            ],
+            "label": "A1*v1/A2",
+            "domain": "fluids"
+          }
+        ]
+      },
+      "raw_model_output": "A large industrial pipe with an internal diameter of 0.5 meters and an outlet diameter of 0.8 meters is used to transport a liquid at a velocity of 2.5 meters per second. The pipe's length is 50 meters, and it is oriented horizontally. Assuming laminar flow, the flow velocity can be calculated using the formula. What is the flow velocity of the liquid at the outlet of the pipe?",
+      "question": "A large industrial pipe with an internal diameter of 0.5 meters and an outlet diameter of 0.8 meters is used to transport a liquid at a velocity of 2.5 meters per second. The pipe's length is 50 meters, and it is oriented horizontally. Assuming laminar flow, the flow velocity can be calculated using the formula. What is the flow velocity of the liquid at the outlet of the pipe?"
+    },
+    {
+      "target": "flow_velocity",
+      "requested_difficulty": 10,
+      "trace_str": "  1. flow_velocity = A1*v1/A2  [uses: area1, velocity1, area2]  (fluids)",
+      "trace": {
+        "leafs": [
+          "area1",
+          "area2",
+          "velocity1"
+        ],
+        "chapters": [
+          "fluids"
+        ],
+        "subdomains": [
+          "fluids"
+        ],
+        "hypernym": "fluids",
+        "path": [
+          {
+            "id": "f96",
+            "output": "flow_velocity",
+            "inputs": [
+              "area1",
+              "velocity1",
+              "area2"
+            ],
+            "label": "A1*v1/A2",
+            "domain": "fluids"
+          }
+        ]
+      },
+      "raw_model_output": "In a water treatment plant, a mixture of pollutants is being removed from a contaminated stream using a series of interconnected pipes. Pipe A, with a cross-sectional area of 0.05 m^2, receives the contaminated water at a velocity of 0.5 m/s. The water then flows into Pipe B, which has a cross-sectional area of 0.08 m^2. What is the average velocity of the pollutants as they exit Pipe B?",
+      "question": "In a water treatment plant, a mixture of pollutants is being removed from a contaminated stream using a series of interconnected pipes. Pipe A, with a cross-sectional area of 0.05 m^2, receives the contaminated water at a velocity of 0.5 m/s. The water then flows into Pipe B, which has a cross-sectional area of 0.08 m^2. What is the average velocity of the pollutants as they exit Pipe B?"
+    },
+    {
+      "target": "electric_potential_energy",
+      "requested_difficulty": 1,
+      "trace_str": "  1. electric_potential_energy = k * q1 * q2 / r  [uses: charge1, charge2, distance]  (electrostatics)",
+      "trace": {
+        "leafs": [
+          "charge1",
+          "charge2",
+          "distance"
+        ],
+        "chapters": [
+          "electrostatics"
+        ],
+        "subdomains": [
+          "electrostatics"
+        ],
+        "hypernym": "electrostatics",
+        "path": [
+          {
+            "id": "f101",
+            "output": "electric_potential_energy",
+            "inputs": [
+              "charge1",
+              "charge2",
+              "distance"
+            ],
+            "label": "k * q1 * q2 / r",
+            "domain": "electrostatics"
+          }
+        ]
+      },
+      "raw_model_output": "Two small balls, each with a charge of 3 microcoulombs, are placed 0.2 meters apart. What is the electric potential energy of the system?",
+      "question": "Two small balls, each with a charge of 3 microcoulombs, are placed 0.2 meters apart. What is the electric potential energy of the system?"
+    },
+    {
+      "target": "electric_potential_energy",
+      "requested_difficulty": 2,
+      "trace_str": "  1. electric_potential_energy = k * q1 * q2 / r  [uses: charge1, charge2, distance]  (electrostatics)",
+      "trace": {
+        "leafs": [
+          "charge1",
+          "charge2",
+          "distance"
+        ],
+        "chapters": [
+          "electrostatics"
+        ],
+        "subdomains": [
+          "electrostatics"
+        ],
+        "hypernym": "electrostatics",
+        "path": [
+          {
+            "id": "f101",
+            "output": "electric_potential_energy",
+            "inputs": [
+              "charge1",
+              "charge2",
+              "distance"
+            ],
+            "label": "k * q1 * q2 / r",
+            "domain": "electrostatics"
+          }
+        ]
+      },
+      "raw_model_output": "Two small, identical metal spheres, each with a charge of 3 x 10^-6 C, are suspended in mid-air at a distance of 0.2 m from each other. What is the electric potential energy between the spheres?",
+      "question": "Two small, identical metal spheres, each with a charge of 3 x 10^-6 C, are suspended in mid-air at a distance of 0.2 m from each other. What is the electric potential energy between the spheres?"
+    },
+    {
+      "target": "electric_potential_energy",
+      "requested_difficulty": 3,
+      "trace_str": "  1. electric_potential_energy = k * q1 * q2 / r  [uses: charge1, charge2, distance]  (electrostatics)",
+      "trace": {
+        "leafs": [
+          "charge1",
+          "charge2",
+          "distance"
+        ],
+        "chapters": [
+          "electrostatics"
+        ],
+        "subdomains": [
+          "electrostatics"
+        ],
+        "hypernym": "electrostatics",
+        "path": [
+          {
+            "id": "f101",
+            "output": "electric_potential_energy",
+            "inputs": [
+              "charge1",
+              "charge2",
+              "distance"
+            ],
+            "label": "k * q1 * q2 / r",
+            "domain": "electrostatics"
+          }
+        ]
+      },
+      "raw_model_output": "Two identical, positively charged spheres, each with a charge of 3 microcoulombs, are placed 0.05 meters apart. What is the electric potential energy of the system?",
+      "question": "Two identical, positively charged spheres, each with a charge of 3 microcoulombs, are placed 0.05 meters apart. What is the electric potential energy of the system?"
+    },
+    {
+      "target": "electric_potential_energy",
+      "requested_difficulty": 4,
+      "trace_str": "  1. electric_potential_energy = k * q1 * q2 / r  [uses: charge1, charge2, distance]  (electrostatics)",
+      "trace": {
+        "leafs": [
+          "charge1",
+          "charge2",
+          "distance"
+        ],
+        "chapters": [
+          "electrostatics"
+        ],
+        "subdomains": [
+          "electrostatics"
+        ],
+        "hypernym": "electrostatics",
+        "path": [
+          {
+            "id": "f101",
+            "output": "electric_potential_energy",
+            "inputs": [
+              "charge1",
+              "charge2",
+              "distance"
+            ],
+            "label": "k * q1 * q2 / r",
+            "domain": "electrostatics"
+          }
+        ]
+      },
+      "raw_model_output": "Two charged spheres, each with a charge of 3 x 10^-6 C, are separated by a distance of 0.05 m. What is the electric potential energy stored in this configuration?",
+      "question": "Two charged spheres, each with a charge of 3 x 10^-6 C, are separated by a distance of 0.05 m. What is the electric potential energy stored in this configuration?"
+    },
+    {
+      "target": "electric_potential_energy",
+      "requested_difficulty": 5,
+      "trace_str": "  1. electric_potential_energy = k * q1 * q2 / r  [uses: charge1, charge2, distance]  (electrostatics)",
+      "trace": {
+        "leafs": [
+          "charge1",
+          "charge2",
+          "distance"
+        ],
+        "chapters": [
+          "electrostatics"
+        ],
+        "subdomains": [
+          "electrostatics"
+        ],
+        "hypernym": "electrostatics",
+        "path": [
+          {
+            "id": "f101",
+            "output": "electric_potential_energy",
+            "inputs": [
+              "charge1",
+              "charge2",
+              "distance"
+            ],
+            "label": "k * q1 * q2 / r",
+            "domain": "electrostatics"
+          }
+        ]
+      },
+      "raw_model_output": "Two identical electrons, each carrying a charge of 1.6 x 10^-19 C, are separated by a distance of 0.3 meters in a vacuum. If one electron is stationary, and the other is moving towards it, what is the electric potential energy between the two electrons when they are 0.3 meters apart?",
+      "question": "Two identical electrons, each carrying a charge of 1.6 x 10^-19 C, are separated by a distance of 0.3 meters in a vacuum. If one electron is stationary, and the other is moving towards it, what is the electric potential energy between the two electrons when they are 0.3 meters apart?"
+    },
+    {
+      "target": "electric_potential_energy",
+      "requested_difficulty": 6,
+      "trace_str": "  1. electric_potential_energy = k * q1 * q2 / r  [uses: charge1, charge2, distance]  (electrostatics)",
+      "trace": {
+        "leafs": [
+          "charge1",
+          "charge2",
+          "distance"
+        ],
+        "chapters": [
+          "electrostatics"
+        ],
+        "subdomains": [
+          "electrostatics"
+        ],
+        "hypernym": "electrostatics",
+        "path": [
+          {
+            "id": "f101",
+            "output": "electric_potential_energy",
+            "inputs": [
+              "charge1",
+              "charge2",
+              "distance"
+            ],
+            "label": "k * q1 * q2 / r",
+            "domain": "electrostatics"
+          }
+        ]
+      },
+      "raw_model_output": "Two small metal spheres, one with a charge of 3.4 microcoulombs and the other with a charge of 2.1 microcoulombs, are placed 0.045 meters apart in a vacuum. As the spheres attract each other, the potential energy stored in the electric field between them is determined by the Coulomb's law formula. What is the electric potential energy of the system in joules?",
+      "question": "Two small metal spheres, one with a charge of 3.4 microcoulombs and the other with a charge of 2.1 microcoulombs, are placed 0.045 meters apart in a vacuum. As the spheres attract each other, the potential energy stored in the electric field between them is determined by the Coulomb's law formula. What is the electric potential energy of the system in joules?"
+    },
+    {
+      "target": "electric_potential_energy",
+      "requested_difficulty": 7,
+      "trace_str": "  1. electric_potential_energy = k * q1 * q2 / r  [uses: charge1, charge2, distance]  (electrostatics)",
+      "trace": {
+        "leafs": [
+          "charge1",
+          "charge2",
+          "distance"
+        ],
+        "chapters": [
+          "electrostatics"
+        ],
+        "subdomains": [
+          "electrostatics"
+        ],
+        "hypernym": "electrostatics",
+        "path": [
+          {
+            "id": "f101",
+            "output": "electric_potential_energy",
+            "inputs": [
+              "charge1",
+              "charge2",
+              "distance"
+            ],
+            "label": "k * q1 * q2 / r",
+            "domain": "electrostatics"
+          }
+        ]
+      },
+      "raw_model_output": "Two charged particles, one with a charge of 3.0 \u03bcC and the other with a charge of 4.5 \u03bcC, are separated by a distance of 0.25 m in a region of space where the electric field lines are radial and perpendicular to the surface. The particles are stationary and not moving towards each other. What is the electric potential energy of the system?",
+      "question": "Two charged particles, one with a charge of 3.0 \u03bcC and the other with a charge of 4.5 \u03bcC, are separated by a distance of 0.25 m in a region of space where the electric field lines are radial and perpendicular to the surface. The particles are stationary and not moving towards each other. What is the electric potential energy of the system?"
+    },
+    {
+      "target": "electric_potential_energy",
+      "requested_difficulty": 8,
+      "trace_str": "  1. electric_potential_energy = k * q1 * q2 / r  [uses: charge1, charge2, distance]  (electrostatics)",
+      "trace": {
+        "leafs": [
+          "charge1",
+          "charge2",
+          "distance"
+        ],
+        "chapters": [
+          "electrostatics"
+        ],
+        "subdomains": [
+          "electrostatics"
+        ],
+        "hypernym": "electrostatics",
+        "path": [
+          {
+            "id": "f101",
+            "output": "electric_potential_energy",
+            "inputs": [
+              "charge1",
+              "charge2",
+              "distance"
+            ],
+            "label": "k * q1 * q2 / r",
+            "domain": "electrostatics"
+          }
+        ]
+      },
+      "raw_model_output": "In a laboratory setup, two small metal spheres, each with a charge of 3.5 \u00d7 10^-6 C, are placed 0.25 m apart. The spheres are suspended in air using thin threads, and the distance between them is carefully measured. The threads are then slowly pulled taut, causing the spheres to move towards each other. As they approach, the potential energy stored between them increases. What is the electric potential energy stored between the spheres when they are 0.25 m apart?",
+      "question": "In a laboratory setup, two small metal spheres, each with a charge of 3.5 \u00d7 10^-6 C, are placed 0.25 m apart. The spheres are suspended in air using thin threads, and the distance between them is carefully measured. The threads are then slowly pulled taut, causing the spheres to move towards each other. As they approach, the potential energy stored between them increases. What is the electric potential energy stored between the spheres when they are 0.25 m apart?"
+    },
+    {
+      "target": "electric_potential_energy",
+      "requested_difficulty": 9,
+      "trace_str": "  1. electric_potential_energy = k * q1 * q2 / r  [uses: charge1, charge2, distance]  (electrostatics)",
+      "trace": {
+        "leafs": [
+          "charge1",
+          "charge2",
+          "distance"
+        ],
+        "chapters": [
+          "electrostatics"
+        ],
+        "subdomains": [
+          "electrostatics"
+        ],
+        "hypernym": "electrostatics",
+        "path": [
+          {
+            "id": "f101",
+            "output": "electric_potential_energy",
+            "inputs": [
+              "charge1",
+              "charge2",
+              "distance"
+            ],
+            "label": "k * q1 * q2 / r",
+            "domain": "electrostatics"
+          }
+        ]
+      },
+      "raw_model_output": "In a laboratory experiment, two small metal spheres, each with a charge of 2.5 microcoulombs, are suspended by thin threads 0.05 meters apart. The threads are carefully adjusted to maintain a constant distance between the spheres. A student records the charge and distance between the spheres, but accidentally omits to note the charges' signs. If the student now wishes to calculate the electric potential energy stored in the system, what value would they obtain?",
+      "question": "In a laboratory experiment, two small metal spheres, each with a charge of 2.5 microcoulombs, are suspended by thin threads 0.05 meters apart. The threads are carefully adjusted to maintain a constant distance between the spheres. A student records the charge and distance between the spheres, but accidentally omits to note the charges' signs. If the student now wishes to calculate the electric potential energy stored in the system, what value would they obtain?"
+    },
+    {
+      "target": "electric_potential_energy",
+      "requested_difficulty": 10,
+      "trace_str": "  1. electric_potential_energy = k * q1 * q2 / r  [uses: charge1, charge2, distance]  (electrostatics)",
+      "trace": {
+        "leafs": [
+          "charge1",
+          "charge2",
+          "distance"
+        ],
+        "chapters": [
+          "electrostatics"
+        ],
+        "subdomains": [
+          "electrostatics"
+        ],
+        "hypernym": "electrostatics",
+        "path": [
+          {
+            "id": "f101",
+            "output": "electric_potential_energy",
+            "inputs": [
+              "charge1",
+              "charge2",
+              "distance"
+            ],
+            "label": "k * q1 * q2 / r",
+            "domain": "electrostatics"
+          }
+        ]
+      },
+      "raw_model_output": "In the vicinity of a massive, positively charged metal sphere with a radius of 10 centimeters, a small, negatively charged particle with a charge of -3.2 x 10^-19 C is suspended 5 centimeters away from the sphere's surface. The metal sphere, which has a charge of 8.0 x 10^-19 C, is part of a large, grounded metal plate. If the particle is released from rest, what is the electric potential energy associated with its initial motion?",
+      "question": "In the vicinity of a massive, positively charged metal sphere with a radius of 10 centimeters, a small, negatively charged particle with a charge of -3.2 x 10^-19 C is suspended 5 centimeters away from the sphere's surface. The metal sphere, which has a charge of 8.0 x 10^-19 C, is part of a large, grounded metal plate. If the particle is released from rest, what is the electric potential energy associated with its initial motion?"
+    },
+    {
+      "target": "speed_string",
+      "requested_difficulty": 1,
+      "trace_str": "  1. speed_string = sqrt(tension / linear_density)  [uses: tension, linear_density]  (waves)",
+      "trace": {
+        "leafs": [
+          "linear_density",
+          "tension"
+        ],
+        "chapters": [
+          "waves"
+        ],
+        "subdomains": [
+          "waves"
+        ],
+        "hypernym": "waves",
+        "path": [
+          {
+            "id": "f80",
+            "output": "speed_string",
+            "inputs": [
+              "tension",
+              "linear_density"
+            ],
+            "label": "sqrt(tension / linear_density)",
+            "domain": "waves"
+          }
+        ]
+      },
+      "raw_model_output": "A tightrope walker is performing a stunt across a lake, using a rope with a linear mass density of 0.05 kg/m. The tension in the rope is 50 N. What is the speed at which the rope vibrates?",
+      "question": "A tightrope walker is performing a stunt across a lake, using a rope with a linear mass density of 0.05 kg/m. The tension in the rope is 50 N. What is the speed at which the rope vibrates?"
+    },
+    {
+      "target": "speed_string",
+      "requested_difficulty": 2,
+      "trace_str": "  1. speed_string = sqrt(tension / linear_density)  [uses: tension, linear_density]  (waves)",
+      "trace": {
+        "leafs": [
+          "linear_density",
+          "tension"
+        ],
+        "chapters": [
+          "waves"
+        ],
+        "subdomains": [
+          "waves"
+        ],
+        "hypernym": "waves",
+        "path": [
+          {
+            "id": "f80",
+            "output": "speed_string",
+            "inputs": [
+              "tension",
+              "linear_density"
+            ],
+            "label": "sqrt(tension / linear_density)",
+            "domain": "waves"
+          }
+        ]
+      },
+      "raw_model_output": "A long rope with a linear mass density of 0.1 kg/m is stretched between two supports. A 20 N tension is applied to the rope, causing it to vibrate. What is the speed of the waves that propagate along the rope?",
+      "question": "A long rope with a linear mass density of 0.1 kg/m is stretched between two supports. A 20 N tension is applied to the rope, causing it to vibrate. What is the speed of the waves that propagate along the rope?"
+    },
+    {
+      "target": "speed_string",
+      "requested_difficulty": 3,
+      "trace_str": "  1. speed_string = sqrt(tension / linear_density)  [uses: tension, linear_density]  (waves)",
+      "trace": {
+        "leafs": [
+          "linear_density",
+          "tension"
+        ],
+        "chapters": [
+          "waves"
+        ],
+        "subdomains": [
+          "waves"
+        ],
+        "hypernym": "waves",
+        "path": [
+          {
+            "id": "f80",
+            "output": "speed_string",
+            "inputs": [
+              "tension",
+              "linear_density"
+            ],
+            "label": "sqrt(tension / linear_density)",
+            "domain": "waves"
+          }
+        ]
+      },
+      "raw_model_output": "A long rope with a linear mass density of 0.05 kg/m is stretched between two supports. A tension of 50 N is applied to the rope. What is the speed at which a wave propagates along the rope?",
+      "question": "A long rope with a linear mass density of 0.05 kg/m is stretched between two supports. A tension of 50 N is applied to the rope. What is the speed at which a wave propagates along the rope?"
+    },
+    {
+      "target": "speed_string",
+      "requested_difficulty": 4,
+      "trace_str": "  1. speed_string = sqrt(tension / linear_density)  [uses: tension, linear_density]  (waves)",
+      "trace": {
+        "leafs": [
+          "linear_density",
+          "tension"
+        ],
+        "chapters": [
+          "waves"
+        ],
+        "subdomains": [
+          "waves"
+        ],
+        "hypernym": "waves",
+        "path": [
+          {
+            "id": "f80",
+            "output": "speed_string",
+            "inputs": [
+              "tension",
+              "linear_density"
+            ],
+            "label": "sqrt(tension / linear_density)",
+            "domain": "waves"
+          }
+        ]
+      },
+      "raw_model_output": "A tightrope walker, dressed in a specially designed costume, is crossing a suspension bridge. The bridge is suspended between two towers, 50 meters apart, and has a linear density of 0.5 kg/m. The tension in the bridge wire is 2000 N. How fast will the walker move along the bridge if the bridge is stretched to its maximum length?",
+      "question": "A tightrope walker, dressed in a specially designed costume, is crossing a suspension bridge. The bridge is suspended between two towers, 50 meters apart, and has a linear density of 0.5 kg/m. The tension in the bridge wire is 2000 N. How fast will the walker move along the bridge if the bridge is stretched to its maximum length?"
+    },
+    {
+      "target": "speed_string",
+      "requested_difficulty": 5,
+      "trace_str": "  1. speed_string = sqrt(tension / linear_density)  [uses: tension, linear_density]  (waves)",
+      "trace": {
+        "leafs": [
+          "linear_density",
+          "tension"
+        ],
+        "chapters": [
+          "waves"
+        ],
+        "subdomains": [
+          "waves"
+        ],
+        "hypernym": "waves",
+        "path": [
+          {
+            "id": "f80",
+            "output": "speed_string",
+            "inputs": [
+              "tension",
+              "linear_density"
+            ],
+            "label": "sqrt(tension / linear_density)",
+            "domain": "waves"
+          }
+        ]
+      },
+      "raw_model_output": "A tightrope walker, weighing 70 kg, is standing on a 20 m long rope with a linear mass density of 0.02 kg/m. The rope is stretched between two towers, with a tension of 300 N. As she begins to walk along the rope, she sets up a wave that travels along its length. What is the speed of this wave?",
+      "question": "A tightrope walker, weighing 70 kg, is standing on a 20 m long rope with a linear mass density of 0.02 kg/m. The rope is stretched between two towers, with a tension of 300 N. As she begins to walk along the rope, she sets up a wave that travels along its length. What is the speed of this wave?"
+    },
+    {
+      "target": "speed_string",
+      "requested_difficulty": 6,
+      "trace_str": "  1. speed_string = sqrt(tension / linear_density)  [uses: tension, linear_density]  (waves)",
+      "trace": {
+        "leafs": [
+          "linear_density",
+          "tension"
+        ],
+        "chapters": [
+          "waves"
+        ],
+        "subdomains": [
+          "waves"
+        ],
+        "hypernym": "waves",
+        "path": [
+          {
+            "id": "f80",
+            "output": "speed_string",
+            "inputs": [
+              "tension",
+              "linear_density"
+            ],
+            "label": "sqrt(tension / linear_density)",
+            "domain": "waves"
+          }
+        ]
+      },
+      "raw_model_output": "A long, slender rope with a linear density of 0.05 kg/m is stretched between two points, with a tension of 150 N. If the rope is plucked and a wave travels down its length, what is the speed of the wave?",
+      "question": "A long, slender rope with a linear density of 0.05 kg/m is stretched between two points, with a tension of 150 N. If the rope is plucked and a wave travels down its length, what is the speed of the wave?"
+    },
+    {
+      "target": "speed_string",
+      "requested_difficulty": 7,
+      "trace_str": "  1. speed_string = sqrt(tension / linear_density)  [uses: tension, linear_density]  (waves)",
+      "trace": {
+        "leafs": [
+          "linear_density",
+          "tension"
+        ],
+        "chapters": [
+          "waves"
+        ],
+        "subdomains": [
+          "waves"
+        ],
+        "hypernym": "waves",
+        "path": [
+          {
+            "id": "f80",
+            "output": "speed_string",
+            "inputs": [
+              "tension",
+              "linear_density"
+            ],
+            "label": "sqrt(tension / linear_density)",
+            "domain": "waves"
+          }
+        ]
+      },
+      "raw_model_output": "A tightrope walker, weighing 70 kg, is suspended by a wire with a linear mass density of 0.02 kg/m. The wire is stretched between two supports, with a tension of 150 N. As the walker starts to vibrate, the wire begins to oscillate with a frequency that depends on the tension and the linear density. What is the speed of these oscillations?",
+      "question": "A tightrope walker, weighing 70 kg, is suspended by a wire with a linear mass density of 0.02 kg/m. The wire is stretched between two supports, with a tension of 150 N. As the walker starts to vibrate, the wire begins to oscillate with a frequency that depends on the tension and the linear density. What is the speed of these oscillations?"
+    },
+    {
+      "target": "speed_string",
+      "requested_difficulty": 8,
+      "trace_str": "  1. speed_string = sqrt(tension / linear_density)  [uses: tension, linear_density]  (waves)",
+      "trace": {
+        "leafs": [
+          "linear_density",
+          "tension"
+        ],
+        "chapters": [
+          "waves"
+        ],
+        "subdomains": [
+          "waves"
+        ],
+        "hypernym": "waves",
+        "path": [
+          {
+            "id": "f80",
+            "output": "speed_string",
+            "inputs": [
+              "tension",
+              "linear_density"
+            ],
+            "label": "sqrt(tension / linear_density)",
+            "domain": "waves"
+          }
+        ]
+      },
+      "raw_model_output": "As a surfer, you've always been fascinated by the way ocean waves propagate along the shore. During a recent trip to the beach, you noticed that the tension in the seawater was quite high, with a reading of 1500 N/m. The linear density of the seawater, which affects the wave's speed, was measured to be 0.1 kg/m. Assuming the wave is a transverse wave, what is the speed at which it will propagate along the shore?",
+      "question": "As a surfer, you've always been fascinated by the way ocean waves propagate along the shore. During a recent trip to the beach, you noticed that the tension in the seawater was quite high, with a reading of 1500 N/m. The linear density of the seawater, which affects the wave's speed, was measured to be 0.1 kg/m. Assuming the wave is a transverse wave, what is the speed at which it will propagate along the shore?"
+    },
+    {
+      "target": "speed_string",
+      "requested_difficulty": 9,
+      "trace_str": "  1. speed_string = sqrt(tension / linear_density)  [uses: tension, linear_density]  (waves)",
+      "trace": {
+        "leafs": [
+          "linear_density",
+          "tension"
+        ],
+        "chapters": [
+          "waves"
+        ],
+        "subdomains": [
+          "waves"
+        ],
+        "hypernym": "waves",
+        "path": [
+          {
+            "id": "f80",
+            "output": "speed_string",
+            "inputs": [
+              "tension",
+              "linear_density"
+            ],
+            "label": "sqrt(tension / linear_density)",
+            "domain": "waves"
+          }
+        ]
+      },
+      "raw_model_output": "A long-distance rope, made of a specialized material with a linear density of 0.05 kg/m, is stretched between two cliffs to support a suspension bridge. The tension in the rope is maintained by a system of counterweights and pulleys, which ensures a constant force of 1500 N. As a strong gust of wind blows through the valley, the rope begins to oscillate in a standing wave pattern. What is the speed of these standing waves?",
+      "question": "A long-distance rope, made of a specialized material with a linear density of 0.05 kg/m, is stretched between two cliffs to support a suspension bridge. The tension in the rope is maintained by a system of counterweights and pulleys, which ensures a constant force of 1500 N. As a strong gust of wind blows through the valley, the rope begins to oscillate in a standing wave pattern. What is the speed of these standing waves?"
+    },
+    {
+      "target": "speed_string",
+      "requested_difficulty": 10,
+      "trace_str": "  1. speed_string = sqrt(tension / linear_density)  [uses: tension, linear_density]  (waves)",
+      "trace": {
+        "leafs": [
+          "linear_density",
+          "tension"
+        ],
+        "chapters": [
+          "waves"
+        ],
+        "subdomains": [
+          "waves"
+        ],
+        "hypernym": "waves",
+        "path": [
+          {
+            "id": "f80",
+            "output": "speed_string",
+            "inputs": [
+              "tension",
+              "linear_density"
+            ],
+            "label": "sqrt(tension / linear_density)",
+            "domain": "waves"
+          }
+        ]
+      },
+      "raw_model_output": "A long-distance surfer, known for her daring stunts, is attempting to ride a massive wave generated by a powerful tsunami. The wave's surface tension is approximately 72 millinewtons per meter, and its linear density is about 120 kilograms per meter. As she paddles towards the wave, her board begins to vibrate in harmony with the wave's oscillations. If the wave's frequency is 0.5 hertz, what is the speed at which the wave's crests are moving along the surface?",
+      "question": "A long-distance surfer, known for her daring stunts, is attempting to ride a massive wave generated by a powerful tsunami. The wave's surface tension is approximately 72 millinewtons per meter, and its linear density is about 120 kilograms per meter. As she paddles towards the wave, her board begins to vibrate in harmony with the wave's oscillations. If the wave's frequency is 0.5 hertz, what is the speed at which the wave's crests are moving along the surface?"
+    },
+    {
+      "target": "refractive_index",
+      "requested_difficulty": 1,
+      "trace_str": "  1. refractive_index = c / v  [uses: speed_of_light, wave_speed]  (optics)",
+      "trace": {
+        "leafs": [
+          "speed_of_light",
+          "wave_speed"
+        ],
+        "chapters": [
+          "optics"
+        ],
+        "subdomains": [
+          "optics"
+        ],
+        "hypernym": "optics",
+        "path": [
+          {
+            "id": "f130",
+            "output": "refractive_index",
+            "inputs": [
+              "speed_of_light",
+              "wave_speed"
+            ],
+            "label": "c / v",
+            "domain": "optics"
+          }
+        ]
+      },
+      "raw_model_output": "In a laboratory experiment, a beam of light is shone through a transparent material. The speed of light in vacuum is 3.00 x 10^8 meters per second, while the speed of the light wave in the material is 2.00 x 10^7 meters per second. What is the refractive index of this material?",
+      "question": "In a laboratory experiment, a beam of light is shone through a transparent material. The speed of light in vacuum is 3.00 x 10^8 meters per second, while the speed of the light wave in the material is 2.00 x 10^7 meters per second. What is the refractive index of this material?"
+    },
+    {
+      "target": "refractive_index",
+      "requested_difficulty": 2,
+      "trace_str": "  1. refractive_index = c / v  [uses: speed_of_light, wave_speed]  (optics)",
+      "trace": {
+        "leafs": [
+          "speed_of_light",
+          "wave_speed"
+        ],
+        "chapters": [
+          "optics"
+        ],
+        "subdomains": [
+          "optics"
+        ],
+        "hypernym": "optics",
+        "path": [
+          {
+            "id": "f130",
+            "output": "refractive_index",
+            "inputs": [
+              "speed_of_light",
+              "wave_speed"
+            ],
+            "label": "c / v",
+            "domain": "optics"
+          }
+        ]
+      },
+      "raw_model_output": "A light beam enters a transparent prism at a speed of 2.0 x 10^8 meters per second, and is slowed down to a speed of 1.5 x 10^7 meters per second. What is the refractive index of the prism material?",
+      "question": "A light beam enters a transparent prism at a speed of 2.0 x 10^8 meters per second, and is slowed down to a speed of 1.5 x 10^7 meters per second. What is the refractive index of the prism material?"
+    },
+    {
+      "target": "refractive_index",
+      "requested_difficulty": 3,
+      "trace_str": "  1. refractive_index = c / v  [uses: speed_of_light, wave_speed]  (optics)",
+      "trace": {
+        "leafs": [
+          "speed_of_light",
+          "wave_speed"
+        ],
+        "chapters": [
+          "optics"
+        ],
+        "subdomains": [
+          "optics"
+        ],
+        "hypernym": "optics",
+        "path": [
+          {
+            "id": "f130",
+            "output": "refractive_index",
+            "inputs": [
+              "speed_of_light",
+              "wave_speed"
+            ],
+            "label": "c / v",
+            "domain": "optics"
+          }
+        ]
+      },
+      "raw_model_output": "A beam of light is shone through a prism, and the angle of refraction is measured to be 30 degrees. The speed of light in a vacuum is 3.00 x 10^8 meters per second, and the speed of the wave as it passes through the prism is 2.00 x 10^6 meters per second. What is the refractive index of the prism material?",
+      "question": "A beam of light is shone through a prism, and the angle of refraction is measured to be 30 degrees. The speed of light in a vacuum is 3.00 x 10^8 meters per second, and the speed of the wave as it passes through the prism is 2.00 x 10^6 meters per second. What is the refractive index of the prism material?"
+    },
+    {
+      "target": "refractive_index",
+      "requested_difficulty": 4,
+      "trace_str": "  1. refractive_index = c / v  [uses: speed_of_light, wave_speed]  (optics)",
+      "trace": {
+        "leafs": [
+          "speed_of_light",
+          "wave_speed"
+        ],
+        "chapters": [
+          "optics"
+        ],
+        "subdomains": [
+          "optics"
+        ],
+        "hypernym": "optics",
+        "path": [
+          {
+            "id": "f130",
+            "output": "refractive_index",
+            "inputs": [
+              "speed_of_light",
+              "wave_speed"
+            ],
+            "label": "c / v",
+            "domain": "optics"
+          }
+        ]
+      },
+      "raw_model_output": "In a laboratory experiment, a beam of light is directed through a glass prism with a wave speed of 2.0 x 10^5 m/s. The speed of light in vacuum is 3.0 x 10^8 m/s. What is the refractive index of the glass prism?",
+      "question": "In a laboratory experiment, a beam of light is directed through a glass prism with a wave speed of 2.0 x 10^5 m/s. The speed of light in vacuum is 3.0 x 10^8 m/s. What is the refractive index of the glass prism?"
+    },
+    {
+      "target": "refractive_index",
+      "requested_difficulty": 5,
+      "trace_str": "  1. refractive_index = c / v  [uses: speed_of_light, wave_speed]  (optics)",
+      "trace": {
+        "leafs": [
+          "speed_of_light",
+          "wave_speed"
+        ],
+        "chapters": [
+          "optics"
+        ],
+        "subdomains": [
+          "optics"
+        ],
+        "hypernym": "optics",
+        "path": [
+          {
+            "id": "f130",
+            "output": "refractive_index",
+            "inputs": [
+              "speed_of_light",
+              "wave_speed"
+            ],
+            "label": "c / v",
+            "domain": "optics"
+          }
+        ]
+      },
+      "raw_model_output": "A light beam is passing through a transparent medium at a speed of 2.0 x 10^5 meters per second. The speed of light in vacuum is 3.0 x 10^8 meters per second. What is the refractive index of this medium?",
+      "question": "A light beam is passing through a transparent medium at a speed of 2.0 x 10^5 meters per second. The speed of light in vacuum is 3.0 x 10^8 meters per second. What is the refractive index of this medium?"
+    },
+    {
+      "target": "refractive_index",
+      "requested_difficulty": 6,
+      "trace_str": "  1. refractive_index = c / v  [uses: speed_of_light, wave_speed]  (optics)",
+      "trace": {
+        "leafs": [
+          "speed_of_light",
+          "wave_speed"
+        ],
+        "chapters": [
+          "optics"
+        ],
+        "subdomains": [
+          "optics"
+        ],
+        "hypernym": "optics",
+        "path": [
+          {
+            "id": "f130",
+            "output": "refractive_index",
+            "inputs": [
+              "speed_of_light",
+              "wave_speed"
+            ],
+            "label": "c / v",
+            "domain": "optics"
+          }
+        ]
+      },
+      "raw_model_output": "As a light beam passes from air into a glass prism, the speed of the light wave decreases significantly. The speed of light in vacuum is approximately 3.0 x 10^8 meters per second, while the speed of the light wave within the glass is measured to be 2.0 x 10^7 meters per second. What is the refractive index of the glass prism?",
+      "question": "As a light beam passes from air into a glass prism, the speed of the light wave decreases significantly. The speed of light in vacuum is approximately 3.0 x 10^8 meters per second, while the speed of the light wave within the glass is measured to be 2.0 x 10^7 meters per second. What is the refractive index of the glass prism?"
+    },
+    {
+      "target": "refractive_index",
+      "requested_difficulty": 7,
+      "trace_str": "  1. refractive_index = c / v  [uses: speed_of_light, wave_speed]  (optics)",
+      "trace": {
+        "leafs": [
+          "speed_of_light",
+          "wave_speed"
+        ],
+        "chapters": [
+          "optics"
+        ],
+        "subdomains": [
+          "optics"
+        ],
+        "hypernym": "optics",
+        "path": [
+          {
+            "id": "f130",
+            "output": "refractive_index",
+            "inputs": [
+              "speed_of_light",
+              "wave_speed"
+            ],
+            "label": "c / v",
+            "domain": "optics"
+          }
+        ]
+      },
+      "raw_model_output": "As a beam of light travels through a prism, its speed is reduced to approximately 1.96 x 10^5 meters per second. If the speed of light in vacuum is 3.00 x 10^8 meters per second, what is the refractive index of the prism material?",
+      "question": "As a beam of light travels through a prism, its speed is reduced to approximately 1.96 x 10^5 meters per second. If the speed of light in vacuum is 3.00 x 10^8 meters per second, what is the refractive index of the prism material?"
+    },
+    {
+      "target": "refractive_index",
+      "requested_difficulty": 8,
+      "trace_str": "  1. refractive_index = c / v  [uses: speed_of_light, wave_speed]  (optics)",
+      "trace": {
+        "leafs": [
+          "speed_of_light",
+          "wave_speed"
+        ],
+        "chapters": [
+          "optics"
+        ],
+        "subdomains": [
+          "optics"
+        ],
+        "hypernym": "optics",
+        "path": [
+          {
+            "id": "f130",
+            "output": "refractive_index",
+            "inputs": [
+              "speed_of_light",
+              "wave_speed"
+            ],
+            "label": "c / v",
+            "domain": "optics"
+          }
+        ]
+      },
+      "raw_model_output": "A high-speed laser beam is transmitted through a glass prism with a refractive index that is crucial for the beam's bending. The laser's speed is approximately 299,792,458 meters per second, and its wave speed is about 2.0 x 10^8 meters per second in vacuum. If the prism's material properties allow it to slow down light by a significant amount, what is the refractive index of the glass?",
+      "question": "A high-speed laser beam is transmitted through a glass prism with a refractive index that is crucial for the beam's bending. The laser's speed is approximately 299,792,458 meters per second, and its wave speed is about 2.0 x 10^8 meters per second in vacuum. If the prism's material properties allow it to slow down light by a significant amount, what is the refractive index of the glass?"
+    },
+    {
+      "target": "refractive_index",
+      "requested_difficulty": 9,
+      "trace_str": "  1. refractive_index = c / v  [uses: speed_of_light, wave_speed]  (optics)",
+      "trace": {
+        "leafs": [
+          "speed_of_light",
+          "wave_speed"
+        ],
+        "chapters": [
+          "optics"
+        ],
+        "subdomains": [
+          "optics"
+        ],
+        "hypernym": "optics",
+        "path": [
+          {
+            "id": "f130",
+            "output": "refractive_index",
+            "inputs": [
+              "speed_of_light",
+              "wave_speed"
+            ],
+            "label": "c / v",
+            "domain": "optics"
+          }
+        ]
+      },
+      "raw_model_output": "As the sun rises over the vast expanse of the Atacama Desert, a team of astronomers sets up their equipment to study the peculiar behavior of a nearby comet. They've detected a faint, diffuse light emanating from the comet's tail, which they attribute to the scattering of photons by the comet's atmosphere. To better understand this phenomenon, they've deployed a high-speed camera to capture the light's propagation. The camera's sensor is designed to capture images at a rate of 100,000 frames per second, with a pixel resolution of 1 millimeter. Meanwhile, the team's calculations indicate that the speed of light in vacuum is approximately 299,792,458 meters per second, while the wave speed in the comet's atmosphere is estimated to be around 100,000 meters per second. What is the refractive index of the comet's atmosphere?",
+      "question": "As the sun rises over the vast expanse of the Atacama Desert, a team of astronomers sets up their equipment to study the peculiar behavior of a nearby comet. They've detected a faint, diffuse light emanating from the comet's tail, which they attribute to the scattering of photons by the comet's atmosphere. To better understand this phenomenon, they've deployed a high-speed camera to capture the light's propagation. The camera's sensor is designed to capture images at a rate of 100,000 frames per second, with a pixel resolution of 1 millimeter. Meanwhile, the team's calculations indicate that the speed of light in vacuum is approximately 299,792,458 meters per second, while the wave speed in the comet's atmosphere is estimated to be around 100,000 meters per second. What is the refractive index of the comet's atmosphere?"
+    },
+    {
+      "target": "refractive_index",
+      "requested_difficulty": 10,
+      "trace_str": "  1. refractive_index = c / v  [uses: speed_of_light, wave_speed]  (optics)",
+      "trace": {
+        "leafs": [
+          "speed_of_light",
+          "wave_speed"
+        ],
+        "chapters": [
+          "optics"
+        ],
+        "subdomains": [
+          "optics"
+        ],
+        "hypernym": "optics",
+        "path": [
+          {
+            "id": "f130",
+            "output": "refractive_index",
+            "inputs": [
+              "speed_of_light",
+              "wave_speed"
+            ],
+            "label": "c / v",
+            "domain": "optics"
+          }
+        ]
+      },
+      "raw_model_output": "As the sun rises over the arid desert landscape, a team of astronomers sets up a makeshift observatory to study the propagation of light through the Earth's atmosphere. Their primary concern is the bending of light rays as they pass through the air, a phenomenon crucial for understanding the behavior of celestial bodies. The team leader, Dr. Maria Rodriguez, carefully measures the speed of light in vacuum, c, to be approximately 3.0 x 10^8 meters per second. Meanwhile, a colleague, Dr. John Lee, records the speed of a light wave traveling through the atmosphere, v, as being roughly 2.0 x 10^5 meters per second. What is the refractive index of the air, which governs the bending of light rays?",
+      "question": "As the sun rises over the arid desert landscape, a team of astronomers sets up a makeshift observatory to study the propagation of light through the Earth's atmosphere. Their primary concern is the bending of light rays as they pass through the air, a phenomenon crucial for understanding the behavior of celestial bodies. The team leader, Dr. Maria Rodriguez, carefully measures the speed of light in vacuum, c, to be approximately 3.0 x 10^8 meters per second. Meanwhile, a colleague, Dr. John Lee, records the speed of a light wave traveling through the atmosphere, v, as being roughly 2.0 x 10^5 meters per second. What is the refractive index of the air, which governs the bending of light rays?"
+    },
+    {
+      "target": "weight",
+      "requested_difficulty": 1,
+      "trace_str": "  1. mass = force / acceleration  [uses: force, acceleration]  (dynamics)\n  2. weight = mass * gravity  [uses: mass, gravity]  (dynamics)",
+      "trace": {
+        "leafs": [
+          "acceleration",
+          "force",
+          "gravity"
+        ],
+        "chapters": [
+          "dynamics"
+        ],
+        "subdomains": [
+          "dynamics"
+        ],
+        "hypernym": "dynamics",
+        "path": [
+          {
+            "id": "f19",
+            "output": "mass",
+            "inputs": [
+              "force",
+              "acceleration"
+            ],
+            "label": "force / acceleration",
+            "domain": "dynamics"
+          },
+          {
+            "id": "f21",
+            "output": "weight",
+            "inputs": [
+              "mass",
+              "gravity"
+            ],
+            "label": "mass * gravity",
+            "domain": "dynamics"
+          }
+        ]
+      },
+      "raw_model_output": "A small, 5-kg block is being pulled horizontally across a frictionless surface with a force of 10 N. The acceleration of the block is 2 m/s^2. What is the weight of the block on the surface?",
+      "question": "A small, 5-kg block is being pulled horizontally across a frictionless surface with a force of 10 N. The acceleration of the block is 2 m/s^2. What is the weight of the block on the surface?"
+    },
+    {
+      "target": "weight",
+      "requested_difficulty": 2,
+      "trace_str": "  1. mass = force / acceleration  [uses: force, acceleration]  (dynamics)\n  2. weight = mass * gravity  [uses: mass, gravity]  (dynamics)",
+      "trace": {
+        "leafs": [
+          "acceleration",
+          "force",
+          "gravity"
+        ],
+        "chapters": [
+          "dynamics"
+        ],
+        "subdomains": [
+          "dynamics"
+        ],
+        "hypernym": "dynamics",
+        "path": [
+          {
+            "id": "f19",
+            "output": "mass",
+            "inputs": [
+              "force",
+              "acceleration"
+            ],
+            "label": "force / acceleration",
+            "domain": "dynamics"
+          },
+          {
+            "id": "f21",
+            "output": "weight",
+            "inputs": [
+              "mass",
+              "gravity"
+            ],
+            "label": "mass * gravity",
+            "domain": "dynamics"
+          }
+        ]
+      },
+      "raw_model_output": "A small, 10 kg box is being lifted vertically upward at a constant speed by a force of 20 N. If the acceleration of the box is 2 m/s^2, what is the weight of the box?",
+      "question": "A small, 10 kg box is being lifted vertically upward at a constant speed by a force of 20 N. If the acceleration of the box is 2 m/s^2, what is the weight of the box?"
+    },
+    {
+      "target": "weight",
+      "requested_difficulty": 3,
+      "trace_str": "  1. mass = force / acceleration  [uses: force, acceleration]  (dynamics)\n  2. weight = mass * gravity  [uses: mass, gravity]  (dynamics)",
+      "trace": {
+        "leafs": [
+          "acceleration",
+          "force",
+          "gravity"
+        ],
+        "chapters": [
+          "dynamics"
+        ],
+        "subdomains": [
+          "dynamics"
+        ],
+        "hypernym": "dynamics",
+        "path": [
+          {
+            "id": "f19",
+            "output": "mass",
+            "inputs": [
+              "force",
+              "acceleration"
+            ],
+            "label": "force / acceleration",
+            "domain": "dynamics"
+          },
+          {
+            "id": "f21",
+            "output": "weight",
+            "inputs": [
+              "mass",
+              "gravity"
+            ],
+            "label": "mass * gravity",
+            "domain": "dynamics"
+          }
+        ]
+      },
+      "raw_model_output": "A small, 10 kg block is attached to a spring and released from rest. As it falls, the block experiences a constant acceleration of 9.8 m/s^2 due to gravity. Meanwhile, a horizontal force of 20 N is applied to the block, causing it to accelerate horizontally. What is the weight of the block?",
+      "question": "A small, 10 kg block is attached to a spring and released from rest. As it falls, the block experiences a constant acceleration of 9.8 m/s^2 due to gravity. Meanwhile, a horizontal force of 20 N is applied to the block, causing it to accelerate horizontally. What is the weight of the block?"
+    },
+    {
+      "target": "weight",
+      "requested_difficulty": 4,
+      "trace_str": "  1. mass = force / acceleration  [uses: force, acceleration]  (dynamics)\n  2. weight = mass * gravity  [uses: mass, gravity]  (dynamics)",
+      "trace": {
+        "leafs": [
+          "acceleration",
+          "force",
+          "gravity"
+        ],
+        "chapters": [
+          "dynamics"
+        ],
+        "subdomains": [
+          "dynamics"
+        ],
+        "hypernym": "dynamics",
+        "path": [
+          {
+            "id": "f19",
+            "output": "mass",
+            "inputs": [
+              "force",
+              "acceleration"
+            ],
+            "label": "force / acceleration",
+            "domain": "dynamics"
+          },
+          {
+            "id": "f21",
+            "output": "weight",
+            "inputs": [
+              "mass",
+              "gravity"
+            ],
+            "label": "mass * gravity",
+            "domain": "dynamics"
+          }
+        ]
+      },
+      "raw_model_output": "As a construction worker, you are tasked with lifting a heavy concrete block to repair a damaged foundation. The block weighs 20,000 N due to its mass and the local gravity of 9.8 m/s^2. You apply a force of 12,000 N to lift it, and it accelerates upward at a rate of 2 m/s^2. What is the weight of the block?",
+      "question": "As a construction worker, you are tasked with lifting a heavy concrete block to repair a damaged foundation. The block weighs 20,000 N due to its mass and the local gravity of 9.8 m/s^2. You apply a force of 12,000 N to lift it, and it accelerates upward at a rate of 2 m/s^2. What is the weight of the block?"
+    },
+    {
+      "target": "weight",
+      "requested_difficulty": 5,
+      "trace_str": "  1. mass = force / acceleration  [uses: force, acceleration]  (dynamics)\n  2. weight = mass * gravity  [uses: mass, gravity]  (dynamics)",
+      "trace": {
+        "leafs": [
+          "acceleration",
+          "force",
+          "gravity"
+        ],
+        "chapters": [
+          "dynamics"
+        ],
+        "subdomains": [
+          "dynamics"
+        ],
+        "hypernym": "dynamics",
+        "path": [
+          {
+            "id": "f19",
+            "output": "mass",
+            "inputs": [
+              "force",
+              "acceleration"
+            ],
+            "label": "force / acceleration",
+            "domain": "dynamics"
+          },
+          {
+            "id": "f21",
+            "output": "weight",
+            "inputs": [
+              "mass",
+              "gravity"
+            ],
+            "label": "mass * gravity",
+            "domain": "dynamics"
+          }
+        ]
+      },
+      "raw_model_output": "A skydiver, weighing 500 N, is falling towards the ground with an acceleration of 9.8 m/s^2. As she descends, she experiences a force of 3500 N acting upwards due to the air resistance. Meanwhile, the acceleration due to gravity is 9.8 m/s^2. What is her weight at this instant?",
+      "question": "A skydiver, weighing 500 N, is falling towards the ground with an acceleration of 9.8 m/s^2. As she descends, she experiences a force of 3500 N acting upwards due to the air resistance. Meanwhile, the acceleration due to gravity is 9.8 m/s^2. What is her weight at this instant?"
+    },
+    {
+      "target": "weight",
+      "requested_difficulty": 6,
+      "trace_str": "  1. mass = force / acceleration  [uses: force, acceleration]  (dynamics)\n  2. weight = mass * gravity  [uses: mass, gravity]  (dynamics)",
+      "trace": {
+        "leafs": [
+          "acceleration",
+          "force",
+          "gravity"
+        ],
+        "chapters": [
+          "dynamics"
+        ],
+        "subdomains": [
+          "dynamics"
+        ],
+        "hypernym": "dynamics",
+        "path": [
+          {
+            "id": "f19",
+            "output": "mass",
+            "inputs": [
+              "force",
+              "acceleration"
+            ],
+            "label": "force / acceleration",
+            "domain": "dynamics"
+          },
+          {
+            "id": "f21",
+            "output": "weight",
+            "inputs": [
+              "mass",
+              "gravity"
+            ],
+            "label": "mass * gravity",
+            "domain": "dynamics"
+          }
+        ]
+      },
+      "raw_model_output": "A team of engineers is designing a new roller coaster, and they need to calculate the weight of the cars as they accelerate from 0 to 25 m/s in 3 seconds. The cars will be pulled up a steep incline using a force of 500 N, and the acceleration will be constant throughout. The acceleration due to gravity is 9.8 m/s^2. What is the weight of the cars at the top of the incline?",
+      "question": "A team of engineers is designing a new roller coaster, and they need to calculate the weight of the cars as they accelerate from 0 to 25 m/s in 3 seconds. The cars will be pulled up a steep incline using a force of 500 N, and the acceleration will be constant throughout. The acceleration due to gravity is 9.8 m/s^2. What is the weight of the cars at the top of the incline?"
+    },
+    {
+      "target": "weight",
+      "requested_difficulty": 7,
+      "trace_str": "  1. mass = force / acceleration  [uses: force, acceleration]  (dynamics)\n  2. weight = mass * gravity  [uses: mass, gravity]  (dynamics)",
+      "trace": {
+        "leafs": [
+          "acceleration",
+          "force",
+          "gravity"
+        ],
+        "chapters": [
+          "dynamics"
+        ],
+        "subdomains": [
+          "dynamics"
+        ],
+        "hypernym": "dynamics",
+        "path": [
+          {
+            "id": "f19",
+            "output": "mass",
+            "inputs": [
+              "force",
+              "acceleration"
+            ],
+            "label": "force / acceleration",
+            "domain": "dynamics"
+          },
+          {
+            "id": "f21",
+            "output": "weight",
+            "inputs": [
+              "mass",
+              "gravity"
+            ],
+            "label": "mass * gravity",
+            "domain": "dynamics"
+          }
+        ]
+      },
+      "raw_model_output": "As a construction worker, you're tasked with lifting a heavy beam onto a crane. The beam weighs 20,000 Newtons and is suspended 10 meters above the ground. To lift it safely, you need to apply a force of 5,000 Newtons to the beam while moving it at a constant acceleration of 2 meters per second squared. What is the weight of the beam when it's lifted?",
+      "question": "As a construction worker, you're tasked with lifting a heavy beam onto a crane. The beam weighs 20,000 Newtons and is suspended 10 meters above the ground. To lift it safely, you need to apply a force of 5,000 Newtons to the beam while moving it at a constant acceleration of 2 meters per second squared. What is the weight of the beam when it's lifted?"
+    },
+    {
+      "target": "weight",
+      "requested_difficulty": 8,
+      "trace_str": "  1. mass = force / acceleration  [uses: force, acceleration]  (dynamics)\n  2. weight = mass * gravity  [uses: mass, gravity]  (dynamics)",
+      "trace": {
+        "leafs": [
+          "acceleration",
+          "force",
+          "gravity"
+        ],
+        "chapters": [
+          "dynamics"
+        ],
+        "subdomains": [
+          "dynamics"
+        ],
+        "hypernym": "dynamics",
+        "path": [
+          {
+            "id": "f19",
+            "output": "mass",
+            "inputs": [
+              "force",
+              "acceleration"
+            ],
+            "label": "force / acceleration",
+            "domain": "dynamics"
+          },
+          {
+            "id": "f21",
+            "output": "weight",
+            "inputs": [
+              "mass",
+              "gravity"
+            ],
+            "label": "mass * gravity",
+            "domain": "dynamics"
+          }
+        ]
+      },
+      "raw_model_output": "As the skydiver approaches the ground, she experiences a force of 550 N acting on her body, slowing her down. The acceleration of her fall is 4.2 m/s^2, and the local gravity is 9.8 m/s^2. If she weighs the same as a 70 kg block on Earth, what is her weight during the free fall?",
+      "question": "As the skydiver approaches the ground, she experiences a force of 550 N acting on her body, slowing her down. The acceleration of her fall is 4.2 m/s^2, and the local gravity is 9.8 m/s^2. If she weighs the same as a 70 kg block on Earth, what is her weight during the free fall?"
+    },
+    {
+      "target": "weight",
+      "requested_difficulty": 9,
+      "trace_str": "  1. mass = force / acceleration  [uses: force, acceleration]  (dynamics)\n  2. weight = mass * gravity  [uses: mass, gravity]  (dynamics)",
+      "trace": {
+        "leafs": [
+          "acceleration",
+          "force",
+          "gravity"
+        ],
+        "chapters": [
+          "dynamics"
+        ],
+        "subdomains": [
+          "dynamics"
+        ],
+        "hypernym": "dynamics",
+        "path": [
+          {
+            "id": "f19",
+            "output": "mass",
+            "inputs": [
+              "force",
+              "acceleration"
+            ],
+            "label": "force / acceleration",
+            "domain": "dynamics"
+          },
+          {
+            "id": "f21",
+            "output": "weight",
+            "inputs": [
+              "mass",
+              "gravity"
+            ],
+            "label": "mass * gravity",
+            "domain": "dynamics"
+          }
+        ]
+      },
+      "raw_model_output": "As the astronaut descended onto the Martian surface, she felt the force of the landing gear's 3500 N force acting on the wheels. The acceleration of the vehicle was approximately 2.5 m/s^2, and the Martian gravity, about 37% of Earth's, was a significant consideration in designing the landing system. The weight of the landing gear itself was crucial in determining the overall weight of the vehicle, which was already heavily laden with scientific equipment and supplies. What is the weight of the landing gear?",
+      "question": "As the astronaut descended onto the Martian surface, she felt the force of the landing gear's 3500 N force acting on the wheels. The acceleration of the vehicle was approximately 2.5 m/s^2, and the Martian gravity, about 37% of Earth's, was a significant consideration in designing the landing system. The weight of the landing gear itself was crucial in determining the overall weight of the vehicle, which was already heavily laden with scientific equipment and supplies. What is the weight of the landing gear?"
+    },
+    {
+      "target": "weight",
+      "requested_difficulty": 10,
+      "trace_str": "  1. mass = force / acceleration  [uses: force, acceleration]  (dynamics)\n  2. weight = mass * gravity  [uses: mass, gravity]  (dynamics)",
+      "trace": {
+        "leafs": [
+          "acceleration",
+          "force",
+          "gravity"
+        ],
+        "chapters": [
+          "dynamics"
+        ],
+        "subdomains": [
+          "dynamics"
+        ],
+        "hypernym": "dynamics",
+        "path": [
+          {
+            "id": "f19",
+            "output": "mass",
+            "inputs": [
+              "force",
+              "acceleration"
+            ],
+            "label": "force / acceleration",
+            "domain": "dynamics"
+          },
+          {
+            "id": "f21",
+            "output": "weight",
+            "inputs": [
+              "mass",
+              "gravity"
+            ],
+            "label": "mass * gravity",
+            "domain": "dynamics"
+          }
+        ]
+      },
+      "raw_model_output": "As a stunt performer, Samantha is known for her daring feats, including jumping off a 50-meter-high platform while attached to a bungee cord. On a particularly windy day, she decides to test the limits of her equipment. The cord has a tensile strength of 10,000 Newtons, and she accelerates downwards at a rate of 5 meters per second squared. Meanwhile, the local gravity is 9.8 meters per second squared. What is the weight of Samantha when she is at her highest point, just before the cord begins to stretch?",
+      "question": "As a stunt performer, Samantha is known for her daring feats, including jumping off a 50-meter-high platform while attached to a bungee cord. On a particularly windy day, she decides to test the limits of her equipment. The cord has a tensile strength of 10,000 Newtons, and she accelerates downwards at a rate of 5 meters per second squared. Meanwhile, the local gravity is 9.8 meters per second squared. What is the weight of Samantha when she is at her highest point, just before the cord begins to stretch?"
+    },
+    {
+      "target": "centripetal_acceleration",
+      "requested_difficulty": 1,
+      "trace_str": "  1. centripetal_acceleration = angular_velocity^2 * radius  [uses: angular_velocity, radius]  (dynamics)",
+      "trace": {
+        "leafs": [
+          "angular_velocity",
+          "radius"
+        ],
+        "chapters": [
+          "dynamics"
+        ],
+        "subdomains": [
+          "dynamics"
+        ],
+        "hypernym": "dynamics",
+        "path": [
+          {
+            "id": "f31",
+            "output": "centripetal_acceleration",
+            "inputs": [
+              "angular_velocity",
+              "radius"
+            ],
+            "label": "angular_velocity^2 * radius",
+            "domain": "dynamics"
+          }
+        ]
+      },
+      "raw_model_output": "A car is traveling at a constant speed of 25 meters per second around a circular track with a radius of 15 meters. What is the acceleration of the car as it moves around the track?",
+      "question": "A car is traveling at a constant speed of 25 meters per second around a circular track with a radius of 15 meters. What is the acceleration of the car as it moves around the track?"
+    },
+    {
+      "target": "centripetal_acceleration",
+      "requested_difficulty": 2,
+      "trace_str": "  1. centripetal_acceleration = angular_velocity^2 * radius  [uses: angular_velocity, radius]  (dynamics)",
+      "trace": {
+        "leafs": [
+          "angular_velocity",
+          "radius"
+        ],
+        "chapters": [
+          "dynamics"
+        ],
+        "subdomains": [
+          "dynamics"
+        ],
+        "hypernym": "dynamics",
+        "path": [
+          {
+            "id": "f31",
+            "output": "centripetal_acceleration",
+            "inputs": [
+              "angular_velocity",
+              "radius"
+            ],
+            "label": "angular_velocity^2 * radius",
+            "domain": "dynamics"
+          }
+        ]
+      },
+      "raw_model_output": "A small satellite, rotating at 2.5 revolutions per minute, orbits the Earth at a distance of 1.2 Earth radii. What is the acceleration experienced by the satellite as it follows its circular path?",
+      "question": "A small satellite, rotating at 2.5 revolutions per minute, orbits the Earth at a distance of 1.2 Earth radii. What is the acceleration experienced by the satellite as it follows its circular path?"
+    },
+    {
+      "target": "centripetal_acceleration",
+      "requested_difficulty": 3,
+      "trace_str": "  1. centripetal_acceleration = angular_velocity^2 * radius  [uses: angular_velocity, radius]  (dynamics)",
+      "trace": {
+        "leafs": [
+          "angular_velocity",
+          "radius"
+        ],
+        "chapters": [
+          "dynamics"
+        ],
+        "subdomains": [
+          "dynamics"
+        ],
+        "hypernym": "dynamics",
+        "path": [
+          {
+            "id": "f31",
+            "output": "centripetal_acceleration",
+            "inputs": [
+              "angular_velocity",
+              "radius"
+            ],
+            "label": "angular_velocity^2 * radius",
+            "domain": "dynamics"
+          }
+        ]
+      },
+      "raw_model_output": "As the Ferris wheel at the county fair begins to rotate, a rider holding a bucket of popcorn feels a force pulling them towards the center of the wheel. The bucket's radius from the axis of rotation is 2.5 meters, and the wheel's angular velocity is 0.5 radians per second. What is the magnitude of the centripetal force acting on the bucket of popcorn?",
+      "question": "As the Ferris wheel at the county fair begins to rotate, a rider holding a bucket of popcorn feels a force pulling them towards the center of the wheel. The bucket's radius from the axis of rotation is 2.5 meters, and the wheel's angular velocity is 0.5 radians per second. What is the magnitude of the centripetal force acting on the bucket of popcorn?"
+    },
+    {
+      "target": "centripetal_acceleration",
+      "requested_difficulty": 4,
+      "trace_str": "  1. centripetal_acceleration = angular_velocity^2 * radius  [uses: angular_velocity, radius]  (dynamics)",
+      "trace": {
+        "leafs": [
+          "angular_velocity",
+          "radius"
+        ],
+        "chapters": [
+          "dynamics"
+        ],
+        "subdomains": [
+          "dynamics"
+        ],
+        "hypernym": "dynamics",
+        "path": [
+          {
+            "id": "f31",
+            "output": "centripetal_acceleration",
+            "inputs": [
+              "angular_velocity",
+              "radius"
+            ],
+            "label": "angular_velocity^2 * radius",
+            "domain": "dynamics"
+          }
+        ]
+      },
+      "raw_model_output": "A cyclist is traveling at a constant angular velocity of 2.5 radians per second on a circular track with a radius of 8 meters. As she rounds a curve, what is the magnitude of the centripetal acceleration acting on her?",
+      "question": "A cyclist is traveling at a constant angular velocity of 2.5 radians per second on a circular track with a radius of 8 meters. As she rounds a curve, what is the magnitude of the centripetal acceleration acting on her?"
+    },
+    {
+      "target": "centripetal_acceleration",
+      "requested_difficulty": 5,
+      "trace_str": "  1. centripetal_acceleration = angular_velocity^2 * radius  [uses: angular_velocity, radius]  (dynamics)",
+      "trace": {
+        "leafs": [
+          "angular_velocity",
+          "radius"
+        ],
+        "chapters": [
+          "dynamics"
+        ],
+        "subdomains": [
+          "dynamics"
+        ],
+        "hypernym": "dynamics",
+        "path": [
+          {
+            "id": "f31",
+            "output": "centripetal_acceleration",
+            "inputs": [
+              "angular_velocity",
+              "radius"
+            ],
+            "label": "angular_velocity^2 * radius",
+            "domain": "dynamics"
+          }
+        ]
+      },
+      "raw_model_output": "A carnival ride, called the \"Dizzy Dragon,\" features a passenger capsule that rotates around a central axis at an angular velocity of 3.5 radians per second. The capsule is 4 meters away from the axis of rotation. What is the centripetal acceleration experienced by a passenger on this ride?",
+      "question": "A carnival ride, called the \"Dizzy Dragon,\" features a passenger capsule that rotates around a central axis at an angular velocity of 3.5 radians per second. The capsule is 4 meters away from the axis of rotation. What is the centripetal acceleration experienced by a passenger on this ride?"
+    },
+    {
+      "target": "centripetal_acceleration",
+      "requested_difficulty": 6,
+      "trace_str": "  1. centripetal_acceleration = angular_velocity^2 * radius  [uses: angular_velocity, radius]  (dynamics)",
+      "trace": {
+        "leafs": [
+          "angular_velocity",
+          "radius"
+        ],
+        "chapters": [
+          "dynamics"
+        ],
+        "subdomains": [
+          "dynamics"
+        ],
+        "hypernym": "dynamics",
+        "path": [
+          {
+            "id": "f31",
+            "output": "centripetal_acceleration",
+            "inputs": [
+              "angular_velocity",
+              "radius"
+            ],
+            "label": "angular_velocity^2 * radius",
+            "domain": "dynamics"
+          }
+        ]
+      },
+      "raw_model_output": "A high-speed motorcycle stunt rider is planning a daring jump over a 15-meter-wide gap. As the bike approaches the gap, its angular velocity is 12 radians per second, and its radius of curvature is 20 meters. What is the magnitude of the centripetal acceleration experienced by the rider as the bike enters the jump?",
+      "question": "A high-speed motorcycle stunt rider is planning a daring jump over a 15-meter-wide gap. As the bike approaches the gap, its angular velocity is 12 radians per second, and its radius of curvature is 20 meters. What is the magnitude of the centripetal acceleration experienced by the rider as the bike enters the jump?"
+    },
+    {
+      "target": "centripetal_acceleration",
+      "requested_difficulty": 7,
+      "trace_str": "  1. centripetal_acceleration = angular_velocity^2 * radius  [uses: angular_velocity, radius]  (dynamics)",
+      "trace": {
+        "leafs": [
+          "angular_velocity",
+          "radius"
+        ],
+        "chapters": [
+          "dynamics"
+        ],
+        "subdomains": [
+          "dynamics"
+        ],
+        "hypernym": "dynamics",
+        "path": [
+          {
+            "id": "f31",
+            "output": "centripetal_acceleration",
+            "inputs": [
+              "angular_velocity",
+              "radius"
+            ],
+            "label": "angular_velocity^2 * radius",
+            "domain": "dynamics"
+          }
+        ]
+      },
+      "raw_model_output": "As a stunt driver, Marco needs to navigate a circular track with a radius of 20 meters while maintaining a constant angular velocity of 3.5 radians per second. If Marco's vehicle is to remain on the track, what is the centripetal acceleration acting on the vehicle?",
+      "question": "As a stunt driver, Marco needs to navigate a circular track with a radius of 20 meters while maintaining a constant angular velocity of 3.5 radians per second. If Marco's vehicle is to remain on the track, what is the centripetal acceleration acting on the vehicle?"
+    },
+    {
+      "target": "centripetal_acceleration",
+      "requested_difficulty": 8,
+      "trace_str": "  1. centripetal_acceleration = angular_velocity^2 * radius  [uses: angular_velocity, radius]  (dynamics)",
+      "trace": {
+        "leafs": [
+          "angular_velocity",
+          "radius"
+        ],
+        "chapters": [
+          "dynamics"
+        ],
+        "subdomains": [
+          "dynamics"
+        ],
+        "hypernym": "dynamics",
+        "path": [
+          {
+            "id": "f31",
+            "output": "centripetal_acceleration",
+            "inputs": [
+              "angular_velocity",
+              "radius"
+            ],
+            "label": "angular_velocity^2 * radius",
+            "domain": "dynamics"
+          }
+        ]
+      },
+      "raw_model_output": "As the carnival ride's Ferris wheel reaches its maximum height, a rider's body is stretched out in a radial direction, with her feet fixed to the seat and her hands grasping the safety bar. If the wheel completes one full rotation in 4 seconds and the radius from the center of rotation to her feet is 5 meters, what is the magnitude of the centripetal acceleration acting on her body?",
+      "question": "As the carnival ride's Ferris wheel reaches its maximum height, a rider's body is stretched out in a radial direction, with her feet fixed to the seat and her hands grasping the safety bar. If the wheel completes one full rotation in 4 seconds and the radius from the center of rotation to her feet is 5 meters, what is the magnitude of the centripetal acceleration acting on her body?"
+    },
+    {
+      "target": "centripetal_acceleration",
+      "requested_difficulty": 9,
+      "trace_str": "  1. centripetal_acceleration = angular_velocity^2 * radius  [uses: angular_velocity, radius]  (dynamics)",
+      "trace": {
+        "leafs": [
+          "angular_velocity",
+          "radius"
+        ],
+        "chapters": [
+          "dynamics"
+        ],
+        "subdomains": [
+          "dynamics"
+        ],
+        "hypernym": "dynamics",
+        "path": [
+          {
+            "id": "f31",
+            "output": "centripetal_acceleration",
+            "inputs": [
+              "angular_velocity",
+              "radius"
+            ],
+            "label": "angular_velocity^2 * radius",
+            "domain": "dynamics"
+          }
+        ]
+      },
+      "raw_model_output": "As the spacecraft enters orbit around the planet, it experiences a force that keeps it moving in a circular path. The orbital radius is approximately 7,000 kilometers, and the spacecraft's angular velocity is about 0.05 radians per second. The astronaut on board is concerned about the acceleration experienced by the spacecraft, which is crucial for navigation and communication equipment. If the astronaut wants to calculate the centripetal acceleration felt by the spacecraft, what is its value in meters per second squared?",
+      "question": "As the spacecraft enters orbit around the planet, it experiences a force that keeps it moving in a circular path. The orbital radius is approximately 7,000 kilometers, and the spacecraft's angular velocity is about 0.05 radians per second. The astronaut on board is concerned about the acceleration experienced by the spacecraft, which is crucial for navigation and communication equipment. If the astronaut wants to calculate the centripetal acceleration felt by the spacecraft, what is its value in meters per second squared?"
+    },
+    {
+      "target": "centripetal_acceleration",
+      "requested_difficulty": 10,
+      "trace_str": "  1. centripetal_acceleration = angular_velocity^2 * radius  [uses: angular_velocity, radius]  (dynamics)",
+      "trace": {
+        "leafs": [
+          "angular_velocity",
+          "radius"
+        ],
+        "chapters": [
+          "dynamics"
+        ],
+        "subdomains": [
+          "dynamics"
+        ],
+        "hypernym": "dynamics",
+        "path": [
+          {
+            "id": "f31",
+            "output": "centripetal_acceleration",
+            "inputs": [
+              "angular_velocity",
+              "radius"
+            ],
+            "label": "angular_velocity^2 * radius",
+            "domain": "dynamics"
+          }
+        ]
+      },
+      "raw_model_output": "As the spacecraft approaches the orbiting satellite, mission control receives a transmission detailing the satellite's angular velocity of 0.5 rad/s and its radius of 2.5 meters. To ensure a safe and controlled descent, the spacecraft must adjust its velocity to match the satellite's centripetal acceleration. What is the centripetal acceleration required to maintain the satellite's circular orbit?",
+      "question": "As the spacecraft approaches the orbiting satellite, mission control receives a transmission detailing the satellite's angular velocity of 0.5 rad/s and its radius of 2.5 meters. To ensure a safe and controlled descent, the spacecraft must adjust its velocity to match the satellite's centripetal acceleration. What is the centripetal acceleration required to maintain the satellite's circular orbit?"
+    },
+    {
+      "target": "kinetic_energy",
+      "requested_difficulty": 1,
+      "trace_str": "  1. kinetic_energy = 0.5 * mass * velocity^2  [uses: mass, velocity]  (energy)",
+      "trace": {
+        "leafs": [
+          "mass",
+          "velocity"
+        ],
+        "chapters": [
+          "energy"
+        ],
+        "subdomains": [
+          "energy"
+        ],
+        "hypernym": "energy",
+        "path": [
+          {
+            "id": "f35",
+            "output": "kinetic_energy",
+            "inputs": [
+              "mass",
+              "velocity"
+            ],
+            "label": "0.5 * mass * velocity^2",
+            "domain": "energy"
+          }
+        ]
+      },
+      "raw_model_output": "A 5 kg block is moving along a horizontal surface with a velocity of 3 m/s. What is the kinetic energy of the block?",
+      "question": "A 5 kg block is moving along a horizontal surface with a velocity of 3 m/s. What is the kinetic energy of the block?"
+    },
+    {
+      "target": "kinetic_energy",
+      "requested_difficulty": 2,
+      "trace_str": "  1. kinetic_energy = 0.5 * mass * velocity^2  [uses: mass, velocity]  (energy)",
+      "trace": {
+        "leafs": [
+          "mass",
+          "velocity"
+        ],
+        "chapters": [
+          "energy"
+        ],
+        "subdomains": [
+          "energy"
+        ],
+        "hypernym": "energy",
+        "path": [
+          {
+            "id": "f35",
+            "output": "kinetic_energy",
+            "inputs": [
+              "mass",
+              "velocity"
+            ],
+            "label": "0.5 * mass * velocity^2",
+            "domain": "energy"
+          }
+        ]
+      },
+      "raw_model_output": "A small, 5-kg block is moving at a velocity of 3 m/s across a frictionless surface. What is the kinetic energy of the block?",
+      "question": "A small, 5-kg block is moving at a velocity of 3 m/s across a frictionless surface. What is the kinetic energy of the block?"
+    },
+    {
+      "target": "kinetic_energy",
+      "requested_difficulty": 3,
+      "trace_str": "  1. kinetic_energy = 0.5 * mass * velocity^2  [uses: mass, velocity]  (energy)",
+      "trace": {
+        "leafs": [
+          "mass",
+          "velocity"
+        ],
+        "chapters": [
+          "energy"
+        ],
+        "subdomains": [
+          "energy"
+        ],
+        "hypernym": "energy",
+        "path": [
+          {
+            "id": "f35",
+            "output": "kinetic_energy",
+            "inputs": [
+              "mass",
+              "velocity"
+            ],
+            "label": "0.5 * mass * velocity^2",
+            "domain": "energy"
+          }
+        ]
+      },
+      "raw_model_output": "A 5 kg block is moving along a frictionless surface with a velocity of 4 m/s. If the block is brought to rest by a force applied perpendicular to its motion, how much kinetic energy is dissipated during the process?",
+      "question": "A 5 kg block is moving along a frictionless surface with a velocity of 4 m/s. If the block is brought to rest by a force applied perpendicular to its motion, how much kinetic energy is dissipated during the process?"
+    },
+    {
+      "target": "kinetic_energy",
+      "requested_difficulty": 4,
+      "trace_str": "  1. kinetic_energy = 0.5 * mass * velocity^2  [uses: mass, velocity]  (energy)",
+      "trace": {
+        "leafs": [
+          "mass",
+          "velocity"
+        ],
+        "chapters": [
+          "energy"
+        ],
+        "subdomains": [
+          "energy"
+        ],
+        "hypernym": "energy",
+        "path": [
+          {
+            "id": "f35",
+            "output": "kinetic_energy",
+            "inputs": [
+              "mass",
+              "velocity"
+            ],
+            "label": "0.5 * mass * velocity^2",
+            "domain": "energy"
+          }
+        ]
+      },
+      "raw_model_output": "A 5 kg block is being pulled across a horizontal, frictionless surface by a rope. The block's velocity as it passes a stationary point is 3 m/s. If the block's kinetic energy is measured to be 12.75 J at this instant, what is its kinetic energy?",
+      "question": "A 5 kg block is being pulled across a horizontal, frictionless surface by a rope. The block's velocity as it passes a stationary point is 3 m/s. If the block's kinetic energy is measured to be 12.75 J at this instant, what is its kinetic energy?"
+    },
+    {
+      "target": "kinetic_energy",
+      "requested_difficulty": 5,
+      "trace_str": "  1. kinetic_energy = 0.5 * mass * velocity^2  [uses: mass, velocity]  (energy)",
+      "trace": {
+        "leafs": [
+          "mass",
+          "velocity"
+        ],
+        "chapters": [
+          "energy"
+        ],
+        "subdomains": [
+          "energy"
+        ],
+        "hypernym": "energy",
+        "path": [
+          {
+            "id": "f35",
+            "output": "kinetic_energy",
+            "inputs": [
+              "mass",
+              "velocity"
+            ],
+            "label": "0.5 * mass * velocity^2",
+            "domain": "energy"
+          }
+        ]
+      },
+      "raw_model_output": "As a cyclist, Sarah knows that her kinetic energy is directly proportional to her mass and velocity. She weighs 65 kg and is traveling at 12 m/s. If she suddenly applies the brakes, she will come to a stop in 5 seconds, during which time she will lose some of her kinetic energy. What is the total kinetic energy she possesses just before applying the brakes?",
+      "question": "As a cyclist, Sarah knows that her kinetic energy is directly proportional to her mass and velocity. She weighs 65 kg and is traveling at 12 m/s. If she suddenly applies the brakes, she will come to a stop in 5 seconds, during which time she will lose some of her kinetic energy. What is the total kinetic energy she possesses just before applying the brakes?"
+    },
+    {
+      "target": "kinetic_energy",
+      "requested_difficulty": 6,
+      "trace_str": "  1. kinetic_energy = 0.5 * mass * velocity^2  [uses: mass, velocity]  (energy)",
+      "trace": {
+        "leafs": [
+          "mass",
+          "velocity"
+        ],
+        "chapters": [
+          "energy"
+        ],
+        "subdomains": [
+          "energy"
+        ],
+        "hypernym": "energy",
+        "path": [
+          {
+            "id": "f35",
+            "output": "kinetic_energy",
+            "inputs": [
+              "mass",
+              "velocity"
+            ],
+            "label": "0.5 * mass * velocity^2",
+            "domain": "energy"
+          }
+        ]
+      },
+      "raw_model_output": "A high-speed train, weighing 200,000 kilograms, is traveling at a velocity of 240 kilometers per hour. As it approaches a curve in the track, the engineer must carefully adjust the brakes to avoid a skid. Assuming the train's kinetic energy is proportional to its velocity squared, what is the total kinetic energy of the train just before the brakes are applied?",
+      "question": "A high-speed train, weighing 200,000 kilograms, is traveling at a velocity of 240 kilometers per hour. As it approaches a curve in the track, the engineer must carefully adjust the brakes to avoid a skid. Assuming the train's kinetic energy is proportional to its velocity squared, what is the total kinetic energy of the train just before the brakes are applied?"
+    },
+    {
+      "target": "kinetic_energy",
+      "requested_difficulty": 7,
+      "trace_str": "  1. kinetic_energy = 0.5 * mass * velocity^2  [uses: mass, velocity]  (energy)",
+      "trace": {
+        "leafs": [
+          "mass",
+          "velocity"
+        ],
+        "chapters": [
+          "energy"
+        ],
+        "subdomains": [
+          "energy"
+        ],
+        "hypernym": "energy",
+        "path": [
+          {
+            "id": "f35",
+            "output": "kinetic_energy",
+            "inputs": [
+              "mass",
+              "velocity"
+            ],
+            "label": "0.5 * mass * velocity^2",
+            "domain": "energy"
+          }
+        ]
+      },
+      "raw_model_output": "A high-speed train, weighing 2500 kg, is traveling at a velocity of 120 km/h. As it approaches a bend in the track, the engineer applies the brakes, slowing the train down to 80 km/h over a distance of 500 meters. Assuming the train's kinetic energy is converted entirely into heat during the braking process, what is the total amount of heat dissipated?",
+      "question": "A high-speed train, weighing 2500 kg, is traveling at a velocity of 120 km/h. As it approaches a bend in the track, the engineer applies the brakes, slowing the train down to 80 km/h over a distance of 500 meters. Assuming the train's kinetic energy is converted entirely into heat during the braking process, what is the total amount of heat dissipated?"
+    },
+    {
+      "target": "kinetic_energy",
+      "requested_difficulty": 8,
+      "trace_str": "  1. kinetic_energy = 0.5 * mass * velocity^2  [uses: mass, velocity]  (energy)",
+      "trace": {
+        "leafs": [
+          "mass",
+          "velocity"
+        ],
+        "chapters": [
+          "energy"
+        ],
+        "subdomains": [
+          "energy"
+        ],
+        "hypernym": "energy",
+        "path": [
+          {
+            "id": "f35",
+            "output": "kinetic_energy",
+            "inputs": [
+              "mass",
+              "velocity"
+            ],
+            "label": "0.5 * mass * velocity^2",
+            "domain": "energy"
+          }
+        ]
+      },
+      "raw_model_output": "A high-speed train, traveling at 120 km/h, collides with a stationary car, causing significant damage to both vehicles. The train's mass is approximately 400,000 kg, and the car's mass is roughly 1,500 kg. Assuming the train's velocity remains constant before and after the collision, how much kinetic energy does the train dissipate in the crash?",
+      "question": "A high-speed train, traveling at 120 km/h, collides with a stationary car, causing significant damage to both vehicles. The train's mass is approximately 400,000 kg, and the car's mass is roughly 1,500 kg. Assuming the train's velocity remains constant before and after the collision, how much kinetic energy does the train dissipate in the crash?"
+    },
+    {
+      "target": "kinetic_energy",
+      "requested_difficulty": 9,
+      "trace_str": "  1. kinetic_energy = 0.5 * mass * velocity^2  [uses: mass, velocity]  (energy)",
+      "trace": {
+        "leafs": [
+          "mass",
+          "velocity"
+        ],
+        "chapters": [
+          "energy"
+        ],
+        "subdomains": [
+          "energy"
+        ],
+        "hypernym": "energy",
+        "path": [
+          {
+            "id": "f35",
+            "output": "kinetic_energy",
+            "inputs": [
+              "mass",
+              "velocity"
+            ],
+            "label": "0.5 * mass * velocity^2",
+            "domain": "energy"
+          }
+        ]
+      },
+      "raw_model_output": "As the stunt driver, Jack, revved up the engine of his sleek, 2,500-kilogram sports car, he felt the rush of adrenaline as the vehicle accelerated from rest to 120 kilometers per hour in just 4.5 seconds. The intense heat generated by the engine's combustion process was mitigated by the high-performance cooling system, which allowed the car to maintain a consistent speed. What is the kinetic energy of the car at this moment, assuming the engine's energy conversion efficiency is around 30%?",
+      "question": "As the stunt driver, Jack, revved up the engine of his sleek, 2,500-kilogram sports car, he felt the rush of adrenaline as the vehicle accelerated from rest to 120 kilometers per hour in just 4.5 seconds. The intense heat generated by the engine's combustion process was mitigated by the high-performance cooling system, which allowed the car to maintain a consistent speed. What is the kinetic energy of the car at this moment, assuming the engine's energy conversion efficiency is around 30%?"
+    },
+    {
+      "target": "kinetic_energy",
+      "requested_difficulty": 10,
+      "trace_str": "  1. kinetic_energy = 0.5 * mass * velocity^2  [uses: mass, velocity]  (energy)",
+      "trace": {
+        "leafs": [
+          "mass",
+          "velocity"
+        ],
+        "chapters": [
+          "energy"
+        ],
+        "subdomains": [
+          "energy"
+        ],
+        "hypernym": "energy",
+        "path": [
+          {
+            "id": "f35",
+            "output": "kinetic_energy",
+            "inputs": [
+              "mass",
+              "velocity"
+            ],
+            "label": "0.5 * mass * velocity^2",
+            "domain": "energy"
+          }
+        ]
+      },
+      "raw_model_output": "A massive 10-tonne locomotive, traveling at a velocity of 80 km/h, is carrying a load of 5000 kilograms of coal. As it accelerates to reach a maximum speed of 120 km/h, it converts some of its initial kinetic energy into heat due to friction in the wheels and the brakes. How much kinetic energy does the locomotive possess at its maximum speed?",
+      "question": "A massive 10-tonne locomotive, traveling at a velocity of 80 km/h, is carrying a load of 5000 kilograms of coal. As it accelerates to reach a maximum speed of 120 km/h, it converts some of its initial kinetic energy into heat due to friction in the wheels and the brakes. How much kinetic energy does the locomotive possess at its maximum speed?"
+    },
+    {
+      "target": "angular_frequency",
+      "requested_difficulty": 1,
+      "trace_str": "  1. wave_speed = sqrt(tension / linear_density)  [uses: tension, linear_density]  (waves)\n  2. frequency = wave_speed / wavelength  [uses: wave_speed, wavelength]  (waves)\n  3. angular_frequency = 2*pi * frequency  [uses: frequency]  (waves)",
+      "trace": {
+        "leafs": [
+          "linear_density",
+          "tension",
+          "wavelength"
+        ],
+        "chapters": [
+          "waves"
+        ],
+        "subdomains": [
+          "waves"
+        ],
+        "hypernym": "shm",
+        "path": [
+          {
+            "id": "f157",
+            "output": "wave_speed",
+            "inputs": [
+              "tension",
+              "linear_density"
+            ],
+            "label": "sqrt(tension / linear_density)",
+            "domain": "waves"
+          },
+          {
+            "id": "f76",
+            "output": "frequency",
+            "inputs": [
+              "wave_speed",
+              "wavelength"
+            ],
+            "label": "wave_speed / wavelength",
+            "domain": "waves"
+          },
+          {
+            "id": "f79",
+            "output": "angular_frequency",
+            "inputs": [
+              "frequency"
+            ],
+            "label": "2*pi * frequency",
+            "domain": "waves"
+          }
+        ]
+      },
+      "raw_model_output": "A rope with a linear mass density of 0.1 kg/m is stretched between two pillars with a tension of 100 N. If the rope vibrates at a wavelength of 0.5 m, what is the angular frequency of the waves?",
+      "question": "A rope with a linear mass density of 0.1 kg/m is stretched between two pillars with a tension of 100 N. If the rope vibrates at a wavelength of 0.5 m, what is the angular frequency of the waves?"
+    },
+    {
+      "target": "angular_frequency",
+      "requested_difficulty": 2,
+      "trace_str": "  1. wave_speed = sqrt(tension / linear_density)  [uses: tension, linear_density]  (waves)\n  2. frequency = wave_speed / wavelength  [uses: wave_speed, wavelength]  (waves)\n  3. angular_frequency = 2*pi * frequency  [uses: frequency]  (waves)",
+      "trace": {
+        "leafs": [
+          "linear_density",
+          "tension",
+          "wavelength"
+        ],
+        "chapters": [
+          "waves"
+        ],
+        "subdomains": [
+          "waves"
+        ],
+        "hypernym": "shm",
+        "path": [
+          {
+            "id": "f157",
+            "output": "wave_speed",
+            "inputs": [
+              "tension",
+              "linear_density"
+            ],
+            "label": "sqrt(tension / linear_density)",
+            "domain": "waves"
+          },
+          {
+            "id": "f76",
+            "output": "frequency",
+            "inputs": [
+              "wave_speed",
+              "wavelength"
+            ],
+            "label": "wave_speed / wavelength",
+            "domain": "waves"
+          },
+          {
+            "id": "f79",
+            "output": "angular_frequency",
+            "inputs": [
+              "frequency"
+            ],
+            "label": "2*pi * frequency",
+            "domain": "waves"
+          }
+        ]
+      },
+      "raw_model_output": "A rope with a linear density of 0.05 kg/m and a tension of 100 N is stretched between two supports. If a wave on this rope has a wavelength of 0.2 m, what is the angular frequency of this wave?",
+      "question": "A rope with a linear density of 0.05 kg/m and a tension of 100 N is stretched between two supports. If a wave on this rope has a wavelength of 0.2 m, what is the angular frequency of this wave?"
+    },
+    {
+      "target": "angular_frequency",
+      "requested_difficulty": 3,
+      "trace_str": "  1. wave_speed = sqrt(tension / linear_density)  [uses: tension, linear_density]  (waves)\n  2. frequency = wave_speed / wavelength  [uses: wave_speed, wavelength]  (waves)\n  3. angular_frequency = 2*pi * frequency  [uses: frequency]  (waves)",
+      "trace": {
+        "leafs": [
+          "linear_density",
+          "tension",
+          "wavelength"
+        ],
+        "chapters": [
+          "waves"
+        ],
+        "subdomains": [
+          "waves"
+        ],
+        "hypernym": "shm",
+        "path": [
+          {
+            "id": "f157",
+            "output": "wave_speed",
+            "inputs": [
+              "tension",
+              "linear_density"
+            ],
+            "label": "sqrt(tension / linear_density)",
+            "domain": "waves"
+          },
+          {
+            "id": "f76",
+            "output": "frequency",
+            "inputs": [
+              "wave_speed",
+              "wavelength"
+            ],
+            "label": "wave_speed / wavelength",
+            "domain": "waves"
+          },
+          {
+            "id": "f79",
+            "output": "angular_frequency",
+            "inputs": [
+              "frequency"
+            ],
+            "label": "2*pi * frequency",
+            "domain": "waves"
+          }
+        ]
+      },
+      "raw_model_output": "In a marine environment, a rope with a linear density of 0.05 kg/m is stretched between two buoys. The rope is under a tension of 150 N, and it vibrates at a frequency that corresponds to a wavelength of 2.5 m. If a wave travels along this rope, what is the angular frequency of its oscillations?",
+      "question": "In a marine environment, a rope with a linear density of 0.05 kg/m is stretched between two buoys. The rope is under a tension of 150 N, and it vibrates at a frequency that corresponds to a wavelength of 2.5 m. If a wave travels along this rope, what is the angular frequency of its oscillations?"
+    },
+    {
+      "target": "angular_frequency",
+      "requested_difficulty": 4,
+      "trace_str": "  1. wave_speed = sqrt(tension / linear_density)  [uses: tension, linear_density]  (waves)\n  2. frequency = wave_speed / wavelength  [uses: wave_speed, wavelength]  (waves)\n  3. angular_frequency = 2*pi * frequency  [uses: frequency]  (waves)",
+      "trace": {
+        "leafs": [
+          "linear_density",
+          "tension",
+          "wavelength"
+        ],
+        "chapters": [
+          "waves"
+        ],
+        "subdomains": [
+          "waves"
+        ],
+        "hypernym": "shm",
+        "path": [
+          {
+            "id": "f157",
+            "output": "wave_speed",
+            "inputs": [
+              "tension",
+              "linear_density"
+            ],
+            "label": "sqrt(tension / linear_density)",
+            "domain": "waves"
+          },
+          {
+            "id": "f76",
+            "output": "frequency",
+            "inputs": [
+              "wave_speed",
+              "wavelength"
+            ],
+            "label": "wave_speed / wavelength",
+            "domain": "waves"
+          },
+          {
+            "id": "f79",
+            "output": "angular_frequency",
+            "inputs": [
+              "frequency"
+            ],
+            "label": "2*pi * frequency",
+            "domain": "waves"
+          }
+        ]
+      },
+      "raw_model_output": "A wave with a wavelength of 2.5 meters travels along a string with a linear density of 0.05 kilograms per meter. The tension in the string is 150 Newtons. If a student measures the frequency of the wave, she finds it to be 20 Hz. What is the angular frequency of this wave?",
+      "question": "A wave with a wavelength of 2.5 meters travels along a string with a linear density of 0.05 kilograms per meter. The tension in the string is 150 Newtons. If a student measures the frequency of the wave, she finds it to be 20 Hz. What is the angular frequency of this wave?"
+    },
+    {
+      "target": "angular_frequency",
+      "requested_difficulty": 5,
+      "trace_str": "  1. wave_speed = sqrt(tension / linear_density)  [uses: tension, linear_density]  (waves)\n  2. frequency = wave_speed / wavelength  [uses: wave_speed, wavelength]  (waves)\n  3. angular_frequency = 2*pi * frequency  [uses: frequency]  (waves)",
+      "trace": {
+        "leafs": [
+          "linear_density",
+          "tension",
+          "wavelength"
+        ],
+        "chapters": [
+          "waves"
+        ],
+        "subdomains": [
+          "waves"
+        ],
+        "hypernym": "shm",
+        "path": [
+          {
+            "id": "f157",
+            "output": "wave_speed",
+            "inputs": [
+              "tension",
+              "linear_density"
+            ],
+            "label": "sqrt(tension / linear_density)",
+            "domain": "waves"
+          },
+          {
+            "id": "f76",
+            "output": "frequency",
+            "inputs": [
+              "wave_speed",
+              "wavelength"
+            ],
+            "label": "wave_speed / wavelength",
+            "domain": "waves"
+          },
+          {
+            "id": "f79",
+            "output": "angular_frequency",
+            "inputs": [
+              "frequency"
+            ],
+            "label": "2*pi * frequency",
+            "domain": "waves"
+          }
+        ]
+      },
+      "raw_model_output": "A tightrope walker, weighing 50 kg, is suspended between two supports by a cable with a linear density of 0.02 kg/m and a tension of 200 N. The walker's motion can be modeled as a wave traveling along the cable. If the wavelength of this wave is 2.5 m, what is the angular frequency of the wave?",
+      "question": "A tightrope walker, weighing 50 kg, is suspended between two supports by a cable with a linear density of 0.02 kg/m and a tension of 200 N. The walker's motion can be modeled as a wave traveling along the cable. If the wavelength of this wave is 2.5 m, what is the angular frequency of the wave?"
+    },
+    {
+      "target": "angular_frequency",
+      "requested_difficulty": 6,
+      "trace_str": "  1. wave_speed = sqrt(tension / linear_density)  [uses: tension, linear_density]  (waves)\n  2. frequency = wave_speed / wavelength  [uses: wave_speed, wavelength]  (waves)\n  3. angular_frequency = 2*pi * frequency  [uses: frequency]  (waves)",
+      "trace": {
+        "leafs": [
+          "linear_density",
+          "tension",
+          "wavelength"
+        ],
+        "chapters": [
+          "waves"
+        ],
+        "subdomains": [
+          "waves"
+        ],
+        "hypernym": "shm",
+        "path": [
+          {
+            "id": "f157",
+            "output": "wave_speed",
+            "inputs": [
+              "tension",
+              "linear_density"
+            ],
+            "label": "sqrt(tension / linear_density)",
+            "domain": "waves"
+          },
+          {
+            "id": "f76",
+            "output": "frequency",
+            "inputs": [
+              "wave_speed",
+              "wavelength"
+            ],
+            "label": "wave_speed / wavelength",
+            "domain": "waves"
+          },
+          {
+            "id": "f79",
+            "output": "angular_frequency",
+            "inputs": [
+              "frequency"
+            ],
+            "label": "2*pi * frequency",
+            "domain": "waves"
+          }
+        ]
+      },
+      "raw_model_output": "A rope with a linear mass density of 0.05 kg/m is stretched between two supports. The rope is plucked, causing a wave to travel along its length. If the wavelength of the wave is 1.2 m and the tension in the rope is 20 N, what is the angular frequency of the oscillation?",
+      "question": "A rope with a linear mass density of 0.05 kg/m is stretched between two supports. The rope is plucked, causing a wave to travel along its length. If the wavelength of the wave is 1.2 m and the tension in the rope is 20 N, what is the angular frequency of the oscillation?"
+    },
+    {
+      "target": "angular_frequency",
+      "requested_difficulty": 7,
+      "trace_str": "  1. wave_speed = sqrt(tension / linear_density)  [uses: tension, linear_density]  (waves)\n  2. frequency = wave_speed / wavelength  [uses: wave_speed, wavelength]  (waves)\n  3. angular_frequency = 2*pi * frequency  [uses: frequency]  (waves)",
+      "trace": {
+        "leafs": [
+          "linear_density",
+          "tension",
+          "wavelength"
+        ],
+        "chapters": [
+          "waves"
+        ],
+        "subdomains": [
+          "waves"
+        ],
+        "hypernym": "shm",
+        "path": [
+          {
+            "id": "f157",
+            "output": "wave_speed",
+            "inputs": [
+              "tension",
+              "linear_density"
+            ],
+            "label": "sqrt(tension / linear_density)",
+            "domain": "waves"
+          },
+          {
+            "id": "f76",
+            "output": "frequency",
+            "inputs": [
+              "wave_speed",
+              "wavelength"
+            ],
+            "label": "wave_speed / wavelength",
+            "domain": "waves"
+          },
+          {
+            "id": "f79",
+            "output": "angular_frequency",
+            "inputs": [
+              "frequency"
+            ],
+            "label": "2*pi * frequency",
+            "domain": "waves"
+          }
+        ]
+      },
+      "raw_model_output": "A rope of linear density 0.05 kg/m is stretched between two pillars, with a tension of 50 N. A wave with a wavelength of 0.2 m propagates along the rope. If the wave speed is determined by the rope's tension and linear density, what is the angular frequency of this wave?",
+      "question": "A rope of linear density 0.05 kg/m is stretched between two pillars, with a tension of 50 N. A wave with a wavelength of 0.2 m propagates along the rope. If the wave speed is determined by the rope's tension and linear density, what is the angular frequency of this wave?"
+    },
+    {
+      "target": "angular_frequency",
+      "requested_difficulty": 8,
+      "trace_str": "  1. wave_speed = sqrt(tension / linear_density)  [uses: tension, linear_density]  (waves)\n  2. frequency = wave_speed / wavelength  [uses: wave_speed, wavelength]  (waves)\n  3. angular_frequency = 2*pi * frequency  [uses: frequency]  (waves)",
+      "trace": {
+        "leafs": [
+          "linear_density",
+          "tension",
+          "wavelength"
+        ],
+        "chapters": [
+          "waves"
+        ],
+        "subdomains": [
+          "waves"
+        ],
+        "hypernym": "shm",
+        "path": [
+          {
+            "id": "f157",
+            "output": "wave_speed",
+            "inputs": [
+              "tension",
+              "linear_density"
+            ],
+            "label": "sqrt(tension / linear_density)",
+            "domain": "waves"
+          },
+          {
+            "id": "f76",
+            "output": "frequency",
+            "inputs": [
+              "wave_speed",
+              "wavelength"
+            ],
+            "label": "wave_speed / wavelength",
+            "domain": "waves"
+          },
+          {
+            "id": "f79",
+            "output": "angular_frequency",
+            "inputs": [
+              "frequency"
+            ],
+            "label": "2*pi * frequency",
+            "domain": "waves"
+          }
+        ]
+      },
+      "raw_model_output": "A marine biologist studying the behavior of ocean waves notices that the tension in a rope attached to a buoy is 120 N, and the rope's linear density is 0.02 kg/m. She also measures the wavelength of the waves to be 10 m. If the waves propagate through the water at a speed of 5 m/s, what is the angular frequency of the wave motion?",
+      "question": "A marine biologist studying the behavior of ocean waves notices that the tension in a rope attached to a buoy is 120 N, and the rope's linear density is 0.02 kg/m. She also measures the wavelength of the waves to be 10 m. If the waves propagate through the water at a speed of 5 m/s, what is the angular frequency of the wave motion?"
+    },
+    {
+      "target": "angular_frequency",
+      "requested_difficulty": 9,
+      "trace_str": "  1. wave_speed = sqrt(tension / linear_density)  [uses: tension, linear_density]  (waves)\n  2. frequency = wave_speed / wavelength  [uses: wave_speed, wavelength]  (waves)\n  3. angular_frequency = 2*pi * frequency  [uses: frequency]  (waves)",
+      "trace": {
+        "leafs": [
+          "linear_density",
+          "tension",
+          "wavelength"
+        ],
+        "chapters": [
+          "waves"
+        ],
+        "subdomains": [
+          "waves"
+        ],
+        "hypernym": "shm",
+        "path": [
+          {
+            "id": "f157",
+            "output": "wave_speed",
+            "inputs": [
+              "tension",
+              "linear_density"
+            ],
+            "label": "sqrt(tension / linear_density)",
+            "domain": "waves"
+          },
+          {
+            "id": "f76",
+            "output": "frequency",
+            "inputs": [
+              "wave_speed",
+              "wavelength"
+            ],
+            "label": "wave_speed / wavelength",
+            "domain": "waves"
+          },
+          {
+            "id": "f79",
+            "output": "angular_frequency",
+            "inputs": [
+              "frequency"
+            ],
+            "label": "2*pi * frequency",
+            "domain": "waves"
+          }
+        ]
+      },
+      "raw_model_output": "As the crew of the research vessel \"Oceanus\" deployed the underwater cable to measure the seismic activity in the Mariana Trench, they noticed a peculiar phenomenon: a series of pressure waves, each approximately 10 meters long, were propagating along the cable at a speed of 150 m/s. The waves were generated by a tension of 200 N in the cable, which had a linear mass density of 0.05 kg/m. Assuming the waves are sinusoidal, what is the angular frequency of these pressure waves?",
+      "question": "As the crew of the research vessel \"Oceanus\" deployed the underwater cable to measure the seismic activity in the Mariana Trench, they noticed a peculiar phenomenon: a series of pressure waves, each approximately 10 meters long, were propagating along the cable at a speed of 150 m/s. The waves were generated by a tension of 200 N in the cable, which had a linear mass density of 0.05 kg/m. Assuming the waves are sinusoidal, what is the angular frequency of these pressure waves?"
+    },
+    {
+      "target": "angular_frequency",
+      "requested_difficulty": 10,
+      "trace_str": "  1. wave_speed = sqrt(tension / linear_density)  [uses: tension, linear_density]  (waves)\n  2. frequency = wave_speed / wavelength  [uses: wave_speed, wavelength]  (waves)\n  3. angular_frequency = 2*pi * frequency  [uses: frequency]  (waves)",
+      "trace": {
+        "leafs": [
+          "linear_density",
+          "tension",
+          "wavelength"
+        ],
+        "chapters": [
+          "waves"
+        ],
+        "subdomains": [
+          "waves"
+        ],
+        "hypernym": "shm",
+        "path": [
+          {
+            "id": "f157",
+            "output": "wave_speed",
+            "inputs": [
+              "tension",
+              "linear_density"
+            ],
+            "label": "sqrt(tension / linear_density)",
+            "domain": "waves"
+          },
+          {
+            "id": "f76",
+            "output": "frequency",
+            "inputs": [
+              "wave_speed",
+              "wavelength"
+            ],
+            "label": "wave_speed / wavelength",
+            "domain": "waves"
+          },
+          {
+            "id": "f79",
+            "output": "angular_frequency",
+            "inputs": [
+              "frequency"
+            ],
+            "label": "2*pi * frequency",
+            "domain": "waves"
+          }
+        ]
+      },
+      "raw_model_output": "A team of marine biologists has been studying the propagation of ocean waves along a 20-meter-long stretch of coastline. They have found that the waves have a wavelength of approximately 4 meters and are characterized by a linear density of 0.05 kg/m. The tension in the water molecules at the surface is measured to be 0.25 N. Assuming the waves are sinusoidal, what is the angular frequency of these waves?",
+      "question": "A team of marine biologists has been studying the propagation of ocean waves along a 20-meter-long stretch of coastline. They have found that the waves have a wavelength of approximately 4 meters and are characterized by a linear density of 0.05 kg/m. The tension in the water molecules at the surface is measured to be 0.25 N. Assuming the waves are sinusoidal, what is the angular frequency of these waves?"
+    }
+  ]
+}

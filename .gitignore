@@ -1,5 +1,6 @@
 /Procedural_knowledge/checkpoints
 /Procedural_knowledge/wandb
 /Hypergraph/checkpoints
-/Hypergraph/wandb.env
+/Hypergraph/wandb
 .env
+/experiments/wandb
