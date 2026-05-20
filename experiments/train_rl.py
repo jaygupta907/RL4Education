@@ -2,8 +2,8 @@
 
 Loads the supervised LoRA checkpoint (same format as ``train_sft.py``), samples
 multiple completions per prompt, scores with ``--reward faithfulness``,
-``feasibility``, or ``combined`` (both judges; PG uses weighted sum in ``[0,2]``
-then scaled to ``[-1,1]``), and applies a GRPO-style policy gradient.
+``feasibility``, ``combined``, ``alternating``, or ``adaptive`` (faithfulness +
+feasibility + difficulty alignment with EMA-adaptive weights).
 
 Outputs a new LoRA directory (see ``--output_dir``) for ``eval_rl.py`` / ``eval_pipeline``.
 
@@ -43,7 +43,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from claude_client import ClaudeClient
 from cot_utils import strip_reasoning_prefix
-from judges import judge_faithfulness, judge_feasibility
+from judges import judge_difficulty, judge_faithfulness, judge_feasibility
 from prompts import build_sft_chat_messages
 
 HERE = Path(__file__).parent
@@ -94,6 +94,95 @@ def combined_raw_score(faith_raw: float, feas_raw: float, w_faith: float, w_feas
     """Weighted sum of faithfulness and feasibility raw scores (each in ``[0,2]``)."""
     w = max(1e-8, w_faith + w_feas)
     return (w_faith / w) * float(faith_raw) + (w_feas / w) * float(feas_raw)
+
+
+def difficulty_alignment_raw_score(requested_d: int, claude_d: int) -> float:
+    """Map requested vs Claude-judged difficulty onto ``[0, 2]`` (perfect match → 2)."""
+    try:
+        req = int(requested_d)
+        got = int(claude_d)
+    except (TypeError, ValueError):
+        return 0.0
+    if req < 1 or req > 10 or got < 1 or got > 10:
+        return 0.0
+    err = abs(req - got)
+    return max(0.0, 2.0 * (1.0 - err / 9.0))
+
+
+def adaptive_component_weights(
+    ema_faith: float,
+    ema_feas: float,
+    ema_diff: float,
+    *,
+    eps: float,
+) -> tuple[float, float, float]:
+    """Up-weight components with lower running EMA (weaker objectives get more gradient signal)."""
+    inv = [
+        1.0 / (float(ema_faith) + eps),
+        1.0 / (float(ema_feas) + eps),
+        1.0 / (float(ema_diff) + eps),
+    ]
+    s = sum(inv)
+    return inv[0] / s, inv[1] / s, inv[2] / s
+
+
+def triple_adaptive_raw(
+    faith_raw: float,
+    feas_raw: float,
+    diff_raw: float,
+    w_faith: float,
+    w_feas: float,
+    w_diff: float,
+) -> float:
+    return (
+        w_faith * float(faith_raw)
+        + w_feas * float(feas_raw)
+        + w_diff * float(diff_raw)
+    )
+
+
+def resolve_active_reward(reward_mode: str, step_num: int, *, switch_steps: int) -> str:
+    """Which Claude signal to use on optimizer step ``step_num`` (1-based).
+
+    For ``alternating``, blocks of ``switch_steps`` use faithfulness, then feasibility,
+    then faithfulness, etc.
+    """
+    if reward_mode != "alternating":
+        return reward_mode
+    period = max(1, int(switch_steps))
+    phase = (max(1, step_num) - 1) // period
+    return "faithfulness" if phase % 2 == 0 else "feasibility"
+
+
+def score_completion_reward(
+    judge,
+    item: dict,
+    question: str,
+    active_reward: str,
+    *,
+    w_faith: float,
+    w_feas: float,
+) -> tuple[float, int | None, float | None, float | None]:
+    """Return (raw_score, feas_claude_1_10_or_None, faith_raw_or_None, feas_raw_or_None)."""
+    trace_str = item["trace_str"]
+    leafs = item["trace"]["leafs"]
+    target = item["target"]
+    if active_reward == "faithfulness":
+        faith = judge_faithfulness(judge, trace_str, leafs, target, question)
+        r = faithfulness_raw_score(faith)
+        return r, None, r, None
+    if active_reward == "feasibility":
+        s = judge_feasibility(judge, trace_str, leafs, target, question)
+        si = int(s) if isinstance(s, int) else -1
+        fer = feasibility_raw_score(si)
+        return fer, si, None, fer
+    faith = judge_faithfulness(judge, trace_str, leafs, target, question)
+    s = judge_feasibility(judge, trace_str, leafs, target, question)
+    si = int(s) if isinstance(s, int) else -1
+    fr = faithfulness_raw_score(faith)
+    fer = feasibility_raw_score(si)
+    cr = combined_raw_score(fr, fer, w_faith, w_feas)
+    return cr, si, fr, fer
 
 
 def build_prompt_tensor(item, tok, *, with_cot: bool) -> torch.Tensor:
@@ -304,10 +393,17 @@ def main():
     ap.add_argument(
         "--reward",
         type=str,
-        choices=("faithfulness", "feasibility", "combined"),
+        choices=("faithfulness", "feasibility", "combined", "alternating", "adaptive"),
         default="faithfulness",
-        help="Claude signal(s): faithfulness composite, feasibility 1–10→[0,2], or "
-        "both (see --combined-faith-weight / --combined-feas-weight).",
+        help="Claude signal(s): faithfulness, feasibility, combined (fixed 2-way), "
+        "alternating, or adaptive (3 judges + EMA-adaptive weights).",
+    )
+    ap.add_argument(
+        "--reward-switch-steps",
+        type=int,
+        default=0,
+        help="When --reward alternating: optimizer steps per phase before switching "
+        "(faithfulness then feasibility). 0 = max(1, total_steps // 6).",
     )
     ap.add_argument(
         "--combined-faith-weight",
@@ -320,6 +416,18 @@ def main():
         type=float,
         default=0.5,
         help="Weight on feasibility raw [0,2] when --reward combined (default 0.5).",
+    )
+    ap.add_argument(
+        "--adaptive-ema-decay",
+        type=float,
+        default=0.9,
+        help="EMA decay for component means when --reward adaptive (higher = slower weight changes).",
+    )
+    ap.add_argument(
+        "--adaptive-weight-eps",
+        type=float,
+        default=0.2,
+        help="Stabilizer in adaptive inverse weights: w_i ∝ 1/(EMA_i + eps).",
     )
     ap.add_argument(
         "--cuda-device",
@@ -453,6 +561,32 @@ def main():
     )
     print(f"Reward signal: {args.reward}", flush=True)
 
+    reward_switch_period = 0
+    if args.reward == "alternating":
+        reward_switch_period = (
+            max(1, int(args.reward_switch_steps))
+            if int(args.reward_switch_steps) > 0
+            else max(1, total_steps // 6)
+        )
+        print(
+            f"Alternating reward: faithfulness for steps 1–{reward_switch_period}, "
+            f"then feasibility for {reward_switch_period} steps, then repeat "
+            f"(period={reward_switch_period})",
+            flush=True,
+        )
+
+    adaptive_ema_decay = float(args.adaptive_ema_decay)
+    adaptive_weight_eps = float(args.adaptive_weight_eps)
+    ema_faith_adapt = ema_feas_adapt = ema_diff_adapt = 1.0
+    w_f_adapt, w_e_adapt, w_d_adapt = 1.0 / 3.0, 1.0 / 3.0, 1.0 / 3.0
+    if args.reward == "adaptive":
+        print(
+            f"Adaptive reward: faithfulness + feasibility + difficulty alignment; "
+            f"weights from EMA (decay={adaptive_ema_decay}, eps={adaptive_weight_eps}); "
+            f"initial w=({w_f_adapt:.3f},{w_e_adapt:.3f},{w_d_adapt:.3f})",
+            flush=True,
+        )
+
     third_save_period = 0
     if not args.no_save_every_third:
         third_save_period = max(1, total_steps // 3)
@@ -508,8 +642,29 @@ def main():
                 all_feas_claude: list[int] = []
                 all_faith_raw_rollouts: list[float] = []
                 all_feas_raw_rollouts: list[float] = []
+                all_diff_raw_rollouts: list[float] = []
                 w_faith = float(args.combined_faith_weight)
                 w_feas = float(args.combined_feas_weight)
+                step_num = global_step + 1
+                switch_steps = (
+                    reward_switch_period
+                    if args.reward == "alternating"
+                    else 1
+                )
+                active_reward = resolve_active_reward(
+                    args.reward, step_num, switch_steps=switch_steps
+                )
+                if (
+                    args.reward == "alternating"
+                    and reward_switch_period > 0
+                    and (step_num - 1) % reward_switch_period == 0
+                ):
+                    print(
+                        f"  >>> reward phase: {active_reward} "
+                        f"(optimizer steps {step_num}–"
+                        f"{min(step_num + reward_switch_period - 1, total_steps)})",
+                        flush=True,
+                    )
                 for bi in batch_idx:
                     item = data[bi]
                     d = int(item.get("requested_difficulty") or 5)
@@ -541,23 +696,31 @@ def main():
                     feas_batch: list[int] = []
                     faith_batch: list[float] = []
                     feas_raw_batch: list[float] = []
+                    diff_batch: list[int] = []
+                    diff_raw_batch: list[float] = []
                     for gi in range(args.num_generations):
                         full = gen_batch[gi]
                         gen_tokens = full[prompt_len:]
                         if gen_tokens.numel() == 0:
                             rewards_raw.append(0.0)
                             rewards_scaled.append(policy_scaled_reward(0.0))
-                            if args.reward in ("feasibility", "combined"):
+                            if active_reward in ("feasibility",) or args.reward == "adaptive":
                                 feas_batch.append(-1)
-                            if args.reward == "combined":
+                            if active_reward == "combined":
                                 faith_batch.append(0.0)
                                 feas_raw_batch.append(0.0)
+                            if args.reward == "adaptive":
+                                faith_batch.append(0.0)
+                                feas_raw_batch.append(0.0)
+                                diff_batch.append(-1)
+                                diff_raw_batch.append(0.0)
                             continue
                         raw_text = tok.decode(
                             gen_tokens, skip_special_tokens=True
                         ).strip()
                         q = strip_reasoning_prefix(raw_text)
-                        if args.reward == "faithfulness":
+                        if args.reward == "adaptive":
+                            req_d = int(item.get("requested_difficulty") or 5)
                             faith = judge_faithfulness(
                                 judge,
                                 item["trace_str"],
@@ -565,50 +728,62 @@ def main():
                                 item["target"],
                                 q,
                             )
-                            rscore = faithfulness_raw_score(faith)
-                            rewards_raw.append(rscore)
-                            rewards_scaled.append(policy_scaled_reward(rscore))
-                        elif args.reward == "feasibility":
-                            s = judge_feasibility(
+                            s_feas = judge_feasibility(
                                 judge,
                                 item["trace_str"],
                                 item["trace"]["leafs"],
                                 item["target"],
                                 q,
                             )
-                            si = int(s) if isinstance(s, int) else -1
-                            feas_batch.append(si)
-                            rscore = feasibility_raw_score(si)
-                            rewards_raw.append(rscore)
-                            rewards_scaled.append(policy_scaled_reward(rscore))
-                        else:
-                            faith = judge_faithfulness(
+                            cd = judge_difficulty(
                                 judge,
                                 item["trace_str"],
                                 item["trace"]["leafs"],
                                 item["target"],
                                 q,
                             )
-                            s = judge_feasibility(
-                                judge,
-                                item["trace_str"],
-                                item["trace"]["leafs"],
-                                item["target"],
-                                q,
-                            )
-                            si = int(s) if isinstance(s, int) else -1
-                            feas_batch.append(si)
                             fr = faithfulness_raw_score(faith)
+                            si = int(s_feas) if isinstance(s_feas, int) else -1
                             fer = feasibility_raw_score(si)
-                            faith_batch.append(fr)
-                            feas_raw_batch.append(fer)
-                            cr = combined_raw_score(fr, fer, w_faith, w_feas)
+                            dr = difficulty_alignment_raw_score(req_d, cd)
+                            cr = triple_adaptive_raw(
+                                fr, fer, dr, w_f_adapt, w_e_adapt, w_d_adapt
+                            )
                             rewards_raw.append(cr)
                             rewards_scaled.append(policy_scaled_reward(cr))
+                            faith_batch.append(fr)
+                            feas_raw_batch.append(fer)
+                            diff_raw_batch.append(dr)
+                            diff_batch.append(
+                                int(cd) if isinstance(cd, int) else -1
+                            )
+                            feas_batch.append(si)
+                        else:
+                            rscore, si, fr, fer = score_completion_reward(
+                                judge,
+                                item,
+                                q,
+                                active_reward,
+                                w_faith=w_faith,
+                                w_feas=w_feas,
+                            )
+                            rewards_raw.append(rscore)
+                            rewards_scaled.append(policy_scaled_reward(rscore))
+                            if si is not None:
+                                feas_batch.append(si)
+                            if fr is not None:
+                                faith_batch.append(fr)
+                            if fer is not None and active_reward == "combined":
+                                feas_raw_batch.append(fer)
 
-                    if args.reward in ("feasibility", "combined"):
+                    if args.reward == "adaptive":
                         all_feas_claude.extend(feas_batch)
-                    if args.reward == "combined":
+                        all_faith_raw_rollouts.extend(faith_batch)
+                        all_feas_raw_rollouts.extend(feas_raw_batch)
+                        all_diff_raw_rollouts.extend(diff_raw_batch)
+                    elif active_reward in ("feasibility",):
+                        all_feas_claude.extend(feas_batch)
+                    if active_reward == "combined":
                         all_faith_raw_rollouts.extend(faith_batch)
                         all_feas_raw_rollouts.extend(feas_raw_batch)
 
@@ -680,6 +855,7 @@ def main():
                 log_rec: dict = {
                     "step": global_step,
                     "reward_kind": args.reward,
+                    "active_reward": active_reward,
                     "kl_beta": kl_beta,
                     "mean_kl_sample": mean_kl,
                     "mean_reward_raw": mean_raw,
@@ -693,10 +869,70 @@ def main():
                     "rewards": all_rollout_scaled,
                     "batch_size": len(batch_idx),
                 }
-                if args.reward == "faithfulness":
+                if args.reward == "alternating":
+                    log_rec["reward_switch_steps"] = reward_switch_period
+                if args.reward == "adaptive":
+                    mf_ad = (
+                        statistics.mean(all_faith_raw_rollouts)
+                        if all_faith_raw_rollouts
+                        else 0.0
+                    )
+                    me_ad = (
+                        statistics.mean(all_feas_raw_rollouts)
+                        if all_feas_raw_rollouts
+                        else 0.0
+                    )
+                    md_ad = (
+                        statistics.mean(all_diff_raw_rollouts)
+                        if all_diff_raw_rollouts
+                        else 0.0
+                    )
+                    log_rec["weight_faithfulness"] = w_f_adapt
+                    log_rec["weight_feasibility"] = w_e_adapt
+                    log_rec["weight_difficulty"] = w_d_adapt
+                    log_rec["ema_faithfulness"] = ema_faith_adapt
+                    log_rec["ema_feasibility"] = ema_feas_adapt
+                    log_rec["ema_difficulty"] = ema_diff_adapt
+                    log_rec["faithfulness_raw_rollout"] = all_faith_raw_rollouts
+                    log_rec["feasibility_raw_rollout"] = all_feas_raw_rollouts
+                    log_rec["difficulty_raw_rollout"] = all_diff_raw_rollouts
+                    log_rec["adaptive_combined_raw_rollout"] = all_rollout_raw
+                    log_rec["mean_faithfulness_raw"] = mf_ad
+                    log_rec["mean_feasibility_raw"] = me_ad
+                    log_rec["mean_difficulty_raw"] = md_ad
+                    log_rec["mean_adaptive_combined_raw"] = mean_raw
+                    valid_fc = [
+                        x for x in all_feas_claude if isinstance(x, int) and x >= 1
+                    ]
+                    log_rec["feasibility_claude_scores"] = all_feas_claude
+                    log_rec["mean_feasibility_claude"] = (
+                        float(statistics.mean(valid_fc)) if valid_fc else None
+                    )
+                    ema_faith_adapt = (
+                        adaptive_ema_decay * ema_faith_adapt
+                        + (1.0 - adaptive_ema_decay) * mf_ad
+                    )
+                    ema_feas_adapt = (
+                        adaptive_ema_decay * ema_feas_adapt
+                        + (1.0 - adaptive_ema_decay) * me_ad
+                    )
+                    ema_diff_adapt = (
+                        adaptive_ema_decay * ema_diff_adapt
+                        + (1.0 - adaptive_ema_decay) * md_ad
+                    )
+                    w_f_adapt, w_e_adapt, w_d_adapt = adaptive_component_weights(
+                        ema_faith_adapt,
+                        ema_feas_adapt,
+                        ema_diff_adapt,
+                        eps=adaptive_weight_eps,
+                    )
+                log_kind = active_reward
+                if args.reward == "adaptive":
+                    pass
+                elif log_kind == "faithfulness":
                     log_rec["mean_faithfulness_raw"] = mean_raw
                     log_rec["faithfulness_raw"] = all_rollout_raw
-                elif args.reward == "feasibility":
+                elif log_kind == "feasibility":
                     valid_fc = [x for x in all_feas_claude if isinstance(x, int) and x >= 1]
                     log_rec["feasibility_claude_scores"] = all_feas_claude
                     log_rec["mean_feasibility_claude"] = (
@@ -732,6 +968,7 @@ def main():
 
                     payload = {
                         "ppo/reward_kind": args.reward,
+                        "ppo/active_reward": active_reward,
                         "ppo/mean_reward_raw": mean_raw,
                         "ppo/mean_reward_scaled": mean_scaled,
                         "ppo/mean_reward": mean_scaled,
@@ -739,9 +976,37 @@ def main():
                         "ppo/reward_std_raw": reward_std_raw,
                         "ppo/skipped_grad": int(loss_val is None),
                     }
-                    if args.reward == "faithfulness":
+                    if args.reward == "adaptive":
+                        payload["ppo/mean_faithfulness_raw"] = log_rec.get(
+                            "mean_faithfulness_raw", 0.0
+                        )
+                        payload["ppo/mean_feasibility_raw"] = log_rec.get(
+                            "mean_feasibility_raw", 0.0
+                        )
+                        payload["ppo/mean_difficulty_raw"] = log_rec.get(
+                            "mean_difficulty_raw", 0.0
+                        )
+                        payload["ppo/mean_adaptive_combined_raw"] = mean_raw
+                        payload["ppo/weight_faithfulness"] = log_rec.get(
+                            "weight_faithfulness", 0.0
+                        )
+                        payload["ppo/weight_feasibility"] = log_rec.get(
+                            "weight_feasibility", 0.0
+                        )
+                        payload["ppo/weight_difficulty"] = log_rec.get(
+                            "weight_difficulty", 0.0
+                        )
+                        valid_fc = [
+                            x for x in all_feas_claude
+                            if isinstance(x, int) and x >= 1
+                        ]
+                        if valid_fc:
+                            payload["ppo/mean_feasibility_claude"] = float(
+                                statistics.mean(valid_fc)
+                            )
+                    elif log_kind == "faithfulness":
                         payload["ppo/mean_faithfulness_raw"] = mean_raw
-                    elif args.reward == "feasibility":
+                    elif log_kind == "feasibility":
                         valid_fc = [
                             x for x in all_feas_claude
                             if isinstance(x, int) and x >= 1
@@ -781,17 +1046,38 @@ def main():
                     if mean_kl is not None
                     else ""
                 )
+                if args.reward == "adaptive":
+                    wf = float(log_rec.get("weight_faithfulness", w_f_adapt))
+                    we = float(log_rec.get("weight_feasibility", w_e_adapt))
+                    wd = float(log_rec.get("weight_difficulty", w_d_adapt))
+                    tag = f"adaptive w=({wf:.2f},{we:.2f},{wd:.2f})"
+                elif args.reward == "alternating":
+                    tag = f"alternating→{active_reward}"
+                else:
+                    tag = active_reward
 
                 if loss_val is not None:
-                    if args.reward == "faithfulness":
+                    if args.reward == "adaptive":
+                        mf = log_rec.get("mean_faithfulness_raw", 0.0)
+                        mfe = log_rec.get("mean_feasibility_raw", 0.0)
+                        md = log_rec.get("mean_difficulty_raw", 0.0)
                         print(
                             f"step {global_step}/{total_steps} "
-                            f"[faithfulness] raw={mean_raw:.4f} (std={reward_std_raw:.4f}) "
+                            f"[{tag}] "
+                            f"faith_raw={mf:.4f} feas_raw={mfe:.4f} diff_raw={md:.4f} "
+                            f"comb_raw={mean_raw:.4f} scaled={mean_scaled:.4f} "
+                            f"ppo_loss={loss_val:.4f}{kl_s}",
+                            flush=True,
+                        )
+                    elif log_kind == "faithfulness":
+                        print(
+                            f"step {global_step}/{total_steps} "
+                            f"[{tag}] raw={mean_raw:.4f} (std={reward_std_raw:.4f}) "
                             f"scaled={mean_scaled:.4f} (std={reward_std_scaled:.4f}) "
                             f"ppo_loss={loss_val:.4f}{kl_s}",
                             flush=True,
                         )
-                    elif args.reward == "feasibility":
+                    elif log_kind == "feasibility":
                         valid_fc = [
                             x for x in all_feas_claude
                             if isinstance(x, int) and x >= 1
@@ -801,7 +1087,7 @@ def main():
                         )
                         print(
                             f"step {global_step}/{total_steps} "
-                            f"[feasibility] claude_mean={mfc:.2f} "
+                            f"[{tag}] claude_mean={mfc:.2f} "
                             f"raw={mean_raw:.4f} (std={reward_std_raw:.4f}) "
                             f"scaled={mean_scaled:.4f} (std={reward_std_scaled:.4f}) "
                             f"ppo_loss={loss_val:.4f}{kl_s}",
@@ -820,22 +1106,34 @@ def main():
                         )
                         print(
                             f"step {global_step}/{total_steps} "
-                            f"[combined w_f={w_faith:.2f} w_e={w_feas:.2f}] "
+                            f"[{tag} w_f={w_faith:.2f} w_e={w_feas:.2f}] "
                             f"faith_raw={mf:.4f} feas_raw={mfe:.4f} "
                             f"comb_raw={mean_raw:.4f} scaled={mean_scaled:.4f} "
                             f"ppo_loss={loss_val:.4f}{kl_s}",
                             flush=True,
                         )
                 else:
-                    if args.reward == "faithfulness":
+                    if args.reward == "adaptive":
+                        mf = log_rec.get("mean_faithfulness_raw", 0.0)
+                        mfe = log_rec.get("mean_feasibility_raw", 0.0)
+                        md = log_rec.get("mean_difficulty_raw", 0.0)
                         print(
                             f"step {global_step}/{total_steps} "
-                            f"[faithfulness] raw={mean_raw:.4f} (std={reward_std_raw:.4f}) "
+                            f"[{tag}] "
+                            f"faith_raw={mf:.4f} feas_raw={mfe:.4f} diff_raw={md:.4f} "
+                            f"comb_raw={mean_raw:.4f} scaled={mean_scaled:.4f} "
+                            f"ppo_loss=skipped (no grad){kl_s}",
+                            flush=True,
+                        )
+                    elif log_kind == "faithfulness":
+                        print(
+                            f"step {global_step}/{total_steps} "
+                            f"[{tag}] raw={mean_raw:.4f} (std={reward_std_raw:.4f}) "
                             f"scaled={mean_scaled:.4f} (std={reward_std_scaled:.4f}) "
                             f"ppo_loss=skipped (no grad){kl_s}",
                             flush=True,
                         )
-                    elif args.reward == "feasibility":
+                    elif log_kind == "feasibility":
                         valid_fc = [
                             x for x in all_feas_claude
                             if isinstance(x, int) and x >= 1
@@ -845,7 +1143,7 @@ def main():
                         )
                         print(
                             f"step {global_step}/{total_steps} "
-                            f"[feasibility] claude_mean={mfc:.2f} "
+                            f"[{tag}] claude_mean={mfc:.2f} "
                             f"raw={mean_raw:.4f} (std={reward_std_raw:.4f}) "
                             f"scaled={mean_scaled:.4f} (std={reward_std_scaled:.4f}) "
                             f"ppo_loss=skipped (no grad){kl_s}",
@@ -864,7 +1162,7 @@ def main():
                         )
                         print(
                             f"step {global_step}/{total_steps} "
-                            f"[combined w_f={w_faith:.2f} w_e={w_feas:.2f}] "
+                            f"[{tag} w_f={w_faith:.2f} w_e={w_feas:.2f}] "
                             f"faith_raw={mf:.4f} feas_raw={mfe:.4f} "
                             f"comb_raw={mean_raw:.4f} scaled={mean_scaled:.4f} "
                             f"ppo_loss=skipped (no grad){kl_s}",
@@ -889,7 +1187,11 @@ def main():
         tok.save_pretrained(args.output_dir)
         print(f"Saved RL LoRA adapter to {args.output_dir}", flush=True)
 
-        from metrics import plot_rl_combined_training_metrics, plot_rl_training_metrics
+        from metrics import (
+            plot_rl_adaptive_combined_metrics,
+            plot_rl_combined_training_metrics,
+            plot_rl_training_metrics,
+        )
 
         rows_log: list[dict] = []
         with open(log_path, encoding="utf-8") as logf:
@@ -898,7 +1200,9 @@ def main():
                 if line:
                     rows_log.append(json.loads(line))
         plot_ok = False
-        if args.reward == "combined":
+        if args.reward == "adaptive":
+            plot_ok = plot_rl_adaptive_combined_metrics(rows_log, str(plot_path))
+        elif args.reward == "combined":
             plot_ok = plot_rl_combined_training_metrics(rows_log, str(plot_path))
         else:
             plot_ok = plot_rl_training_metrics(rows_log, str(plot_path))

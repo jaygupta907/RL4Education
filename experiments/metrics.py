@@ -775,6 +775,113 @@ def plot_rl_combined_training_metrics(rows: List[Dict], output_path):
     return True
 
 
+def plot_rl_adaptive_combined_metrics(rows: List[Dict], output_path):
+    """RL curves for ``reward_kind`` ``adaptive``: per-component raw rewards,
+    adaptive combined raw/scaled PG signal, and inverse-EMA weights vs step."""
+    import matplotlib.pyplot as plt
+
+    if not rows or str(rows[0].get("reward_kind")) != "adaptive":
+        return False
+
+    def _roll(y: List[float], w: int) -> List[float]:
+        if len(y) < w or w < 2:
+            return y
+        ker = np.ones(w, dtype=float) / w
+        return list(np.convolve(np.array(y, dtype=float), ker, mode="same"))
+
+    steps = [int(r["step"]) for r in rows]
+    mf = [float(r.get("mean_faithfulness_raw", 0.0)) for r in rows]
+    me = [float(r.get("mean_feasibility_raw", 0.0)) for r in rows]
+    md = [float(r.get("mean_difficulty_raw", 0.0)) for r in rows]
+    mc = [float(r.get("mean_adaptive_combined_raw", r.get("mean_reward_raw", 0.0))) for r in rows]
+    m_scaled = [float(r.get("mean_reward_scaled", r["mean_reward"])) for r in rows]
+    wf = [float(r.get("weight_faithfulness", 0.0)) for r in rows]
+    we = [float(r.get("weight_feasibility", 0.0)) for r in rows]
+    wd = [float(r.get("weight_difficulty", 0.0)) for r in rows]
+    pairs = [(int(r["step"]), float(r["loss"]))
+             for r in rows if r.get("loss") is not None]
+
+    if not any(mf) and not any(mc):
+        return False
+
+    use_tex = _setup_mpl_style()
+    bold = _bold(use_tex)
+
+    fig, axes = plt.subplots(2, 3, figsize=(14.5, 8.8))
+
+    def _line(ax, ys, ylab, ttl, color="#1f4e79"):
+        ax.plot(steps, ys, color=color, linewidth=2.0, label=r"mean / step")
+        if len(ys) >= 8:
+            w = min(31, max(5, len(ys) // 10))
+            ax.plot(
+                steps,
+                _roll(ys, w),
+                color="#7fb3d5",
+                linewidth=1.4,
+                linestyle="--",
+                label=rf"rolling ($w={w}$)",
+            )
+        ax.set_xlabel(r"Training step")
+        ax.set_ylabel(ylab)
+        ax.set_title(bold(ttl))
+        ax.legend(loc="lower right", frameon=False, fontsize=8)
+
+    _line(axes[0, 0], mf, r"Mean faithfulness raw", "Faithfulness reward", "#4a90e2")
+    _line(axes[0, 1], me, r"Mean feasibility raw", "Feasibility reward", "#1d6f42")
+    _line(axes[0, 2], md, r"Mean difficulty-align raw", "Difficulty alignment", "#8e44ad")
+
+    axc = axes[1, 0]
+    axc.plot(steps, mc, color="#1f4e79", linewidth=2.0, label=r"combined raw")
+    if len(mc) >= 8:
+        w0 = min(31, max(5, len(mc) // 10))
+        axc.plot(steps, _roll(mc, w0), color="#7fb3d5", linewidth=1.4, linestyle="--",
+                 label=rf"rolling ($w={w0}$)")
+    axc.set_xlabel(r"Training step")
+    axc.set_ylabel(r"Mean adaptive combined raw")
+    axc.set_title(bold("Combined adaptive raw vs step"))
+    axc.legend(loc="lower right", frameon=False, fontsize=8)
+
+    axs = axes[1, 1]
+    axs.plot(steps, m_scaled, color="#1f4e79", linewidth=2.0, label=r"scaled PG reward")
+    if len(m_scaled) >= 8:
+        w1 = min(31, max(5, len(m_scaled) // 10))
+        axs.plot(steps, _roll(m_scaled, w1), color="#7fb3d5", linewidth=1.4, linestyle="--",
+                 label=rf"rolling ($w={w1}$)")
+    axs.set_xlabel(r"Training step")
+    axs.set_ylabel(r"Mean scaled ($[-1,1]$)")
+    axs.set_title(bold("Combined PG signal vs step"))
+    if pairs:
+        st_l, ls = zip(*pairs)
+        ax_t = axs.twinx()
+        ax_t.plot(st_l, ls, color="#c0392b", linewidth=1.7, alpha=0.95, label=r"PG loss")
+        ax_t.set_ylabel(r"PG loss")
+        ax_t.spines["top"].set_visible(False)
+        h1, l1 = axs.get_legend_handles_labels()
+        h2, l2 = ax_t.get_legend_handles_labels()
+        axs.legend(h1 + h2, l1 + l2, loc="upper right", frameon=False, fontsize=8)
+    else:
+        axs.legend(loc="lower right", frameon=False, fontsize=8)
+
+    axw = axes[1, 2]
+    axw.plot(steps, wf, color="#4a90e2", linewidth=2.0, label=r"$w_{\mathrm{faith}}$")
+    axw.plot(steps, we, color="#27ae60", linewidth=2.0, label=r"$w_{\mathrm{feas}}$")
+    axw.plot(steps, wd, color="#8e44ad", linewidth=2.0, label=r"$w_{\mathrm{diff}}$")
+    axw.set_xlabel(r"Training step")
+    axw.set_ylabel(r"Adaptive weight")
+    axw.set_ylim(-0.02, 1.02)
+    axw.set_title(bold("Inverse-EMA weights vs step"))
+    axw.legend(loc="best", frameon=False, fontsize=8)
+
+    fig.suptitle(
+        bold("RL adaptive: faithfulness, feasibility, difficulty + weighted PG")
+        + f"\n({len(rows)} steps)",
+        fontsize=12,
+        y=0.995,
+    )
+    _save(fig, output_path)
+    return True
+
+
 def make_all_plots(rows, summary, plot_dir):
     plot_dir = Path(plot_dir)
     plot_dir.mkdir(parents=True, exist_ok=True)
