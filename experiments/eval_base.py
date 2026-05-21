@@ -11,7 +11,7 @@ Pipeline:
   2. Build a fresh solution trace per target.
   3. For each requested difficulty, prompt the base model via the chat
      template with the same DIFFICULTY_RUBRIC used in dataset generation.
-  4. Ask Claude to score the difficulty using the same rubric (no leakage
+  4. Ask the LLM judge (Claude or OpenAI via ``--llm-provider``) to score difficulty.
      of the requested difficulty).
   5. Save raw eval records to JSON for the metrics script.
 
@@ -26,9 +26,9 @@ from pathlib import Path
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from claude_client import ClaudeClient
 from cot_utils import strip_reasoning_prefix
 from judges import judge_difficulty, judge_faithfulness, judge_feasibility
+from llm_client import add_llm_cli, describe_llm_client, llm_client_from_args
 from prompts import DIFFICULTY_RUBRIC, format_trace
 from traversal import HyperGraph
 
@@ -169,6 +169,7 @@ def main():
                          "and subdomain (must match dataset generation)")
     ap.add_argument("--no_single_domain", dest="single_domain",
                     action="store_false")
+    add_llm_cli(ap)
     args = ap.parse_args()
 
     rng = random.Random(args.seed)
@@ -181,10 +182,25 @@ def main():
     pool = [c for c in candidates if c not in excluded] or candidates
 
     model, tok = load_base(args.base_model)
-    judge = ClaudeClient()
+    judge = llm_client_from_args(args)
+    judge_desc = describe_llm_client(judge)
+    print(f"Judge backend: {judge_desc}", flush=True)
 
     out = []
-    Path(args.output).parent.mkdir(parents=True, exist_ok=True)
+    out_path = Path(args.output)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    meta_path = out_path.with_suffix(".meta.json")
+    with open(meta_path, "w", encoding="utf-8") as mf:
+        json.dump(
+            {
+                "llm_provider": args.llm_provider,
+                "llm_model": judge.model,
+                "judge_backend": judge_desc,
+                "base_model": args.base_model,
+            },
+            mf,
+            indent=2,
+        )
     i, attempts = 0, 0
     while i < args.num_targets and attempts < args.num_targets * 5:
         attempts += 1
@@ -244,7 +260,7 @@ def main():
                   f"coverage={claude_faith['variable_coverage']:.2f} "
                   f"feasibility={claude_feas}",
                   flush=True)
-            tmp = Path(args.output).with_suffix(".json.tmp")
+            tmp = out_path.with_suffix(".json.tmp")
             with open(tmp, "w") as f:
                 json.dump(out, f, indent=2)
             tmp.replace(args.output)

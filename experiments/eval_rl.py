@@ -5,11 +5,18 @@ Same pipeline, metrics, and CLI as ``eval_pipeline.py``, but the default
 ``/mnt/storage/ae21b026/rl_faithfulness_lora``. Pass ``--sft_dir`` explicitly
 to compare another checkpoint.
 
-Example::
+Judges use ``--llm-provider`` (``claude`` or ``openai``); keys load from
+``experiments/.env`` (``OPENAI_API_KEY``, ``OPENAI_MODEL``) unless overridden.
 
-    python eval_rl.py --output data/cot/eval_rl.json
-    python eval_rl.py --sft_dir /mnt/storage/ae21b026/rl_faithfulness_lora/checkpoint-100 \\
-        --output data/cot/eval_rl_ckpt.json
+Examples::
+
+    python eval_rl.py --output data/rl/eval_rl.json
+
+    python eval_rl.py --llm-provider openai --llm-model gpt-5.5 \\
+        --output data/rl/eval_rl_openai.json
+
+    python eval_rl.py --sft_dir /mnt/storage/ae21b026/rl_adaptive_openai/checkpoint-100 \\
+        --llm-provider openai --output data/rl/eval_ckpt.json
 """
 import sys
 

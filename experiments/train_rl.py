@@ -1,4 +1,4 @@
-"""RL fine-tuning of the SFT LoRA adapter with a configurable Claude reward.
+"""RL fine-tuning of the SFT LoRA adapter with a configurable LLM judge reward.
 
 Loads the supervised LoRA checkpoint (same format as ``train_sft.py``), samples
 multiple completions per prompt, scores with ``--reward faithfulness``,
@@ -7,7 +7,8 @@ feasibility + difficulty alignment with EMA-adaptive weights).
 
 Outputs a new LoRA directory (see ``--output_dir``) for ``eval_rl.py`` / ``eval_pipeline``.
 
-Requires ``ANTHROPIC_API_KEY`` and a trained SFT adapter at ``--sft_dir``.
+Requires an LLM API key (``ANTHROPIC_API_KEY`` or ``OPENAI_API_KEY``, or pass
+``--anthropic-api-key`` / ``--openai-api-key``) and a trained SFT adapter at ``--sft_dir``.
 
 GPU: single device via ``--cuda-device`` (default 0).
 
@@ -25,6 +26,13 @@ Use ``--kl-ref-cpu`` to load the reference on CPU to save GPU memory.
 **W&B:** ``--wandb`` / ``--wandb_project`` as before.
 
 Prompts include **target difficulty** in the user turn, same as SFT.
+
+**LLM judges:** ``--llm-provider openai`` (or ``claude``); keys from ``experiments/.env``
+or ``--openai-api-key`` / ``--anthropic-api-key``. Example::
+
+    python train_rl.py --reward adaptive --llm-provider openai \\
+        --sft_dir /mnt/storage/ae21b026/sft_lora \\
+        --output_dir /mnt/storage/ae21b026/rl_adaptive_openai
 """
 from __future__ import annotations
 
@@ -41,9 +49,9 @@ from peft import PeftModel
 from torch.optim import AdamW
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from claude_client import ClaudeClient
 from cot_utils import strip_reasoning_prefix
 from judges import judge_difficulty, judge_faithfulness, judge_feasibility
+from llm_client import add_llm_cli, describe_llm_client, llm_client_from_args
 from prompts import build_sft_chat_messages
 
 HERE = Path(__file__).parent
@@ -486,6 +494,7 @@ def main():
         action="store_true",
         help="Load π_ref on CPU (saves GPU RAM; KL forward is slower).",
     )
+    add_llm_cli(ap)
     args = ap.parse_args()
 
     Path(args.output_dir).mkdir(parents=True, exist_ok=True)
@@ -525,7 +534,8 @@ def main():
     model, tok = load_trainable_sft(
         args.base_model, args.sft_dir, cuda_device=args.cuda_device
     )
-    judge = ClaudeClient()
+    judge = llm_client_from_args(args)
+    print(f"Judge backend: {describe_llm_client(judge)}", flush=True)
     ref_model = None
     kl_beta = float(args.kl_beta)
     if kl_beta > 0.0:
@@ -855,6 +865,8 @@ def main():
                 log_rec: dict = {
                     "step": global_step,
                     "reward_kind": args.reward,
+                    "llm_provider": getattr(args, "llm_provider", "claude"),
+                    "llm_model": getattr(judge, "model", ""),
                     "active_reward": active_reward,
                     "kl_beta": kl_beta,
                     "mean_kl_sample": mean_kl,

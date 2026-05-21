@@ -24,6 +24,7 @@ import torch
 
 from cot_utils import strip_reasoning_prefix
 from eval_pipeline import generate_question, load_model, tokens_for_difficulty
+from llm_client import add_llm_cli
 from prompts import build_sft_chat_messages, format_trace
 from traversal import HyperGraph
 
@@ -94,8 +95,9 @@ def main():
     ap.add_argument(
         "--with-judges",
         action="store_true",
-        help="Call Claude difficulty / faithfulness / feasibility (needs API key).",
+        help="Call LLM difficulty / faithfulness / feasibility judges (needs API key).",
     )
+    add_llm_cli(ap)
     ap.add_argument(
         "--print",
         action="store_true",
@@ -114,10 +116,11 @@ def main():
     model, tok = load_model(args.base_model, args.sft_dir)
     judges = None
     if args.with_judges:
-        from claude_client import ClaudeClient
         from judges import judge_difficulty, judge_faithfulness, judge_feasibility
+        from llm_client import describe_llm_client, llm_client_from_args
 
-        judges = ClaudeClient()
+        judges = llm_client_from_args(args)
+        print(f"Judge backend: {describe_llm_client(judges)}", flush=True)
 
     records = []
     n, attempts = 0, 0

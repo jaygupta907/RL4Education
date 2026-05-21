@@ -68,8 +68,20 @@ Hard constraints regardless of level:
   - The integer difficulty must NOT appear in the question text."""
 
 
+CONCISENESS_GUIDANCE = """CONCISENESS (mandatory; still satisfy every rubric axis at each level):
+  - Write the SHORTEST question that fully meets that level's distractor, disguise,
+    phrasing, and conversion requirements. No filler, no scene-setting paragraphs,
+    no recap of the trace or formulas.
+  - Approximate caps on the question text alone (not counting any <reasoning> block):
+    levels 1-3: 1-2 sentences; 4-5: 2-4 sentences; 6-7: 3-5 sentences;
+    level 8: 4-6 sentences; levels 9-10: 5-8 sentences.
+  - Embed leaf values compactly in the narrative; avoid bullet lists of givens.
+  - Higher difficulty comes from rubric axes (distractors, disguise, etc.), NOT from
+    extra word count alone."""
+
+
 SYSTEM_GEN = f"""You generate physics word problems from a solution trace.
-For each requested difficulty level you produce ONE distinct word problem.
+For the requested difficulty level you produce ONE word problem.
 
 {DIFFICULTY_RUBRIC}
 
@@ -104,34 +116,32 @@ PHYSICAL FEASIBILITY (mandatory at EVERY difficulty level):
     well-posed, physically realistic scenario whose target is named
     directly or via a clear synonym.
 
-Output ONLY a JSON array. Each element is an object:
+{CONCISENESS_GUIDANCE}
+
+Output ONLY a JSON array with exactly one object:
   {{"difficulty": <int 1-10>, "question": "<word problem text>"}}
 No prose, no markdown, no code fences. Do NOT mention the difficulty number
 inside the question text. Do NOT include the answer or solution steps."""
 
 
 SYSTEM_GEN_WITH_COT = SYSTEM_GEN.replace(
-    "Output ONLY a JSON array. Each element is an object:\n"
+    "Output ONLY a JSON array with exactly one object:\n"
     '  {"difficulty": <int 1-10>, "question": "<word problem text>"}\n'
     "No prose, no markdown, no code fences. Do NOT mention the difficulty number\n"
     "inside the question text. Do NOT include the answer or solution steps.",
-    "First output exactly one XML element <reasoning>...</reasoning> containing your\n"
-    "chain-of-thought before any JSON. Inside <reasoning>, use concise numbered steps:\n"
-    "(1) Walk the trace from each leaf variable to the target through every formula step.\n"
-    "(2) For each leaf, state the numerical value you will embed and one line on physical\n"
-    "plausibility (order of magnitude, sign, domain consistency).\n"
-    "(3) For each requested difficulty level in the user message, spell out how you will\n"
-    "meet the rubric (distractor count, variable disguise, phrasing, unit conversions) without\n"
-    "omitting, replacing, or leaving any leaf without a numeric value.\n"
-    "(4) For each difficulty, how the final sentence will explicitly ask for the target\n"
-    "(or an allowed synonym per the rubric).\n"
-    "Keep the <reasoning> block under roughly 700 words.\n\n"
-    "Immediately after </reasoning>, output ONLY a JSON array with one object per requested\n"
-    "difficulty. Each element is an object:\n"
+    "First output exactly one XML element <reasoning>...</reasoning> before any JSON.\n"
+    "Inside <reasoning>, use terse bullet lines only (no essays):\n"
+    "- One line: leaf -> target via trace.\n"
+    "- One line per leaf: value + plausibility check.\n"
+    "- One line for the requested difficulty: rubric axes you will hit (distractors, disguise,\n"
+    "  phrasing, conversions) and how the final sentence asks for the target.\n"
+    "Keep <reasoning> under 150 words total. Do NOT put the question text inside <reasoning>.\n"
+    "You MUST close </reasoning> and output the complete one-element JSON array in the same reply.\n\n"
+    "Immediately after </reasoning>, output ONLY a JSON array with exactly one object:\n"
     '  {"difficulty": <int 1-10>, "question": "<word problem text>"}\n'
-    "Do not wrap the JSON array in markdown code fences. Do not add prose after the closing ]\n"
-    "of the array. Do NOT mention the difficulty number inside any question text.\n"
-    "Do NOT include answers or solution steps inside the question strings.",
+    "Do not wrap the JSON in markdown code fences. Do not add prose after the closing ].\n"
+    "Do NOT mention the difficulty number inside the question text.\n"
+    "Do NOT include answers or solution steps inside the question string.",
 )
 
 
@@ -143,13 +153,15 @@ Required given variables (must all appear, with realistic numerical values): {le
 Physics domain / chapter (the entire scenario MUST stay inside this single
 chapter - all numerical givens, distractors and the narrative belong here): {domain}
 
-Produce one physics word problem at EACH of these difficulty levels: {difficulties}
+Produce one physics word problem at difficulty level {difficulty}/10.
 
-Return the JSON array now."""
+Keep the question concise per the rubric length caps in the system message.
+
+Return a JSON array with exactly one object: {{"difficulty": {difficulty}, "question": "..."}}."""
 
 USER_GEN_WITH_COT = USER_GEN + """
 
-Follow the system message exactly: write <reasoning>...</reasoning> first, then the JSON array."""
+Follow the system message: write <reasoning>...</reasoning> first (with the bullet structure), then the one-element JSON array."""
 
 
 SYSTEM_SCORE = f"""You rate the difficulty of physics word problems on the
@@ -371,13 +383,13 @@ domain/subdomain and a target difficulty (1-10), you produce ONE physics word
 problem.
 
 Output format (strict order):
-1. First output exactly one XML element <reasoning>...</reasoning>. Inside it,
-   write concise chain-of-thought: how the trace links each leaf to the target
-   through the formulas; what numerical value you assign to each leaf and why
-   it is physically plausible; how you satisfy the difficulty rubric
-   (distractors, disguise, phrasing, conversions) without omitting any leaf; how
-   the final sentence will ask for the target (or an allowed synonym). Keep this
-   block under roughly 600 words.
+1. First output exactly one <reasoning>...</reasoning> block. Inside it, use terse
+   bullet lines only (no essays):
+   - One line: leaf -> target via trace.
+   - One line per leaf: value + plausibility check.
+   - One line for the requested difficulty: rubric axes (distractors, disguise,
+     phrasing, conversions) and how the final sentence asks for the target.
+   Keep <reasoning> under 150 words. Do NOT put the question text inside <reasoning>.
 2. Immediately after </reasoning>, output ONLY the word problem itself: plain
    prose, no headings, no JSON, no markdown, no commentary. Do NOT restate the
    difficulty number inside the question. Do NOT include the answer or solution
@@ -422,8 +434,8 @@ def build_sft_user_message(
         "domain/subdomain, and any distractors must be the SAME physical "
         "type as the leaves.\n\n"
         + (
-            "Follow the system message: write <reasoning>...</reasoning> first, "
-            "then the question text only (no JSON).\n\n"
+            "Follow the system message: write <reasoning>...</reasoning> first "
+            "(with the bullet structure), then the question text only (no JSON).\n\n"
             "Write your reasoning and the question now."
             if expect_chain_of_thought
             else "Write the question now."

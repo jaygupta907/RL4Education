@@ -17,12 +17,18 @@ DEFAULT_MODEL = os.environ.get("CLAUDE_MODEL", "claude-opus-4-7")
 
 
 class ClaudeClient:
-    def __init__(self, model: Optional[str] = None,
-                 max_tokens: int = 1024,
-                 temperature: Optional[float] = None):
-        key = os.environ.get("ANTHROPIC_API_KEY")
+    def __init__(
+        self,
+        model: Optional[str] = None,
+        api_key: Optional[str] = None,
+        max_tokens: int = 1024,
+        temperature: Optional[float] = None,
+    ):
+        key = (api_key or "").strip() or os.environ.get("ANTHROPIC_API_KEY")
         if not key:
-            raise RuntimeError("ANTHROPIC_API_KEY not set in environment / .env")
+            raise RuntimeError(
+                "ANTHROPIC_API_KEY not set (use --anthropic-api-key, .env, or environment)"
+            )
         self.client = anthropic.Anthropic(api_key=key)
         self.model = model or DEFAULT_MODEL
         self.max_tokens = max_tokens

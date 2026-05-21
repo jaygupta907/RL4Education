@@ -1,6 +1,6 @@
 """Evaluation: SFT model generates difficulty-conditioned questions; three
-independent Claude judges score each question for difficulty,
-faithfulness and physical feasibility using their own system prompts.
+independent LLM judges (Claude or OpenAI via ``--llm-provider``) score each
+question for difficulty, faithfulness, and physical feasibility.
 
 Supports both LoRA adapters (preferred) and full SFT checkpoints. The SFT
 model is invoked through the Llama-3 chat template (system + user roles)
@@ -14,9 +14,9 @@ from pathlib import Path
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from claude_client import ClaudeClient
 from cot_utils import strip_reasoning_prefix
 from judges import judge_difficulty, judge_faithfulness, judge_feasibility
+from llm_client import add_llm_cli, describe_llm_client, llm_client_from_args
 from prompts import build_sft_chat_messages, format_trace
 from traversal import HyperGraph
 
@@ -115,6 +115,7 @@ def main():
                          "and subdomain (must match dataset generation)")
     ap.add_argument("--no_single_domain", dest="single_domain",
                     action="store_false")
+    add_llm_cli(ap)
     args = ap.parse_args()
 
     rng = random.Random(args.seed)
@@ -127,10 +128,23 @@ def main():
     pool = [c for c in candidates if c not in excluded] or candidates
 
     model, tok = load_model(args.base_model, args.sft_dir)
-    judge = ClaudeClient()
+    judge = llm_client_from_args(args)
+    judge_desc = describe_llm_client(judge)
+    print(f"Judge backend: {judge_desc}", flush=True)
 
     out = []
-    Path(args.output).parent.mkdir(parents=True, exist_ok=True)
+    out_path = Path(args.output)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    meta_path = out_path.with_suffix(".meta.json")
+    meta = {
+        "llm_provider": args.llm_provider,
+        "llm_model": judge.model,
+        "judge_backend": judge_desc,
+        "base_model": args.base_model,
+        "sft_dir": args.sft_dir,
+    }
+    with open(meta_path, "w", encoding="utf-8") as mf:
+        json.dump(meta, mf, indent=2)
     i, attempts = 0, 0
     while i < args.num_targets and attempts < args.num_targets * 5:
         attempts += 1
@@ -199,12 +213,13 @@ def main():
                   f"coverage={claude_faith['variable_coverage']:.2f} "
                   f"feasibility={claude_feas}",
                   flush=True)
-            tmp = Path(args.output).with_suffix(".json.tmp")
+            tmp = out_path.with_suffix(".json.tmp")
             with open(tmp, "w") as f:
                 json.dump(out, f, indent=2)
-            tmp.replace(args.output)
+            tmp.replace(out_path)
 
-    print(f"\nSaved {len(out)} eval records to {args.output}")
+    print(f"\nSaved {len(out)} eval records to {out_path}")
+    print(f"Judge metadata: {meta_path}", flush=True)
 
 
 if __name__ == "__main__":

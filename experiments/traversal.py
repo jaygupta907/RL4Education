@@ -69,6 +69,14 @@ class HyperGraph:
                 return True
             shuffled = edges[:]
             rng.shuffle(shuffled)
+            # Prefer formulas with more producible inputs (longer traces) when
+            # several edges are valid; random tie-break keeps sampling stochastic.
+            shuffled.sort(
+                key=lambda e: (
+                    -sum(1 for i in e["inputs"] if i in self.out_to_edges),
+                    rng.random(),
+                )
+            )
             visiting.add(var)
             for edge in shuffled:
                 snap = (dict(chosen), list(order), set(leafs),

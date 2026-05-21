@@ -1,6 +1,6 @@
-"""Independent Claude judges used during evaluation.
+"""Independent LLM judges used during evaluation (Claude or OpenAI via ``llm_client``).
 
-Three separate Claude calls per generated question, each with its own
+Three separate API calls per generated question, each with its own
 system prompt:
   - judge_difficulty:    SYSTEM_SCORE / USER_SCORE -> int 1..10
   - judge_faithfulness:  SYSTEM_FAITH / USER_FAITH -> {leaf_hits,
@@ -90,7 +90,7 @@ def judge_faithfulness(client, trace_str: str, leafs: List[str], target: str,
                 leafs=", ".join(leafs) or "(none)",
                 target=target, question=question,
             ),
-            max_tokens=512, temperature=0.0,
+            max_tokens=256, temperature=0.0,
         )
     except Exception:
         raw = ""

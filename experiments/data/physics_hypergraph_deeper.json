@@ -1,0 +1,4037 @@
+{
+  "nodes": [
+    "acceleration",
+    "amplitude",
+    "angle",
+    "angular_acceleration",
+    "angular_displacement",
+    "angular_frequency",
+    "angular_momentum",
+    "angular_velocity",
+    "applied_force",
+    "area",
+    "area1",
+    "area2",
+    "average_kinetic_energy",
+    "average_velocity",
+    "boltzmann_constant",
+    "buoyant_force",
+    "capacitance",
+    "capacitive_reactance",
+    "centripetal_acceleration",
+    "centripetal_force",
+    "change_in_current",
+    "change_in_flux",
+    "change_in_kinetic_energy",
+    "change_in_momentum",
+    "change_in_temperature",
+    "change_in_volume",
+    "charge",
+    "charge1",
+    "charge2",
+    "coefficient_of_friction",
+    "cold_temperature",
+    "coulomb_force",
+    "current",
+    "current_rms",
+    "de_broglie_wavelength",
+    "density",
+    "density_fluid",
+    "displacement",
+    "distance",
+    "doppler_frequency",
+    "earth_mass",
+    "earth_radius",
+    "efficiency",
+    "efficiency_carnot",
+    "elastic_pe",
+    "electric_field",
+    "electric_potential",
+    "electric_potential_energy",
+    "emf_self",
+    "energy_capacitor",
+    "energy_electric",
+    "energy_inductor",
+    "escape_velocity",
+    "final_angular_velocity",
+    "final_momentum",
+    "final_velocity",
+    "flow_velocity",
+    "focal_length",
+    "force",
+    "frequency",
+    "friction_force",
+    "fringe_width",
+    "gas_constant",
+    "gravitational_force",
+    "gravitational_pe",
+    "gravity",
+    "heat",
+    "height",
+    "horizontal_displacement",
+    "horizontal_velocity",
+    "hot_temperature",
+    "image_distance",
+    "image_height",
+    "impedance",
+    "impulse",
+    "inductance",
+    "inductive_reactance",
+    "initial_angular_velocity",
+    "initial_momentum",
+    "initial_velocity",
+    "intensity",
+    "internal_energy_change",
+    "kinetic_energy",
+    "kinetic_energy_shm",
+    "length",
+    "linear_density",
+    "lorentz_factor",
+    "magnetic_field",
+    "magnetic_field_solenoid",
+    "magnetic_flux",
+    "magnetic_force",
+    "magnetic_force_wire",
+    "magnification",
+    "mass",
+    "mass1",
+    "mass2",
+    "mass_energy",
+    "max_acceleration",
+    "max_height",
+    "max_kinetic",
+    "max_velocity",
+    "mechanical_energy",
+    "moles",
+    "moment_of_inertia",
+    "momentum",
+    "net_force",
+    "normal_force",
+    "object_distance",
+    "object_height",
+    "observer_velocity",
+    "orbital_kinetic_energy",
+    "orbital_period",
+    "orbital_radius",
+    "orbital_velocity",
+    "peak_current",
+    "peak_voltage",
+    "period",
+    "period_pendulum",
+    "permeability",
+    "phase",
+    "photoelectron_velocity",
+    "photon_energy",
+    "planck_constant",
+    "potential_energy",
+    "potential_energy_shm",
+    "power",
+    "power_ac",
+    "pressure",
+    "r1",
+    "r2",
+    "radius",
+    "range",
+    "refractive_index",
+    "relativistic_energy",
+    "relativistic_momentum",
+    "resistance",
+    "resistance_parallel",
+    "resistance_series",
+    "resistivity",
+    "rotational_kinetic_energy",
+    "screen_distance",
+    "slit_separation",
+    "source_velocity",
+    "specific_heat",
+    "speed",
+    "speed_of_light",
+    "speed_string",
+    "spring_constant",
+    "spring_force",
+    "tangential_acceleration",
+    "temperature",
+    "tension",
+    "time",
+    "time_of_flight",
+    "torque",
+    "total_energy_shm",
+    "total_input",
+    "turns_per_length",
+    "useful_output",
+    "velocity",
+    "velocity1",
+    "vertical_displacement",
+    "vertical_velocity",
+    "voltage",
+    "voltage_induced",
+    "voltage_induced_motional",
+    "voltage_rms",
+    "volume",
+    "volume_displaced",
+    "wave_number",
+    "wave_speed",
+    "wavelength",
+    "weight",
+    "work",
+    "work_function",
+    "work_thermo"
+  ],
+  "hyperedges": [
+    {
+      "id": "f0",
+      "domain": "kinematics",
+      "output": "velocity",
+      "inputs": [
+        "displacement",
+        "time"
+      ],
+      "label": "displacement / time",
+      "output_unit": "m/s",
+      "subdomain": "const_velocity"
+    },
+    {
+      "id": "f1",
+      "domain": "kinematics",
+      "output": "displacement",
+      "inputs": [
+        "velocity",
+        "time"
+      ],
+      "label": "velocity * time",
+      "output_unit": "m",
+      "subdomain": "const_velocity"
+    },
+    {
+      "id": "f2",
+      "domain": "kinematics",
+      "output": "time",
+      "inputs": [
+        "displacement",
+        "velocity"
+      ],
+      "label": "displacement / velocity",
+      "output_unit": "s",
+      "subdomain": "const_velocity"
+    },
+    {
+      "id": "f3",
+      "domain": "kinematics",
+      "output": "speed",
+      "inputs": [
+        "distance",
+        "time"
+      ],
+      "label": "distance / time",
+      "output_unit": "m/s",
+      "subdomain": "const_velocity"
+    },
+    {
+      "id": "f4",
+      "domain": "kinematics",
+      "output": "distance",
+      "inputs": [
+        "speed",
+        "time"
+      ],
+      "label": "speed * time",
+      "output_unit": "m",
+      "subdomain": "const_velocity"
+    },
+    {
+      "id": "f5",
+      "domain": "kinematics",
+      "output": "acceleration",
+      "inputs": [
+        "final_velocity",
+        "initial_velocity",
+        "time"
+      ],
+      "label": "(final_velocity - initial_velocity) / time",
+      "output_unit": "m/s^2",
+      "subdomain": "uniform_accel"
+    },
+    {
+      "id": "f6",
+      "domain": "kinematics",
+      "output": "final_velocity",
+      "inputs": [
+        "initial_velocity",
+        "acceleration",
+        "time"
+      ],
+      "label": "initial_velocity + acceleration * time",
+      "output_unit": "m/s",
+      "subdomain": "uniform_accel"
+    },
+    {
+      "id": "f7",
+      "domain": "kinematics",
+      "output": "displacement",
+      "inputs": [
+        "initial_velocity",
+        "acceleration",
+        "time"
+      ],
+      "label": "initial_velocity * time + 0.5 * acceleration * time^2",
+      "output_unit": "m",
+      "subdomain": "uniform_accel"
+    },
+    {
+      "id": "f8",
+      "domain": "kinematics",
+      "output": "final_velocity",
+      "inputs": [
+        "initial_velocity",
+        "acceleration",
+        "displacement"
+      ],
+      "label": "sqrt(initial_velocity^2 + 2 * acceleration * displacement)",
+      "output_unit": "m/s",
+      "subdomain": "uniform_accel"
+    },
+    {
+      "id": "f9",
+      "domain": "kinematics",
+      "output": "average_velocity",
+      "inputs": [
+        "initial_velocity",
+        "final_velocity"
+      ],
+      "label": "(initial_velocity + final_velocity) / 2",
+      "output_unit": "m/s",
+      "subdomain": "uniform_accel"
+    },
+    {
+      "id": "f11",
+      "domain": "kinematics",
+      "output": "horizontal_velocity",
+      "inputs": [
+        "initial_velocity",
+        "angle"
+      ],
+      "label": "initial_velocity * cos(angle)",
+      "output_unit": "m/s",
+      "subdomain": "projectile"
+    },
+    {
+      "id": "f12",
+      "domain": "kinematics",
+      "output": "vertical_velocity",
+      "inputs": [
+        "initial_velocity",
+        "angle"
+      ],
+      "label": "initial_velocity * sin(angle)",
+      "output_unit": "m/s",
+      "subdomain": "projectile"
+    },
+    {
+      "id": "f13",
+      "domain": "kinematics",
+      "output": "range",
+      "inputs": [
+        "initial_velocity",
+        "angle",
+        "gravity"
+      ],
+      "label": "(initial_velocity^2 * sin(2*angle)) / gravity",
+      "output_unit": "m",
+      "subdomain": "projectile"
+    },
+    {
+      "id": "f14",
+      "domain": "kinematics",
+      "output": "max_height",
+      "inputs": [
+        "initial_velocity",
+        "angle",
+        "gravity"
+      ],
+      "label": "(initial_velocity * sin(angle))^2 / (2 * gravity)",
+      "output_unit": "m",
+      "subdomain": "projectile"
+    },
+    {
+      "id": "f15",
+      "domain": "kinematics",
+      "output": "time_of_flight",
+      "inputs": [
+        "initial_velocity",
+        "angle",
+        "gravity"
+      ],
+      "label": "2 * initial_velocity * sin(angle) / gravity",
+      "output_unit": "s",
+      "subdomain": "projectile"
+    },
+    {
+      "id": "f16",
+      "domain": "kinematics",
+      "output": "horizontal_displacement",
+      "inputs": [
+        "horizontal_velocity",
+        "time"
+      ],
+      "label": "horizontal_velocity * time",
+      "output_unit": "m",
+      "subdomain": "projectile"
+    },
+    {
+      "id": "f17",
+      "domain": "kinematics",
+      "output": "vertical_displacement",
+      "inputs": [
+        "vertical_velocity",
+        "gravity",
+        "time"
+      ],
+      "label": "vertical_velocity * time - 0.5 * gravity * time^2",
+      "output_unit": "m",
+      "subdomain": "projectile"
+    },
+    {
+      "id": "f18",
+      "domain": "dynamics",
+      "output": "force",
+      "inputs": [
+        "mass",
+        "acceleration"
+      ],
+      "label": "mass * acceleration",
+      "output_unit": "N",
+      "subdomain": "dynamics"
+    },
+    {
+      "id": "f19",
+      "domain": "dynamics",
+      "output": "mass",
+      "inputs": [
+        "force",
+        "acceleration"
+      ],
+      "label": "force / acceleration",
+      "output_unit": "kg",
+      "subdomain": "dynamics"
+    },
+    {
+      "id": "f20",
+      "domain": "dynamics",
+      "output": "acceleration",
+      "inputs": [
+        "force",
+        "mass"
+      ],
+      "label": "force / mass",
+      "output_unit": "m/s^2",
+      "subdomain": "dynamics"
+    },
+    {
+      "id": "f21",
+      "domain": "dynamics",
+      "output": "weight",
+      "inputs": [
+        "mass",
+        "gravity"
+      ],
+      "label": "mass * gravity",
+      "output_unit": "N",
+      "subdomain": "dynamics"
+    },
+    {
+      "id": "f22",
+      "domain": "dynamics",
+      "output": "normal_force",
+      "inputs": [
+        "mass",
+        "gravity"
+      ],
+      "label": "mass * gravity",
+      "output_unit": "N",
+      "subdomain": "dynamics"
+    },
+    {
+      "id": "f23",
+      "domain": "dynamics",
+      "output": "friction_force",
+      "inputs": [
+        "coefficient_of_friction",
+        "normal_force"
+      ],
+      "label": "mu * normal_force",
+      "output_unit": "N",
+      "subdomain": "dynamics"
+    },
+    {
+      "id": "f24",
+      "domain": "dynamics",
+      "output": "net_force",
+      "inputs": [
+        "applied_force",
+        "friction_force"
+      ],
+      "label": "applied_force - friction_force",
+      "output_unit": "N",
+      "subdomain": "dynamics"
+    },
+    {
+      "id": "f25",
+      "domain": "dynamics",
+      "output": "momentum",
+      "inputs": [
+        "mass",
+        "velocity"
+      ],
+      "label": "mass * velocity",
+      "output_unit": "kg*m/s",
+      "subdomain": "dynamics"
+    },
+    {
+      "id": "f26",
+      "domain": "dynamics",
+      "output": "impulse",
+      "inputs": [
+        "force",
+        "time"
+      ],
+      "label": "force * time",
+      "output_unit": "kg*m/s",
+      "subdomain": "dynamics"
+    },
+    {
+      "id": "f27",
+      "domain": "dynamics",
+      "output": "impulse",
+      "inputs": [
+        "final_momentum",
+        "initial_momentum"
+      ],
+      "label": "final_momentum - initial_momentum",
+      "output_unit": "kg*m/s",
+      "subdomain": "dynamics"
+    },
+    {
+      "id": "f28",
+      "domain": "dynamics",
+      "output": "change_in_momentum",
+      "inputs": [
+        "mass",
+        "final_velocity",
+        "initial_velocity"
+      ],
+      "label": "mass * (final_velocity - initial_velocity)",
+      "output_unit": "kg*m/s",
+      "subdomain": "dynamics"
+    },
+    {
+      "id": "f29",
+      "domain": "dynamics",
+      "output": "centripetal_force",
+      "inputs": [
+        "mass",
+        "velocity",
+        "radius"
+      ],
+      "label": "mass * velocity^2 / radius",
+      "output_unit": "N",
+      "subdomain": "dynamics"
+    },
+    {
+      "id": "f30",
+      "domain": "dynamics",
+      "output": "centripetal_acceleration",
+      "inputs": [
+        "velocity",
+        "radius"
+      ],
+      "label": "velocity^2 / radius",
+      "output_unit": "m/s^2",
+      "subdomain": "dynamics"
+    },
+    {
+      "id": "f31",
+      "domain": "dynamics",
+      "output": "centripetal_acceleration",
+      "inputs": [
+        "angular_velocity",
+        "radius"
+      ],
+      "label": "angular_velocity^2 * radius",
+      "output_unit": "m/s^2",
+      "subdomain": "dynamics"
+    },
+    {
+      "id": "f32",
+      "domain": "dynamics",
+      "output": "tension",
+      "inputs": [
+        "mass",
+        "gravity",
+        "acceleration"
+      ],
+      "label": "mass * (gravity + acceleration)",
+      "output_unit": "N",
+      "subdomain": "dynamics"
+    },
+    {
+      "id": "f33",
+      "domain": "dynamics",
+      "output": "spring_force",
+      "inputs": [
+        "spring_constant",
+        "displacement"
+      ],
+      "label": "spring_constant * displacement",
+      "output_unit": "N",
+      "subdomain": "dynamics"
+    },
+    {
+      "id": "f34",
+      "domain": "dynamics",
+      "output": "pressure",
+      "inputs": [
+        "force",
+        "area"
+      ],
+      "label": "force / area",
+      "output_unit": "Pa",
+      "subdomain": "dynamics"
+    },
+    {
+      "id": "f35",
+      "domain": "energy",
+      "output": "kinetic_energy",
+      "inputs": [
+        "mass",
+        "velocity"
+      ],
+      "label": "0.5 * mass * velocity^2",
+      "output_unit": "J",
+      "subdomain": "energy"
+    },
+    {
+      "id": "f36",
+      "domain": "energy",
+      "output": "potential_energy",
+      "inputs": [
+        "mass",
+        "gravity",
+        "height"
+      ],
+      "label": "mass * gravity * height",
+      "output_unit": "J",
+      "subdomain": "energy"
+    },
+    {
+      "id": "f37",
+      "domain": "energy",
+      "output": "elastic_pe",
+      "inputs": [
+        "spring_constant",
+        "displacement"
+      ],
+      "label": "0.5 * spring_constant * displacement^2",
+      "output_unit": "J",
+      "subdomain": "energy"
+    },
+    {
+      "id": "f38",
+      "domain": "energy",
+      "output": "work",
+      "inputs": [
+        "force",
+        "displacement"
+      ],
+      "label": "force * displacement",
+      "output_unit": "J",
+      "subdomain": "energy"
+    },
+    {
+      "id": "f39",
+      "domain": "energy",
+      "output": "work",
+      "inputs": [
+        "force",
+        "displacement",
+        "angle"
+      ],
+      "label": "force * displacement * cos(angle)",
+      "output_unit": "J",
+      "subdomain": "energy"
+    },
+    {
+      "id": "f40",
+      "domain": "energy",
+      "output": "power",
+      "inputs": [
+        "work",
+        "time"
+      ],
+      "label": "work / time",
+      "output_unit": "W",
+      "subdomain": "energy"
+    },
+    {
+      "id": "f41",
+      "domain": "energy",
+      "output": "power",
+      "inputs": [
+        "force",
+        "velocity"
+      ],
+      "label": "force * velocity",
+      "output_unit": "W",
+      "subdomain": "energy"
+    },
+    {
+      "id": "f42",
+      "domain": "energy",
+      "output": "mechanical_energy",
+      "inputs": [
+        "kinetic_energy",
+        "potential_energy"
+      ],
+      "label": "kinetic_energy + potential_energy",
+      "output_unit": "J",
+      "subdomain": "energy"
+    },
+    {
+      "id": "f43",
+      "domain": "energy",
+      "output": "efficiency",
+      "inputs": [
+        "useful_output",
+        "total_input"
+      ],
+      "label": "useful_output / total_input",
+      "output_unit": "",
+      "subdomain": "energy"
+    },
+    {
+      "id": "f44",
+      "domain": "energy",
+      "output": "change_in_kinetic_energy",
+      "inputs": [
+        "work"
+      ],
+      "label": "work",
+      "output_unit": "J",
+      "subdomain": "energy"
+    },
+    {
+      "id": "f45",
+      "domain": "energy",
+      "output": "height",
+      "inputs": [
+        "potential_energy",
+        "mass",
+        "gravity"
+      ],
+      "label": "potential_energy / (mass * gravity)",
+      "output_unit": "m",
+      "subdomain": "energy"
+    },
+    {
+      "id": "f46",
+      "domain": "energy",
+      "output": "velocity",
+      "inputs": [
+        "kinetic_energy",
+        "mass"
+      ],
+      "label": "sqrt(2 * kinetic_energy / mass)",
+      "output_unit": "m/s",
+      "subdomain": "energy"
+    },
+    {
+      "id": "f47",
+      "domain": "rotational",
+      "output": "angular_velocity",
+      "inputs": [
+        "angular_displacement",
+        "time"
+      ],
+      "label": "angular_displacement / time",
+      "output_unit": "rad/s",
+      "subdomain": "rotational"
+    },
+    {
+      "id": "f48",
+      "domain": "rotational",
+      "output": "angular_acceleration",
+      "inputs": [
+        "final_angular_velocity",
+        "initial_angular_velocity",
+        "time"
+      ],
+      "label": "(final_angular_velocity - initial_angular_velocity) / time",
+      "output_unit": "rad/s^2",
+      "subdomain": "rotational"
+    },
+    {
+      "id": "f49",
+      "domain": "rotational",
+      "output": "angular_displacement",
+      "inputs": [
+        "initial_angular_velocity",
+        "angular_acceleration",
+        "time"
+      ],
+      "label": "w0*t + 0.5*alpha*t^2",
+      "output_unit": "rad",
+      "subdomain": "rotational"
+    },
+    {
+      "id": "f50",
+      "domain": "rotational",
+      "output": "velocity",
+      "inputs": [
+        "angular_velocity",
+        "radius"
+      ],
+      "label": "angular_velocity * radius",
+      "output_unit": "m/s",
+      "subdomain": "rotational"
+    },
+    {
+      "id": "f51",
+      "domain": "rotational",
+      "output": "tangential_acceleration",
+      "inputs": [
+        "angular_acceleration",
+        "radius"
+      ],
+      "label": "angular_acceleration * radius",
+      "output_unit": "m/s^2",
+      "subdomain": "rotational"
+    },
+    {
+      "id": "f52",
+      "domain": "rotational",
+      "output": "torque",
+      "inputs": [
+        "force",
+        "radius"
+      ],
+      "label": "force * radius",
+      "output_unit": "N*m",
+      "subdomain": "rotational"
+    },
+    {
+      "id": "f53",
+      "domain": "rotational",
+      "output": "torque",
+      "inputs": [
+        "force",
+        "radius",
+        "angle"
+      ],
+      "label": "force * radius * sin(angle)",
+      "output_unit": "N*m",
+      "subdomain": "rotational"
+    },
+    {
+      "id": "f54",
+      "domain": "rotational",
+      "output": "torque",
+      "inputs": [
+        "moment_of_inertia",
+        "angular_acceleration"
+      ],
+      "label": "moment_of_inertia * angular_acceleration",
+      "output_unit": "N*m",
+      "subdomain": "rotational"
+    },
+    {
+      "id": "f55",
+      "domain": "rotational",
+      "output": "angular_momentum",
+      "inputs": [
+        "moment_of_inertia",
+        "angular_velocity"
+      ],
+      "label": "moment_of_inertia * angular_velocity",
+      "output_unit": "kg*m^2/s",
+      "subdomain": "rotational"
+    },
+    {
+      "id": "f56",
+      "domain": "rotational",
+      "output": "moment_of_inertia",
+      "inputs": [
+        "mass",
+        "radius"
+      ],
+      "label": "mass * radius^2",
+      "output_unit": "kg*m^2",
+      "subdomain": "rotational"
+    },
+    {
+      "id": "f57",
+      "domain": "rotational",
+      "output": "rotational_kinetic_energy",
+      "inputs": [
+        "moment_of_inertia",
+        "angular_velocity"
+      ],
+      "label": "0.5 * moment_of_inertia * angular_velocity^2",
+      "output_unit": "J",
+      "subdomain": "rotational"
+    },
+    {
+      "id": "f58",
+      "domain": "rotational",
+      "output": "frequency",
+      "inputs": [
+        "period"
+      ],
+      "label": "1 / period",
+      "output_unit": "Hz",
+      "subdomain": "rotational"
+    },
+    {
+      "id": "f59",
+      "domain": "rotational",
+      "output": "angular_velocity",
+      "inputs": [
+        "frequency"
+      ],
+      "label": "2*pi*frequency",
+      "output_unit": "rad/s",
+      "subdomain": "rotational"
+    },
+    {
+      "id": "f60",
+      "domain": "rotational",
+      "output": "period",
+      "inputs": [
+        "angular_velocity"
+      ],
+      "label": "2*pi / angular_velocity",
+      "output_unit": "s",
+      "subdomain": "rotational"
+    },
+    {
+      "id": "f61",
+      "domain": "shm",
+      "output": "period",
+      "inputs": [
+        "mass",
+        "spring_constant"
+      ],
+      "label": "2*pi*sqrt(mass / spring_constant)",
+      "output_unit": "s",
+      "subdomain": "shm"
+    },
+    {
+      "id": "f62",
+      "domain": "shm",
+      "output": "period_pendulum",
+      "inputs": [
+        "length",
+        "gravity"
+      ],
+      "label": "2*pi*sqrt(length / gravity)",
+      "output_unit": "s",
+      "subdomain": "shm"
+    },
+    {
+      "id": "f63",
+      "domain": "shm",
+      "output": "angular_frequency",
+      "inputs": [
+        "spring_constant",
+        "mass"
+      ],
+      "label": "sqrt(spring_constant / mass)",
+      "output_unit": "rad/s",
+      "subdomain": "shm"
+    },
+    {
+      "id": "f64",
+      "domain": "shm",
+      "output": "displacement",
+      "inputs": [
+        "amplitude",
+        "angular_frequency",
+        "time"
+      ],
+      "label": "amplitude * cos(angular_frequency * time)",
+      "output_unit": "m",
+      "subdomain": "shm"
+    },
+    {
+      "id": "f65",
+      "domain": "shm",
+      "output": "max_velocity",
+      "inputs": [
+        "amplitude",
+        "angular_frequency"
+      ],
+      "label": "amplitude * angular_frequency",
+      "output_unit": "m/s",
+      "subdomain": "shm"
+    },
+    {
+      "id": "f66",
+      "domain": "shm",
+      "output": "max_acceleration",
+      "inputs": [
+        "amplitude",
+        "angular_frequency"
+      ],
+      "label": "amplitude * angular_frequency^2",
+      "output_unit": "m/s^2",
+      "subdomain": "shm"
+    },
+    {
+      "id": "f67",
+      "domain": "shm",
+      "output": "total_energy_shm",
+      "inputs": [
+        "spring_constant",
+        "amplitude"
+      ],
+      "label": "0.5 * spring_constant * amplitude^2",
+      "output_unit": "J",
+      "subdomain": "shm"
+    },
+    {
+      "id": "f68",
+      "domain": "gravitation",
+      "output": "gravitational_force",
+      "inputs": [
+        "mass1",
+        "mass2",
+        "distance"
+      ],
+      "label": "G * m1 * m2 / r^2",
+      "output_unit": "N",
+      "subdomain": "gravitation"
+    },
+    {
+      "id": "f69",
+      "domain": "gravitation",
+      "output": "gravitational_pe",
+      "inputs": [
+        "mass1",
+        "mass2",
+        "distance"
+      ],
+      "label": "-G * m1 * m2 / r",
+      "output_unit": "J",
+      "subdomain": "gravitation"
+    },
+    {
+      "id": "f70",
+      "domain": "gravitation",
+      "output": "gravity",
+      "inputs": [
+        "earth_mass",
+        "earth_radius"
+      ],
+      "label": "G * M / R^2",
+      "output_unit": "m/s^2",
+      "subdomain": "gravitation"
+    },
+    {
+      "id": "f71",
+      "domain": "gravitation",
+      "output": "escape_velocity",
+      "inputs": [
+        "earth_mass",
+        "earth_radius"
+      ],
+      "label": "sqrt(2*G*M / R)",
+      "output_unit": "m/s",
+      "subdomain": "gravitation"
+    },
+    {
+      "id": "f72",
+      "domain": "gravitation",
+      "output": "orbital_velocity",
+      "inputs": [
+        "earth_mass",
+        "orbital_radius"
+      ],
+      "label": "sqrt(G*M / r)",
+      "output_unit": "m/s",
+      "subdomain": "gravitation"
+    },
+    {
+      "id": "f73",
+      "domain": "gravitation",
+      "output": "orbital_period",
+      "inputs": [
+        "earth_mass",
+        "orbital_radius"
+      ],
+      "label": "2*pi*sqrt(r^3 / (G*M))",
+      "output_unit": "s",
+      "subdomain": "gravitation"
+    },
+    {
+      "id": "f74",
+      "domain": "waves",
+      "output": "wave_speed",
+      "inputs": [
+        "frequency",
+        "wavelength"
+      ],
+      "label": "frequency * wavelength",
+      "output_unit": "m/s",
+      "subdomain": "waves"
+    },
+    {
+      "id": "f75",
+      "domain": "waves",
+      "output": "wavelength",
+      "inputs": [
+        "wave_speed",
+        "frequency"
+      ],
+      "label": "wave_speed / frequency",
+      "output_unit": "m",
+      "subdomain": "waves"
+    },
+    {
+      "id": "f76",
+      "domain": "waves",
+      "output": "frequency",
+      "inputs": [
+        "wave_speed",
+        "wavelength"
+      ],
+      "label": "wave_speed / wavelength",
+      "output_unit": "Hz",
+      "subdomain": "waves"
+    },
+    {
+      "id": "f77",
+      "domain": "waves",
+      "output": "period",
+      "inputs": [
+        "frequency"
+      ],
+      "label": "1 / frequency",
+      "output_unit": "s",
+      "subdomain": "waves"
+    },
+    {
+      "id": "f78",
+      "domain": "waves",
+      "output": "wave_number",
+      "inputs": [
+        "wavelength"
+      ],
+      "label": "2*pi / wavelength",
+      "output_unit": "1/m",
+      "subdomain": "waves"
+    },
+    {
+      "id": "f79",
+      "domain": "waves",
+      "output": "angular_frequency",
+      "inputs": [
+        "frequency"
+      ],
+      "label": "2*pi * frequency",
+      "output_unit": "rad/s",
+      "subdomain": "waves"
+    },
+    {
+      "id": "f80",
+      "domain": "waves",
+      "output": "speed_string",
+      "inputs": [
+        "tension",
+        "linear_density"
+      ],
+      "label": "sqrt(tension / linear_density)",
+      "output_unit": "m/s",
+      "subdomain": "waves"
+    },
+    {
+      "id": "f81",
+      "domain": "waves",
+      "output": "intensity",
+      "inputs": [
+        "power",
+        "area"
+      ],
+      "label": "power / area",
+      "output_unit": "W/m^2",
+      "subdomain": "waves"
+    },
+    {
+      "id": "f82",
+      "domain": "waves",
+      "output": "doppler_frequency",
+      "inputs": [
+        "frequency",
+        "wave_speed",
+        "observer_velocity",
+        "source_velocity"
+      ],
+      "label": "f*(v+vo)/(v-vs)",
+      "output_unit": "Hz",
+      "subdomain": "waves"
+    },
+    {
+      "id": "f83",
+      "domain": "thermodynamics",
+      "output": "pressure",
+      "inputs": [
+        "moles",
+        "gas_constant",
+        "temperature",
+        "volume"
+      ],
+      "label": "n*R*T / V",
+      "output_unit": "Pa",
+      "subdomain": "thermodynamics"
+    },
+    {
+      "id": "f84",
+      "domain": "thermodynamics",
+      "output": "volume",
+      "inputs": [
+        "moles",
+        "gas_constant",
+        "temperature",
+        "pressure"
+      ],
+      "label": "n*R*T / P",
+      "output_unit": "m^3",
+      "subdomain": "thermodynamics"
+    },
+    {
+      "id": "f85",
+      "domain": "thermodynamics",
+      "output": "temperature",
+      "inputs": [
+        "pressure",
+        "volume",
+        "moles",
+        "gas_constant"
+      ],
+      "label": "P*V / (n*R)",
+      "output_unit": "K",
+      "subdomain": "thermodynamics"
+    },
+    {
+      "id": "f86",
+      "domain": "thermodynamics",
+      "output": "average_kinetic_energy",
+      "inputs": [
+        "boltzmann_constant",
+        "temperature"
+      ],
+      "label": "1.5 * k_B * temperature",
+      "output_unit": "J",
+      "subdomain": "thermodynamics"
+    },
+    {
+      "id": "f87",
+      "domain": "thermodynamics",
+      "output": "heat",
+      "inputs": [
+        "mass",
+        "specific_heat",
+        "change_in_temperature"
+      ],
+      "label": "mass * c * dT",
+      "output_unit": "J",
+      "subdomain": "thermodynamics"
+    },
+    {
+      "id": "f88",
+      "domain": "thermodynamics",
+      "output": "work_thermo",
+      "inputs": [
+        "pressure",
+        "change_in_volume"
+      ],
+      "label": "pressure * dV",
+      "output_unit": "J",
+      "subdomain": "thermodynamics"
+    },
+    {
+      "id": "f89",
+      "domain": "thermodynamics",
+      "output": "internal_energy_change",
+      "inputs": [
+        "heat",
+        "work_thermo"
+      ],
+      "label": "heat - work_thermo",
+      "output_unit": "J",
+      "subdomain": "thermodynamics"
+    },
+    {
+      "id": "f90",
+      "domain": "thermodynamics",
+      "output": "efficiency_carnot",
+      "inputs": [
+        "cold_temperature",
+        "hot_temperature"
+      ],
+      "label": "1 - T_c / T_h",
+      "output_unit": "",
+      "subdomain": "thermodynamics"
+    },
+    {
+      "id": "f91",
+      "domain": "fluids",
+      "output": "pressure",
+      "inputs": [
+        "density",
+        "gravity",
+        "height"
+      ],
+      "label": "density * gravity * height",
+      "output_unit": "Pa",
+      "subdomain": "fluids"
+    },
+    {
+      "id": "f92",
+      "domain": "fluids",
+      "output": "buoyant_force",
+      "inputs": [
+        "density_fluid",
+        "gravity",
+        "volume_displaced"
+      ],
+      "label": "rho * g * V",
+      "output_unit": "N",
+      "subdomain": "fluids"
+    },
+    {
+      "id": "f93",
+      "domain": "fluids",
+      "output": "density",
+      "inputs": [
+        "mass",
+        "volume"
+      ],
+      "label": "mass / volume",
+      "output_unit": "kg/m^3",
+      "subdomain": "fluids"
+    },
+    {
+      "id": "f94",
+      "domain": "fluids",
+      "output": "mass",
+      "inputs": [
+        "density",
+        "volume"
+      ],
+      "label": "density * volume",
+      "output_unit": "kg",
+      "subdomain": "fluids"
+    },
+    {
+      "id": "f95",
+      "domain": "fluids",
+      "output": "volume",
+      "inputs": [
+        "mass",
+        "density"
+      ],
+      "label": "mass / density",
+      "output_unit": "m^3",
+      "subdomain": "fluids"
+    },
+    {
+      "id": "f96",
+      "domain": "fluids",
+      "output": "flow_velocity",
+      "inputs": [
+        "area1",
+        "velocity1",
+        "area2"
+      ],
+      "label": "A1*v1/A2",
+      "output_unit": "m/s",
+      "subdomain": "fluids"
+    },
+    {
+      "id": "f97",
+      "domain": "electrostatics",
+      "output": "coulomb_force",
+      "inputs": [
+        "charge1",
+        "charge2",
+        "distance"
+      ],
+      "label": "k * q1 * q2 / r^2",
+      "output_unit": "N",
+      "subdomain": "electrostatics"
+    },
+    {
+      "id": "f98",
+      "domain": "electrostatics",
+      "output": "electric_field",
+      "inputs": [
+        "force",
+        "charge"
+      ],
+      "label": "force / charge",
+      "output_unit": "V/m",
+      "subdomain": "electrostatics"
+    },
+    {
+      "id": "f99",
+      "domain": "electrostatics",
+      "output": "electric_field",
+      "inputs": [
+        "charge",
+        "distance"
+      ],
+      "label": "k * q / r^2",
+      "output_unit": "V/m",
+      "subdomain": "electrostatics"
+    },
+    {
+      "id": "f100",
+      "domain": "electrostatics",
+      "output": "electric_potential",
+      "inputs": [
+        "charge",
+        "distance"
+      ],
+      "label": "k * q / r",
+      "output_unit": "V",
+      "subdomain": "electrostatics"
+    },
+    {
+      "id": "f101",
+      "domain": "electrostatics",
+      "output": "electric_potential_energy",
+      "inputs": [
+        "charge1",
+        "charge2",
+        "distance"
+      ],
+      "label": "k * q1 * q2 / r",
+      "output_unit": "J",
+      "subdomain": "electrostatics"
+    },
+    {
+      "id": "f102",
+      "domain": "electrostatics",
+      "output": "voltage",
+      "inputs": [
+        "work",
+        "charge"
+      ],
+      "label": "work / charge",
+      "output_unit": "V",
+      "subdomain": "electrostatics"
+    },
+    {
+      "id": "f103",
+      "domain": "electrostatics",
+      "output": "capacitance",
+      "inputs": [
+        "charge",
+        "voltage"
+      ],
+      "label": "charge / voltage",
+      "output_unit": "F",
+      "subdomain": "electrostatics"
+    },
+    {
+      "id": "f104",
+      "domain": "electrostatics",
+      "output": "energy_capacitor",
+      "inputs": [
+        "capacitance",
+        "voltage"
+      ],
+      "label": "0.5 * capacitance * voltage^2",
+      "output_unit": "J",
+      "subdomain": "electrostatics"
+    },
+    {
+      "id": "f105",
+      "domain": "electrostatics",
+      "output": "energy_capacitor",
+      "inputs": [
+        "charge",
+        "voltage"
+      ],
+      "label": "0.5 * charge * voltage",
+      "output_unit": "J",
+      "subdomain": "electrostatics"
+    },
+    {
+      "id": "f106",
+      "domain": "current_electricity",
+      "output": "current",
+      "inputs": [
+        "charge",
+        "time"
+      ],
+      "label": "charge / time",
+      "output_unit": "A",
+      "subdomain": "current_electricity"
+    },
+    {
+      "id": "f107",
+      "domain": "current_electricity",
+      "output": "voltage",
+      "inputs": [
+        "current",
+        "resistance"
+      ],
+      "label": "current * resistance",
+      "output_unit": "V",
+      "subdomain": "current_electricity"
+    },
+    {
+      "id": "f108",
+      "domain": "current_electricity",
+      "output": "resistance",
+      "inputs": [
+        "voltage",
+        "current"
+      ],
+      "label": "voltage / current",
+      "output_unit": "ohm",
+      "subdomain": "current_electricity"
+    },
+    {
+      "id": "f109",
+      "domain": "current_electricity",
+      "output": "resistance",
+      "inputs": [
+        "resistivity",
+        "length",
+        "area"
+      ],
+      "label": "rho*L / A",
+      "output_unit": "ohm",
+      "subdomain": "current_electricity"
+    },
+    {
+      "id": "f110",
+      "domain": "current_electricity",
+      "output": "power",
+      "inputs": [
+        "voltage",
+        "current"
+      ],
+      "label": "voltage * current",
+      "output_unit": "W",
+      "subdomain": "current_electricity"
+    },
+    {
+      "id": "f111",
+      "domain": "current_electricity",
+      "output": "power",
+      "inputs": [
+        "current",
+        "resistance"
+      ],
+      "label": "current^2 * resistance",
+      "output_unit": "W",
+      "subdomain": "current_electricity"
+    },
+    {
+      "id": "f112",
+      "domain": "current_electricity",
+      "output": "power",
+      "inputs": [
+        "voltage",
+        "resistance"
+      ],
+      "label": "voltage^2 / resistance",
+      "output_unit": "W",
+      "subdomain": "current_electricity"
+    },
+    {
+      "id": "f113",
+      "domain": "current_electricity",
+      "output": "energy_electric",
+      "inputs": [
+        "power",
+        "time"
+      ],
+      "label": "power * time",
+      "output_unit": "J",
+      "subdomain": "current_electricity"
+    },
+    {
+      "id": "f114",
+      "domain": "current_electricity",
+      "output": "resistance_series",
+      "inputs": [
+        "r1",
+        "r2"
+      ],
+      "label": "r1 + r2",
+      "output_unit": "ohm",
+      "subdomain": "current_electricity"
+    },
+    {
+      "id": "f115",
+      "domain": "current_electricity",
+      "output": "resistance_parallel",
+      "inputs": [
+        "r1",
+        "r2"
+      ],
+      "label": "r1*r2 / (r1+r2)",
+      "output_unit": "ohm",
+      "subdomain": "current_electricity"
+    },
+    {
+      "id": "f116",
+      "domain": "magnetism",
+      "output": "magnetic_force",
+      "inputs": [
+        "charge",
+        "velocity",
+        "magnetic_field"
+      ],
+      "label": "q * v * B",
+      "output_unit": "N",
+      "subdomain": "magnetism"
+    },
+    {
+      "id": "f117",
+      "domain": "magnetism",
+      "output": "magnetic_force_wire",
+      "inputs": [
+        "current",
+        "length",
+        "magnetic_field"
+      ],
+      "label": "I * L * B",
+      "output_unit": "N",
+      "subdomain": "magnetism"
+    },
+    {
+      "id": "f118",
+      "domain": "magnetism",
+      "output": "magnetic_field_solenoid",
+      "inputs": [
+        "permeability",
+        "turns_per_length",
+        "current"
+      ],
+      "label": "mu0 * n * I",
+      "output_unit": "T",
+      "subdomain": "magnetism"
+    },
+    {
+      "id": "f119",
+      "domain": "magnetism",
+      "output": "magnetic_flux",
+      "inputs": [
+        "magnetic_field",
+        "area"
+      ],
+      "label": "magnetic_field * area",
+      "output_unit": "Wb",
+      "subdomain": "magnetism"
+    },
+    {
+      "id": "f120",
+      "domain": "magnetism",
+      "output": "voltage_induced",
+      "inputs": [
+        "change_in_flux",
+        "time"
+      ],
+      "label": "-dPhi / dt",
+      "output_unit": "V",
+      "subdomain": "magnetism"
+    },
+    {
+      "id": "f121",
+      "domain": "magnetism",
+      "output": "voltage_induced_motional",
+      "inputs": [
+        "magnetic_field",
+        "length",
+        "velocity"
+      ],
+      "label": "B * L * v",
+      "output_unit": "V",
+      "subdomain": "magnetism"
+    },
+    {
+      "id": "f122",
+      "domain": "magnetism",
+      "output": "emf_self",
+      "inputs": [
+        "inductance",
+        "change_in_current",
+        "time"
+      ],
+      "label": "-L * dI/dt",
+      "output_unit": "V",
+      "subdomain": "magnetism"
+    },
+    {
+      "id": "f123",
+      "domain": "magnetism",
+      "output": "energy_inductor",
+      "inputs": [
+        "inductance",
+        "current"
+      ],
+      "label": "0.5 * L * I^2",
+      "output_unit": "J",
+      "subdomain": "magnetism"
+    },
+    {
+      "id": "f124",
+      "domain": "ac_circuits",
+      "output": "inductive_reactance",
+      "inputs": [
+        "angular_frequency",
+        "inductance"
+      ],
+      "label": "omega * L",
+      "output_unit": "ohm",
+      "subdomain": "ac_circuits"
+    },
+    {
+      "id": "f125",
+      "domain": "ac_circuits",
+      "output": "capacitive_reactance",
+      "inputs": [
+        "angular_frequency",
+        "capacitance"
+      ],
+      "label": "1 / (omega * C)",
+      "output_unit": "ohm",
+      "subdomain": "ac_circuits"
+    },
+    {
+      "id": "f126",
+      "domain": "ac_circuits",
+      "output": "impedance",
+      "inputs": [
+        "resistance",
+        "inductive_reactance",
+        "capacitive_reactance"
+      ],
+      "label": "sqrt(R^2 + (XL-XC)^2)",
+      "output_unit": "ohm",
+      "subdomain": "ac_circuits"
+    },
+    {
+      "id": "f127",
+      "domain": "ac_circuits",
+      "output": "voltage_rms",
+      "inputs": [
+        "peak_voltage"
+      ],
+      "label": "Vp / sqrt(2)",
+      "output_unit": "V",
+      "subdomain": "ac_circuits"
+    },
+    {
+      "id": "f128",
+      "domain": "ac_circuits",
+      "output": "current_rms",
+      "inputs": [
+        "peak_current"
+      ],
+      "label": "Ip / sqrt(2)",
+      "output_unit": "A",
+      "subdomain": "ac_circuits"
+    },
+    {
+      "id": "f129",
+      "domain": "ac_circuits",
+      "output": "power_ac",
+      "inputs": [
+        "voltage_rms",
+        "current_rms",
+        "phase"
+      ],
+      "label": "Vrms*Irms*cos(phi)",
+      "output_unit": "W",
+      "subdomain": "ac_circuits"
+    },
+    {
+      "id": "f130",
+      "domain": "optics",
+      "output": "refractive_index",
+      "inputs": [
+        "speed_of_light",
+        "wave_speed"
+      ],
+      "label": "c / v",
+      "output_unit": "",
+      "subdomain": "optics"
+    },
+    {
+      "id": "f131",
+      "domain": "optics",
+      "output": "wave_speed",
+      "inputs": [
+        "speed_of_light",
+        "refractive_index"
+      ],
+      "label": "c / n",
+      "output_unit": "m/s",
+      "subdomain": "optics"
+    },
+    {
+      "id": "f132",
+      "domain": "optics",
+      "output": "image_distance",
+      "inputs": [
+        "focal_length",
+        "object_distance"
+      ],
+      "label": "1/(1/f - 1/do)",
+      "output_unit": "m",
+      "subdomain": "optics"
+    },
+    {
+      "id": "f133",
+      "domain": "optics",
+      "output": "magnification",
+      "inputs": [
+        "image_height",
+        "object_height"
+      ],
+      "label": "image_height / object_height",
+      "output_unit": "",
+      "subdomain": "optics"
+    },
+    {
+      "id": "f134",
+      "domain": "optics",
+      "output": "magnification",
+      "inputs": [
+        "image_distance",
+        "object_distance"
+      ],
+      "label": "-image_distance / object_distance",
+      "output_unit": "",
+      "subdomain": "optics"
+    },
+    {
+      "id": "f135",
+      "domain": "optics",
+      "output": "fringe_width",
+      "inputs": [
+        "wavelength",
+        "screen_distance",
+        "slit_separation"
+      ],
+      "label": "lambda * D / d",
+      "output_unit": "m",
+      "subdomain": "optics"
+    },
+    {
+      "id": "f136",
+      "domain": "modern_physics",
+      "output": "photon_energy",
+      "inputs": [
+        "planck_constant",
+        "frequency"
+      ],
+      "label": "h * frequency",
+      "output_unit": "J",
+      "subdomain": "modern_physics"
+    },
+    {
+      "id": "f137",
+      "domain": "modern_physics",
+      "output": "photon_energy",
+      "inputs": [
+        "planck_constant",
+        "speed_of_light",
+        "wavelength"
+      ],
+      "label": "h*c / wavelength",
+      "output_unit": "J",
+      "subdomain": "modern_physics"
+    },
+    {
+      "id": "f138",
+      "domain": "modern_physics",
+      "output": "de_broglie_wavelength",
+      "inputs": [
+        "planck_constant",
+        "momentum"
+      ],
+      "label": "h / momentum",
+      "output_unit": "m",
+      "subdomain": "modern_physics"
+    },
+    {
+      "id": "f139",
+      "domain": "modern_physics",
+      "output": "max_kinetic",
+      "inputs": [
+        "photon_energy",
+        "work_function"
+      ],
+      "label": "photon_energy - work_function",
+      "output_unit": "J",
+      "subdomain": "modern_physics"
+    },
+    {
+      "id": "f140",
+      "domain": "modern_physics",
+      "output": "mass_energy",
+      "inputs": [
+        "mass",
+        "speed_of_light"
+      ],
+      "label": "m * c^2",
+      "output_unit": "J",
+      "subdomain": "modern_physics"
+    },
+    {
+      "id": "f141",
+      "domain": "modern_physics",
+      "output": "lorentz_factor",
+      "inputs": [
+        "velocity",
+        "speed_of_light"
+      ],
+      "label": "1 / sqrt(1 - v^2/c^2)",
+      "output_unit": "",
+      "subdomain": "modern_physics"
+    },
+    {
+      "id": "f142",
+      "output": "gravitational_force",
+      "inputs": [
+        "mass",
+        "gravity"
+      ],
+      "label": "mass * gravity",
+      "output_unit": "N",
+      "domain": "gravitation",
+      "subdomain": "gravitation"
+    },
+    {
+      "id": "f143",
+      "output": "orbital_velocity",
+      "inputs": [
+        "gravity",
+        "orbital_radius"
+      ],
+      "label": "sqrt(gravity * orbital_radius)",
+      "output_unit": "m/s",
+      "domain": "gravitation",
+      "subdomain": "gravitation"
+    },
+    {
+      "id": "f144",
+      "output": "escape_velocity",
+      "inputs": [
+        "gravity",
+        "earth_radius"
+      ],
+      "label": "sqrt(2 * gravity * earth_radius)",
+      "output_unit": "m/s",
+      "domain": "gravitation",
+      "subdomain": "gravitation"
+    },
+    {
+      "id": "f145",
+      "output": "orbital_kinetic_energy",
+      "inputs": [
+        "mass",
+        "orbital_velocity"
+      ],
+      "label": "0.5 * mass * orbital_velocity^2",
+      "output_unit": "J",
+      "domain": "gravitation",
+      "subdomain": "gravitation"
+    },
+    {
+      "id": "f146",
+      "output": "magnetic_flux",
+      "inputs": [
+        "magnetic_field_solenoid",
+        "area"
+      ],
+      "label": "magnetic_field_solenoid * area",
+      "output_unit": "Wb",
+      "domain": "magnetism",
+      "subdomain": "magnetism"
+    },
+    {
+      "id": "f147",
+      "output": "voltage_induced_motional",
+      "inputs": [
+        "magnetic_field_solenoid",
+        "length",
+        "velocity"
+      ],
+      "label": "magnetic_field_solenoid * length * velocity",
+      "output_unit": "V",
+      "domain": "magnetism",
+      "subdomain": "magnetism"
+    },
+    {
+      "id": "f148",
+      "output": "magnetic_force_wire",
+      "inputs": [
+        "current",
+        "length",
+        "magnetic_field_solenoid"
+      ],
+      "label": "current * length * magnetic_field_solenoid",
+      "output_unit": "N",
+      "domain": "magnetism",
+      "subdomain": "magnetism"
+    },
+    {
+      "id": "f149",
+      "output": "relativistic_momentum",
+      "inputs": [
+        "lorentz_factor",
+        "mass",
+        "velocity"
+      ],
+      "label": "lorentz_factor * mass * velocity",
+      "output_unit": "kg*m/s",
+      "domain": "modern_physics",
+      "subdomain": "modern_physics"
+    },
+    {
+      "id": "f150",
+      "output": "relativistic_energy",
+      "inputs": [
+        "lorentz_factor",
+        "mass_energy"
+      ],
+      "label": "lorentz_factor * mass_energy",
+      "output_unit": "J",
+      "domain": "modern_physics",
+      "subdomain": "modern_physics"
+    },
+    {
+      "id": "f151",
+      "output": "photoelectron_velocity",
+      "inputs": [
+        "max_kinetic",
+        "mass"
+      ],
+      "label": "sqrt(2 * max_kinetic / mass)",
+      "output_unit": "m/s",
+      "domain": "modern_physics",
+      "subdomain": "modern_physics"
+    },
+    {
+      "id": "f152",
+      "output": "kinetic_energy_shm",
+      "inputs": [
+        "mass",
+        "max_velocity"
+      ],
+      "label": "0.5 * mass * max_velocity^2",
+      "output_unit": "J",
+      "domain": "shm",
+      "subdomain": "shm"
+    },
+    {
+      "id": "f153",
+      "output": "potential_energy_shm",
+      "inputs": [
+        "spring_constant",
+        "displacement"
+      ],
+      "label": "0.5 * spring_constant * displacement^2",
+      "output_unit": "J",
+      "domain": "shm",
+      "subdomain": "shm"
+    },
+    {
+      "id": "f154",
+      "output": "image_height",
+      "inputs": [
+        "magnification",
+        "object_height"
+      ],
+      "label": "magnification * object_height",
+      "output_unit": "m",
+      "domain": "optics",
+      "subdomain": "optics"
+    },
+    {
+      "id": "f155",
+      "output": "range",
+      "inputs": [
+        "horizontal_velocity",
+        "time_of_flight"
+      ],
+      "label": "horizontal_velocity * time_of_flight",
+      "output_unit": "m",
+      "domain": "kinematics",
+      "subdomain": "projectile"
+    },
+    {
+      "id": "f156",
+      "output": "max_height",
+      "inputs": [
+        "vertical_velocity",
+        "gravity"
+      ],
+      "label": "vertical_velocity^2 / (2 * gravity)",
+      "output_unit": "m",
+      "domain": "kinematics",
+      "subdomain": "projectile"
+    },
+    {
+      "id": "f157",
+      "output": "wave_speed",
+      "inputs": [
+        "tension",
+        "linear_density"
+      ],
+      "label": "sqrt(tension / linear_density)",
+      "output_unit": "m/s",
+      "domain": "waves",
+      "subdomain": "waves"
+    },
+    {
+      "id": "f158",
+      "output": "wave_number",
+      "inputs": [
+        "angular_frequency",
+        "wave_speed"
+      ],
+      "label": "angular_frequency / wave_speed",
+      "output_unit": "1/m",
+      "domain": "waves",
+      "subdomain": "waves"
+    },
+    {
+      "id": "f159",
+      "output": "internal_energy_change",
+      "inputs": [
+        "mass",
+        "specific_heat",
+        "change_in_temperature",
+        "work_thermo"
+      ],
+      "label": "mass * specific_heat * change_in_temperature - work_thermo",
+      "output_unit": "J",
+      "domain": "thermodynamics",
+      "subdomain": "thermodynamics"
+    },
+    {
+      "id": "f160",
+      "output": "force",
+      "inputs": [
+        "electric_field",
+        "charge"
+      ],
+      "label": "electric_field * charge",
+      "output_unit": "N",
+      "domain": "electrostatics",
+      "subdomain": "electrostatics"
+    },
+    {
+      "id": "f161",
+      "output": "energy_capacitor",
+      "inputs": [
+        "capacitance",
+        "voltage"
+      ],
+      "label": "0.5 * capacitance * voltage^2",
+      "output_unit": "J",
+      "domain": "electrostatics",
+      "subdomain": "electrostatics"
+    },
+    {
+      "id": "f162",
+      "output": "buoyant_force",
+      "inputs": [
+        "density",
+        "gravity",
+        "volume"
+      ],
+      "label": "density * gravity * volume",
+      "output_unit": "N",
+      "domain": "fluids",
+      "subdomain": "fluids"
+    },
+    {
+      "id": "f200",
+      "domain": "energy",
+      "subdomain": "energy",
+      "output": "kinetic_energy",
+      "inputs": [
+        "momentum",
+        "mass"
+      ],
+      "label": "momentum^2 / (2 * mass)",
+      "output_unit": "J"
+    },
+    {
+      "id": "f201",
+      "domain": "energy",
+      "subdomain": "energy",
+      "output": "kinetic_energy",
+      "inputs": [
+        "power",
+        "time"
+      ],
+      "label": "power * time",
+      "output_unit": "J"
+    },
+    {
+      "id": "f202",
+      "domain": "energy",
+      "subdomain": "energy",
+      "output": "kinetic_energy",
+      "inputs": [
+        "work"
+      ],
+      "label": "work",
+      "output_unit": "J"
+    },
+    {
+      "id": "f203",
+      "domain": "energy",
+      "subdomain": "energy",
+      "output": "potential_energy",
+      "inputs": [
+        "weight",
+        "height"
+      ],
+      "label": "weight * height",
+      "output_unit": "J"
+    },
+    {
+      "id": "f204",
+      "domain": "energy",
+      "subdomain": "energy",
+      "output": "work",
+      "inputs": [
+        "power",
+        "time"
+      ],
+      "label": "power * time",
+      "output_unit": "J"
+    },
+    {
+      "id": "f205",
+      "domain": "energy",
+      "subdomain": "energy",
+      "output": "mechanical_energy",
+      "inputs": [
+        "work",
+        "potential_energy"
+      ],
+      "label": "work + potential_energy",
+      "output_unit": "J"
+    },
+    {
+      "id": "f206",
+      "domain": "energy",
+      "subdomain": "energy",
+      "output": "useful_output",
+      "inputs": [
+        "power",
+        "time",
+        "efficiency"
+      ],
+      "label": "power * time * efficiency",
+      "output_unit": "J"
+    },
+    {
+      "id": "f210",
+      "domain": "dynamics",
+      "subdomain": "dynamics",
+      "output": "centripetal_force",
+      "inputs": [
+        "mass",
+        "centripetal_acceleration"
+      ],
+      "label": "mass * centripetal_acceleration",
+      "output_unit": "N"
+    },
+    {
+      "id": "f211",
+      "domain": "dynamics",
+      "subdomain": "dynamics",
+      "output": "friction_force",
+      "inputs": [
+        "coefficient_of_friction",
+        "mass",
+        "gravity"
+      ],
+      "label": "coefficient_of_friction * mass * gravity",
+      "output_unit": "N"
+    },
+    {
+      "id": "f212",
+      "domain": "dynamics",
+      "subdomain": "dynamics",
+      "output": "net_force",
+      "inputs": [
+        "mass",
+        "acceleration"
+      ],
+      "label": "mass * acceleration",
+      "output_unit": "N"
+    },
+    {
+      "id": "f213",
+      "domain": "dynamics",
+      "subdomain": "dynamics",
+      "output": "momentum",
+      "inputs": [
+        "force",
+        "time"
+      ],
+      "label": "force * time",
+      "output_unit": "kg*m/s"
+    },
+    {
+      "id": "f214",
+      "domain": "dynamics",
+      "subdomain": "dynamics",
+      "output": "tension",
+      "inputs": [
+        "mass",
+        "centripetal_acceleration"
+      ],
+      "label": "mass * centripetal_acceleration",
+      "output_unit": "N"
+    },
+    {
+      "id": "f215",
+      "domain": "dynamics",
+      "subdomain": "dynamics",
+      "output": "pressure",
+      "inputs": [
+        "force",
+        "area"
+      ],
+      "label": "force / area",
+      "output_unit": "Pa"
+    },
+    {
+      "id": "f220",
+      "domain": "kinematics",
+      "subdomain": "uniform_accel",
+      "output": "acceleration",
+      "inputs": [
+        "final_velocity",
+        "initial_velocity",
+        "displacement"
+      ],
+      "label": "(final_velocity^2 - initial_velocity^2) / (2 * displacement)",
+      "output_unit": "m/s^2"
+    },
+    {
+      "id": "f221",
+      "domain": "kinematics",
+      "subdomain": "uniform_accel",
+      "output": "displacement",
+      "inputs": [
+        "average_velocity",
+        "time"
+      ],
+      "label": "average_velocity * time",
+      "output_unit": "m"
+    },
+    {
+      "id": "f222",
+      "domain": "kinematics",
+      "subdomain": "uniform_accel",
+      "output": "average_velocity",
+      "inputs": [
+        "displacement",
+        "time"
+      ],
+      "label": "displacement / time",
+      "output_unit": "m/s"
+    },
+    {
+      "id": "f223",
+      "domain": "kinematics",
+      "subdomain": "projectile",
+      "output": "range",
+      "inputs": [
+        "horizontal_velocity",
+        "time_of_flight"
+      ],
+      "label": "horizontal_velocity * time_of_flight",
+      "output_unit": "m"
+    },
+    {
+      "id": "f224",
+      "domain": "kinematics",
+      "subdomain": "projectile",
+      "output": "max_height",
+      "inputs": [
+        "vertical_velocity",
+        "gravity"
+      ],
+      "label": "vertical_velocity^2 / (2 * gravity)",
+      "output_unit": "m"
+    },
+    {
+      "id": "f225",
+      "domain": "kinematics",
+      "subdomain": "projectile",
+      "output": "time_of_flight",
+      "inputs": [
+        "vertical_velocity",
+        "gravity"
+      ],
+      "label": "2 * vertical_velocity / gravity",
+      "output_unit": "s"
+    },
+    {
+      "id": "f230",
+      "domain": "gravitation",
+      "subdomain": "gravitation",
+      "output": "escape_velocity",
+      "inputs": [
+        "orbital_velocity"
+      ],
+      "label": "sqrt(2) * orbital_velocity",
+      "output_unit": "m/s"
+    },
+    {
+      "id": "f231",
+      "domain": "gravitation",
+      "subdomain": "gravitation",
+      "output": "orbital_velocity",
+      "inputs": [
+        "gravity",
+        "orbital_radius"
+      ],
+      "label": "sqrt(gravity * orbital_radius)",
+      "output_unit": "m/s"
+    },
+    {
+      "id": "f232",
+      "domain": "gravitation",
+      "subdomain": "gravitation",
+      "output": "gravity",
+      "inputs": [
+        "earth_mass",
+        "orbital_radius"
+      ],
+      "label": "G * earth_mass / orbital_radius^2",
+      "output_unit": "m/s^2"
+    },
+    {
+      "id": "f233",
+      "domain": "gravitation",
+      "subdomain": "gravitation",
+      "output": "orbital_kinetic_energy",
+      "inputs": [
+        "earth_mass",
+        "orbital_radius"
+      ],
+      "label": "G * earth_mass / (2 * orbital_radius)",
+      "output_unit": "J"
+    },
+    {
+      "id": "f234",
+      "domain": "gravitation",
+      "subdomain": "gravitation",
+      "output": "gravitational_pe",
+      "inputs": [
+        "earth_mass",
+        "mass",
+        "orbital_radius"
+      ],
+      "label": "-G * earth_mass * mass / orbital_radius",
+      "output_unit": "J"
+    },
+    {
+      "id": "f240",
+      "domain": "thermodynamics",
+      "subdomain": "thermodynamics",
+      "output": "heat",
+      "inputs": [
+        "internal_energy_change",
+        "work_thermo"
+      ],
+      "label": "internal_energy_change + work_thermo",
+      "output_unit": "J"
+    },
+    {
+      "id": "f241",
+      "domain": "thermodynamics",
+      "subdomain": "thermodynamics",
+      "output": "internal_energy_change",
+      "inputs": [
+        "heat",
+        "work_thermo"
+      ],
+      "label": "heat - work_thermo",
+      "output_unit": "J"
+    },
+    {
+      "id": "f242",
+      "domain": "thermodynamics",
+      "subdomain": "thermodynamics",
+      "output": "work_thermo",
+      "inputs": [
+        "pressure",
+        "change_in_volume"
+      ],
+      "label": "pressure * change_in_volume",
+      "output_unit": "J"
+    },
+    {
+      "id": "f243",
+      "domain": "thermodynamics",
+      "subdomain": "thermodynamics",
+      "output": "pressure",
+      "inputs": [
+        "density",
+        "gas_constant",
+        "temperature"
+      ],
+      "label": "density * gas_constant * temperature",
+      "output_unit": "Pa"
+    },
+    {
+      "id": "f244",
+      "domain": "thermodynamics",
+      "subdomain": "thermodynamics",
+      "output": "temperature",
+      "inputs": [
+        "pressure",
+        "volume",
+        "moles",
+        "gas_constant"
+      ],
+      "label": "pressure * volume / (moles * gas_constant)",
+      "output_unit": "K"
+    },
+    {
+      "id": "f250",
+      "domain": "electrostatics",
+      "subdomain": "electrostatics",
+      "output": "voltage",
+      "inputs": [
+        "electric_field",
+        "distance"
+      ],
+      "label": "electric_field * distance",
+      "output_unit": "V"
+    },
+    {
+      "id": "f251",
+      "domain": "electrostatics",
+      "subdomain": "electrostatics",
+      "output": "electric_field",
+      "inputs": [
+        "voltage",
+        "distance"
+      ],
+      "label": "voltage / distance",
+      "output_unit": "V/m"
+    },
+    {
+      "id": "f252",
+      "domain": "electrostatics",
+      "subdomain": "electrostatics",
+      "output": "coulomb_force",
+      "inputs": [
+        "electric_field",
+        "charge"
+      ],
+      "label": "electric_field * charge",
+      "output_unit": "N"
+    },
+    {
+      "id": "f253",
+      "domain": "electrostatics",
+      "subdomain": "electrostatics",
+      "output": "energy_capacitor",
+      "inputs": [
+        "charge",
+        "voltage"
+      ],
+      "label": "0.5 * charge * voltage",
+      "output_unit": "J"
+    },
+    {
+      "id": "f260",
+      "domain": "current_electricity",
+      "subdomain": "current_electricity",
+      "output": "current",
+      "inputs": [
+        "power",
+        "voltage"
+      ],
+      "label": "power / voltage",
+      "output_unit": "A"
+    },
+    {
+      "id": "f261",
+      "domain": "current_electricity",
+      "subdomain": "current_electricity",
+      "output": "power",
+      "inputs": [
+        "energy_electric",
+        "time"
+      ],
+      "label": "energy_electric / time",
+      "output_unit": "W"
+    },
+    {
+      "id": "f262",
+      "domain": "current_electricity",
+      "subdomain": "current_electricity",
+      "output": "resistance",
+      "inputs": [
+        "voltage",
+        "current"
+      ],
+      "label": "voltage / current",
+      "output_unit": "ohm"
+    },
+    {
+      "id": "f270",
+      "domain": "waves",
+      "subdomain": "waves",
+      "output": "wave_speed",
+      "inputs": [
+        "frequency",
+        "wavelength"
+      ],
+      "label": "frequency * wavelength",
+      "output_unit": "m/s"
+    },
+    {
+      "id": "f271",
+      "domain": "waves",
+      "subdomain": "waves",
+      "output": "frequency",
+      "inputs": [
+        "wave_speed",
+        "wavelength"
+      ],
+      "label": "wave_speed / wavelength",
+      "output_unit": "Hz"
+    },
+    {
+      "id": "f272",
+      "domain": "waves",
+      "subdomain": "waves",
+      "output": "doppler_frequency",
+      "inputs": [
+        "frequency",
+        "wave_speed",
+        "observer_velocity"
+      ],
+      "label": "frequency * (wave_speed + observer_velocity) / wave_speed",
+      "output_unit": "Hz"
+    },
+    {
+      "id": "f280",
+      "domain": "rotational",
+      "subdomain": "rotational",
+      "output": "torque",
+      "inputs": [
+        "moment_of_inertia",
+        "angular_acceleration"
+      ],
+      "label": "moment_of_inertia * angular_acceleration",
+      "output_unit": "N*m"
+    },
+    {
+      "id": "f281",
+      "domain": "rotational",
+      "subdomain": "rotational",
+      "output": "angular_velocity",
+      "inputs": [
+        "velocity",
+        "radius"
+      ],
+      "label": "velocity / radius",
+      "output_unit": "rad/s"
+    },
+    {
+      "id": "f282",
+      "domain": "rotational",
+      "subdomain": "rotational",
+      "output": "rotational_kinetic_energy",
+      "inputs": [
+        "torque",
+        "angular_displacement"
+      ],
+      "label": "torque * angular_displacement",
+      "output_unit": "J"
+    },
+    {
+      "id": "f290",
+      "domain": "magnetism",
+      "subdomain": "magnetism",
+      "output": "voltage_induced_motional",
+      "inputs": [
+        "magnetic_field",
+        "velocity",
+        "length"
+      ],
+      "label": "magnetic_field * velocity * length",
+      "output_unit": "V"
+    },
+    {
+      "id": "f291",
+      "domain": "magnetism",
+      "subdomain": "magnetism",
+      "output": "magnetic_force",
+      "inputs": [
+        "current",
+        "length",
+        "magnetic_field"
+      ],
+      "label": "current * length * magnetic_field",
+      "output_unit": "N"
+    },
+    {
+      "id": "f300",
+      "domain": "shm",
+      "subdomain": "shm",
+      "output": "frequency",
+      "inputs": [
+        "spring_constant",
+        "mass"
+      ],
+      "label": "sqrt(spring_constant / mass) / (2 * pi)",
+      "output_unit": "Hz"
+    },
+    {
+      "id": "f301",
+      "domain": "shm",
+      "subdomain": "shm",
+      "output": "total_energy_shm",
+      "inputs": [
+        "kinetic_energy_shm",
+        "potential_energy_shm"
+      ],
+      "label": "kinetic_energy_shm + potential_energy_shm",
+      "output_unit": "J"
+    },
+    {
+      "id": "f310",
+      "domain": "ac_circuits",
+      "subdomain": "ac_circuits",
+      "output": "angular_frequency",
+      "inputs": [
+        "frequency"
+      ],
+      "label": "2 * pi * frequency",
+      "output_unit": "rad/s"
+    },
+    {
+      "id": "f311",
+      "domain": "ac_circuits",
+      "subdomain": "ac_circuits",
+      "output": "capacitive_reactance",
+      "inputs": [
+        "frequency",
+        "capacitance"
+      ],
+      "label": "1 / (2 * pi * frequency * capacitance)",
+      "output_unit": "ohm"
+    },
+    {
+      "id": "f312",
+      "domain": "ac_circuits",
+      "subdomain": "ac_circuits",
+      "output": "inductive_reactance",
+      "inputs": [
+        "frequency",
+        "inductance"
+      ],
+      "label": "2 * pi * frequency * inductance",
+      "output_unit": "ohm"
+    },
+    {
+      "id": "f320",
+      "domain": "modern_physics",
+      "subdomain": "modern_physics",
+      "output": "photon_energy",
+      "inputs": [
+        "frequency",
+        "planck_constant"
+      ],
+      "label": "planck_constant * frequency",
+      "output_unit": "J"
+    },
+    {
+      "id": "f321",
+      "domain": "modern_physics",
+      "subdomain": "modern_physics",
+      "output": "de_broglie_wavelength",
+      "inputs": [
+        "planck_constant",
+        "momentum"
+      ],
+      "label": "planck_constant / momentum",
+      "output_unit": "m"
+    },
+    {
+      "id": "f322",
+      "domain": "modern_physics",
+      "subdomain": "modern_physics",
+      "output": "relativistic_energy",
+      "inputs": [
+        "mass",
+        "speed_of_light",
+        "velocity"
+      ],
+      "label": "mass * speed_of_light^2 / sqrt(1 - velocity^2 / speed_of_light^2)",
+      "output_unit": "J"
+    },
+    {
+      "id": "f330",
+      "domain": "fluids",
+      "subdomain": "fluids",
+      "output": "buoyant_force",
+      "inputs": [
+        "density",
+        "volume",
+        "gravity"
+      ],
+      "label": "density * volume * gravity",
+      "output_unit": "N"
+    },
+    {
+      "id": "f331",
+      "domain": "fluids",
+      "subdomain": "fluids",
+      "output": "pressure",
+      "inputs": [
+        "density",
+        "gravity",
+        "height"
+      ],
+      "label": "density * gravity * height",
+      "output_unit": "Pa"
+    },
+    {
+      "id": "f332",
+      "domain": "fluids",
+      "subdomain": "fluids",
+      "output": "flow_velocity",
+      "inputs": [
+        "volume",
+        "area",
+        "time"
+      ],
+      "label": "volume / (area * time)",
+      "output_unit": "m/s"
+    },
+    {
+      "id": "f400",
+      "domain": "rotational",
+      "subdomain": "rotational",
+      "output": "angular_acceleration",
+      "inputs": [
+        "torque",
+        "moment_of_inertia"
+      ],
+      "label": "torque / moment_of_inertia",
+      "output_unit": "rad/s^2"
+    },
+    {
+      "id": "f401",
+      "domain": "rotational",
+      "subdomain": "rotational",
+      "output": "angular_displacement",
+      "inputs": [
+        "angular_velocity",
+        "time"
+      ],
+      "label": "angular_velocity * time",
+      "output_unit": "rad"
+    },
+    {
+      "id": "f402",
+      "domain": "rotational",
+      "subdomain": "rotational",
+      "output": "angular_momentum",
+      "inputs": [
+        "torque",
+        "time"
+      ],
+      "label": "torque * time",
+      "output_unit": "kg*m^2/s"
+    },
+    {
+      "id": "f433",
+      "domain": "rotational",
+      "subdomain": "rotational",
+      "output": "moment_of_inertia",
+      "inputs": [
+        "angular_momentum",
+        "angular_velocity"
+      ],
+      "label": "angular_momentum / angular_velocity",
+      "output_unit": "kg*m^2"
+    },
+    {
+      "id": "f447",
+      "domain": "rotational",
+      "subdomain": "rotational",
+      "output": "tangential_acceleration",
+      "inputs": [
+        "angular_acceleration",
+        "radius"
+      ],
+      "label": "angular_acceleration * radius",
+      "output_unit": "m/s^2"
+    },
+    {
+      "id": "f403",
+      "domain": "thermodynamics",
+      "subdomain": "thermodynamics",
+      "output": "average_kinetic_energy",
+      "inputs": [
+        "pressure",
+        "volume",
+        "moles",
+        "gas_constant"
+      ],
+      "label": "(3/2) * pressure * volume / (moles * gas_constant)",
+      "output_unit": "J"
+    },
+    {
+      "id": "f411",
+      "domain": "thermodynamics",
+      "subdomain": "thermodynamics",
+      "output": "efficiency_carnot",
+      "inputs": [
+        "work_thermo",
+        "heat"
+      ],
+      "label": "work_thermo / heat",
+      "output_unit": ""
+    },
+    {
+      "id": "f405",
+      "domain": "energy",
+      "subdomain": "energy",
+      "output": "change_in_kinetic_energy",
+      "inputs": [
+        "mass",
+        "final_velocity",
+        "initial_velocity"
+      ],
+      "label": "0.5 * mass * (final_velocity^2 - initial_velocity^2)",
+      "output_unit": "J"
+    },
+    {
+      "id": "f410",
+      "domain": "energy",
+      "subdomain": "energy",
+      "output": "efficiency",
+      "inputs": [
+        "work",
+        "total_input"
+      ],
+      "label": "work / total_input",
+      "output_unit": ""
+    },
+    {
+      "id": "f412",
+      "domain": "energy",
+      "subdomain": "energy",
+      "output": "elastic_pe",
+      "inputs": [
+        "spring_force",
+        "displacement"
+      ],
+      "label": "0.5 * spring_force * displacement",
+      "output_unit": "J"
+    },
+    {
+      "id": "f419",
+      "domain": "energy",
+      "subdomain": "energy",
+      "output": "height",
+      "inputs": [
+        "final_velocity",
+        "gravity"
+      ],
+      "label": "final_velocity^2 / (2 * gravity)",
+      "output_unit": "m"
+    },
+    {
+      "id": "f449",
+      "domain": "energy",
+      "subdomain": "energy",
+      "output": "useful_output",
+      "inputs": [
+        "work",
+        "efficiency"
+      ],
+      "label": "work * efficiency",
+      "output_unit": "J"
+    },
+    {
+      "id": "f406",
+      "domain": "dynamics",
+      "subdomain": "dynamics",
+      "output": "change_in_momentum",
+      "inputs": [
+        "force",
+        "time"
+      ],
+      "label": "force * time",
+      "output_unit": "kg*m/s"
+    },
+    {
+      "id": "f434",
+      "domain": "dynamics",
+      "subdomain": "dynamics",
+      "output": "normal_force",
+      "inputs": [
+        "mass",
+        "centripetal_acceleration"
+      ],
+      "label": "mass * centripetal_acceleration",
+      "output_unit": "N"
+    },
+    {
+      "id": "f446",
+      "domain": "dynamics",
+      "subdomain": "dynamics",
+      "output": "spring_force",
+      "inputs": [
+        "elastic_pe",
+        "displacement"
+      ],
+      "label": "2 * elastic_pe / displacement",
+      "output_unit": "N"
+    },
+    {
+      "id": "f455",
+      "domain": "dynamics",
+      "subdomain": "dynamics",
+      "output": "weight",
+      "inputs": [
+        "gravitational_force"
+      ],
+      "label": "gravitational_force",
+      "output_unit": "N"
+    },
+    {
+      "id": "f409",
+      "domain": "kinematics",
+      "subdomain": "const_velocity",
+      "output": "distance",
+      "inputs": [
+        "average_velocity",
+        "time"
+      ],
+      "label": "average_velocity * time",
+      "output_unit": "m"
+    },
+    {
+      "id": "f444",
+      "domain": "kinematics",
+      "subdomain": "const_velocity",
+      "output": "speed",
+      "inputs": [
+        "velocity"
+      ],
+      "label": "velocity",
+      "output_unit": "m/s"
+    },
+    {
+      "id": "f448",
+      "domain": "kinematics",
+      "subdomain": "const_velocity",
+      "output": "time",
+      "inputs": [
+        "distance",
+        "speed"
+      ],
+      "label": "distance / speed",
+      "output_unit": "s"
+    },
+    {
+      "id": "f420",
+      "domain": "kinematics",
+      "subdomain": "projectile",
+      "output": "horizontal_displacement",
+      "inputs": [
+        "range"
+      ],
+      "label": "range",
+      "output_unit": "m"
+    },
+    {
+      "id": "f421",
+      "domain": "kinematics",
+      "subdomain": "projectile",
+      "output": "horizontal_velocity",
+      "inputs": [
+        "range",
+        "time_of_flight"
+      ],
+      "label": "range / time_of_flight",
+      "output_unit": "m/s"
+    },
+    {
+      "id": "f451",
+      "domain": "kinematics",
+      "subdomain": "projectile",
+      "output": "vertical_velocity",
+      "inputs": [
+        "max_height",
+        "gravity"
+      ],
+      "label": "sqrt(2 * max_height * gravity)",
+      "output_unit": "m/s"
+    },
+    {
+      "id": "f450",
+      "domain": "kinematics",
+      "subdomain": "projectile",
+      "output": "vertical_displacement",
+      "inputs": [
+        "max_height"
+      ],
+      "label": "max_height",
+      "output_unit": "m"
+    },
+    {
+      "id": "f435",
+      "domain": "gravitation",
+      "subdomain": "gravitation",
+      "output": "orbital_period",
+      "inputs": [
+        "orbital_radius",
+        "orbital_velocity"
+      ],
+      "label": "2 * pi * orbital_radius / orbital_velocity",
+      "output_unit": "s"
+    },
+    {
+      "id": "f408",
+      "domain": "fluids",
+      "subdomain": "fluids",
+      "output": "density",
+      "inputs": [
+        "weight",
+        "volume",
+        "gravity"
+      ],
+      "label": "weight / (volume * gravity)",
+      "output_unit": "kg/m^3"
+    },
+    {
+      "id": "f404",
+      "domain": "electrostatics",
+      "subdomain": "electrostatics",
+      "output": "capacitance",
+      "inputs": [
+        "energy_capacitor",
+        "voltage"
+      ],
+      "label": "2 * energy_capacitor / voltage^2",
+      "output_unit": "F"
+    },
+    {
+      "id": "f413",
+      "domain": "electrostatics",
+      "subdomain": "electrostatics",
+      "output": "electric_potential",
+      "inputs": [
+        "electric_field",
+        "distance"
+      ],
+      "label": "electric_field * distance",
+      "output_unit": "V"
+    },
+    {
+      "id": "f414",
+      "domain": "electrostatics",
+      "subdomain": "electrostatics",
+      "output": "electric_potential_energy",
+      "inputs": [
+        "charge",
+        "electric_potential"
+      ],
+      "label": "charge * electric_potential",
+      "output_unit": "J"
+    },
+    {
+      "id": "f416",
+      "domain": "current_electricity",
+      "subdomain": "current_electricity",
+      "output": "energy_electric",
+      "inputs": [
+        "current",
+        "voltage",
+        "time"
+      ],
+      "label": "current * voltage * time",
+      "output_unit": "J"
+    },
+    {
+      "id": "f443",
+      "domain": "current_electricity",
+      "subdomain": "current_electricity",
+      "output": "resistance_series",
+      "inputs": [
+        "voltage",
+        "current"
+      ],
+      "label": "voltage / current",
+      "output_unit": "ohm"
+    },
+    {
+      "id": "f442",
+      "domain": "current_electricity",
+      "subdomain": "current_electricity",
+      "output": "resistance_parallel",
+      "inputs": [
+        "voltage",
+        "current"
+      ],
+      "label": "voltage / current",
+      "output_unit": "ohm"
+    },
+    {
+      "id": "f415",
+      "domain": "magnetism",
+      "subdomain": "magnetism",
+      "output": "emf_self",
+      "inputs": [
+        "change_in_flux",
+        "time"
+      ],
+      "label": "-change_in_flux / time",
+      "output_unit": "V"
+    },
+    {
+      "id": "f417",
+      "domain": "magnetism",
+      "subdomain": "magnetism",
+      "output": "energy_inductor",
+      "inputs": [
+        "power",
+        "time"
+      ],
+      "label": "power * time",
+      "output_unit": "J"
+    },
+    {
+      "id": "f428",
+      "domain": "magnetism",
+      "subdomain": "magnetism",
+      "output": "magnetic_field_solenoid",
+      "inputs": [
+        "magnetic_force",
+        "current",
+        "length"
+      ],
+      "label": "magnetic_force / (current * length)",
+      "output_unit": "T"
+    },
+    {
+      "id": "f452",
+      "domain": "magnetism",
+      "subdomain": "magnetism",
+      "output": "voltage_induced",
+      "inputs": [
+        "magnetic_field",
+        "length",
+        "velocity"
+      ],
+      "label": "magnetic_field * length * velocity",
+      "output_unit": "V"
+    },
+    {
+      "id": "f418",
+      "domain": "waves",
+      "subdomain": "waves",
+      "output": "fringe_width",
+      "inputs": [
+        "wavelength",
+        "screen_distance",
+        "slit_separation"
+      ],
+      "label": "wavelength * screen_distance / slit_separation",
+      "output_unit": "m"
+    },
+    {
+      "id": "f425",
+      "domain": "waves",
+      "subdomain": "waves",
+      "output": "intensity",
+      "inputs": [
+        "power",
+        "area"
+      ],
+      "label": "power / area",
+      "output_unit": "W/m^2"
+    },
+    {
+      "id": "f445",
+      "domain": "waves",
+      "subdomain": "waves",
+      "output": "speed_string",
+      "inputs": [
+        "wave_speed"
+      ],
+      "label": "wave_speed",
+      "output_unit": "m/s"
+    },
+    {
+      "id": "f454",
+      "domain": "waves",
+      "subdomain": "waves",
+      "output": "wavelength",
+      "inputs": [
+        "frequency",
+        "wave_speed"
+      ],
+      "label": "wave_speed / frequency",
+      "output_unit": "m"
+    },
+    {
+      "id": "f422",
+      "domain": "optics",
+      "subdomain": "optics",
+      "output": "image_distance",
+      "inputs": [
+        "focal_length",
+        "magnification"
+      ],
+      "label": "focal_length * magnification",
+      "output_unit": "m"
+    },
+    {
+      "id": "f423",
+      "domain": "optics",
+      "subdomain": "optics",
+      "output": "image_height",
+      "inputs": [
+        "object_height",
+        "focal_length",
+        "object_distance"
+      ],
+      "label": "object_height * focal_length / object_distance",
+      "output_unit": "m"
+    },
+    {
+      "id": "f440",
+      "domain": "optics",
+      "subdomain": "optics",
+      "output": "refractive_index",
+      "inputs": [
+        "speed_of_light",
+        "wave_speed"
+      ],
+      "label": "speed_of_light / wave_speed",
+      "output_unit": ""
+    },
+    {
+      "id": "f426",
+      "domain": "shm",
+      "subdomain": "shm",
+      "output": "kinetic_energy_shm",
+      "inputs": [
+        "spring_constant",
+        "amplitude"
+      ],
+      "label": "0.5 * spring_constant * amplitude^2",
+      "output_unit": "J"
+    },
+    {
+      "id": "f430",
+      "domain": "shm",
+      "subdomain": "shm",
+      "output": "max_acceleration",
+      "inputs": [
+        "spring_constant",
+        "amplitude",
+        "mass"
+      ],
+      "label": "spring_constant * amplitude / mass",
+      "output_unit": "m/s^2"
+    },
+    {
+      "id": "f432",
+      "domain": "shm",
+      "subdomain": "shm",
+      "output": "max_velocity",
+      "inputs": [
+        "amplitude",
+        "angular_frequency"
+      ],
+      "label": "amplitude * angular_frequency",
+      "output_unit": "m/s"
+    },
+    {
+      "id": "f436",
+      "domain": "shm",
+      "subdomain": "shm",
+      "output": "period_pendulum",
+      "inputs": [
+        "angular_frequency"
+      ],
+      "label": "2 * pi / angular_frequency",
+      "output_unit": "s"
+    },
+    {
+      "id": "f438",
+      "domain": "shm",
+      "subdomain": "shm",
+      "output": "potential_energy_shm",
+      "inputs": [
+        "total_energy_shm",
+        "kinetic_energy_shm"
+      ],
+      "label": "total_energy_shm - kinetic_energy_shm",
+      "output_unit": "J"
+    },
+    {
+      "id": "f407",
+      "domain": "ac_circuits",
+      "subdomain": "ac_circuits",
+      "output": "current_rms",
+      "inputs": [
+        "power_ac",
+        "voltage_rms"
+      ],
+      "label": "power_ac / voltage_rms",
+      "output_unit": "A"
+    },
+    {
+      "id": "f424",
+      "domain": "ac_circuits",
+      "subdomain": "ac_circuits",
+      "output": "impedance",
+      "inputs": [
+        "voltage_rms",
+        "current_rms"
+      ],
+      "label": "voltage_rms / current_rms",
+      "output_unit": "ohm"
+    },
+    {
+      "id": "f439",
+      "domain": "ac_circuits",
+      "subdomain": "ac_circuits",
+      "output": "power_ac",
+      "inputs": [
+        "current_rms",
+        "resistance"
+      ],
+      "label": "current_rms^2 * resistance",
+      "output_unit": "W"
+    },
+    {
+      "id": "f453",
+      "domain": "ac_circuits",
+      "subdomain": "ac_circuits",
+      "output": "voltage_rms",
+      "inputs": [
+        "power_ac",
+        "current_rms"
+      ],
+      "label": "power_ac / current_rms",
+      "output_unit": "V"
+    },
+    {
+      "id": "f427",
+      "domain": "modern_physics",
+      "subdomain": "modern_physics",
+      "output": "lorentz_factor",
+      "inputs": [
+        "relativistic_energy",
+        "mass_energy"
+      ],
+      "label": "relativistic_energy / mass_energy",
+      "output_unit": ""
+    },
+    {
+      "id": "f429",
+      "domain": "modern_physics",
+      "subdomain": "modern_physics",
+      "output": "mass_energy",
+      "inputs": [
+        "relativistic_energy"
+      ],
+      "label": "relativistic_energy",
+      "output_unit": "J"
+    },
+    {
+      "id": "f431",
+      "domain": "modern_physics",
+      "subdomain": "modern_physics",
+      "output": "max_kinetic",
+      "inputs": [
+        "photon_energy",
+        "work_function"
+      ],
+      "label": "photon_energy - work_function",
+      "output_unit": "J"
+    },
+    {
+      "id": "f437",
+      "domain": "modern_physics",
+      "subdomain": "modern_physics",
+      "output": "photoelectron_velocity",
+      "inputs": [
+        "momentum",
+        "mass"
+      ],
+      "label": "momentum / mass",
+      "output_unit": "m/s"
+    },
+    {
+      "id": "f441",
+      "domain": "modern_physics",
+      "subdomain": "modern_physics",
+      "output": "relativistic_momentum",
+      "inputs": [
+        "relativistic_energy",
+        "velocity",
+        "speed_of_light"
+      ],
+      "label": "relativistic_energy * velocity / speed_of_light^2",
+      "output_unit": "kg*m/s"
+    },
+    {
+      "id": "f460",
+      "domain": "energy",
+      "subdomain": "energy",
+      "output": "kinetic_energy",
+      "inputs": [
+        "mechanical_energy",
+        "potential_energy"
+      ],
+      "label": "mechanical_energy - potential_energy",
+      "output_unit": "J"
+    },
+    {
+      "id": "f461",
+      "domain": "energy",
+      "subdomain": "energy",
+      "output": "potential_energy",
+      "inputs": [
+        "weight",
+        "height"
+      ],
+      "label": "weight * height",
+      "output_unit": "J"
+    },
+    {
+      "id": "f462",
+      "domain": "dynamics",
+      "subdomain": "dynamics",
+      "output": "force",
+      "inputs": [
+        "momentum",
+        "time"
+      ],
+      "label": "momentum / time",
+      "output_unit": "N"
+    },
+    {
+      "id": "f463",
+      "domain": "kinematics",
+      "subdomain": "uniform_accel",
+      "output": "final_velocity",
+      "inputs": [
+        "initial_velocity",
+        "acceleration",
+        "time"
+      ],
+      "label": "initial_velocity + acceleration * time",
+      "output_unit": "m/s"
+    },
+    {
+      "id": "f464",
+      "domain": "gravitation",
+      "subdomain": "gravitation",
+      "output": "gravitational_pe",
+      "inputs": [
+        "gravitational_force",
+        "orbital_radius"
+      ],
+      "label": "-gravitational_force * orbital_radius",
+      "output_unit": "J"
+    },
+    {
+      "id": "f465",
+      "domain": "gravitation",
+      "subdomain": "gravitation",
+      "output": "gravitational_force",
+      "inputs": [
+        "mass",
+        "gravity"
+      ],
+      "label": "mass * gravity",
+      "output_unit": "N"
+    },
+    {
+      "id": "f466",
+      "domain": "electrostatics",
+      "subdomain": "electrostatics",
+      "output": "voltage",
+      "inputs": [
+        "electric_field",
+        "distance"
+      ],
+      "label": "electric_field * distance",
+      "output_unit": "V"
+    },
+    {
+      "id": "f467",
+      "domain": "current_electricity",
+      "subdomain": "current_electricity",
+      "output": "current",
+      "inputs": [
+        "power",
+        "voltage"
+      ],
+      "label": "power / voltage",
+      "output_unit": "A"
+    },
+    {
+      "id": "f468",
+      "domain": "waves",
+      "subdomain": "waves",
+      "output": "frequency",
+      "inputs": [
+        "wave_speed",
+        "wavelength"
+      ],
+      "label": "wave_speed / wavelength",
+      "output_unit": "Hz"
+    },
+    {
+      "id": "f469",
+      "domain": "rotational",
+      "subdomain": "rotational",
+      "output": "angular_velocity",
+      "inputs": [
+        "velocity",
+        "radius"
+      ],
+      "label": "velocity / radius",
+      "output_unit": "rad/s"
+    },
+    {
+      "id": "f470",
+      "domain": "shm",
+      "subdomain": "shm",
+      "output": "angular_frequency",
+      "inputs": [
+        "spring_constant",
+        "mass"
+      ],
+      "label": "sqrt(spring_constant / mass)",
+      "output_unit": "rad/s"
+    },
+    {
+      "id": "f471",
+      "domain": "thermodynamics",
+      "subdomain": "thermodynamics",
+      "output": "temperature",
+      "inputs": [
+        "pressure",
+        "volume",
+        "moles",
+        "gas_constant"
+      ],
+      "label": "pressure * volume / (moles * gas_constant)",
+      "output_unit": "K"
+    },
+    {
+      "id": "f472",
+      "domain": "optics",
+      "subdomain": "optics",
+      "output": "wave_speed",
+      "inputs": [
+        "frequency",
+        "wavelength"
+      ],
+      "label": "frequency * wavelength",
+      "output_unit": "m/s"
+    },
+    {
+      "id": "f483",
+      "domain": "gravitation",
+      "subdomain": "gravitation",
+      "output": "gravity",
+      "inputs": [
+        "orbital_velocity",
+        "orbital_radius"
+      ],
+      "label": "orbital_velocity^2 / orbital_radius",
+      "output_unit": "m/s^2"
+    },
+    {
+      "id": "f484",
+      "domain": "gravitation",
+      "subdomain": "gravitation",
+      "output": "gravity",
+      "inputs": [
+        "escape_velocity",
+        "orbital_radius"
+      ],
+      "label": "escape_velocity^2 / (2 * orbital_radius)",
+      "output_unit": "m/s^2"
+    },
+    {
+      "id": "f485",
+      "domain": "gravitation",
+      "subdomain": "gravitation",
+      "output": "orbital_velocity",
+      "inputs": [
+        "escape_velocity"
+      ],
+      "label": "escape_velocity / sqrt(2)",
+      "output_unit": "m/s"
+    },
+    {
+      "id": "f486",
+      "domain": "thermodynamics",
+      "subdomain": "thermodynamics",
+      "output": "temperature",
+      "inputs": [
+        "heat",
+        "mass",
+        "specific_heat"
+      ],
+      "label": "heat / (mass * specific_heat)",
+      "output_unit": "K"
+    },
+    {
+      "id": "f487",
+      "domain": "energy",
+      "subdomain": "energy",
+      "output": "change_in_kinetic_energy",
+      "inputs": [
+        "power",
+        "time"
+      ],
+      "label": "power * time",
+      "output_unit": "J"
+    },
+    {
+      "id": "f488",
+      "domain": "dynamics",
+      "subdomain": "dynamics",
+      "output": "centripetal_acceleration",
+      "inputs": [
+        "force",
+        "mass"
+      ],
+      "label": "force / mass",
+      "output_unit": "m/s^2"
+    },
+    {
+      "id": "f489",
+      "domain": "energy",
+      "subdomain": "energy",
+      "output": "height",
+      "inputs": [
+        "potential_energy",
+        "weight"
+      ],
+      "label": "potential_energy / weight",
+      "output_unit": "m"
+    },
+    {
+      "id": "f490",
+      "domain": "fluids",
+      "subdomain": "fluids",
+      "output": "density",
+      "inputs": [
+        "buoyant_force",
+        "volume",
+        "gravity"
+      ],
+      "label": "buoyant_force / (volume * gravity)",
+      "output_unit": "kg/m^3"
+    },
+    {
+      "id": "f494",
+      "domain": "waves",
+      "subdomain": "waves",
+      "output": "wave_speed",
+      "inputs": [
+        "wavelength",
+        "period"
+      ],
+      "label": "wavelength / period",
+      "output_unit": "m/s"
+    },
+    {
+      "id": "f495",
+      "domain": "modern_physics",
+      "subdomain": "modern_physics",
+      "output": "photon_energy",
+      "inputs": [
+        "momentum",
+        "speed_of_light"
+      ],
+      "label": "momentum * speed_of_light",
+      "output_unit": "J"
+    },
+    {
+      "id": "f496",
+      "domain": "modern_physics",
+      "subdomain": "modern_physics",
+      "output": "momentum",
+      "inputs": [
+        "mass",
+        "velocity"
+      ],
+      "label": "mass * velocity",
+      "output_unit": "kg*m/s"
+    },
+    {
+      "id": "f497",
+      "domain": "gravitation",
+      "subdomain": "gravitation",
+      "output": "escape_velocity",
+      "inputs": [
+        "gravity",
+        "orbital_radius"
+      ],
+      "label": "sqrt(2 * gravity * orbital_radius)",
+      "output_unit": "m/s"
+    },
+    {
+      "id": "f498",
+      "domain": "gravitation",
+      "subdomain": "gravitation",
+      "output": "orbital_period",
+      "inputs": [
+        "orbital_radius",
+        "gravity"
+      ],
+      "label": "2 * pi * orbital_radius / sqrt(gravity * orbital_radius)",
+      "output_unit": "s"
+    },
+    {
+      "id": "f499",
+      "domain": "gravitation",
+      "subdomain": "gravitation",
+      "output": "gravitational_pe",
+      "inputs": [
+        "gravitational_force",
+        "orbital_radius"
+      ],
+      "label": "-gravitational_force * orbital_radius",
+      "output_unit": "J"
+    }
+  ],
+  "hypernyms": {
+    "acceleration": "kinematics",
+    "amplitude": "shm",
+    "angle": "kinematics",
+    "angular_acceleration": "rotational",
+    "angular_displacement": "rotational",
+    "angular_frequency": "shm",
+    "angular_momentum": "rotational",
+    "angular_velocity": "dynamics",
+    "applied_force": "dynamics",
+    "area": "dynamics",
+    "area1": "fluids",
+    "area2": "fluids",
+    "average_kinetic_energy": "thermodynamics",
+    "average_velocity": "kinematics",
+    "boltzmann_constant": "thermodynamics",
+    "buoyant_force": "fluids",
+    "capacitance": "electrostatics",
+    "capacitive_reactance": "ac_circuits",
+    "centripetal_acceleration": "dynamics",
+    "centripetal_force": "dynamics",
+    "change_in_current": "magnetism",
+    "change_in_flux": "magnetism",
+    "change_in_kinetic_energy": "energy",
+    "change_in_momentum": "dynamics",
+    "change_in_temperature": "thermodynamics",
+    "change_in_volume": "thermodynamics",
+    "charge": "electrostatics",
+    "charge1": "electrostatics",
+    "charge2": "electrostatics",
+    "coefficient_of_friction": "dynamics",
+    "cold_temperature": "thermodynamics",
+    "coulomb_force": "electrostatics",
+    "current": "current_electricity",
+    "current_rms": "ac_circuits",
+    "de_broglie_wavelength": "modern_physics",
+    "density": "fluids",
+    "density_fluid": "fluids",
+    "displacement": "kinematics",
+    "distance": "kinematics",
+    "doppler_frequency": "waves",
+    "earth_mass": "gravitation",
+    "earth_radius": "gravitation",
+    "efficiency": "energy",
+    "efficiency_carnot": "thermodynamics",
+    "elastic_pe": "energy",
+    "electric_field": "electrostatics",
+    "electric_potential": "electrostatics",
+    "electric_potential_energy": "electrostatics",
+    "emf_self": "magnetism",
+    "energy_capacitor": "electrostatics",
+    "energy_electric": "current_electricity",
+    "energy_inductor": "magnetism",
+    "escape_velocity": "gravitation",
+    "final_angular_velocity": "rotational",
+    "final_momentum": "dynamics",
+    "final_velocity": "kinematics",
+    "flow_velocity": "fluids",
+    "focal_length": "optics",
+    "force": "dynamics",
+    "frequency": "rotational",
+    "friction_force": "dynamics",
+    "fringe_width": "optics",
+    "gas_constant": "thermodynamics",
+    "gravitational_force": "gravitation",
+    "gravitational_pe": "gravitation",
+    "gravity": "kinematics",
+    "heat": "thermodynamics",
+    "height": "energy",
+    "horizontal_displacement": "kinematics",
+    "horizontal_velocity": "kinematics",
+    "hot_temperature": "thermodynamics",
+    "image_distance": "optics",
+    "image_height": "optics",
+    "impedance": "ac_circuits",
+    "impulse": "dynamics",
+    "inductance": "magnetism",
+    "inductive_reactance": "ac_circuits",
+    "initial_angular_velocity": "rotational",
+    "initial_momentum": "dynamics",
+    "initial_velocity": "kinematics",
+    "intensity": "waves",
+    "internal_energy_change": "thermodynamics",
+    "kinetic_energy": "energy",
+    "kinetic_energy_shm": "shm",
+    "length": "shm",
+    "linear_density": "waves",
+    "lorentz_factor": "modern_physics",
+    "magnetic_field": "magnetism",
+    "magnetic_field_solenoid": "magnetism",
+    "magnetic_flux": "magnetism",
+    "magnetic_force": "magnetism",
+    "magnetic_force_wire": "magnetism",
+    "magnification": "optics",
+    "mass": "dynamics",
+    "mass1": "gravitation",
+    "mass2": "gravitation",
+    "mass_energy": "modern_physics",
+    "max_acceleration": "shm",
+    "max_height": "kinematics",
+    "max_kinetic": "modern_physics",
+    "max_velocity": "shm",
+    "mechanical_energy": "energy",
+    "moles": "thermodynamics",
+    "moment_of_inertia": "rotational",
+    "momentum": "dynamics",
+    "net_force": "dynamics",
+    "normal_force": "dynamics",
+    "object_distance": "optics",
+    "object_height": "optics",
+    "observer_velocity": "waves",
+    "orbital_kinetic_energy": "gravitation",
+    "orbital_period": "gravitation",
+    "orbital_radius": "gravitation",
+    "orbital_velocity": "gravitation",
+    "peak_current": "ac_circuits",
+    "peak_voltage": "ac_circuits",
+    "period": "rotational",
+    "period_pendulum": "shm",
+    "permeability": "magnetism",
+    "phase": "ac_circuits",
+    "photoelectron_velocity": "modern_physics",
+    "photon_energy": "modern_physics",
+    "planck_constant": "modern_physics",
+    "potential_energy": "energy",
+    "potential_energy_shm": "shm",
+    "power": "energy",
+    "power_ac": "ac_circuits",
+    "pressure": "dynamics",
+    "r1": "current_electricity",
+    "r2": "current_electricity",
+    "radius": "dynamics",
+    "range": "kinematics",
+    "refractive_index": "optics",
+    "relativistic_energy": "modern_physics",
+    "relativistic_momentum": "modern_physics",
+    "resistance": "current_electricity",
+    "resistance_parallel": "current_electricity",
+    "resistance_series": "current_electricity",
+    "resistivity": "current_electricity",
+    "rotational_kinetic_energy": "rotational",
+    "screen_distance": "optics",
+    "slit_separation": "optics",
+    "source_velocity": "waves",
+    "specific_heat": "thermodynamics",
+    "speed": "kinematics",
+    "speed_of_light": "optics",
+    "speed_string": "waves",
+    "spring_constant": "dynamics",
+    "spring_force": "dynamics",
+    "tangential_acceleration": "rotational",
+    "temperature": "thermodynamics",
+    "tension": "dynamics",
+    "time": "kinematics",
+    "time_of_flight": "kinematics",
+    "torque": "rotational",
+    "total_energy_shm": "shm",
+    "total_input": "energy",
+    "turns_per_length": "magnetism",
+    "useful_output": "energy",
+    "velocity": "kinematics",
+    "velocity1": "fluids",
+    "vertical_displacement": "kinematics",
+    "vertical_velocity": "kinematics",
+    "voltage": "electrostatics",
+    "voltage_induced": "magnetism",
+    "voltage_induced_motional": "magnetism",
+    "voltage_rms": "ac_circuits",
+    "volume": "thermodynamics",
+    "volume_displaced": "fluids",
+    "wave_number": "waves",
+    "wave_speed": "waves",
+    "wavelength": "waves",
+    "weight": "dynamics",
+    "work": "energy",
+    "work_function": "modern_physics",
+    "work_thermo": "thermodynamics"
+  },
+  "chapters": [
+    "ac_circuits",
+    "current_electricity",
+    "dynamics",
+    "electrostatics",
+    "energy",
+    "fluids",
+    "gravitation",
+    "kinematics",
+    "magnetism",
+    "modern_physics",
+    "optics",
+    "rotational",
+    "shm",
+    "thermodynamics",
+    "waves"
+  ]
+}
