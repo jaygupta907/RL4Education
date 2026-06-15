@@ -112,6 +112,149 @@ class HyperGraph:
             "hypernym": self.hypernyms.get(target, "unknown"),
         }
 
+    def enumerate_traces(
+        self,
+        target: str,
+        max_depth: int = 5,
+        *,
+        single_domain: bool = False,
+        domain: Optional[str] = None,
+        subdomain: Optional[str] = None,
+        max_traces: Optional[int] = None,
+    ) -> List[Dict]:
+        """Enumerate all distinct solution traces for ``target`` (no randomness).
+
+        Traces are deduplicated by ``(path edge ids, leaf set)``. Enumeration
+        tries every valid producing formula at each step (sorted by edge id).
+        """
+        results: List[Dict] = []
+        seen: set[tuple[tuple[str, ...], tuple[str, ...]]] = set()
+        chosen: Dict[str, Dict] = {}
+        leafs: set[str] = set()
+        order: List[Dict] = []
+        allowed = {"d": domain, "sd": subdomain}
+
+        def record() -> None:
+            key = (tuple(e["id"] for e in order), tuple(sorted(leafs)))
+            if key in seen:
+                return
+            seen.add(key)
+            results.append({
+                "target": target,
+                "path": list(order),
+                "leafs": sorted(leafs),
+                "chapters": sorted({e["domain"] for e in order}),
+                "subdomains": sorted({
+                    e.get("subdomain", e["domain"]) for e in order
+                }),
+                "hypernym": self.hypernyms.get(target, "unknown"),
+            })
+
+        def snap() -> tuple:
+            return (dict(chosen), list(order), set(leafs),
+                    allowed["d"], allowed["sd"])
+
+        def restore(state: tuple) -> None:
+            chosen.clear()
+            chosen.update(state[0])
+            order.clear()
+            order.extend(state[1])
+            leafs.clear()
+            leafs.update(state[2])
+            allowed["d"], allowed["sd"] = state[3], state[4]
+
+        def resolve_var(var: str, depth: int, visiting: set[str]) -> None:
+            """Backtracking generator: resolve ``var`` then yield."""
+            if max_traces is not None and len(results) >= max_traces:
+                return
+            if var in chosen or var in leafs:
+                yield
+                return
+            if var in visiting:
+                return
+            edges = [e for e in self.out_to_edges.get(var, [])
+                     if target not in e["inputs"]]
+            if single_domain and allowed["d"] is not None:
+                edges = [e for e in edges if e["domain"] == allowed["d"]]
+                if allowed["sd"] is not None:
+                    edges = [e for e in edges
+                             if e.get("subdomain", e["domain"]) == allowed["sd"]]
+            if not edges or depth >= max_depth:
+                leafs.add(var)
+                yield
+                leafs.discard(var)
+                return
+            edges = sorted(edges, key=lambda e: e["id"])
+            visiting.add(var)
+            for edge in edges:
+                if max_traces is not None and len(results) >= max_traces:
+                    break
+                branch = snap()
+                lock_d, lock_sd = allowed["d"], allowed["sd"]
+                if single_domain and allowed["d"] is None:
+                    allowed["d"] = edge["domain"]
+                    allowed["sd"] = edge.get("subdomain", edge["domain"])
+                sub_ok = False
+                for _ in resolve_inputs(edge["inputs"], depth + 1, visiting):
+                    sub_ok = True
+                    chosen[var] = edge
+                    order.append(edge)
+                    yield
+                    order.pop()
+                    del chosen[var]
+                if not sub_ok:
+                    restore(branch)
+                allowed["d"], allowed["sd"] = lock_d, lock_sd
+            visiting.discard(var)
+            leafs.add(var)
+            yield
+            leafs.discard(var)
+
+        def resolve_inputs(inputs: List[str], depth: int, visiting: set[str]):
+            if not inputs:
+                yield
+                return
+            var, rest = inputs[0], inputs[1:]
+            for _ in resolve_var(var, depth, visiting):
+                yield from resolve_inputs(rest, depth, visiting)
+
+        def resolve_target() -> None:
+            edges = [e for e in self.out_to_edges.get(target, [])
+                     if target not in e["inputs"]]
+            if single_domain and allowed["d"] is not None:
+                edges = [e for e in edges if e["domain"] == allowed["d"]]
+                if allowed["sd"] is not None:
+                    edges = [e for e in edges
+                             if e.get("subdomain", e["domain"]) == allowed["sd"]]
+            if not edges:
+                return
+            edges = sorted(edges, key=lambda e: e["id"])
+            visiting: set[str] = {target}
+            for edge in edges:
+                if max_traces is not None and len(results) >= max_traces:
+                    break
+                branch = snap()
+                lock_d, lock_sd = allowed["d"], allowed["sd"]
+                if single_domain and allowed["d"] is None:
+                    allowed["d"] = edge["domain"]
+                    allowed["sd"] = edge.get("subdomain", edge["domain"])
+                for _ in resolve_inputs(edge["inputs"], 1, visiting):
+                    chosen[target] = edge
+                    order.append(edge)
+                    record()
+                    order.pop()
+                    del chosen[target]
+                restore(branch)
+                allowed["d"], allowed["sd"] = lock_d, lock_sd
+
+        chosen.clear()
+        leafs.clear()
+        order.clear()
+        allowed["d"] = domain
+        allowed["sd"] = subdomain
+        resolve_target()
+        return results
+
 
 def format_trace(trace: Dict) -> str:
     lines = [f"Target: {trace['target']}  (chapter: {trace['hypernym']})",

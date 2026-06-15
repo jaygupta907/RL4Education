@@ -135,7 +135,7 @@ SYSTEM_GEN_WITH_COT = SYSTEM_GEN.replace(
     "- One line per leaf: value + plausibility check.\n"
     "- One line for the requested difficulty: rubric axes you will hit (distractors, disguise,\n"
     "  phrasing, conversions) and how the final sentence asks for the target.\n"
-    "Keep <reasoning> under 150 words total. Do NOT put the question text inside <reasoning>.\n"
+    "Keep <reasoning> under 150  words total. Do NOT put the question text inside <reasoning>.\n"
     "You MUST close </reasoning> and output the complete one-element JSON array in the same reply.\n\n"
     "Immediately after </reasoning>, output ONLY a JSON array with exactly one object:\n"
     '  {"difficulty": <int 1-10>, "question": "<word problem text>"}\n'
