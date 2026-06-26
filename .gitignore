@@ -4,3 +4,4 @@
 /Hypergraph/wandb
 .env
 /experiments/wandb
+/experiments/.env
